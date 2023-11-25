@@ -1,13 +1,19 @@
 ; Semiprogressive Swords/Armor
 ; Str/Def scales off of the number of Swords/Armors Obtained while unique effects are still tied to their respective item.
 
-arch 65816
-lorom
+if not(defined("initialized"))
+    arch 65816
+    lorom
 
-check title "SOULBLAZER - 1 USA   "
+    check title "SOULBLAZER - 1 USA   "
 
-; 7A57 to 7FBF is Unused. Lets put our hacks there.
-org $00FA57
+    ; FA57 to FFBF is Unused. Lets put our hacks there.
+    org $00FA57
+
+    !initialized = 1
+endif
+
+; New code section.
 
 ; Hook Into the drawing Function that draws Swords/Shields (and lots of other stuff too)
 ; Address to load is in A
@@ -138,6 +144,8 @@ LDA #$00
 XBA
 RTS
 
+; Hooks and original rom data overwrite section
+pushpc
 
 org $029EF0
 JSL CalcStrength
@@ -190,3 +198,5 @@ dw $0001
 ; Edit the Level Requirement Table (word, BCD)
 org $02E1CE
 dw $0001, $0001, $0001, $0001, $0001, $0001, $0001, $0001
+
+pullpc
