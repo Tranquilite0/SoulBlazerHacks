@@ -65,9 +65,10 @@ ASL A
 ASL A
 TAX ; NPC * 32 in X
 SEP #$20
-JSL 028D54 ; ReleaseSoul? TODO: Verify if earlier code needs to run too. 
-; JSL 0289D6 ; Or maybe this is the right starting point? Too high in the call chain? This is called every frame.
-; -> JSL 028C25 ; Called when standing on an unsealed lair Tile (ID $FE). Still too high in call chain?
+JSL $028D54 ; ReleaseSoul? TODO: Needs more code. this just results in "Soul cannot be recalled yet" every time, but it does teleport you if you are on the same screen as the released NPC. Does not seal lair, does not release NPC.
+; JSL $028D18 ; This appears to work, but it also seals the accompanying lair and breaks if called from the screen with the released NPC. Want to figure out what this does right, and only do that.
+; JSL $0289D6 ; Or maybe this is the right starting point? Too high in the call chain? This is called every frame.
+; JSL $028C25 ; Called when standing on an unsealed lair Tile (ID $FE). Still too high in call chain.
 
 .end:
 STZ Command ; Set command back to 0, indicating that we are finished receiving.
