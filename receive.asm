@@ -21,6 +21,20 @@ JSL $0298FC ; Original Code
 JSL Receive
 RTL
 
+
+; I dont fully understand how this check works, just that bypassing it seems to allow my releases to work without sealing lairs.
+; Needs lots of testing.
+ReleaseCheckBypass:
+LDA Command
+CMP #$03
+BEQ .bypass
+LDA $7F8000,X ; Original Code
+RTL
+.bypass:
+LDA #$01 ; Load the value that the following CMP instruction expects.
+RTL
+
+
 Receive:
 LDA Command
 BEQ .skip
@@ -55,8 +69,9 @@ BRA .end
 .releaseSoul:
 ; TODO: figure out how to trigger soul releases
 ; We want to release an NPC without sealing a lair... tricky...
+INC Command ; Bump the command number up to indicate that we are now releasing an NPC
 REP #$20
-LDA Operand1
+LDA Operand1 ; Operand 1 is NPC ID
 TAY ; NPC ID in Y
 ASL A
 ASL A
@@ -68,8 +83,8 @@ SEP #$20
 JSL $028D54 ; ReleaseSoul? TODO: Needs more code. this just results in "Soul cannot be recalled yet" every time, but it does teleport you if you are on the same screen as the released NPC. Does not seal lair, does not release NPC.
 ; JSL $028D18 ; This appears to work, but it also seals the accompanying lair and breaks if called from the screen with the released NPC. Want to figure out what this does right, and only do that.
 ; JSL $0289D6 ; Or maybe this is the right starting point? Too high in the call chain? This is called every frame.
-; JSL $028C25 ; Called when standing on an unsealed lair Tile (ID $FE). Still too high in call chain.
-
+; JSL $028C25 ; Called when standing on an unsealed lair Tile (ID $FE). Still too high in call chain (but we will want to mess with it sometime).
+RTL
 .end:
 STZ Command ; Set command back to 0, indicating that we are finished receiving.
 .skip:
@@ -81,6 +96,10 @@ pushpc
 ; Insert our hook into the main gameloop
 org $008049
 JSL MainHook
+
+; Allow Bypassing one of the checks during release
+org $028EBF
+JSL ReleaseCheckBypass
 
 pullpc
 
