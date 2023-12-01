@@ -9,6 +9,7 @@ org $00FA57
 
 !initialized = 1
 
+incsrc "decouplelair.asm"
 incsrc "receive.asm"
 incsrc "semiprogressive.asm"
 
