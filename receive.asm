@@ -1,6 +1,6 @@
 ; Routines for Receiving stuff
 ; Used for Multiworld/Archipelago integration
-; Possibly also for decoupling item/lair checks?
+; Possibly also for decoupling item/lair checks? TODO: move lair decoupling into its own file.
 
 if not(defined("initialized"))
     arch 65816
@@ -15,6 +15,7 @@ if not(defined("initialized"))
     !initialized = 1
 endif
 
+
 ; New code section.
 MainHook:
 JSL $0298FC ; Original Code
@@ -23,16 +24,60 @@ RTL
 
 
 ; I dont fully understand how this check works, just that bypassing it seems to allow my releases to work without sealing lairs.
-; Needs lots of testing.
-ReleaseCheckBypass:
-LDA Command
-CMP #$03
-BEQ .bypass
-LDA $7F8000,X ; Original Code
+; Will make it so that you never get "Soul cannot be recalled yet" prompts so I'm hoping to find a better way.
+; TODO: Delete this once confirmed the other more correct way works.
+;ReleaseCheckBypass:
+;LDA Command
+;CMP #$03
+;BEQ .bypass
+;LDA $7F8000,X ; Original Code
+;RTL
+;.bypass:
+;LDA #$01 ; Load the value that the following CMP instruction expects.
+;RTL
+
+
+; Loads lair data with lair index in X
+; Filters out Sealing in progress flag.
+LoadLairForTileData:
+LDA $7F0203,X
+AND #$BF
 RTL
-.bypass:
-LDA #$01 ; Load the value that the following CMP instruction expects.
+
+; Loads lair data with lair index in X
+; Filters out Sealing in progress flag.
+LoadLairForMonsters:
+LDA $7F0203,X
+AND #$BFBF
 RTL
+
+; Stores lair data with value in A to lair index in X
+; Preserves existing Sealing In Progress flag
+StoreLairDataPreserveFlag:
+;BIT $7F0203,X ; Cant do this, no long addressing mode
+PEA $017F ; Push Data Bank register values
+PLB
+BIT $0203,X
+BVC .skip
+ORA #$40 ; Set Sealing in Progress flag.
+.skip
+PLB
+STA $7F0203,X ; Original Code
+RTL
+
+
+;MonstersDeadHook1:
+;STA $002F,Y ; Original Code
+;BIT #$BF ; Filter out sealing in progress flag
+;CLC ; Original Code
+;RTL
+
+
+;MonstersDeadHook2:
+;SEP #$20 ; Original Code
+;LDA $002E,Y ; Original Code
+;BIT #$BF ; Filter out sealing in progress flag
+;RTL
 
 
 Receive:
@@ -90,18 +135,54 @@ STZ Command ; Set command back to 0, indicating that we are finished receiving.
 .skip:
 RTL
 
+
 ; Hooks and original rom data overwrite section
 pushpc
+
 
 ; Insert our hook into the main gameloop
 org $008049
 JSL MainHook
 
+org $028C74
+;TODO: insert decoupling hook here.
+;028C74  FA             PLX ; Pull index into lair table ; This is the place to insert hook.
+;028C75  BD 1B BA       LDA $BA1B,X
+
+; Called when loading lair tile data.
+org $029597
+JSL LoadLairForTileData
+
+
+; Called when loading the number of monsters to spawn from lair data
+org $009455
+JSL LoadLairForMonsters
+
+
+; Called when storing back to lair data after monsters are dead
+org $00A8E5
+JSL StoreLairDataPreserveFlag
+
+
+; Called when killing monsters
+;org $00A8DE
+;JSL MonstersDeadHook1
+
+
+; Also called when killing monsters
+;org $00AB86
+;NOP
+;JSL MonstersDeadHook2
+
+
 ; Allow Bypassing one of the checks during release
-org $028EBF
-JSL ReleaseCheckBypass
+; TODO: Delete this code once we have the new way in place.
+;org $028EBF
+;JSL ReleaseCheckBypass
+
 
 pullpc
+
 
 ; Ram Defines
 ; According to hellow554, ram addresses $7E1E00 through $7E1F00 are available
