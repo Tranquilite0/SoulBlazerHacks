@@ -46,7 +46,7 @@ RTL
 
 
 ; Decouple Lair reward by making it so that the lair cleared is not necessarily the lair released
-; Uses Lair struct fields 16,17,18 to determine what reward to give (so randomizers only need to modify those fields now)
+; Uses Lair struct fields 18,19,1A to determine what reward to give (so randomizers only need to modify those fields now)
 DecoupleLairReward:
 ; First run code that we replaced
 STA $7E8000,X ; Store tile ID to map data
@@ -67,23 +67,30 @@ ORA $01,S ; combine with town area and lair cleared flag
 STA $7F0203,X
 PLA
 PLX
-; Load alternate release reward ID from lair field 16
-LDA $BA23,X
+; Load alternate release reward ID from lair field 17
+; TODO: Refactor code so that it can be reused elsewhere?
+LDA $BA25,X
+BEQ .nothing
 CMP #$FE
 BEQ .lair
 CMP #$FF
-BEQ .gemsExp ; TODO: Figure out how to animate lair closing for items
+BEQ .gemsExp
 ; Give regular item
 STA $03C8 ; Used by the print routine to load item name
 STZ $03C9 ; Second byte unused
 JSL $02A0F9 ; GiveItem
 LDY #$E216 ; String pointer "Hero received <item>"
 JSL $02AC27 ; Some sort of print routine
+JSL $008173 ; Unsure what this does
 BRK #$9E ; Play Item Get sound
-RTL
+JML $028D03 ; Finish by animating the lair closing
+.nothing
+LDY #$E232 ; Text Pointer "Nothing inside."
+JSL $02AC27 ; Print routine
+JML $028CFD ; Play lair closed sound and finish animating lair closing
 .gemsExp
 REP #$20
-LDA $BA24,X ; Load GemExp amount from lair field 17-18 
+LDA $BA26,X ; Load GemExp amount from lair field 18-19 
 STA $03C8 ; Used by the print routine to load Gems/Exp Amount
 JSL $04F6A5 ; GiveGems?
 LDA #$0010 ; Unsure what this and the next instruction does...
@@ -91,11 +98,12 @@ TSB $0332
 SEP #$20
 LDY #$E246 ; Text Pointer "Hero found <amount> GEMs"
 JSL $02AC27 ; Some sort of print routine
+JSL $008173 ; Unsure what this does
 BRK #$8D ; Play Gem-get sound
-RTL
+JML $028D03 ; Finish by animating the lair closing
 .lair
 REP #$20
-LDA $BA24,X ; Load NPC ID from lair field 17-18
+LDA $BA26,X ; Load NPC ID from lair field 18-19
 TAY ; NPC ID in Y
 ASL A
 ASL A
@@ -105,20 +113,6 @@ ASL A
 TAX ; Lair Index in X
 SEP #$20
 JML $028C75 ; Jump back and continue releasing lair with updated target lair
-
-
-;MonstersDeadHook1:
-;STA $002F,Y ; Original Code
-;BIT #$BF ; Filter out sealing in progress flag
-;CLC ; Original Code
-;RTL
-
-
-;MonstersDeadHook2:
-;SEP #$20 ; Original Code
-;LDA $002E,Y ; Original Code
-;BIT #$BF ; Filter out sealing in progress flag
-;RTL
 
 
 ; Hooks and original rom data overwrite section
@@ -135,14 +129,27 @@ NOP : NOP : NOP : NOP ; STA $7EC000,X
 NOP                   ; PLX
 
 
-; Alter BNE to skip over code for setting flag that we handled differently earlier
+NewBranchLongTarget = $028D1F ; Originally $028D18
+; Now that lairs are decoupled, we need to skip over and/or replace existing code that set lair state data.
 org $028C7B
-BNE $028C8B ; Originally $028C80
+; Alter BNE to skip over code for setting flag that we already handled in a new way earlier
+BNE NewBranchNotEqualTarget
+; Replace the follow BRL and the now-unused code we skipped over with the code we need to run after the branch but didnt have space for
+PHX
+TYX
+LDA #$40 ; Release in progress flag.
+ORA $7F0203,X ; Combine with lair data to set flag.
+BRL NewBranchLongTarget ; Branch to code that stores the updated lair data value.
+NOP ; Clean up remaining byte of unused code we dont need.
+NewBranchNotEqualTarget: 
+PHX ; Get Stack back to expected state
+TYX ; Get registers back into expected state
+warnpc $028C8B ; next instruction should be REP #$20
 
 
 ;Alter instruction to just set release in progress flag
-org $028D1C
-ORA #$40 ; Originally #$C0
+;org $028D1C
+;ORA #$40 ; Originally #$C0
 
 
 ; Called when loading lair tile data.
@@ -170,6 +177,15 @@ JSL StoreLairDataPreserveFlag
 ;NOP
 ;JSL MonstersDeadHook2
 
-; TODO: Add more info to lair data so that they work vanilla
+; Patches Lair Data to add decoupled rewards
+; Sets lair reward to vanilla values
+org $01BA0D+$18       ; Set PC to first instance of Lair Table Field
+!i = $0
+while !i < $1A3
+    db $FE              ; "Item ID" for lair reward
+    dw !i               ; Same reward as lair being released
+    skip $20-$3         ; Move PC to next entry
+    !i #= !i+1
+endif
 
 pullpc
