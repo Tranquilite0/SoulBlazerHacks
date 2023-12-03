@@ -14,6 +14,8 @@ if not(defined("initialized"))
     !initialized = 1
 endif
 
+incsrc "chestrelease.asm"
+
 ; New Code Section
 
 ; Loads lair data with lair index in X
@@ -44,6 +46,16 @@ PLB
 STA $7F0203,X ; Original Code
 RTL
 
+;Check if the current Lair index is the currently sealing lair id
+CheckForSealingLair:
+CPX $0405
+BEQ .isSealingLair
+LDA $7F0203,X
+RTL
+.isSealingLair
+LDA #$80 ; Add back in the lair sealed flag for the purpose of the next branch
+ORA $7F0203,X
+RTL
 
 ; Decouple Lair reward by making it so that the lair cleared is not necessarily the lair released
 ; Uses Lair struct fields 18,19,1A to determine what reward to give (so randomizers only need to modify those fields now)
@@ -155,6 +167,10 @@ warnpc $028C8B ; next instruction should be REP #$20
 ; Called when loading lair tile data.
 org $029597
 JSL LoadLairForTileData
+
+; Called during map load. Checks for sealing lairs.
+org $029398
+JSL CheckForSealingLair
 
 
 ; Called when loading the number of monsters to spawn from lair data

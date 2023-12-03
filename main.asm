@@ -13,4 +13,6 @@ incsrc "decouplelair.asm"
 incsrc "receive.asm"
 incsrc "semiprogressive.asm"
 
+incsrc "randoproofofconcept.asm"
+
 warnpc $00FFBF
