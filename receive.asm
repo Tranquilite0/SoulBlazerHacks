@@ -54,7 +54,7 @@ LDY #$E216 ; String pointer "Hero received <item>"
 JSL $02AC27 ; Some sort of print routine
 BRK #$9E ; Play Item Get sound
 BRA .end
-..gemsExp: ; TODO: Figure out how to give EXP instead.
+..gemsExp: ; TODO: Figure out how to give EXP instead?
 REP #$20
 LDA Operand2
 STA $03C8 ; Used by the print routine to load Gems/Exp Amount

@@ -14,6 +14,7 @@ if not(defined("initialized"))
     !initialized = 1
 endif
 
+incsrc "npcreward.asm"
 incsrc "chestrelease.asm"
 
 ; New Code Section
