@@ -1,0 +1,29 @@
+!Text_YellowStyle = $03,$24
+!Text_EndStyle = $03,$20
+!Text_EndText12 = $12,$08,$08,$04,$0C
+!Text_EndText5FE2 = $13,$5F,$E2 ; Is this actually an end marker?
+!Text_HeroName = $02,$02
+!Dict_received = $D4
+
+pushpc
+
+; According to the data crystal rom map, this section is unused, so I guess I will put strings here.
+; TODO: If not many strings are needed, just put them in the same place as code
+org $1EF967
+
+
+; Lets make a custom EXP text message that shows the EXP amount. We'll use the GEMs received text as a template
+; The "$C8,$03" reference is definitely a pointer to $03C8 which contains our BCD Gem/Exp amount, so perhaps
+; "$06,$03" is a command to print a BCD value?
+ExpReceived:
+db $10,!Text_HeroName," ",!Dict_received,$0D,!Text_YellowStyle,$06,$03,$C8,$03," EXP.",!Text_EndStyle,!Text_EndText12
+
+
+NothingReceived:
+db $10,!Text_HeroName," ",!Dict_received,$0D,!Text_YellowStyle,"Nothing.",!Text_EndStyle,!Text_EndText12
+
+EndTextForBank:
+db !Text_EndText12 
+
+warnpc $1EFFFF
+pullpc
