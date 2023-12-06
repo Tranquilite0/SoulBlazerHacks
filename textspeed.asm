@@ -9,7 +9,7 @@ lorom
 check title "SOULBLAZER - 1 USA   "
 
 ; For text speeds that can be any speed
-!text_speed = $00
+!text_speed = $01
 ; For text speed that cannot be instant (0x00)
 !text_speed_not_instant = $01
 

@@ -15,6 +15,7 @@ if not(defined("initialized"))
 endif
 
 incsrc "npcreward.asm"
+incsrc "npcscriptpatches.asm"
 incsrc "chestrelease.asm"
 
 ; New Code Section

@@ -21,10 +21,5 @@ org $01AAFB
 db $FE
 dw $0002
 
-; Test. TODO: Remove when no longer needed to Test
-org $03AD13
-COP #$3D
-db $00
-NOP
 
 pullpc
