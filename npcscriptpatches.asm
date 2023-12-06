@@ -1,0 +1,1 @@
+; Patch NPC scriptsto use new NPC Reward COP routine.

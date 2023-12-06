@@ -1,12 +1,12 @@
 ; I think the easiest way to deal with NPCs is to make a new COP dedicated to their rewards.
 
-CopTemp = $7E0038
+CopTemp = $7E0038 ; Argument storage for COP routines.
 
 ; New Code Section
 
-;TODO: Set NPC Flags somewhere
+;TODO: Check/Set Flags somewhere to prevent multiple delivery
 GiveNpcReward:
-    TYX
+    TYX ; Many cop routines start with this instruction... no idea why.
     LDA.B [CopTemp] ; NPC ID in A
     INC.B CopTemp
     AND #$00FF
@@ -64,7 +64,7 @@ GiveNpcReward:
     ASL A
     TAX ; Lair Index in X
     SEP #$20
-    JSL $028C75 ; Release Lair. No idea if this will work or not from here.
+    JSL $028C75 ; Release Lair. As always needs testing.
 .end:
     REP #$20
     LDA.B CopTemp
