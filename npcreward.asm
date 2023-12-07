@@ -2,6 +2,17 @@
 
 CopTemp = $7E0038 ; Argument storage for COP routines.
 
+; Soulblazer has 420 entries in the lair table, but has 512 bits to store lair sealed flags
+; We will use 60 of the unused flags for NPC reward tracking
+NpcReceivedFlags = $7E1B13
+
+; Macro for the new COP routine
+macro CopGiveNpcReward(npcId)
+    COP #$3D
+    db <npcId>
+endmacro
+
+
 ; New Code Section
 
 ;TODO: Check/Set Flags somewhere to prevent multiple delivery
@@ -10,6 +21,21 @@ GiveNpcReward:
     LDA.B [CopTemp] ; NPC ID in A
     INC.B CopTemp
     AND #$00FF
+    JSL CheckNpcFlag
+    BCC .giveReward
+    ; You already have this reward.
+    ; TODO: allow medical herbs to be regiven?
+    SEP #$20
+    PHB
+    LDA.B #AlreadyHave>>16 ; Switch bank
+    PHA
+    PLB
+    LDY.W #AlreadyHave 
+    JSL PrintOsdStringFromBankX
+    PLB ; restore bank
+    BRA .end
+.giveReward:
+    JSL SetNpcFlag
     TAY ; NPC ID in Y
     ASL A
     ASL A
@@ -25,7 +51,7 @@ GiveNpcReward:
     STA $03C8 ; Used by the print routine to load item name
     STZ $03C9 ; Second byte unused
     JSL $02A0F9 ; GiveItem
-    LDY #$E216 ; String pointer "Hero received <item>"
+    LDY #$E216 ; String pointer "<Hero> received <item>"
     JSL PrintOsdStringFromBankX
     BRK #$5E ; Play Item Get sound
     BRA .end
@@ -72,6 +98,20 @@ GiveNpcReward:
     RTI
 
 
+CheckNpcFlag:
+    PHY
+    LDY #NpcReceivedFlags
+    JSL CheckIfBitIsSet
+    PLY
+    RTL
+
+SetNpcFlag:
+    PHY
+    LDY #NpcReceivedFlags
+    JSL SetBit
+    PLY
+    RTL
+
 ; Hooks and original rom data overwrite section
 pushpc
 
@@ -88,7 +128,7 @@ pullpc
 ; TODO: We can put this table somewhere else if it takes up too much space.
 ; TODO: Change first entry to byte?
 NpcRewardTable:
-    dw $0000 ; Tool shop owner
+    dw $0038 ; Tool shop owner
 RewardQuantity:
     dw $0000        : !NPC_ToolShopOwner = $00
     dw $0000, $0000 : !NPC_EmblemATile = $01
@@ -131,7 +171,7 @@ RewardQuantity:
     dw $0000, $0000 : !NPC_SparkBombMouse = $26
     dw $0000, $0000 : !NPC_LeosLabBasementCrystal = $27
     dw $0000, $0000 : !NPC_ModelTown1Crystal = $28
-    dw $0000, $0000 : !NPC_PowerPlantcrystal = $29
+    dw $0000, $0000 : !NPC_PowerPlantCrystal = $29
     dw $0000, $0000 : !NPC_ElementalMailSoldier = $2A
     dw $0000, $0000 : !NPC_SuperBraceletTile = $2B
     dw $0000, $0000 : !NPC_QueenMagriddVIPCard = $2C

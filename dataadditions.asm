@@ -1,9 +1,13 @@
 !Text_YellowStyle = $03,$24
 !Text_EndStyle = $03,$20
 !Text_EndText12 = $12,$08,$08,$04,$0C
-!Text_EndText5FE2 = $13,$5F,$E2 ; Is this actually an end marker?
 !Text_HeroName = $02,$02
+!Text_CR = $0D
+!Dict_You = $95
+!Dict_have = $B5
+!Dict_my = $C2
 !Dict_received = $D4
+
 
 pushpc
 
@@ -18,10 +22,13 @@ org $1EF967
 ExpReceived:
 db $10,!Text_HeroName," ",!Dict_received,$0D,!Text_YellowStyle,$06,$03,$C8,$03," EXP.",!Text_EndStyle,!Text_EndText12
 
-
 NothingReceived:
 db $10,!Text_HeroName," ",!Dict_received,$0D,!Text_YellowStyle,"Nothing.",!Text_EndStyle,!Text_EndText12
 
+AlreadyHave:
+db $10,!Dict_You,"already ",!Dict_have,!Dict_my,!Text_CR,"reward. ",!Text_EndText12
+
+;This is only worthwhile if we put lots of strings in this bank.
 EndTextForBank:
 db !Text_EndText12 
 

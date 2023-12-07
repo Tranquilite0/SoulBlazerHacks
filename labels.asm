@@ -8,3 +8,14 @@ PrintOsdStringFromBank2 = $02A769
 ; Prints OSD String in current bank from address in Y
 ; ...but if you are in Bank 1 it will switch to Bank 2
 PrintOsdStringFromBankX = $02AC27
+
+; Pretty sure this routine sets a bit
+; A contains the bit position to check (0-$3F8?)
+; Y contains the pointer to the start of a table to use
+SetBit = $04F348
+
+; Checks if Bit is set
+; A contains the bit position to check (0-$3F8?)
+; Y contains the pointer to the start of a table to check
+; returns the result in the carry bit: it's clear if the bit is clear and the carry bit is set if the bit is set
+CheckIfBitIsSet = $04F3A2
