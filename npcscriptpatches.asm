@@ -7,7 +7,7 @@ TextEndStandardBank3 = $03B988
 ;---------------- Tool Shop Owner ----------------;
 
 org $038399
-TODO: This
+; TODO: This
 
 ;-------------------------------------------------;
 
