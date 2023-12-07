@@ -13,8 +13,9 @@ incsrc "labels.asm"
 incsrc "decouplelair.asm"
 incsrc "dataadditions.asm"
 incsrc "receive.asm"
-incsrc "semiprogressive.asm"
 
 incsrc "randoproofofconcept.asm"
 
 warnpc $00FFBF
+
+incsrc "semiprogressive.asm"
