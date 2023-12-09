@@ -10,6 +10,7 @@ org $00FA57
 !initialized = 1
 
 incsrc "labels.asm"
+incsrc "items.asm"
 incsrc "decouplelair.asm"
 incsrc "dataadditions.asm"
 incsrc "receive.asm"

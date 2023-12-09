@@ -28,11 +28,16 @@ Receive:
     STA Command
 +
     CMP #$01
-    BEQ .skip
+    BNE +
+    RTL
++
     LDA Operand1
-    CMP #$FF
-    BEQ .gemsExp
-    CMP #$FE
+    BEQ .nothing
+    CMP #!Gems
+    BEQ .gems
+    CMP #!Exp
+    BEQ .exp
+    CMP #!LairRelease
     BEQ .lairReward
     STA $03C8 ; Used by the print routine to load item name
     STZ $03C9 ; Second byte unused
@@ -41,7 +46,16 @@ Receive:
     JSL PrintOsdStringFromBankX ; Some sort of print routine
     BRK #$9E ; Play Item Get sound
     BRA .end
-.gemsExp: ; TODO: Figure out how to give EXP instead?
+.nothing:
+    SEP #$20
+    PHB
+    LDA.B #NothingReceived>>16 ; Switch bank
+    PHA
+    PLB
+    LDY.W #NothingReceived 
+    PLB ; restore bank
+    BRA .end
+.gems:
     REP #$20
     LDA Operand2
     STA $03C8 ; Used by the print routine to load Gems/Exp Amount
@@ -53,34 +67,44 @@ Receive:
     JSL PrintOsdStringFromBankX ; Some sort of print routine
     BRK #$8D ; Play Gem-get sound
     BRA .end
+.exp:
+    REP #$20
+    LDA Operand2
+    STA $7E043D ; Address that stores EXP to recieve.
+    STA $03C8 ; Used by the print routine to load Gems/Exp Amount
+    SEP #$20
+    PHB
+    LDA.B #ExpReceived>>16 ; Switch bank
+    PHA
+    PLB
+    LDY.W #ExpReceived 
+    JSL PrintOsdStringFromBankX
+    PLB ; restore bank
+    BRA .end
 .lairReward:
     ; TODO: Works unless you are on the same screen as lair which expects teleport.
     ;  Need to figure out how to force the "MapsNotEqual" branch here.
-    ; Ok the SameMapBpass check works, but now there is a chance of getting trapped by a released house when you teleport back in.
+    ; Ok the SameMapBpass check works, but now there is a chance of getting trapped by a released house or something when you teleport back in.
     ; Now we need to figure out how safely set your return location if you are in a town area.
     LDA #$03
     STA Command ; Signal that lair is being released so MapCheckBypass can bypass
     REP #$20
     LDA Operand2 ; Operand 1 is Lair ID
     TAY ; Lair ID in Y
-    ASL A
-    ASL A
-    ASL A
-    ASL A
-    ASL A
+    ASL #5
     TAX ; Lair index in X
     SEP #$20
     JSL $028C75
-    ;RTL
 .end:
     STZ Command ; Finished processing command, but wait until next main loop to become ready to recieve.
-.skip:
     RTL
 
 
 ; If we release a cutscene NPC on the same map that it gets unlocked on then things will break
 ; This check bypasses that when we are sending releases.
 ; TODO: better check that prevents getting softlocked when teleporting back in to something that got released.
+; TODO: Perhaps also check both teleport map, and original lair location map?
+; TODO: And also check if current map is town map and set a new return location to prevent getting locked.
 SameMapCheckBypass:
     LDA Command
     CMP #$03
@@ -104,6 +128,7 @@ JSL MainHook
 
 
 ; Insert hook to bypass same-map check
+; TODO: There is another same-map check in one of the other lair release branches, do we need to patch that one too?
 org $028D24
 SameMapCheckBypassHook:
     JSL SameMapCheckBypass

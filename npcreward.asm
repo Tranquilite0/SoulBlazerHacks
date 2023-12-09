@@ -17,14 +17,15 @@ endmacro
 
 ;TODO: Check/Set Flags somewhere to prevent multiple delivery
 GiveNpcReward:
-    TYX ; Many cop routines start with this instruction... no idea why.
+    TYX ; Cop Handler puts X in Y
+    PHX ; Push X since some NPC scripts expect X to be preserved
     LDA.B [CopTemp] ; NPC ID in A
     INC.B CopTemp
     AND #$00FF
     JSL CheckNpcFlag
     BCC .giveReward
     ; You already have this reward.
-    ; TODO: allow medical herbs to be regiven?
+    ; TODO: allow medical herbs and goat food to be regiven?
     SEP #$20
     PHB
     LDA.B #AlreadyHave>>16 ; Switch bank
@@ -33,7 +34,7 @@ GiveNpcReward:
     LDY.W #AlreadyHave 
     JSL PrintOsdStringFromBankX
     PLB ; restore bank
-    BRA .end
+    BRL .end
 .giveReward:
     JSL SetNpcFlag
     TAY ; NPC ID in Y
@@ -43,10 +44,12 @@ GiveNpcReward:
     SEP #$20
     LDA.L NpcRewardTable,X
     BEQ .nothing
-    CMP #$FE
+    CMP #!Gems
+    BEQ .gems
+    CMP #!Exp
+    BEQ .exp
+    CMP #!LairRelease
     BEQ .lair
-    CMP #$FF
-    BEQ .gemsExp
     ; Give regular item
     STA $03C8 ; Used by the print routine to load item name
     STZ $03C9 ; Second byte unused
@@ -54,7 +57,7 @@ GiveNpcReward:
     LDY #$E216 ; String pointer "<Hero> received <item>"
     JSL PrintOsdStringFromBankX
     BRK #$5E ; Play Item Get sound
-    BRA .end
+    BRL .end
 .nothing
     SEP #$20
     PHB
@@ -65,9 +68,21 @@ GiveNpcReward:
     JSL PrintOsdStringFromBankX
     PLB ; restore bank
     BRA .end
-.gemsExp ; Give EXP
+.gems:
     REP #$20
-    LDA.L RewardQuantity,X ;
+    LDA.L RewardQuantity,X
+    STA $03C8 ; Used by the print routine to load Gems/Exp Amount
+    JSL $04F6A5 ; GiveGems
+    LDA #$0010 ; UpdateHud?
+    TSB $0332
+    SEP #$20
+    LDY #$E246 ; Text Pointer "Hero found <amount> GEMs"
+    JSL PrintOsdStringFromBankX
+    BRK #$8D ; Play Gem get sound
+    BRA .end
+.exp
+    REP #$20
+    LDA.L RewardQuantity,X
     STA $7E043D ; Address that stores EXP to recieve.
     STA $03C8 ; Used by the print routine to load Gems/Exp Amount
     SEP #$20
@@ -83,16 +98,13 @@ GiveNpcReward:
     REP #$20
     LDA.L RewardQuantity,X ;
     TAY ; Lair ID in Y
-    ASL A
-    ASL A
-    ASL A
-    ASL A
-    ASL A
+    ASL #5
     TAX ; Lair Index in X
     SEP #$20
-    JSL $028C75 ; Release Lair. As always needs testing.
+    JSL $028C75 ; Release Lair. Still needs more testing.
 .end:
     REP #$20
+    PLX ; Restore X so that some NPC scripts wont break.
     LDA.B CopTemp
     STA.B $02, S ; place A onto stack, so that the `RTI` in the next line returns to that address
     RTI
@@ -126,21 +138,21 @@ pullpc
 
 ; NPC Reward Table section
 ; TODO: We can put this table somewhere else if it takes up too much space.
-; TODO: Change first entry to byte?
+; TODO: Change first entry to byte and add something else to keep it 4 bytes?
 NpcRewardTable:
-    dw $0038 ; Tool shop owner
+    dw !MedicalHerb ; Tool shop owner
 RewardQuantity:
-    dw $0000        : !NPC_ToolShopOwner = $00
-    dw $0000, $0000 : !NPC_EmblemATile = $01
-    dw $0000, $0000 : !NPC_GoatPenCorner = $02
-    dw $0000, $0000 : !NPC_ToolShopOwnersSonTeddy = $03
-    dw $0000, $0000 : !NPC_APass = $04
-    dw $0000, $0000 : !NPC_TileInChildsSecretCave = $05
-    dw $0000, $0000 : !NPC_VillageChief = $06
-    dw $0000, $0000 : !NPC_Magician = $07
-    dw $0000, $0000 : !NPC_RecoverySwordCrystal = $08
-    dw $0000, $0000 : !NPC_GrassValleySecretRoomCrystal = $09
-    dw $00FF, $0080 : !NPC_UndergroundCastle1stPartCrystal = $0A
+    dw $0000               : !NPC_ToolShopOwner = $00
+    dw !EmblemA,     $0000 : !NPC_EmblemATile = $01
+    dw !MedicalHerb, $0000 : !NPC_GoatPenCorner = $02
+    dw !GoatsFood,   $0000 : !NPC_ToolShopOwnersSonTeddy = $03
+    dw !APass,       $0000 : !NPC_APass = $04
+    dw $0000,        $0000 : !NPC_TileInChildsSecretCave = $05
+    dw $0000,        $0000 : !NPC_VillageChief = $06
+    dw !FlameBall,   $0000 : !NPC_Magician = $07
+    dw $0000,        $0000 : !NPC_RecoverySwordCrystal = $08
+    dw $0000,        $0000 : !NPC_GrassValleySecretRoomCrystal = $09
+    dw !Exp,         $0080 : !NPC_UndergroundCastle1stPartCrystal = $0A
     dw $0000, $0000 : !NPC_RedHotMirrorBird = $0B
     dw $0000, $0000 : !NPC_MagicBellCrystal = $0C
     dw $0000, $0000 : !NPC_WoodstinTrio = $0D

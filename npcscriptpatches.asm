@@ -31,13 +31,17 @@ org $038399
 
 ;---------------- Goat Pen Corner ----------------;
 
-;TODO: This
+; Patch NPC Script
+org $038958
+%CopGiveNpcReward(!NPC_GoatPenCorner)
+NOP #6
 
 ;-------------------------------------------------;
 
 ;---------- Tool Shop Owner's Son Teddy ----------;
 
 ;TODO: This
+;TODO: Would like a fancy way to print what NPC has easily
 
 ;-------------------------------------------------;
 

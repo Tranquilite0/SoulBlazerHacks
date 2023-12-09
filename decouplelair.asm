@@ -88,45 +88,62 @@ DecoupleLairReward:
     ; TODO: Refactor code so that it can be reused elsewhere?
     LDA $BA25,X
     BEQ .nothing
-    CMP #$FE
+    CMP #!Gems
+    BEQ .gems
+    CMP #!Exp
+    BEQ .exp
+    CMP #!LairRelease
     BEQ .lair
-    CMP #$FF
-    BEQ .gemsExp
     ; Give regular item
     STA $03C8 ; Used by the print routine to load item name
     STZ $03C9 ; Second byte unused
     JSL $02A0F9 ; GiveItem
     LDY #$E216 ; String pointer "Hero received <item>"
-    JSL $02AC27 ; Some sort of print routine
+    JSL PrintOsdStringFromBankX
     JSL $008173 ; Unsure what this does
     BRK #$9E ; Play Item Get sound
     JML $028D03 ; Finish by animating the lair closing
-.nothing
-    LDY #$E232 ; Text Pointer "Nothing inside."
-    JSL $02AC27 ; Print routine
+.nothing:
+    PHB
+    LDA.B #NothingReceived>>16 ; Switch bank
+    PHA
+    PLB
+    LDY.W #NothingReceived 
+    JSL PrintOsdStringFromBankX
+    PLB ; restore bank
     JML $028CFD ; Play lair closed sound and finish animating lair closing
-.gemsExp
+.gems:
     REP #$20
     LDA $BA26,X ; Load GemExp amount from lair field 18-19 
     STA $03C8 ; Used by the print routine to load Gems/Exp Amount
-    JSL $04F6A5 ; GiveGems?
+    JSL $04F6A5 ; GiveGems
     LDA #$0010 ; Unsure what this and the next instruction does...
     TSB $0332
     SEP #$20
     LDY #$E246 ; Text Pointer "Hero found <amount> GEMs"
-    JSL $02AC27 ; Some sort of print routine
+    JSL PrintOsdStringFromBankX
     JSL $008173 ; Unsure what this does
     BRK #$8D ; Play Gem-get sound
     JML $028D03 ; Finish by animating the lair closing
-.lair
+.exp:
+    REP #$20
+    LDA.L RewardQuantity,X
+    STA $7E043D ; Address that stores EXP to recieve.
+    STA $03C8 ; Used by the print routine to load Gems/Exp Amount
+    SEP #$20
+    PHB
+    LDA.B #ExpReceived>>16 ; Switch bank
+    PHA
+    PLB
+    LDY.W #ExpReceived 
+    JSL PrintOsdStringFromBankX
+    PLB ; restore bank
+    JML $028CFD ; Play lair closed sound and finish animating lair closing
+.lair:
     REP #$20
     LDA $BA26,X ; Load NPC ID from lair field 18-19
     TAY ; NPC ID in Y
-    ASL A
-    ASL A
-    ASL A
-    ASL A
-    ASL A
+    ASL #5
     TAX ; Lair Index in X
     SEP #$20
     JML $028C75 ; Jump back and continue releasing lair with updated target lair
@@ -188,7 +205,7 @@ org $00A8E5
 org $01BA0D+$18       ; Set PC to first instance of Lair Table Field
 !i = $0
 while !i < $1A3
-    db $FE              ; "Item ID" for lair reward
+    db !LairRelease     ; "Item ID" for lair reward
     dw !i               ; Same reward as lair being released
     skip $20-$3         ; Move PC to next entry
     !i #= !i+1
