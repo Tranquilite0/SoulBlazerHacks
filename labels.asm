@@ -7,6 +7,7 @@ PrintOsdStringFromBank2 = $02A769
 
 ; Prints OSD String in current bank from address in Y
 ; ...but if you are in Bank 1 it will switch to Bank 2
+; A can be 8 or 16 bit prior to calling
 PrintOsdStringFromBankX = $02AC27
 
 ; Pretty sure this routine sets a bit

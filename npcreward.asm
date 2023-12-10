@@ -6,22 +6,53 @@ CopTemp = $7E0038 ; Argument storage for COP routines.
 ; We will use 60 of the unused flags for NPC reward tracking
 NpcReceivedFlags = $7E1B13
 
-; Macro for the new COP routine
+; Macros for the new COP routines
+
+; Gives an NPC Reward and prints message
+; Checks if NPC has already given the reward and prints message.
+; Size: 3 bytes
 macro CopGiveNpcReward(npcId)
     COP #$3D
     db <npcId>
 endmacro
 
 
+; Prints what the the given NPC ID where the previous textbox left off.
+; Must be used after printing a message that ends in the $C0 Text Command.
+macro CopResumePrintNpcReward(npcId)
+    COP #$3E
+    db <npcId>
+endmacro
+
+
+; Prints a message where the previous textbox left off.
+; Must be used after printing a message that ends in the $C0 Text Command.
+macro CopResumeShowText(textPtr)
+    COP #$3F
+    dw <textPtr>
+endmacro
+
+
 ; New Code Section
 
-;TODO: Check/Set Flags somewhere to prevent multiple delivery
-GiveNpcReward:
+GiveNpcRewardCop:
     TYX ; Cop Handler puts X in Y
     PHX ; Push X since some NPC scripts expect X to be preserved
     LDA.B [CopTemp] ; NPC ID in A
     INC.B CopTemp
     AND #$00FF
+    JSL GiveNpcReward
+    REP #$20
+    PLX ; Restore X so that some NPC scripts wont break.
+    LDA.B CopTemp
+    STA.B $02, S ; place A onto stack, so that the 'RTI' in the next line returns to that address
+    RTI
+
+
+; NPC ID in A
+GiveNpcReward:
+    PHP
+    REP #$20
     JSL CheckNpcFlag
     BCC .giveReward
     ; You already have this reward.
@@ -38,8 +69,7 @@ GiveNpcReward:
 .giveReward:
     JSL SetNpcFlag
     TAY ; NPC ID in Y
-    ASL A
-    ASL A
+    ASL #2
     TAX ; Table Index in X
     SEP #$20
     LDA.L NpcRewardTable,X
@@ -103,10 +133,104 @@ GiveNpcReward:
     SEP #$20
     JSL $028C75 ; Release Lair. Still needs more testing.
 .end:
+    PLP
+    RTL
+
+
+ResumePrintNpcRewardCop:
+    TYX ; Cop Handler puts X in Y
+    PHX ; Push X since some NPC scripts expect X to be preserved
+    LDA.B [CopTemp] ; NPC ID in A
+    INC.B CopTemp
+    AND #$00FF
+    JSL ResumePrintNpcReward
     REP #$20
     PLX ; Restore X so that some NPC scripts wont break.
     LDA.B CopTemp
-    STA.B $02, S ; place A onto stack, so that the `RTI` in the next line returns to that address
+    STA.B $02, S ; place A onto stack, so that the 'RTI' in the next line returns to that address
+    RTI
+
+
+ResumePrintNpcReward:
+    PHP
+    PHB
+    REP #$20
+    TAY ; NPC ID in Y
+    ASL #2
+    TAX ; Table Index in X
+    SEP #$20
+    LDA.L NpcRewardTable,X
+    BEQ .nothing
+    CMP #!Gems
+    BEQ .gems
+    CMP #!Exp
+    BEQ .exp
+    CMP #!LairRelease
+    BEQ .lair
+    ; Print regular item
+    STA $03C8 ; Used by the print routine to load item name
+    STZ $03C9 ; Second byte unused
+    LDY.W #PrintItemNameShort
+    LDA.B #PrintItemNameShort>>16 ; Load bank to switch to
+    BRA .end
+.nothing
+    LDY.W #PrintNothingShort
+    LDA.B #PrintNothingShort>>16 ; Load bank to switch to
+    BRA .end
+.gems:
+    REP #$20
+    LDA.L RewardQuantity,X
+    STA $03C8 ; Used by the print routine to load Gems/Exp Amount
+    SEP #$20
+    LDY.W #PrintGemsShort
+    LDA.B #PrintGemsShort>>16 ; Load bank to switch to
+    BRA .end
+.exp
+    REP #$20
+    LDA.L RewardQuantity,X
+    STA $03C8 ; Used by the print routine to load Gems/Exp Amount
+    SEP #$20
+    LDY.W #PrintExpShort
+    LDA.B #PrintExpShort>>16 ; Load bank to switch to
+    BRA .end
+.lair
+    REP #$20
+    LDA.L RewardQuantity,X ;
+    ASL #5
+    TAX ; Lair Index in X
+    SEP #$20
+    LDA $BA16,X ; Load NPC Name index from lair data field 09
+    STA $03C8 ; Used by the print routine to load npc name
+    STZ $03C9 ; Second byte unused
+    LDY.W #PrintRevivableNpcNameShort
+    LDA.B #PrintRevivableNpcNameShort>>16 ; Load bank to switch to
+.end:
+    PHA ; Switch Bank
+    PLB
+    JSL ResumePrintOsdStringFromBankX
+    PLB
+    PLP
+    RTL
+
+
+ResumePrintCop:
+    TYX
+    LDA.B [CopTemp]
+    INC.B CopTemp
+    INC.B CopTemp
+    TAY
+    SEP #$20
+    PHX
+    PHB
+    LDA.B CopTemp+2
+    PHA
+    PLB
+    JSL ResumePrintOsdStringFromBankX
+    PLB
+    PLX
+    REP #$20
+    LDA.B CopTemp
+    STA.B $02, S
     RTI
 
 
@@ -117,6 +241,7 @@ CheckNpcFlag:
     PLY
     RTL
 
+
 SetNpcFlag:
     PHY
     LDY #NpcReceivedFlags
@@ -124,14 +249,17 @@ SetNpcFlag:
     PLY
     RTL
 
+
 ; Hooks and original rom data overwrite section
 pushpc
 
-;Insert our new COP routine into slot $3D
+;Insert our new COP routines into slots $3D through $3F
 org $00D6B2
-dw GiveNpcReward
+dw GiveNpcRewardCop
+dw ResumePrintNpcRewardCop
+dw ResumePrintCop
 
-;TODO Create variant of CopJumpIfItemNotObtained for CopJumpIfNpcRewardNotObtained?
+;TODO Create variant of CopJumpIfItemNotObtained called CopJumpIfNpcRewardNotObtained?
 
 pullpc
 

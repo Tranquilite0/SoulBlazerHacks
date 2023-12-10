@@ -43,7 +43,7 @@ Receive:
     STZ $03C9 ; Second byte unused
     JSL $02A0F9 ; GiveItem
     LDY #$E216 ; String pointer "Hero received <item>"
-    JSL PrintOsdStringFromBankX ; Some sort of print routine
+    JSL PrintOsdStringFromBankX
     BRK #$9E ; Play Item Get sound
     BRA .end
 .nothing:
@@ -53,6 +53,7 @@ Receive:
     PHA
     PLB
     LDY.W #NothingReceived 
+    JSL PrintOsdStringFromBankX
     PLB ; restore bank
     BRA .end
 .gems:
@@ -64,7 +65,7 @@ Receive:
     TSB $0332
     SEP #$20
     LDY #$E246 ; Text Pointer "Hero found <amount> GEMs"
-    JSL PrintOsdStringFromBankX ; Some sort of print routine
+    JSL PrintOsdStringFromBankX
     BRK #$8D ; Play Gem-get sound
     BRA .end
 .exp:

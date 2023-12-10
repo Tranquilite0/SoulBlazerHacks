@@ -9,6 +9,13 @@ macro CopShowText(textPtr)
     dw <textPtr>
 endmacro
 
+macro CopShowChoices(choicesTxtPtr, numberOfChoices, abortPtr)
+    COP #$1A
+    dw <choicesTxtPtr>
+    db <numberOfChoices>
+    dw <abortPtr>
+endmacro
+
 ;---------------- Tool Shop Owner ----------------;
 
 ; Patch shopkeeper message to skip mentioning that she only has medical herbs.
@@ -40,8 +47,23 @@ NOP #6
 
 ;---------- Tool Shop Owner's Son Teddy ----------;
 
-;TODO: This
-;TODO: Would like a fancy way to print what NPC has easily
+; Break up Teddy's speech so we can print our reward name
+org $039276
+db $0D,$0C
+; And end it early since we will be printing the get message in a different routine
+org $039300
+db $13 : dw TextEndStandardBank3
+
+; Patch NPC Script
+org $03922C
+    %CopShowText($9255)
+    %CopResumePrintNpcReward(!NPC_ToolShopOwnersSonTeddy)
+    %CopResumeShowText($9287)
+    NOP #3 ; 3 nops to get to the choice menu
+
+org $03924F
+    %CopGiveNpcReward(!NPC_ToolShopOwnersSonTeddy)
+    RTL
 
 ;-------------------------------------------------;
 

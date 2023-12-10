@@ -11,6 +11,7 @@ org $00FA57
 
 incsrc "labels.asm"
 incsrc "items.asm"
+incsrc "textengineextensions.asm"
 incsrc "decouplelair.asm"
 incsrc "dataadditions.asm"
 incsrc "receive.asm"
