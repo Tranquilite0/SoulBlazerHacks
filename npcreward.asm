@@ -12,7 +12,7 @@ NpcReceivedFlags = $7E1B13
 ; Checks if NPC has already given the reward and prints message.
 ; Size: 3 bytes
 macro CopGiveNpcReward(npcId)
-    COP #$3D
+    COP #!CopGiveNpcRewardId
     db <npcId>
 endmacro
 
@@ -20,16 +20,23 @@ endmacro
 ; Prints what the the given NPC ID where the previous textbox left off.
 ; Must be used after printing a message that ends in the $C0 Text Command.
 macro CopResumePrintNpcReward(npcId)
-    COP #$3E
+    COP #!CopResumePrintNpcRewardId
     db <npcId>
 endmacro
 
 
 ; Prints a message where the previous textbox left off.
 ; Must be used after printing a message that ends in the $C0 Text Command.
-macro CopResumeShowText(textPtr)
-    COP #$3F
+macro CopResumePrint(textPtr)
+    COP #!CopResumePrintId
     dw <textPtr>
+endmacro
+
+
+macro CopJumpIfNpcRewardNotObtained(npcId, target)
+    COP #!CopJumpIfNpcRewardNotObtainedId
+    db <npcId>
+    dw <target>
 endmacro
 
 
@@ -44,9 +51,7 @@ GiveNpcRewardCop:
     JSL GiveNpcReward
     REP #$20
     PLX ; Restore X so that some NPC scripts wont break.
-    LDA.B CopTemp
-    STA.B $02, S ; place A onto stack, so that the 'RTI' in the next line returns to that address
-    RTI
+    BRL RetInTmp
 
 
 ; NPC ID in A
@@ -146,9 +151,7 @@ ResumePrintNpcRewardCop:
     JSL ResumePrintNpcReward
     REP #$20
     PLX ; Restore X so that some NPC scripts wont break.
-    LDA.B CopTemp
-    STA.B $02, S ; place A onto stack, so that the 'RTI' in the next line returns to that address
-    RTI
+    BRL RetInTmp
 
 
 ResumePrintNpcReward:
@@ -229,9 +232,22 @@ ResumePrintCop:
     PLB
     PLX
     REP #$20
-    LDA.B CopTemp
-    STA.B $02, S
-    RTI
+    BRL RetInTmp
+
+
+JumpIfNpcRewardNotObtainedCop:
+    TYX
+    LDA.B [CopTemp]
+    INC.B CopTemp
+    AND.W #$FF
+    JSL CheckNpcFlag
+    BCC .isNotObtained
+    BRL Skip2Args
+.isNotObtained:
+    LDA.B [CopTemp]
+    INC.B CopTemp
+    INC.B CopTemp
+    BRL RetInA
 
 
 CheckNpcFlag:
@@ -253,13 +269,29 @@ SetNpcFlag:
 ; Hooks and original rom data overwrite section
 pushpc
 
-;Insert our new COP routines into slots $3D through $3F
+;Insert our new COP routines into slots $3D through $40
+!CopIndex = $3D
 org $00D6B2
-dw GiveNpcRewardCop
-dw ResumePrintNpcRewardCop
-dw ResumePrintCop
+    dw GiveNpcRewardCop              : !CopGiveNpcRewardId              := !CopIndex : !CopIndex #= !CopIndex+1
+    dw ResumePrintNpcRewardCop       : !CopResumePrintNpcRewardId       := !CopIndex : !CopIndex #= !CopIndex+1
+    dw ResumePrintCop                : !CopResumePrintId                := !CopIndex : !CopIndex #= !CopIndex+1
+    dw JumpIfNpcRewardNotObtainedCop : !CopJumpIfNpcRewardNotObtainedId := !CopIndex : !CopIndex #= !CopIndex+1
 
-;TODO Create variant of CopJumpIfItemNotObtained called CopJumpIfNpcRewardNotObtained?
+; Labels for reusing existing code for returning from COP Routines
+org $00E4B5
+Skip5Args: skip 2
+Skip4Args: skip 2
+Skip3Args: skip 2
+Skip2Args: skip 2
+Skip1Arg:  skip 2
+RetInTmp:  skip 2
+RetInA:
+    skip 2
+    skip 1
+SetScriptRetAddrAndGetOut:
+    skip 2
+    skip 3
+RetOutOfScript:
 
 pullpc
 
@@ -276,7 +308,7 @@ RewardQuantity:
     dw !GoatsFood,   $0000 : !NPC_ToolShopOwnersSonTeddy = $03
     dw !APass,       $0000 : !NPC_APass = $04
     dw $0000,        $0000 : !NPC_TileInChildsSecretCave = $05
-    dw $0000,        $0000 : !NPC_VillageChief = $06
+    dw !BrownStone,  $0000 : !NPC_VillageChief = $06
     dw !FlameBall,   $0000 : !NPC_Magician = $07
     dw $0000,        $0000 : !NPC_RecoverySwordCrystal = $08
     dw !Exp,         $0080 : !NPC_GrassValleySecretRoomCrystal = $09

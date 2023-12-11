@@ -21,7 +21,7 @@ endmacro
 ; Patch shopkeeper message to skip mentioning that she only has medical herbs.
 ; Now ends after "Take whatever you need from my store. "
 org $0383ED
-db $13 : dw TextEndStandardBank3
+db !Text_ChangeStreamPtr : dw TextEndStandardBank3 ; TODO: Use $C0 instead?
 
 ; Patch NPC Script
 org $038399
@@ -58,7 +58,7 @@ db !Text_ChangeStreamPtr : dw TextEndStandardBank3
 org $03922C
     %CopShowText($9255)
     %CopResumePrintNpcReward(!NPC_ToolShopOwnersSonTeddy)
-    %CopResumeShowText($9287)
+    %CopResumePrint($9287)
     NOP #3 ; 3 nops to get to the choice menu
 
 org $03924F
@@ -81,7 +81,29 @@ org $03924F
 
 ;----------------- Village Chief -----------------;
 
-;TODO: This
+; Abridge Village Chief's Dialog
+org $03A1F4
+    db $E2,$97,$D1,"named",!Text_CR,!Text_HeroName,". ",!Text_WaitBlinkCursor,!Text_Break
+
+; Patch Master's Dialog
+org $03A2F8
+    db "next ",$F6,$BA,!Text_CR,"open. Return ",$E2,"me.>",!Text_ChangeStreamPtr : dw TextEndStandardBank3
+
+; Change CopJumpIfItemNotObtained to CopJumpIfNpcRewardNotObtained
+org $03A125
+    %CopJumpIfNpcRewardNotObtained(!NPC_VillageChief, $A12F)
+
+; Change reward
+org $03A133
+    %CopGiveNpcReward(!NPC_VillageChief)
+    NOP #2
+
+; Patch the script that checks for brown stone to check for NPC reward instead
+;  so that Master's text shows and next world can open.
+org $03A0BE
+    %CopJumpIfNpcRewardNotObtained(!NPC_VillageChief, $A0C5)
+
+;TODO: patch the script in the shrine of the master?
 
 ;-------------------------------------------------;
 
