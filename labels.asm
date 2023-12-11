@@ -20,3 +20,16 @@ SetBit = $04F348
 ; Y contains the pointer to the start of a table to check
 ; returns the result in the carry bit: it's clear if the bit is clear and the carry bit is set if the bit is set
 CheckIfBitIsSet = $04F3A2
+
+
+!Text_YellowStyle = $03,$24
+!Text_EndStyle = $03,$20
+!Text_EndText12 = $12,$08,$08,$04,$0C
+!Text_HeroName = $02,$02
+!Text_CR = $0D
+!Text_ChangeStreamPtr = $13
+!Text_Break = $0C
+!Dict_You = $95
+!Dict_have = $B5
+!Dict_my = $C2
+!Dict_received = $D4

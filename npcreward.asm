@@ -279,8 +279,8 @@ RewardQuantity:
     dw $0000,        $0000 : !NPC_VillageChief = $06
     dw !FlameBall,   $0000 : !NPC_Magician = $07
     dw $0000,        $0000 : !NPC_RecoverySwordCrystal = $08
-    dw $0000,        $0000 : !NPC_GrassValleySecretRoomCrystal = $09
-    dw !Exp,         $0080 : !NPC_UndergroundCastle1stPartCrystal = $0A
+    dw !Exp,         $0080 : !NPC_GrassValleySecretRoomCrystal = $09
+    dw !Exp,         $0030 : !NPC_UndergroundCastle1stPartCrystal = $0A
     dw $0000, $0000 : !NPC_RedHotMirrorBird = $0B
     dw $0000, $0000 : !NPC_MagicBellCrystal = $0C
     dw $0000, $0000 : !NPC_WoodstinTrio = $0D

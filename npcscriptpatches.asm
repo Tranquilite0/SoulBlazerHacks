@@ -49,10 +49,10 @@ NOP #6
 
 ; Break up Teddy's speech so we can print our reward name
 org $039276
-db $0D,$0C
+db !Text_CR,!Text_Break
 ; And end it early since we will be printing the get message in a different routine
 org $039300
-db $13 : dw TextEndStandardBank3
+db !Text_ChangeStreamPtr : dw TextEndStandardBank3
 
 ; Patch NPC Script
 org $03922C
@@ -99,16 +99,22 @@ org $03924F
 
 ;------- Grass Valley Secret Room Crystal --------;
 
-;TODO: This
+; Change crystal message to skip EXP received message
+org $03ABD3
+    db !Text_Break
+
+; Change crystal message to skip EXP received message
+org $03AC24
+    %CopGiveNpcReward(!NPC_GrassValleySecretRoomCrystal)
+    NOP
 
 ;-------------------------------------------------;
 
 ;------ Underground Castle 1st part crystal ------;
 
 ; Change crystal message to skip EXP received message
-; Advice->Exp->End to Advice->End
-org $03AD07
-    dw TextEndStandardBank3
+org $03AD06
+    db !Text_Break
 
 ; Change GiveExp COP routine to GiveNpcReward
 ; Also avoid giving the return to town prompt the first time you talk

@@ -1,14 +1,3 @@
-!Text_YellowStyle = $03,$24
-!Text_EndStyle = $03,$20
-!Text_EndText12 = $12,$08,$08,$04,$0C
-!Text_HeroName = $02,$02
-!Text_CR = $0D
-!Text_Break = $0C
-!Dict_You = $95
-!Dict_have = $B5
-!Dict_my = $C2
-!Dict_received = $D4
-
 
 pushpc
 

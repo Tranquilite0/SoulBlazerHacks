@@ -44,4 +44,8 @@ pushpc
 org $028ABB  
 JML ExtendChestReward
 
+;Patch the default GEMs recieved message to allow up to 4 digit values
+org $02E254
+db $04
+
 pullpc
