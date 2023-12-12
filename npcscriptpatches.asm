@@ -9,6 +9,12 @@ macro CopShowText(textPtr)
     dw <textPtr>
 endmacro
 
+macro CopJumpIfItemNotObtained(itemId, target)
+    COP #$18
+    db <itemId>
+    dw <target>
+endmacro
+
 macro CopShowChoices(choicesTxtPtr, numberOfChoices, abortPtr)
     COP #$1A
     dw <choicesTxtPtr>
@@ -16,12 +22,14 @@ macro CopShowChoices(choicesTxtPtr, numberOfChoices, abortPtr)
     dw <abortPtr>
 endmacro
 
+; Patches for Item-giving NPC Scripts
+
 ;---------------- Tool Shop Owner ----------------;
 
 ; Patch shopkeeper message to skip mentioning that she only has medical herbs.
 ; Now ends after "Take whatever you need from my store. "
 org $0383ED
-db !Text_ChangeStreamPtr : dw TextEndStandardBank3 ; TODO: Use $C0 instead?
+    db !Text_ChangeStreamPtr : dw TextEndStandardBank3
 
 ; Patch NPC Script
 org $038399
@@ -36,54 +44,73 @@ org $038399
 
 ;-------------------------------------------------;
 
+
 ;---------------- Goat Pen Corner ----------------;
 
 ; Patch NPC Script
 org $038958
-%CopGiveNpcReward(!NPC_GoatPenCorner)
-NOP #6
+    %CopGiveNpcReward(!NPC_GoatPenCorner)
+    NOP #6
 
 ;-------------------------------------------------;
+
 
 ;---------- Tool Shop Owner's Son Teddy ----------;
 
 ; Break up Teddy's speech so we can print our reward name
 org $039276
-db !Text_CR,!Text_Break
-; And end it early since we will be printing the get message in a different routine
+    db !Text_CR,!Text_Break,!Text_ChangeStreamPtr : dw $9287
+
+; And end it early since we will be printing the received message in a different routine
 org $039300
-db !Text_ChangeStreamPtr : dw TextEndStandardBank3
+    db !Text_ChangeStreamPtr : dw TextEndStandardBank3
+
+; Modify the you already have my reward message.
+org $039320
+    db "That`s all I`ve got.",!Text_ChangeStreamPtr : dw TextEndStandardBank3
 
 ; Patch NPC Script
 org $03922C
-    %CopShowText($9255)
-    %CopResumePrintNpcReward(!NPC_ToolShopOwnersSonTeddy)
-    %CopResumePrint($9287)
-    NOP #3 ; 3 nops to get to the choice menu
-
-org $03924F
+    %CopJumpIfNpcRewardNotObtained(!NPC_ToolShopOwnersSonTeddy, $9236)
+    skip 5
+    %CopPrintNpcReward($9255,!NPC_ToolShopOwnersSonTeddy)
+    ; This choice doesnt matter (But thou must!)
+    %CopShowChoices($CF02,$02,+)
++ 
+    COP #$12
+    db $05, $80, $84
+    %CopShowText($92D9)
+    COP #$12
+    db $05, $53, $83
     %CopGiveNpcReward(!NPC_ToolShopOwnersSonTeddy)
     RTL
 
 ;-------------------------------------------------;
 
+
 ;--------------------- A Pass --------------------;
 
-;TODO: This
+org $039833
+    %CopGiveNpcReward(!NPC_APass)
+    NOP #6
 
 ;-------------------------------------------------;
+
 
 ;---------- Tile in Child's Secret Cave ----------;
 
-;TODO: This
+org $03990C
+    %CopGiveNpcReward(!NPC_TileInChildsSecretCave)
+    NOP #6
 
 ;-------------------------------------------------;
+
 
 ;----------------- Village Chief -----------------;
 
 ; Abridge Village Chief's Dialog
 org $03A1F4
-    db $E2,$97,$D1,"named",!Text_CR,!Text_HeroName,". ",!Text_WaitBlinkCursor,!Text_Break
+    db $E2,$97,$D1,"named",!Text_CR,!Text_HeroName,". ",!Text_ChangeStreamPtr : dw TextEndStandardBank3
 
 ; Patch Master's Dialog
 org $03A2F8
@@ -103,9 +130,13 @@ org $03A133
 org $03A0BE
     %CopJumpIfNpcRewardNotObtained(!NPC_VillageChief, $A0C5)
 
-;TODO: patch the script in the shrine of the master?
+; Patch out the textbox in the master's shrine
+org $00F790
+    NOP #4
+
 
 ;-------------------------------------------------;
+
 
 ;-------------------- Macician -------------------;
 
@@ -113,17 +144,19 @@ org $03A0BE
 
 ;-------------------------------------------------;
 
+
 ;------------ Recovery Sword Crystal -------------;
 
 ;TODO: This
 
 ;-------------------------------------------------;
 
+
 ;------- Grass Valley Secret Room Crystal --------;
 
 ; Change crystal message to skip EXP received message
-org $03ABD3
-    db !Text_Break
+org $03ABD2
+    db !Text_ChangeStreamPtr : dw TextEndStandardBank3
 
 ; Change crystal message to skip EXP received message
 org $03AC24
@@ -132,11 +165,12 @@ org $03AC24
 
 ;-------------------------------------------------;
 
+
 ;------ Underground Castle 1st part crystal ------;
 
 ; Change crystal message to skip EXP received message
-org $03AD06
-    db !Text_Break
+org $03AD05
+    db !Text_ChangeStreamPtr : dw TextEndStandardBank3
 
 ; Change GiveExp COP routine to GiveNpcReward
 ; Also avoid giving the return to town prompt the first time you talk
@@ -149,11 +183,13 @@ org $03AD13
 
 ;-------------------------------------------------;
 
+
 ;-------------- Red-Hot Mirror Bird --------------;
 
 ;TODO: This
 
 ;-------------------------------------------------;
+
 
 ;-------------- Magic Bell Crystal ---------------;
 
@@ -161,17 +197,20 @@ org $03AD13
 
 ;-------------------------------------------------;
 
+
 ;----------------- Woodstin Trio -----------------;
 
 ;TODO: This
 
 ;-------------------------------------------------;
 
+
 ;------------- Greenwood's Guardian --------------;
 
 ;TODO: This
 
 ;-------------------------------------------------;
+
 
 ;--------------- Greenwood Leaves ----------------;
 
@@ -186,11 +225,52 @@ org $03AD13
 
 ;-------------------------------------------------;
 
+
 ;------------- Psycho Sword Squirrel -------------;
 
-;TODO: This
+; Patch the release text box to hint item.
+; We dont have quite enough room in the script, 
+; but we can save some room in the text and relocate our script there.
+org $03E145
+BRL +
+
+; Patch release text to have reward hint.
+org $03E1A0
+    db !Text_CR,!Text_Break,!Text_CR,$F2,"them.....",!Text_ChangeStreamPtr : dw TextEndStandardBank3
++
+    %CopPrintNpcReward($E14C,!NPC_PsychoSwordSquirrel)
+    COP #$86
+    RTL
+; We have 8 bytes to spare starting at $03E1B8, so if the next script happens to need it we can use it.
+
+; Now Patch the reward recieved text/script
+; Edit text to make the no seeds obtained message give hint
+org $03E097
+    db !Text_Break,".",!Text_ChangeStreamPtr : dw TextEndStandardBank3
+
+; Edit text when giving reward
+org $03E0EB
+    db $F2,$FE,$AE,$E1,!Text_CR,"seeds.",!Text_ChangeStreamPtr : dw TextEndStandardBank3
+
+; Patch NPC script
+org $03E01A
+    ; Skip checks if NPC reward not obtained instead of item not obtained.
+    %CopJumpIfNpcRewardNotObtained(!NPC_PsychoSwordSquirrel, +)
+    skip 5
++
+    ; Relocate jump destination since we need an extra byte for hinting
+    %CopJumpIfItemNotObtained(!DeliciousSeeds,+)
+
+org $03E035
+    %CopGiveNpcReward(!NPC_PsychoSwordSquirrel)
+    RTL
++
+    ; Give hint about reward if you do not have seeds.
+    %CopPrintNpcReward($E045,!NPC_PsychoSwordSquirrel)
+    RTL
 
 ;-------------------------------------------------;
+
 
 ;--------------- Emblem C Squirrel ---------------;
 
@@ -198,17 +278,30 @@ org $03AD13
 
 ;-------------------------------------------------;
 
+
 ;----------- WaterShrineStrangeBottle ------------;
 
-;TODO: This
+org $03E48E
+    %CopGiveNpcReward(!NPC_WaterShrineStrangeBottle)
+    NOP #6
 
 ;-------------------------------------------------;
+
 
 ;--------------- LightArrowCrystal ---------------;
 
-;TODO: This
+; Reward recieved message is so short already, just skip it entirely.
+; Change GiveExp COP routine to GiveNpcReward
+; Also avoid giving the return to town prompt the first time you talk
+; so that you dont glitch the game if you get a lair reward and return at the same time.
+org $03E561
+    %CopGiveNpcReward(!NPC_LightArrowCrystal)
+    COP #$09
+    db $07,$9C
+    RTL 
 
 ;-------------------------------------------------;
+
 
 ;-------------- Lost Marsh Crystal ---------------;
 
@@ -216,11 +309,24 @@ org $03AD13
 
 ;-------------------------------------------------;
 
+
 ;------------- Water Shrine Crystal --------------;
 
-;TODO: This
+; Abridge text to remove reward message.
+org $03EBDC
+    db !Text_ChangeStreamPtr : dw TextEndStandardBank3
+
+; Change GiveExp COP routine to GiveNpcReward
+; Also avoid giving the return to town prompt the first time you talk
+; so that you dont glitch the game if you get a lair reward and return at the same time.
+org $03E535
+    %CopGiveNpcReward(!NPC_WaterShrineCrystal)
+    COP #$09
+    db $06,$9C
+    RTL 
 
 ;-------------------------------------------------;
+
 
 ;-------------- Fire Shrine Crystal --------------;
 
@@ -228,11 +334,13 @@ org $03AD13
 
 ;-------------------------------------------------;
 
+
 ;----------------- Mountain King -----------------;
 
 ;TODO: This
 
 ;-------------------------------------------------;
+
 
 ;-------------- Mushroom Shoes Boy ---------------;
 
@@ -240,11 +348,13 @@ org $03AD13
 
 ;-------------------------------------------------;
 
+
 ;--------------------- Nome ----------------------;
 
 ;TODO: This
 
 ;-------------------------------------------------;
+
 
 ;---------------- Emblem E Snail -----------------;
 
@@ -252,11 +362,13 @@ org $03AD13
 
 ;-------------------------------------------------;
 
+
 ;----------------- Emblem F Tile -----------------;
 
 ;TODO: This
 
 ;-------------------------------------------------;
+
 
 ;----------- Mountain of Souls Crystal -----------;
 
@@ -264,11 +376,13 @@ org $03AD13
 
 ;-------------------------------------------------;
 
+
 ;------------------ Lune Crystal -----------------;
 
 ;TODO: This
 
 ;-------------------------------------------------;
+
 
 ;-------- Emblem G Under Chest of Drawers --------;
 
@@ -276,11 +390,13 @@ org $03AD13
 
 ;-------------------------------------------------;
 
+
 ;----------- ChestOfDrawersMysticArmor -----------;
 
 ;TODO: This
 
 ;-------------------------------------------------;
+
 
 ;----------- Herb Plant in Leo's Lab -------------;
 
@@ -288,11 +404,13 @@ org $03AD13
 
 ;-------------------------------------------------;
 
+
 ;-------------- Leo's Cat Door Key ---------------;
 
 ;TODO: This
 
 ;-------------------------------------------------;
+
 
 ;---------------- Actinidia Plant ----------------;
 
@@ -300,11 +418,13 @@ org $03AD13
 
 ;-------------------------------------------------;
 
+
 ;------------- Chest of Drawers Herb -------------;
 
 ;TODO: This
 
 ;-------------------------------------------------;
+
 
 ;--------------------- Marie ---------------------;
 
@@ -312,11 +432,13 @@ org $03AD13
 
 ;-------------------------------------------------;
 
+
 ;--------------- Spark Bomb Mouse ----------------;
 
 ;TODO: This
 
 ;-------------------------------------------------;
+
 
 ;---------- Leo's Lab Basement Crystal -----------;
 
@@ -324,11 +446,13 @@ org $03AD13
 
 ;-------------------------------------------------;
 
+
 ;------------ Model Town 1 Crystal ---------------;
 
 ;TODO: This
 
 ;-------------------------------------------------;
+
 
 ;-------------- Power Plant Crystal --------------;
 
@@ -336,11 +460,13 @@ org $03AD13
 
 ;-------------------------------------------------;
 
+
 ;------------ Elemental Mail Soldier -------------;
 
 ;TODO: This
 
 ;-------------------------------------------------;
+
 
 ;-------------- Super Bracelet Tile --------------;
 
@@ -348,11 +474,13 @@ org $03AD13
 
 ;-------------------------------------------------;
 
+
 ;------------ Queen Magridd VIP Card -------------;
 
 ;TODO: This
 
 ;-------------------------------------------------;
+
 
 ;------------- Platinum Card Soldier -------------;
 
@@ -360,11 +488,13 @@ org $03AD13
 
 ;-------------------------------------------------;
 
+
 ;------------------- Maid Herb -------------------;
 
 ;TODO: This
 
 ;-------------------------------------------------;
+
 
 ;----------------- Emblem H Tile -----------------;
 
@@ -372,11 +502,13 @@ org $03AD13
 
 ;-------------------------------------------------;
 
+
 ;----------------- Magridd King ------------------;
 
 ;TODO: This
 
 ;-------------------------------------------------;
+
 
 ;------ Leo On The Airship Deck Mobile Key -------;
 
@@ -384,11 +516,13 @@ org $03AD13
 
 ;-------------------------------------------------;
 
+
 ;--------------- Harp String Tile ----------------;
 
 ;TODO: This
 
 ;-------------------------------------------------;
+
 
 ;---------- North Eastern Mermaid Herb -----------;
 
@@ -396,11 +530,13 @@ org $03AD13
 
 ;-------------------------------------------------;
 
+
 ;------------- Bubble Armor Mermaid --------------;
 
 ;TODO: This
 
 ;-------------------------------------------------;
+
 
 ;-------------- Magic Flair Mermaid --------------;
 
@@ -408,11 +544,13 @@ org $03AD13
 
 ;-------------------------------------------------;
 
+
 ;----------------- Mermaid Queen -----------------;
 
 ;TODO: This
 
 ;-------------------------------------------------;
+
 
 ;------------- Red-Hot Stick Mermaid -------------;
 
@@ -420,11 +558,13 @@ org $03AD13
 
 ;-------------------------------------------------;
 
+
 ;---------------------- Lue ----------------------;
 
 ;TODO: This
 
 ;-------------------------------------------------;
+
 
 ;--------------- Rockbird Crystal ----------------;
 
@@ -432,16 +572,19 @@ org $03AD13
 
 ;-------------------------------------------------;
 
+
 ;---------- Seabed Crystal Near Blester ----------;
 
 ;TODO: This
 
 ;-------------------------------------------------;
 
+
 ;------------ SeabedCrystalNearDurean ------------;
 
 ;TODO: This
 
 ;-------------------------------------------------;
+
 
 pullpc

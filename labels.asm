@@ -25,6 +25,7 @@ CheckIfBitIsSet = $04F3A2
 !Text_YellowStyle = $03,$24
 !Text_EndStyle = $03,$20
 !Text_EndText12 = $12,$08,$08,$04,$0C
+!Text_CleanUpAndBreak = $08,$08,$04,$0C
 !Text_HeroName = $02,$02
 !Text_CR = $0D
 !Text_WaitBlinkCursor = $11

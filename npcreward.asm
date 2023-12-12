@@ -39,6 +39,11 @@ macro CopJumpIfNpcRewardNotObtained(npcId, target)
     dw <target>
 endmacro
 
+macro CopPrintNpcReward(textPtr, npcId)
+    COP #!CopPrintNpcRewardId
+    dw <textPtr>
+    db <npcId>
+endmacro
 
 ; New Code Section
 
@@ -215,6 +220,101 @@ ResumePrintNpcReward:
     PLP
     RTL
 
+PrintNPCRewardCop:
+    TYX
+    LDA.B [CopTemp]
+    INC.B CopTemp
+    INC.B CopTemp
+    TAY
+    LDA.B [CopTemp]
+    INC.B CopTemp
+    AND #$00FF
+    SEP #$20
+    PHX
+    PHB
+    PHA
+    LDA.B CopTemp+2
+    PHA
+    PLB
+    PLA
+    JSL PrintNpcReward
+    PLB
+    PLX
+    REP #$20
+    BRL RetInTmp
+
+; String to print in Y
+; NPC ID in A
+; NPC reward will be printed in place of the first $0C command that occurs in the string
+; printing will then continue from after the first $0C until the end of the string.
+PrintNpcReward:
+    PHP
+    PHB
+    REP #$20
+    ASL #2
+    PHA ; Push NPC Table Index
+    SEP #$20
+    ; Print string in Y
+    JSL PrintOsdStringFromBankX
+    PLX ; Pull NPC Table index into X
+    PHY ; Store current string position for later
+    ; Determine NPC reward and set up string for printing.
+    LDA.L NpcRewardTable,X
+    BEQ .nothing
+    CMP #!Gems
+    BEQ .gems
+    CMP #!Exp
+    BEQ .exp
+    CMP #!LairRelease
+    BEQ .lair
+    ; Print regular item
+    STA $03C8 ; Used by the print routine to load item name
+    STZ $03C9 ; Second byte unused
+    LDY.W #PrintItemNameShort
+    LDA.B #PrintItemNameShort>>16 ; Load bank to switch to
+    BRA .end
+.nothing
+    LDY.W #PrintNothingShort
+    LDA.B #PrintNothingShort>>16 ; Load bank to switch to
+    BRA .end
+.gems:
+    REP #$20
+    LDA.L RewardQuantity,X
+    STA $03C8 ; Used by the print routine to load Gems/Exp Amount
+    SEP #$20
+    LDY.W #PrintGemsShort
+    LDA.B #PrintGemsShort>>16 ; Load bank to switch to
+    BRA .end
+.exp
+    REP #$20
+    LDA.L RewardQuantity,X
+    STA $03C8 ; Used by the print routine to load Gems/Exp Amount
+    SEP #$20
+    LDY.W #PrintExpShort
+    LDA.B #PrintExpShort>>16 ; Load bank to switch to
+    BRA .end
+.lair
+    REP #$20
+    LDA.L RewardQuantity,X ;
+    ASL #5
+    TAX ; Lair Index in X
+    SEP #$20
+    LDA $BA16,X ; Load NPC Name index from lair data field 09
+    STA $03C8 ; Used by the print routine to load npc name
+    STZ $03C9 ; Second byte unused
+    LDY.W #PrintRevivableNpcNameShort
+    LDA.B #PrintRevivableNpcNameShort>>16 ; Load bank to switch to
+.end:
+    PHA ; Switch Bank
+    PLB
+    ; Print NPC reward
+    JSL ResumePrintOsdStringFromBankX
+    PLY ; Pull string position from original string.
+    PLB ; Restore bank
+    JSL ResumePrintOsdStringFromBankX ; Finish printing rest of string.
+    PLP
+    RTL
+
 
 ResumePrintCop:
     TYX
@@ -269,13 +369,14 @@ SetNpcFlag:
 ; Hooks and original rom data overwrite section
 pushpc
 
-;Insert our new COP routines into slots $3D through $40
+;Insert our new COP routines into slots $3D through $41
 !CopIndex = $3D
 org $00D6B2
     dw GiveNpcRewardCop              : !CopGiveNpcRewardId              := !CopIndex : !CopIndex #= !CopIndex+1
     dw ResumePrintNpcRewardCop       : !CopResumePrintNpcRewardId       := !CopIndex : !CopIndex #= !CopIndex+1
     dw ResumePrintCop                : !CopResumePrintId                := !CopIndex : !CopIndex #= !CopIndex+1
     dw JumpIfNpcRewardNotObtainedCop : !CopJumpIfNpcRewardNotObtainedId := !CopIndex : !CopIndex #= !CopIndex+1
+    dw PrintNPCRewardCop             : !CopPrintNpcRewardId := !CopIndex : !CopIndex #= !CopIndex+1
 
 ; Labels for reusing existing code for returning from COP Routines
 org $00E4B5
@@ -302,29 +403,29 @@ pullpc
 NpcRewardTable:
     dw !MedicalHerb ; Tool shop owner
 RewardQuantity:
-    dw $0000               : !NPC_ToolShopOwner = $00
-    dw !EmblemA,     $0000 : !NPC_EmblemATile = $01
-    dw !MedicalHerb, $0000 : !NPC_GoatPenCorner = $02
-    dw !GoatsFood,   $0000 : !NPC_ToolShopOwnersSonTeddy = $03
-    dw !APass,       $0000 : !NPC_APass = $04
-    dw $0000,        $0000 : !NPC_TileInChildsSecretCave = $05
-    dw !BrownStone,  $0000 : !NPC_VillageChief = $06
-    dw !FlameBall,   $0000 : !NPC_Magician = $07
-    dw $0000,        $0000 : !NPC_RecoverySwordCrystal = $08
-    dw !Exp,         $0080 : !NPC_GrassValleySecretRoomCrystal = $09
-    dw !Exp,         $0030 : !NPC_UndergroundCastle1stPartCrystal = $0A
+    dw $0000                 : !NPC_ToolShopOwner = $00
+    dw !EmblemA,       $0000 : !NPC_EmblemATile = $01
+    dw !MedicalHerb,   $0000 : !NPC_GoatPenCorner = $02
+    dw !GoatsFood,     $0000 : !NPC_ToolShopOwnersSonTeddy = $03
+    dw !APass,         $0000 : !NPC_APass = $04
+    dw !StrangeBottle, $0000 : !NPC_TileInChildsSecretCave = $05
+    dw !BrownStone,    $0000 : !NPC_VillageChief = $06
+    dw !FlameBall,     $0000 : !NPC_Magician = $07
+    dw !RecoverySword, $0000 : !NPC_RecoverySwordCrystal = $08
+    dw !Exp,           $0080 : !NPC_GrassValleySecretRoomCrystal = $09
+    dw !Exp,           $0030 : !NPC_UndergroundCastle1stPartCrystal = $0A
     dw $0000, $0000 : !NPC_RedHotMirrorBird = $0B
     dw $0000, $0000 : !NPC_MagicBellCrystal = $0C
     dw $0000, $0000 : !NPC_WoodstinTrio = $0D
     dw $0000, $0000 : !NPC_GreenwoodsGuardian = $0E
     dw $0000, $0000 : !NPC_GreenwoodLeaves = $0F
     dw $0000, $0000 : !NPC_ShieldBraceletMole = $10
-    dw $0000, $0000 : !NPC_PsychoSwordSquirrel = $11
+    dw !PsychoSword,   $0000 : !NPC_PsychoSwordSquirrel = $11
     dw $0000, $0000 : !NPC_EmblemCSquirrel = $12
-    dw $0000, $0000 : !NPC_WaterShrineStrangeBottle = $13
-    dw $0000, $0000 : !NPC_LightArrowCrystal = $14
+    dw !StrangeBottle, $0000 : !NPC_WaterShrineStrangeBottle = $13
+    dw !LightArrow,    $0000 : !NPC_LightArrowCrystal = $14
     dw $0000, $0000 : !NPC_LostMarshCrystal = $15
-    dw $0000, $0000 : !NPC_WaterShrineCrystal = $16
+    dw !Exp,           $0180 : !NPC_WaterShrineCrystal = $16
     dw $0000, $0000 : !NPC_FireShrineCrystal = $17
     dw $0000, $0000 : !NPC_MountainKing = $18
     dw $0000, $0000 : !NPC_MushroomShoesBoy = $19
