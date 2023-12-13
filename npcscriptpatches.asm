@@ -31,7 +31,7 @@ endmacro
 org $0383ED
     db !Text_ChangeStreamPtr : dw TextEndStandardBank3
 
-; Patch NPC Script
+; Patch NPC Script TODO: Revisit and make fancy?
 org $038399
     %CopShowText($83AD) ; Display shopkeepers message
     %CopGiveNpcReward(!NPC_ToolShopOwner)
@@ -138,7 +138,7 @@ org $00F790
 ;-------------------------------------------------;
 
 
-;-------------------- Macician -------------------;
+;-------------------- Magician -------------------;
 
 ;TODO: This
 
@@ -200,7 +200,33 @@ org $03AD13
 
 ;----------------- Woodstin Trio -----------------;
 
-;TODO: This
+; Lets add a hint to the initial textbox
+; We dont have quite enough room in the script, for CopPrintNpcReward,
+; but we can save some room in the text and relocate our script there.
+org $03D0E3
+    BRL.W +
+    NOP
+-- ; Our return point to resume the NPC script
+
+;Now patch the text
+org $03D174
+-
+    skip 1
+    db "Let`s start the show!",!Text_CR,"The prize is",!Text_CR,!Text_Break,".",!Text_ChangeStreamPtr : dw TextEndStandardBank3
++
+    %CopPrintNpcReward(-,!NPC_WoodstinTrio)
+    BRL --
+
+
+; Edit The "you guessed correctly" text to end early since
+; We print the reward a different way.
+org $03D2B7
+    db !Text_ChangeStreamPtr : dw TextEndStandardBank3
+
+; Modify script to give NPC Reward
+org $03D11C
+    %CopGiveNpcReward(!NPC_WoodstinTrio)
+    NOP #2
 
 ;-------------------------------------------------;
 
@@ -214,7 +240,12 @@ org $03AD13
 
 ;--------------- Greenwood Leaves ----------------;
 
-;TODO: This
+org $03D816
+    %CopGiveNpcReward(!NPC_GreenwoodLeaves)
+    COP #$09
+    db $04,$83
+    COP #$91
+    RTL 
 
 ;-------------------------------------------------;
 
@@ -305,7 +336,12 @@ org $03E561
 
 ;-------------- Lost Marsh Crystal ---------------;
 
-;TODO: This
+;Text is already perfect as-is, just patch script to give NPC Reward
+org $03E4E1
+    %CopGiveNpcReward(!NPC_LostMarshCrystal)
+    COP #$09
+    db $05,$9C
+    RTL 
 
 ;-------------------------------------------------;
 
