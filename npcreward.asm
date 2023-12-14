@@ -417,7 +417,7 @@ RewardQuantity:
     dw $0000, $0000 : !NPC_RedHotMirrorBird = $0B
     dw !MagicBell,      $0000 : !NPC_MagicBellCrystal = $0C
     dw !MedicalHerb,    $0000 : !NPC_WoodstinTrio = $0D
-    dw $0000, $0000 : !NPC_GreenwoodsGuardian = $0E
+    dw !GreenStone,     $0000 : !NPC_GreenwoodsGuardian = $0E
     dw !TurbosLeaves,   $0000 : !NPC_GreenwoodLeaves = $0F
     dw !ShieldBracelet, $0000 : !NPC_ShieldBraceletMole = $10
     dw !PsychoSword,    $0000 : !NPC_PsychoSwordSquirrel = $11

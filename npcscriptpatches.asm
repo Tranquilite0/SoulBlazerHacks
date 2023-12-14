@@ -353,7 +353,73 @@ org $03D11C
 
 ;------------- Greenwood's Guardian --------------;
 
-;TODO: This
+; Patch text to remove vanilla item reference.
+org $03D599
+    db !Text_ChangeStreamPtr : dw TextEndStandardBank3
+
+
+; Patch release text to hint reward. Once again we dont quite have enough space, so abridge text and relocate.
+org $03D531
+    BRL +
+    NOP
+-
+
+org $03D5CE
++
+    %CopPrintNpcReward(+,!NPC_GreenwoodsGuardian)
+    BRL -
++
+    ; "I will give you \r<reward>\r upon your return."
+    db $10,$88,$F1,$B0,$FE,!Text_CR,!Text_Break,!Text_CR,"upon ",$FF,"return. ",!Text_ChangeStreamPtr : dw TextEndStandardBank3
+-
+    %CopGiveNpcReward(!NPC_GreenwoodsGuardian)
+    COP #$09
+    db $02,$85
+    BRL +
+
+; Patch script to give reward and also open Southerta
+org $03D521
+    BRL -
+    NOP #2
++
+    
+; Talk script
+;03D511  02 07          COP #$07
+;03D513               --------data--------
+;03D513  00 00 00 00  .db $07 $85 $2E $D5
+;03D516               ----------------
+;03D517  02 1B          COP #$1B
+;03D519               --------data--------
+;03D519  00 00 00 00  .db $1D $D5 $02 $00
+;03D51C               ----------------
+;03D51D  02 01          COP #$01
+;03D51F               --------data--------
+;03D51F  00 00        .db $3A $D5
+;03D520               ----------------
+;03D521  00 5E          BRK #$5E
+;03D523  02 0A          COP #$0A
+;03D525               --------data--------
+;03D525  00           .db $3B
+;03D525               ----------------
+;03D526  02 09          COP #$09
+;03D528               --------data--------
+;03D528  00 00        .db $07 $85
+;03D529               ----------------
+;03D52A  02 09          COP #$09
+;03D52C               --------data--------
+;03D52C  00 00        .db $01 $9B
+;03D52D               ----------------
+;03D52E  02 91          COP #$91
+;03D530  6B             RTL
+
+;Release Script
+;03D531  02 01          COP #$01
+;03D533               --------data--------
+;03D533  00 00        .db $CE $D5
+;03D534               ----------------
+;03D535  02 37          COP #$37
+;03D537  02 86          COP #$86
+;03D539  6B             RTL
 
 ;-------------------------------------------------;
 
