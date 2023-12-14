@@ -193,7 +193,127 @@ org $03AD13
 
 ;-------------- Magic Bell Crystal ---------------;
 
-;TODO: This
+;TODO: Verify this all works.
+; Patch hint text to remove vanilla item reference
+org $03C177
+    db $96,$FE,$A7,$B5,!Text_CR,!Text_Break,".",!Text_ChangeStreamPtr : dw TextEndStandardBank3
+
+
+; Change CopJumpIfItemNotObtained to CopJumpIfNpcRewardNotObtained
+org $03C0C4
+    %CopJumpIfNpcRewardNotObtained(!NPC_MagicBellCrystal,$C0CE)
+
+; Change the pointer for when you dont have all 8 emblems since we need an extra byte
+; to use CopPrintNpcReward
+org $03C0CE
+    %CopJumpIfItemNotObtained(!EmblemA,+)
+    %CopJumpIfItemNotObtained(!EmblemB,+)
+    %CopJumpIfItemNotObtained(!EmblemC,+)
+    %CopJumpIfItemNotObtained(!EmblemD,+)
+    %CopJumpIfItemNotObtained(!EmblemE,+)
+    %CopJumpIfItemNotObtained(!EmblemF,+)
+    %CopJumpIfItemNotObtained(!EmblemG,+)
+    %CopJumpIfItemNotObtained(!EmblemH,+)
+
+; Give NPC Reward
+org $03C112
+    %CopGiveNpcReward(!NPC_MagicBellCrystal)
+    RTL
++
+    %CopPrintNpcReward($C11D,!NPC_MagicBellCrystal)
+    RTL
+
+;03C0C4  02 18          COP #$18
+;03C0C6               --------data--------
+;03C0C6  00 00 00     .db $40 $CE $C0
+;03C0C8               ----------------
+;03C0C9  02 01          COP #$01
+;03C0CB               --------data--------
+;03C0CB  00 00        .db $24 $C2
+;03C0CC               ----------------
+;03C0CD  6B             RTL
+;                     ----------------
+;03C0CE  02 18          COP #$18
+;03C0D0               --------data--------
+;03C0D0  00 00 00     .db $2A $18 $C1
+;03C0D2               ----------------
+;03C0D3  02 18          COP #$18
+;03C0D5               --------data--------
+;03C0D5  00 00 00     .db $2B $18 $C1
+;03C0D7               ----------------
+;03C0D8  02 18          COP #$18
+;03C0DA               --------data--------
+;03C0DA  00 00 00     .db $2C $18 $C1
+;03C0DC               ----------------
+;03C0DD  02 18          COP #$18
+;03C0DF               --------data--------
+;03C0DF  00 00 00     .db $2D $18 $C1
+;03C0E1               ----------------
+;03C0E2  02 18          COP #$18
+;03C0E4               --------data--------
+;03C0E4  00 00 00     .db $2E $18 $C1
+;03C0E6               ----------------
+;03C0E7  02 18          COP #$18
+;03C0E9               --------data--------
+;03C0E9  00 00 00     .db $2F $18 $C1
+;03C0EB               ----------------
+;03C0EC  02 18          COP #$18
+;03C0EE               --------data--------
+;03C0EE  00 00 00     .db $30 $18 $C1
+;03C0F0               ----------------
+;03C0F1  02 18          COP #$18
+;03C0F3               --------data--------
+;03C0F3  00 00 00     .db $31 $18 $C1
+;03C0F5               ----------------
+;03C0F6  02 01          COP #$01
+;03C0F8               --------data--------
+;03C0F8  00 00        .db $D8 $C1
+;03C0F9               ----------------
+;03C0FA  02 0B          COP #$0B
+;03C0FC               --------data--------
+;03C0FC  00           .db $2A
+;03C0FC               ----------------
+;03C0FD  02 0B          COP #$0B
+;03C0FF               --------data--------
+;03C0FF  00           .db $2B
+;03C0FF               ----------------
+;03C100  02 0B          COP #$0B
+;03C102               --------data--------
+;03C102  00           .db $2C
+;03C102               ----------------
+;03C103  02 0B          COP #$0B
+;03C105               --------data--------
+;03C105  00           .db $2D
+;03C105               ----------------
+;03C106  02 0B          COP #$0B
+;03C108               --------data--------
+;03C108  00           .db $2E
+;03C108               ----------------
+;03C109  02 0B          COP #$0B
+;03C10B               --------data--------
+;03C10B  00           .db $2F
+;03C10B               ----------------
+;03C10C  02 0B          COP #$0B
+;03C10E               --------data--------
+;03C10E  00           .db $30
+;03C10E               ----------------
+;03C10F  02 0B          COP #$0B
+;03C111               --------data--------
+;03C111  00           .db $31
+;03C111               ----------------
+;03C112  00 5E          BRK #$5E
+;03C114  02 0A          COP #$0A
+;03C116               --------data--------
+;03C116  00           .db $40
+;03C116               ----------------
+;03C117  6B             RTL
+;                     ----------------
+;03C118  02 01          COP #$01
+;03C11A               --------data--------
+;03C11A  00 00        .db $1D $C1
+;03C11B               ----------------
+;03C11C  6B             RTL
+
 
 ;-------------------------------------------------;
 
@@ -252,7 +372,25 @@ org $03D816
 
 ;------------- Shield Bracelet Mole --------------;
 
-;TODO: This
+;Change text to remove reference to vanilla reward.
+org $03DCD8
+    db "this.",!Text_ChangeStreamPtr : dw TextEndStandardBank3
+
+; Change CopJumpIfItemNotObtained to CopJumpIfNpcRewardNotObtained
+org $03DC05
+    %CopJumpIfNpcRewardNotObtained(!NPC_ShieldBraceletMole, $DC0F)
+
+; Modify script to give NPC Reward
+org $03DC13
+    %CopGiveNpcReward(!NPC_ShieldBraceletMole)
+    RTL
+
+; Ghost Mole
+; Jump item not equiped (mole's ribbon)
+; TODO: QOL suggestion. Change item not equipped to item not obtained?
+;03D908  02 19          COP #$19 
+;03D90A               --------data--------
+;03D90A  00 00 00     .db $1F $1C $D9
 
 ;-------------------------------------------------;
 
@@ -305,7 +443,16 @@ org $03E035
 
 ;--------------- Emblem C Squirrel ---------------;
 
-;TODO: This
+; Patch text to remove reward reference.
+org $03E20C
+    db !Text_ChangeStreamPtr : dw TextEndStandardBank3
+
+; Patch script to give NPC reward
+org $03E1DF
+    %CopGiveNpcReward(!NPC_EmblemCSquirrel)
+    COP #$09
+    db $02,$9A
+    RTL
 
 ;-------------------------------------------------;
 
