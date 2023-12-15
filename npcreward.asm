@@ -47,8 +47,8 @@ endmacro
 
 ; Shows Text using Text speed 1
 ; TODO: Move to own file?
-macro CopShowTextSpeed1(textPtr)
-    COP #!CopShowTextSpeed1Id
+macro CopShowTextNotInstant(textPtr)
+    COP #!CopShowTextNotInstantId
     dw <textPtr>
 endmacro
 
@@ -323,7 +323,7 @@ PrintNpcReward:
     RTL
 
 ; Like COP #$01 ShowText, but forces Text Speed 1 and restores afterwards.
-ShowTextSpeed1Cop:
+ShowTextNotInstantCop:
     TYX
     LDA.B [CopTemp] ; loads 24-bit textpointer
     INC.B CopTemp
@@ -337,8 +337,9 @@ ShowTextSpeed1Cop:
     PLB
     LDA TextSpeedRam
     PHA
-    LDA #$01
-    STA TextSpeedRam
+    BNE +
+    INC TextSpeedRam
+    +
     JSL.L PrintOsdStringFromBankX
     PLA
     STA TextSpeedRam
@@ -408,7 +409,7 @@ org $00D6B2
     dw ResumePrintCop                : !CopResumePrintId                := !CopIndex : !CopIndex #= !CopIndex+1
     dw JumpIfNpcRewardNotObtainedCop : !CopJumpIfNpcRewardNotObtainedId := !CopIndex : !CopIndex #= !CopIndex+1
     dw PrintNPCRewardCop             : !CopPrintNpcRewardId             := !CopIndex : !CopIndex #= !CopIndex+1
-    dw ShowTextSpeed1Cop             : !CopShowTextSpeed1Id             := !CopIndex : !CopIndex #= !CopIndex+1
+    dw ShowTextNotInstantCop         : !CopShowTextNotInstantId         := !CopIndex : !CopIndex #= !CopIndex+1
 
 ; Labels for reusing existing code for returning from COP Routines
 org $00E4B5
@@ -488,11 +489,11 @@ RewardQuantity:
     dw $0000,           $0000 : !NPC_HarpStringTile = $32
     dw $0000,           $0000 : !NPC_NorthEasternMermaidHerb = $33
     dw !BubbleArmor,    $0000 : !NPC_BubbleArmorMermaid = $34
-    dw $0000,           $0000 : !NPC_MagicFlairMermaid = $35
+    dw !MagicFlare,     $0000 : !NPC_MagicFlairMermaid = $35
     dw $0000,           $0000 : !NPC_MermaidQueen = $36
     dw $0000,           $0000 : !NPC_RedHotStickMermaid = $37
-    dw $0000,           $0000 : !NPC_Lue = $38
+    dw !ThunderRing,    $0000 : !NPC_Lue = $38
     dw !Exp,            $0200 : !NPC_RockbirdCrystal = $39
-    dw $0000,           $0000 : !NPC_SeabedCrystalNearBlester = $3A
+    dw !Exp,            $0300 : !NPC_SeabedCrystalNearBlester = $3A
     dw !Exp,            $0250 : !NPC_SeabedCrystalNearDurean = $3B
 

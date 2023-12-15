@@ -70,4 +70,4 @@ db !text_speed_not_instant
 ; Dolphin release: Lue's Friend
 ; Instant text causes a softlock
 org $1F9E36
-    %CopShowTextSpeed1($9E3D)
+    %CopShowTextNotInstant($9E3D)
