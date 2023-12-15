@@ -1,6 +1,6 @@
 ; Text Speed Hacks
 ; 3 - US version normal text speed
-; 2 - JP version normal text speed
+; 1 - JP version normal text speed
 ; 0 - Instant (can break the game if used some places, not sure why)
 
 arch 65816
@@ -9,7 +9,7 @@ lorom
 check title "SOULBLAZER - 1 USA   "
 
 ; For text speeds that can be any speed
-!text_speed = $01
+!text_speed = $00
 ; For text speed that cannot be instant (0x00)
 !text_speed_not_instant = $01
 
@@ -64,3 +64,10 @@ db !text_speed_not_instant
 ; Post Credits Text Speed change. Restore Text Speed right after.
 ;org $03B466
 ;db !text_speed_not_instant
+
+; Patch cutscenes which break if text is instant
+
+; Dolphin release: Lue's Friend
+; Instant text causes a softlock
+org $1F9E36
+    %CopShowTextSpeed1($9E3D)

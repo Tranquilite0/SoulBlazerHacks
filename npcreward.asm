@@ -45,6 +45,13 @@ macro CopPrintNpcReward(textPtr, npcId)
     db <npcId>
 endmacro
 
+; Shows Text using Text speed 1
+; TODO: Move to own file?
+macro CopShowTextSpeed1(textPtr)
+    COP #!CopShowTextSpeed1Id
+    dw <textPtr>
+endmacro
+
 ; New Code Section
 
 GiveNpcRewardCop:
@@ -315,6 +322,30 @@ PrintNpcReward:
     PLP
     RTL
 
+; Like COP #$01 ShowText, but forces Text Speed 1 and restores afterwards.
+ShowTextSpeed1Cop:
+    TYX
+    LDA.B [CopTemp] ; loads 24-bit textpointer
+    INC.B CopTemp
+    INC.B CopTemp
+    TAY             ; print expects the textpointer in Y
+    SEP #$20
+    PHX
+    PHB
+    LDA.B CopTemp+2
+    PHA
+    PLB
+    LDA TextSpeedRam
+    PHA
+    LDA #$01
+    STA TextSpeedRam
+    JSL.L PrintOsdStringFromBankX
+    PLA
+    STA TextSpeedRam
+    PLB
+    PLX
+    REP #$20
+    BRL RetInTmp
 
 ResumePrintCop:
     TYX
@@ -376,7 +407,8 @@ org $00D6B2
     dw ResumePrintNpcRewardCop       : !CopResumePrintNpcRewardId       := !CopIndex : !CopIndex #= !CopIndex+1
     dw ResumePrintCop                : !CopResumePrintId                := !CopIndex : !CopIndex #= !CopIndex+1
     dw JumpIfNpcRewardNotObtainedCop : !CopJumpIfNpcRewardNotObtainedId := !CopIndex : !CopIndex #= !CopIndex+1
-    dw PrintNPCRewardCop             : !CopPrintNpcRewardId := !CopIndex : !CopIndex #= !CopIndex+1
+    dw PrintNPCRewardCop             : !CopPrintNpcRewardId             := !CopIndex : !CopIndex #= !CopIndex+1
+    dw ShowTextSpeed1Cop             : !CopShowTextSpeed1Id             := !CopIndex : !CopIndex #= !CopIndex+1
 
 ; Labels for reusing existing code for returning from COP Routines
 org $00E4B5
@@ -414,7 +446,7 @@ RewardQuantity:
     dw !RecoverySword,  $0000 : !NPC_RecoverySwordCrystal = $08
     dw !Exp,            $0080 : !NPC_GrassValleySecretRoomCrystal = $09
     dw !Exp,            $0030 : !NPC_UndergroundCastle1stPartCrystal = $0A
-    dw $0000, $0000 : !NPC_RedHotMirrorBird = $0B
+    dw !RedHotMirror,   $0000 : !NPC_RedHotMirrorBird = $0B
     dw !MagicBell,      $0000 : !NPC_MagicBellCrystal = $0C
     dw !MedicalHerb,    $0000 : !NPC_WoodstinTrio = $0D
     dw !GreenStone,     $0000 : !NPC_GreenwoodsGuardian = $0E
@@ -426,41 +458,41 @@ RewardQuantity:
     dw !LightArrow,     $0000 : !NPC_LightArrowCrystal = $14
     dw !Exp,            $0150 : !NPC_LostMarshCrystal = $15
     dw !Exp,            $0180 : !NPC_WaterShrineCrystal = $16
-    dw $0000, $0000 : !NPC_FireShrineCrystal = $17
-    dw $0000, $0000 : !NPC_MountainKing = $18
-    dw $0000, $0000 : !NPC_MushroomShoesBoy = $19
-    dw $0000, $0000 : !NPC_Nome = $1A
-    dw $0000, $0000 : !NPC_EmblemESnail = $1B
-    dw $0000, $0000 : !NPC_EmblemFTile = $1C
-    dw $0000, $0000 : !NPC_MountainOfSoulsCrystal = $1D
-    dw $0000, $0000 : !NPC_LuneCrystal = $1E
-    dw $0000, $0000 : !NPC_EmblemGUnderChestOfDrawers = $1F
-    dw $0000, $0000 : !NPC_ChestOfDrawersMysticArmor = $20
-    dw $0000, $0000 : !NPC_HerbPlantInLeosLab = $21
-    dw $0000, $0000 : !NPC_LeosCatDoorKey = $22
-    dw $0000, $0000 : !NPC_ActinidiaPlant = $23
-    dw $0000, $0000 : !NPC_ChestOfDrawersHerb = $24
-    dw $0000, $0000 : !NPC_Marie = $25
-    dw $0000, $0000 : !NPC_SparkBombMouse = $26
-    dw $0000, $0000 : !NPC_LeosLabBasementCrystal = $27
-    dw $0000, $0000 : !NPC_ModelTown1Crystal = $28
-    dw $0000, $0000 : !NPC_PowerPlantCrystal = $29
-    dw $0000, $0000 : !NPC_ElementalMailSoldier = $2A
-    dw $0000, $0000 : !NPC_SuperBraceletTile = $2B
-    dw $0000, $0000 : !NPC_QueenMagriddVIPCard = $2C
-    dw $0000, $0000 : !NPC_PlatinumCardSoldier = $2D
-    dw $0000, $0000 : !NPC_MaidHerb = $2E
-    dw $0000, $0000 : !NPC_EmblemHTile = $2F
-    dw $0000, $0000 : !NPC_MagriddKing = $30
-    dw $0000, $0000 : !NPC_LeoOnTheAirshipDeckMobileKey = $31
-    dw $0000, $0000 : !NPC_HarpStringTile = $32
-    dw $0000, $0000 : !NPC_NorthEasternMermaidHerb = $33
-    dw $0000, $0000 : !NPC_BubbleArmorMermaid = $34
-    dw $0000, $0000 : !NPC_MagicFlairMermaid = $35
-    dw $0000, $0000 : !NPC_MermaidQueen = $36
-    dw $0000, $0000 : !NPC_RedHotStickMermaid = $37
-    dw $0000, $0000 : !NPC_Lue = $38
-    dw $0000, $0000 : !NPC_RockbirdCrystal = $39
-    dw $0000, $0000 : !NPC_SeabedCrystalNearBlester = $3A
-    dw $0000, $0000 : !NPC_SeabedCrystalNearDurean = $3B
+    dw $0000,           $0000 : !NPC_FireShrineCrystal = $17
+    dw $0000,           $0000 : !NPC_MountainKing = $18
+    dw $0000,           $0000 : !NPC_MushroomShoesBoy = $19
+    dw $0000,           $0000 : !NPC_Nome = $1A
+    dw $0000,           $0000 : !NPC_EmblemESnail = $1B
+    dw $0000,           $0000 : !NPC_EmblemFTile = $1C
+    dw $0000,           $0000 : !NPC_MountainOfSoulsCrystal = $1D
+    dw $0000,           $0000 : !NPC_LuneCrystal = $1E
+    dw $0000,           $0000 : !NPC_EmblemGUnderChestOfDrawers = $1F
+    dw $0000,           $0000 : !NPC_ChestOfDrawersMysticArmor = $20
+    dw $0000,           $0000 : !NPC_HerbPlantInLeosLab = $21
+    dw $0000,           $0000 : !NPC_LeosCatDoorKey = $22
+    dw $0000,           $0000 : !NPC_ActinidiaPlant = $23
+    dw $0000,           $0000 : !NPC_ChestOfDrawersHerb = $24
+    dw $0000,           $0000 : !NPC_Marie = $25
+    dw $0000,           $0000 : !NPC_SparkBombMouse = $26
+    dw $0000,           $0000 : !NPC_LeosLabBasementCrystal = $27
+    dw $0000,           $0000 : !NPC_ModelTown1Crystal = $28
+    dw $0000,           $0000 : !NPC_PowerPlantCrystal = $29
+    dw $0000,           $0000 : !NPC_ElementalMailSoldier = $2A
+    dw $0000,           $0000 : !NPC_SuperBraceletTile = $2B
+    dw $0000,           $0000 : !NPC_QueenMagriddVIPCard = $2C
+    dw $0000,           $0000 : !NPC_PlatinumCardSoldier = $2D
+    dw $0000,           $0000 : !NPC_MaidHerb = $2E
+    dw $0000,           $0000 : !NPC_EmblemHTile = $2F
+    dw $0000,           $0000 : !NPC_MagriddKing = $30
+    dw $0000,           $0000 : !NPC_LeoOnTheAirshipDeckMobileKey = $31
+    dw $0000,           $0000 : !NPC_HarpStringTile = $32
+    dw $0000,           $0000 : !NPC_NorthEasternMermaidHerb = $33
+    dw !BubbleArmor,    $0000 : !NPC_BubbleArmorMermaid = $34
+    dw $0000,           $0000 : !NPC_MagicFlairMermaid = $35
+    dw $0000,           $0000 : !NPC_MermaidQueen = $36
+    dw $0000,           $0000 : !NPC_RedHotStickMermaid = $37
+    dw $0000,           $0000 : !NPC_Lue = $38
+    dw !Exp,            $0200 : !NPC_RockbirdCrystal = $39
+    dw $0000,           $0000 : !NPC_SeabedCrystalNearBlester = $3A
+    dw !Exp,            $0250 : !NPC_SeabedCrystalNearDurean = $3B
 

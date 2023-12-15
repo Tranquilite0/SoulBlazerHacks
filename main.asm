@@ -21,3 +21,4 @@ incsrc "randoproofofconcept.asm"
 warnpc $00FFBF
 
 incsrc "semiprogressive.asm"
+incsrc "textspeed.asm"

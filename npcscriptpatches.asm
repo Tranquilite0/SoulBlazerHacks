@@ -3,6 +3,7 @@
 pushpc
 
 TextEndStandardBank3 = $03B988
+TextEndStandardBank1F = $1FAA44
 
 macro CopShowText(textPtr)
     COP #$01
@@ -782,7 +783,41 @@ org $03E535
 
 ;------------- Bubble Armor Mermaid --------------;
 
-;TODO: This
+; Modify release script/text to hint reward.
+org $1F8BB5
+    %CopPrintNpcReward(+,!NPC_BubbleArmorMermaid)
+    COP #$86
+    RTL
++
+    ; Abridge Release text and hint NPC Reward.
+    db $10,$0E,$3C,"Does anyone need",!Text_CR,!Text_Break,"? ",!Text_ChangeStreamPtr : dw TextEndStandardBank1F
+
+; Patch script to give NPC Reward
+org $1F8B9B
+    %CopGiveNpcReward(!NPC_BubbleArmorMermaid)
+    RTL
+
+; Patch text to remove vanilla reward
+org $1F8C45
+    db !Text_ChangeStreamPtr : dw TextEndStandardBank1F
+;1F8B8D  02 07          COP #$07
+;1F8B8F               --------data--------
+;1F8B8F  00 00 00 00  .db $05 $84 $A1 $8B
+;1F8B92               ----------------
+;1F8B93  02 09          COP #$09
+;1F8B95               --------data--------
+;1F8B95  00 00        .db $05 $84
+;1F8B96               ----------------
+;1F8B97  02 01          COP #$01
+;1F8B99               --------data--------
+;1F8B99  00 00        .db $F7 $8B
+;1F8B9A               ----------------
+;1F8B9B  00 5E          BRK #$5E
+;1F8B9D  02 0A          COP #$0A
+;1F8B9F               --------data--------
+;1F8B9F  00           .db $0B
+;1F8B9F               ----------------
+;1F8BA0  6B             RTL
 
 ;-------------------------------------------------;
 
@@ -817,7 +852,18 @@ org $03E535
 
 ;--------------- Rockbird Crystal ----------------;
 
-;TODO: This
+; Change crystal message to skip EXP received message
+org $1FA9E3
+    db !Text_ChangeStreamPtr : dw TextEndStandardBank1F
+
+; Change GiveExp COP routine to GiveNpcReward
+; Also avoid giving the return to town prompt the first time you talk
+; so that you dont glitch the game if you get a lair reward and return at the same time.
+org $1FA465
+    %CopGiveNpcReward(!NPC_RockbirdCrystal)
+    COP #$09
+    db $00,$9D
+    RTL 
 
 ;-------------------------------------------------;
 
@@ -831,7 +877,35 @@ org $03E535
 
 ;------------ SeabedCrystalNearDurean ------------;
 
-;TODO: This
+;Crystal message was already edited since text is shared with other crystal
+
+; Change GiveExp COP routine to GiveNpcReward
+; Also avoid giving the return to town prompt the first time you talk
+; so that you dont glitch the game if you get a lair reward and return at the same time.
+org $1FA4E9
+    %CopGiveNpcReward(!NPC_SeabedCrystalNearDurean)
+    COP #$09
+    db $07,$9D
+    RTL 
+
+;1FA4DF  02 07          COP #$07
+;1FA4E1               --------data--------
+;1FA4E1  00 00 00 00  .db $07 $9D $6D $A4
+;1FA4E4               ----------------
+;1FA4E5  02 01          COP #$01
+;1FA4E7               --------data--------
+;1FA4E7  00 00        .db $C5 $A9
+;1FA4E8               ----------------
+;1FA4E9  02 38          COP #$38
+;1FA4EB               --------data--------
+;1FA4EB  00 00        .db $50 $02
+;1FA4EC               ----------------
+;1FA4ED  02 09          COP #$09
+;1FA4EF               --------data--------
+;1FA4EF  00 00        .db $07 $9D
+;1FA4F0               ----------------
+;1FA4F1  82 79 FF       BRL $1FA46D
+
 
 ;-------------------------------------------------;
 

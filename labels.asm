@@ -21,6 +21,8 @@ SetBit = $04F348
 ; returns the result in the carry bit: it's clear if the bit is clear and the carry bit is set if the bit is set
 CheckIfBitIsSet = $04F3A2
 
+; Text Speed ram location
+TextSpeedRam = $7E1B84
 
 !Text_YellowStyle = $03,$24
 !Text_EndStyle = $03,$20
