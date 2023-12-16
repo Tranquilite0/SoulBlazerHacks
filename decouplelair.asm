@@ -148,6 +148,16 @@ DecoupleLairReward:
     SEP #$20
     JML $028C75 ; Jump back and continue releasing lair with updated target lair
 
+; TODO: Patch cop14 to check for target of lair rather than lair. This could be majorly risky though
+; TODO: run through game with breakpoint on cop14 and see how things could break if it was patched.
+; Alternatively, selectively patch known issues like with Ghost Ship.
+; Alternatively alternatively, create a new alternate cop14 that checks the target of the lair.
+; This controls whether or not the final breaking plank spawns on map load in ghost ship.
+; There are other ones for the worms and flames too which could be patched as well to point to whatever this lair seals
+;00C24C  02 14          COP #$14 
+;00C24E               --------data--------
+;00C24E  00 00 00 00  .db $B6 $00 $7E $C2
+
 
 ; Hooks and original rom data overwrite section
 pushpc

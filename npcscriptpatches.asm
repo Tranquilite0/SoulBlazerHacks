@@ -776,7 +776,33 @@ org $03E535
 
 ;---------- North Eastern Mermaid Herb -----------;
 
-;TODO: This
+; Probably easier to just redo this NPC script and text than patch it into shape.
+org $1F82F2
+NorthEasternMermaidHerbScript:
+    %CopJumpIfNpcRewardNotObtained(!NPC_NorthEasternMermaidHerb, .doYouWantOne)
+    %CopShowText(.textThatsAll)
+    RTL
+.doYouWantOne
+    %CopPrintNpcReward(.textWantOne, !NPC_NorthEasternMermaidHerb)
+    %CopShowChoices($CF02, $02, .dontWant)
+    LDA $0003D0 ; Read menu choice
+    BNE .dontWant
+    %CopGiveNpcReward(!NPC_NorthEasternMermaidHerb)
+    RTL
+.dontWant
+    %CopShowText(.textComeBackAgain)
+    RTL
+.textThatsAll
+    ; "That's all I have, sorry."
+    db !Text_Start,"That`",$D7,$9A,$88,"have,",!Text_CR,"sorry.",!Text_ChangeStreamPtr : dw TextEndStandardBank1F
+.textWantOne
+    ; "Hello, I have <x>. Would you Like one?"
+    db !Text_Start,"Hello, ",$88,$B5,!Text_CR,!Text_Break,".",!Text_CR,"Would ",$FE,$BE,"one?",!Text_Break
+.textComeBackAgain
+    ; "Come back if you change your mind."
+    db !Text_Start,$84,$A0,"if ",$FE,!Text_CR,"change ",$FF,"mind.",!Text_ChangeStreamPtr : dw TextEndStandardBank1F
+
+warnpc $1F83AC
 
 ;-------------------------------------------------;
 
@@ -800,24 +826,6 @@ org $1F8B9B
 ; Patch text to remove vanilla reward
 org $1F8C45
     db !Text_ChangeStreamPtr : dw TextEndStandardBank1F
-;1F8B8D  02 07          COP #$07
-;1F8B8F               --------data--------
-;1F8B8F  00 00 00 00  .db $05 $84 $A1 $8B
-;1F8B92               ----------------
-;1F8B93  02 09          COP #$09
-;1F8B95               --------data--------
-;1F8B95  00 00        .db $05 $84
-;1F8B96               ----------------
-;1F8B97  02 01          COP #$01
-;1F8B99               --------data--------
-;1F8B99  00 00        .db $F7 $8B
-;1F8B9A               ----------------
-;1F8B9B  00 5E          BRK #$5E
-;1F8B9D  02 0A          COP #$0A
-;1F8B9F               --------data--------
-;1F8B9F  00           .db $0B
-;1F8B9F               ----------------
-;1F8BA0  6B             RTL
 
 ;-------------------------------------------------;
 
@@ -842,7 +850,14 @@ org $1F9093
 
 ;----------------- Mermaid Queen -----------------;
 
-;TODO: This
+; Patch script to give item.
+org $1F921F
+    %CopGiveNpcReward(!NPC_MermaidQueen)
+    NOP #2
+
+; Remove reference to vanilla item.
+org $1F9349
+    db "this. ",!Text_CR,!Text_ChangeStreamPtr : dw $935C
 
 ;-------------------------------------------------;
 
@@ -902,28 +917,6 @@ org $1FA4B9
     COP #$09
     db $06,$9D
     RTL 
-
-;1FA4AF  02 07          COP #$07
-;1FA4B1               --------data--------
-;1FA4B1  00 00 00 00  .db $06 $9D $6D $A4
-;1FA4B4               ----------------
-;1FA4B5  02 01          COP #$01
-;1FA4B7               --------data--------
-;1FA4B7  00 00        .db $C5 $A9
-;1FA4B8               ----------------
-;1FA4B9  02 38          COP #$38
-;1FA4BB               --------data--------
-;1FA4BB  00 00        .db $00 $03
-;1FA4BC               ----------------
-;1FA4BD  02 09          COP #$09
-;1FA4BF               --------data--------
-;1FA4BF  00 00        .db $06 $9D
-;1FA4C0               ----------------
-;1FA4C1  82 A9 FF       BRL $1FA46D
-;1FA4C4  02 14          COP #$14
-;1FA4C6               --------data--------
-;1FA4C6  00 00 00 00  .db $7A $00 $CB $A4
-
 
 ;-------------------------------------------------;
 

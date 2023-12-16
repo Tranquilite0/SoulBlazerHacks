@@ -30,6 +30,7 @@ TextSpeedRam = $7E1B84
 !Text_CleanUpAndBreak = $08,$08,$04,$0C
 !Text_HeroName = $02,$02
 !Text_CR = $0D
+!Text_Start = $10
 !Text_WaitBlinkCursor = $11
 !Text_Wait = $12
 !Text_ChangeStreamPtr = $13

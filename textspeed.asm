@@ -35,39 +35,49 @@ db !text_speed
 
 ; In Green Wood, when "you" are on the menu.
 org $03BA48
-db !text_speed_not_instant
+db !text_speed
 
 ; Post deathtoll defeat. Begin Epilogue autotext.
-;org $00D3AF
-;db !text_speed_not_instant
+org $00D3AF
+db !text_speed_not_instant
 
+;TODO: See if epilogue breaks with instant text now.
 ; Post Credits Text Speed change. For speech given by Master.
-;org $03B356
-;db !text_speed_not_instant
+org $03B356
+db !text_speed_not_instant
 
 ; Post Credits Text Speed change. Lisa talks with Turbo the Goat.
-;org $03B38F
-;db !text_speed_not_instant
+org $03B38F
+db !text_speed_not_instant
 
 ; Post Credits Text Speed change. Lisa sees Hero.
-;org $03B3FD
-;db !text_speed_not_instant
+org $03B3FD
+db !text_speed_not_instant
 
 ; Post Credits Text Speed change. Restore Text Speed right after.
-;org $03B407
-;db !text_speed_not_instant
+org $03B407
+db !text_speed_not_instant
 
 ; Post Credits Text Speed change. Turbo the Goat goes Bleeeet.
-;org $03B45C
-;db !text_speed_not_instant
+org $03B45C
+db !text_speed_not_instant
 
 ; Post Credits Text Speed change. Restore Text Speed right after.
-;org $03B466
-;db !text_speed_not_instant
+org $03B466
+db !text_speed_not_instant
 
 ; Patch cutscenes which break if text is instant
 
 ; Dolphin release: Lue's Friend
 ; Instant text causes a softlock
-org $1F9E36
-    %CopShowTextNotInstant($9E3D)
+; This should no longer be needed if the delay print command fix works as expected.
+;org $1F9E36
+;    %CopShowTextNotInstant($9E3D)
+
+; The delay print command ($0E) is does not delay when text speed is instant. Lets try forcing it to behave the same.
+; Appears to fix instant text, but needs more testing.
+org $02AD90
+NOP #5
+;02AD90  AD 84 1B       LDA $1B84
+;02AD93  F0 07          BEQ $02AD9C
+

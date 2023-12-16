@@ -487,10 +487,10 @@ RewardQuantity:
     dw $0000,           $0000 : !NPC_MagriddKing = $30
     dw $0000,           $0000 : !NPC_LeoOnTheAirshipDeckMobileKey = $31
     dw $0000,           $0000 : !NPC_HarpStringTile = $32
-    dw $0000,           $0000 : !NPC_NorthEasternMermaidHerb = $33
+    dw !MedicalHerb,    $0000 : !NPC_NorthEasternMermaidHerb = $33
     dw !BubbleArmor,    $0000 : !NPC_BubbleArmorMermaid = $34
     dw !MagicFlare,     $0000 : !NPC_MagicFlairMermaid = $35
-    dw $0000,           $0000 : !NPC_MermaidQueen = $36
+    dw !BlueStone,      $0000 : !NPC_MermaidQueen = $36
     dw $0000,           $0000 : !NPC_RedHotStickMermaid = $37
     dw !ThunderRing,    $0000 : !NPC_Lue = $38
     dw !Exp,            $0200 : !NPC_RockbirdCrystal = $39
