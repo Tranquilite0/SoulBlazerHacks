@@ -1,17 +1,21 @@
 ; Text Speed Hacks
 ; 3 - US version normal text speed
 ; 1 - JP version normal text speed
-; 0 - Instant (can break the game if used some places, not sure why)
+; 0 - Instant
 
-arch 65816
-lorom
+if not(defined("initialized"))
+    arch 65816
+    lorom
 
-check title "SOULBLAZER - 1 USA   "
+    check title "SOULBLAZER - 1 USA   "
+
+    !initialized = 1
+endif
 
 ; For text speeds that can be any speed
 !text_speed = $00
-; For text speed that cannot be instant (0x00)
-!text_speed_not_instant = $01
+; Text speed for the epilogue (Doesn't feel right for it to be instant)
+!text_speed_epilogue = $01
 
 ; General text speed set at game start. Covers 90 percent of text boxes.
 org $04F96C
@@ -39,32 +43,32 @@ db !text_speed
 
 ; Post deathtoll defeat. Begin Epilogue autotext.
 org $00D3AF
-db !text_speed_not_instant
+db !text_speed_epilogue
 
 ;TODO: See if epilogue breaks with instant text now.
 ; Post Credits Text Speed change. For speech given by Master.
 org $03B356
-db !text_speed_not_instant
+db !text_speed_epilogue
 
 ; Post Credits Text Speed change. Lisa talks with Turbo the Goat.
 org $03B38F
-db !text_speed_not_instant
+db !text_speed_epilogue
 
 ; Post Credits Text Speed change. Lisa sees Hero.
 org $03B3FD
-db !text_speed_not_instant
+db !text_speed_epilogue
 
 ; Post Credits Text Speed change. Restore Text Speed right after.
 org $03B407
-db !text_speed_not_instant
+db !text_speed_epilogue
 
 ; Post Credits Text Speed change. Turbo the Goat goes Bleeeet.
 org $03B45C
-db !text_speed_not_instant
+db !text_speed_epilogue
 
 ; Post Credits Text Speed change. Restore Text Speed right after.
 org $03B466
-db !text_speed_not_instant
+db !text_speed_epilogue
 
 ; Patch cutscenes which break if text is instant
 
@@ -74,8 +78,9 @@ db !text_speed_not_instant
 ;org $1F9E36
 ;    %CopShowTextNotInstant($9E3D)
 
-; The delay print command ($0E) is does not delay when text speed is instant. Lets try forcing it to behave the same.
-; Appears to fix instant text, but needs more testing.
+; The delay print command ($0E) does not delay when text speed is instant.
+; This behavior appears to be the source of problems with instant text.
+; So patch it to behave the same as regular text.
 org $02AD90
 NOP #5
 ;02AD90  AD 84 1B       LDA $1B84
