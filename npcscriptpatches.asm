@@ -11,6 +11,11 @@ macro CopShowText(textPtr)
     dw <textPtr>
 endmacro
 
+macro CopAssignTalkCallback(ptr)
+    COP #$17
+    dw <ptr>
+endmacro
+
 macro CopJumpIfItemNotObtained(itemId, target)
     COP #$18
     db <itemId>
@@ -131,11 +136,11 @@ org $03990C
 
 ; Abridge Village Chief's Dialog
 org $03A1F4
-    db $E2,$97,$D1,"named",!Text_CR,!Text_HeroName,". ",!Text_ChangeStreamPtr : dw TextEndStandardBank3
+    db !Dict_to,!Dict_a,!Dict_person,"named",!Text_CR,!Text_HeroName,". ",!Text_ChangeStreamPtr : dw TextEndStandardBank3
 
 ; Patch Master's Dialog
 org $03A2F8
-    db "next ",$F6,$BA,!Text_CR,"open. Return ",$E2,"me.>",!Text_ChangeStreamPtr : dw TextEndStandardBank3
+    db "next ",!Dict_world,!Dict_is,!Text_CR,"open. Return ",!Dict_to,"me.>",!Text_ChangeStreamPtr : dw TextEndStandardBank3
 
 ; Change CopJumpIfItemNotObtained to CopJumpIfNpcRewardNotObtained
 org $03A125
@@ -167,6 +172,8 @@ org $03A7E0
 
 org $03A8F4
     db !Text_ChangeStreamPtr : dw TextEndStandardBank3
+
+; TODO: Goodluck and/or blame Everhate.
 
 ;03A7DC  02 01          COP #$01
 ;03A7DE               --------data--------
@@ -299,11 +306,6 @@ org $03BEB4
 
 ;-------------- Magic Bell Crystal ---------------;
 
-;TODO: Verify this all works.
-; Patch hint text to remove vanilla item reference
-org $03C177
-    db $96,$FE,$A7,$B5,!Text_CR,!Text_Break,".",!Text_ChangeStreamPtr : dw TextEndStandardBank3
-
 
 ; Change CopJumpIfItemNotObtained to CopJumpIfNpcRewardNotObtained
 org $03C0C4
@@ -329,6 +331,17 @@ org $03C112
     %CopPrintNpcReward($C11D,!NPC_MagicBellCrystal)
     RTL
 
+; Patch hint text to remove vanilla item reference
+org $03C177
+    db !Dict_and,!Dict_you,!Dict_can,!Dict_have,!Text_CR,!Text_Break,".",!Text_ChangeStreamPtr : dw TextEndStandardBank3
+
+; Patch reward text to remove vanilla item reference
+org $03C200
+    db "this. Well fought!",!Text_ChangeStreamPtr : dw TextEndStandardBank3
+
+; Patch out magic bell usage text.
+org $03C224
+    db !Text_Start,!Text_HeroName,", ",!Dict_good,"luck!",!Text_ChangeStreamPtr : dw TextEndStandardBank3
 ;03C0C4  02 18          COP #$18
 ;03C0C6               --------data--------
 ;03C0C6  00 00 00     .db $40 $CE $C0
@@ -476,7 +489,7 @@ org $03D5CE
     BRL -
 +
     ; "I will give you \r<reward>\r upon your return."
-    db $10,$88,$F1,$B0,$FE,!Text_CR,!Text_Break,!Text_CR,"upon ",$FF,"return. ",!Text_ChangeStreamPtr : dw TextEndStandardBank3
+    db !Text_Start,!Dict_I,!Dict_will,!Dict_give,!Dict_you,!Text_CR,!Text_Break,!Text_CR,"upon ",!Dict_your,"return. ",!Text_ChangeStreamPtr : dw TextEndStandardBank3
 -
     %CopGiveNpcReward(!NPC_GreenwoodsGuardian)
     COP #$09
@@ -577,7 +590,7 @@ BRL +
 
 ; Patch release text to have reward hint.
 org $03E1A0
-    db !Text_CR,!Text_Break,!Text_CR,$F2,"them.....",!Text_ChangeStreamPtr : dw TextEndStandardBank3
+    db !Text_CR,!Text_Break,!Text_CR,!Dict_with,"them.....",!Text_ChangeStreamPtr : dw TextEndStandardBank3
 +
     %CopPrintNpcReward($E14C,!NPC_PsychoSwordSquirrel)
     COP #$86
@@ -591,7 +604,7 @@ org $03E097
 
 ; Edit text when giving reward
 org $03E0EB
-    db $F2,$FE,$AE,$E1,!Text_CR,"seeds.",!Text_ChangeStreamPtr : dw TextEndStandardBank3
+    db !Dict_with,!Dict_you,!Dict_for,!Dict_the,!Text_CR,"seeds.",!Text_ChangeStreamPtr : dw TextEndStandardBank3
 
 ; Patch NPC script
 org $03E01A
@@ -797,13 +810,13 @@ org $048D69
     RTL
 .hintRewardText
     ; "I will give you <x> if you return to me."
-    db !Text_Start,$88,$F1,$B0,$FE,!Text_CR,!Text_Break,!Text_CR,"if ",$FE,"return ",$E2,"me. ",!Text_ChangeStreamPtr : dw TextEndStandardBank4
+    db !Text_Start,!Dict_I,!Dict_will,!Dict_give,!Dict_you,!Text_CR,!Text_Break,!Text_CR,"if ",!Dict_you,"return ",!Dict_to,"me. ",!Text_ChangeStreamPtr : dw TextEndStandardBank4
 .giveText
     ; "I will give you this."
-    db !Text_Start,$88,$F1,$B0,$FE,"this.",!Text_ChangeStreamPtr : dw TextEndStandardBank4
+    db !Text_Start,!Dict_I,!Dict_will,!Dict_give,!Dict_you,"this.",!Text_ChangeStreamPtr : dw TextEndStandardBank4
 .alreadyHave
     ; "You already have my reward."
-    db !Text_Start,$95,"already ",$B5,!Text_CR,$C2,"reward.",!Text_ChangeStreamPtr : dw TextEndStandardBank4
+    db !Text_Start,!Dict_You,"already ",!Dict_have,!Text_CR,!Dict_my,"reward.",!Text_ChangeStreamPtr : dw TextEndStandardBank4
 
 ;-------------------------------------------------;
 
@@ -815,7 +828,7 @@ org $0490BD
     NOP #2
 
 org $0491A9
-    db "Here, ",$E6,$E4,$96,"go",!Text_CR,$E2,"Leo`s Laboratory.",!Text_ChangeStreamPtr : dw TextEndStandardBank4
+    db "Here, ",!Dict_take,!Dict_this,!Dict_and,"go",!Text_CR,!Dict_to,"Leo`s Laboratory.",!Text_ChangeStreamPtr : dw TextEndStandardBank4
 
 ;-------------------------------------------------;
 
@@ -914,7 +927,7 @@ org $04AA69
 
 ; Patch text to remove vanilla reward.
 org $04AA82
-    db "contents ",!Text_CR,$AD,$C2,"drawer.",!Text_ChangeStreamPtr : dw TextEndStandardBank4
+    db "contents ",!Text_CR,!Dict_from,!Dict_my,"drawer.",!Text_ChangeStreamPtr : dw TextEndStandardBank4
 
 ;-------------------------------------------------;
 
@@ -939,13 +952,13 @@ HerbPlantLeosLabScript:
     RTL
 .textThatsAll
     ; "That's all I have, sorry."
-    db !Text_Start,"That`",$D7,$9A,$88,"have,",!Text_CR,"sorry.",!Text_ChangeStreamPtr : dw TextEndStandardBank4
+    db !Text_Start,"That`",!Dict_s,!Dict_all,!Dict_I,"have,",!Text_CR,"sorry.",!Text_ChangeStreamPtr : dw TextEndStandardBank4
 .textWantOne
     ; "Hello, I have <x>. Would you like one?"
-    db !Text_Start,"Hello, ",$88,$B5,!Text_CR,!Text_Break,".",!Text_CR,"Would ",$FE,$BE,"one?",!Text_Break
+    db !Text_Start,"Hello, ",!Dict_I,!Dict_have,!Text_CR,!Text_Break,".",!Text_CR,"Would ",!Dict_you,!Dict_like,"one?",!Text_Break
 .textComeBackAgain
     ; "Come back if you change your mind."
-    db !Text_Start,$84,$A0,"if ",$FE,!Text_CR,"change ",$FF,"mind.",!Text_ChangeStreamPtr : dw TextEndStandardBank4
+    db !Text_Start,!Dict_Come,!Dict_back,"if ",!Dict_you,!Text_CR,"change ",!Dict_your,"mind.",!Text_ChangeStreamPtr : dw TextEndStandardBank4
 
 warnpc $04AC7B
 
@@ -1080,7 +1093,7 @@ org $04B1A7
     RTL
 
 org $04B1BD
-    db $8F,$E6,"this.",!Text_ChangeStreamPtr : dw TextEndStandardBank4
+    db !Dict_please,!Dict_take,"this.",!Text_ChangeStreamPtr : dw TextEndStandardBank4
 
 ;04B199  02 18          COP #$18
 ;04B19B               --------data--------
@@ -1128,13 +1141,13 @@ ChestOfDrawersHerbScript:
     RTL
 .textThatsAll
     ; "That's all I have, sorry."
-    db !Text_Start,"That`",$D7,$9A,$88,"have,",!Text_CR,"sorry.",!Text_ChangeStreamPtr : dw TextEndStandardBank4
+    db !Text_Start,"That`",!Dict_s,!Dict_all,!Dict_I,"have,",!Text_CR,"sorry.",!Text_ChangeStreamPtr : dw TextEndStandardBank4
 .textWantOne
     ; "Hello, I have <x>. Would you like one?"
-    db !Text_Start,"Hello, ",$88,$B5,!Text_CR,!Text_Break,".",!Text_CR,"Would ",$FE,$BE,"one?",!Text_Break
+    db !Text_Start,"Hello, ",!Dict_I,!Dict_have,!Text_CR,!Text_Break,".",!Text_CR,"Would ",!Dict_you,!Dict_like,"one?",!Text_Break
 .textComeBackAgain
     ; "Come back if you change your mind."
-    db !Text_Start,$84,$A0,"if ",$FE,!Text_CR,"change ",$FF,"mind.",!Text_ChangeStreamPtr : dw TextEndStandardBank4
+    db !Text_Start,!Dict_Come,!Dict_back,"if ",!Dict_you,!Text_CR,"change ",!Dict_your,"mind.",!Text_ChangeStreamPtr : dw TextEndStandardBank4
 
 warnpc $04B45C
 ;04B2CD  02 07          COP #$07
@@ -1225,11 +1238,11 @@ org $04B558
     COP #$86
     RTL
 +
-    db !Text_Start, $0E,$3C,$88,$9D,"Marie, ",$E1,"doll. ",!Text_CR,$88,$F1,$B0,$FE,!Text_CR,!Text_Break,!Text_CR,!Text_ChangeStreamPtr : dw $B585
+    db !Text_Start, !Text_DelayAndContinue,$3C,!Dict_I,!Dict_am,"Marie, ",!Dict_the,"doll. ",!Text_CR,!Dict_I,!Dict_will,!Dict_give,!Dict_you,!Text_CR,!Text_Break,!Text_CR,!Text_ChangeStreamPtr : dw $B585
 
 ; Patch item give text to remove reference to vanilla reward
 org $04B623
-    db $96,!Text_CR,$B3,$E2,$8D,"Castle.",!Text_ChangeStreamPtr : dw TextEndStandardBank4
+    db !Dict_and,!Text_CR,!Dict_go,!Dict_to,!Dict_Magridd,"Castle.",!Text_ChangeStreamPtr : dw TextEndStandardBank4
 
 ;04B53F  02 07          COP #$07
 ;04B541               --------data--------
@@ -1278,7 +1291,7 @@ org $04B8F2
     RTL
 
 org $04B93A
-    db !Text_CR,$8F,$E6,"this. ",!Text_ChangeStreamPtr : dw TextEndStandardBank4
+    db !Text_CR,!Dict_please,!Dict_take,"this. ",!Text_ChangeStreamPtr : dw TextEndStandardBank4
 
 ;04B8E4  02 18          COP #$18
 ;04B8E6               --------data--------
@@ -1404,63 +1417,619 @@ org $04BE7C
 
 ;------------ Elemental Mail Soldier -------------;
 
-;TODO: This
+org $04C29F
+    %CopGiveNpcReward(!NPC_ElementalMailSoldier)
+    NOP #2
+
+org $04C39A
+    db !Dict_please,!Dict_take,"this. ",!Text_ChangeStreamPtr : dw TextEndStandardBank4
+
+;04C281  02 17          COP #$17
+;04C283               --------data--------
+;04C283  00 00        .db $00 $00
+;04C284               ----------------
+;04C285  A9 80 2F       LDA #$2F80
+;04C288  0C 26 03       TSB $0326
+;04C28B  02 03          COP #$03
+;04C28D               --------data--------
+;04C28D  00           .db $1F
+;04C28D               ----------------
+;04C28E  02 04          COP #$04
+;04C290  02 80          COP #$80
+;04C292               --------data--------
+;04C292  00           .db $2C
+;04C292               ----------------
+;04C293  02 82          COP #$82
+;04C295  02 2B          COP #$2B
+;04C297               --------data--------
+;04C297  00 00 00 00  .db $F0 $FF $00 $00
+;04C29A               ----------------
+;04C29B  02 01          COP #$01
+;04C29D               --------data--------
+;04C29D  00 00        .db $16 $C3
+;04C29E               ----------------
+;04C29F  00 5E          BRK #$5E
+;04C2A1  02 0A          COP #$0A
+;04C2A3               --------data--------
+;04C2A3  00           .db $0F
+;04C2A3               ----------------
+;04C2A4  02 09          COP #$09
+;04C2A6               --------data--------
+;04C2A6  00 00        .db $04 $88
+;04C2A7               ----------------
+;04C2A8  A9 80 2F       LDA #$2F80
+;04C2AB  1C 26 03       TRB $0326
+;04C2AE  02 80          COP #$80
+;04C2B0               --------data--------
+;04C2B0  00           .db $12
+;04C2B0               ----------------
+;04C2B1  02 82          COP #$82
+;04C2B3  02 17          COP #$17
+;04C2B5               --------data--------
+;04C2B5  00 00        .db $DD $C2
+;04C2B6               ----------------
+;04C2B7  02 15          COP #$15
+;04C2B9  02 91          COP #$91
+;04C2BB  6B             RTL
+
+; There is another soldier who hints what the sleeping soldier has
+; Fortunately his text segment is adjacent to his script so we can
+; Safely expand the script to include the hint.
+org $04C111
+    %CopPrintNpcReward(+, !NPC_ElementalMailSoldier)
+    COP #$86
+    RTL
++
+    db !Text_Start,!Dict_I,!Dict_know,!Dict_a,"sleeping",!Text_CR,"soldier ",!Dict_who,!Dict_has,!Text_CR,!Text_Break,".",!Text_ChangeStreamPtr : dw TextEndStandardBank4
+
+;04C111  02 01          COP #$01
+;04C113               --------data--------
+;04C113  00 00        .db $18 $C1
+;04C114               ----------------
+;04C115  02 86          COP #$86
+;04C117  6B             RTL
+
+
+
 
 ;-------------------------------------------------;
 
 
 ;-------------- Super Bracelet Tile --------------;
 
-;TODO: This
+
+
+org $04C981
+    %CopJumpIfNpcRewardNotObtained(!NPC_SuperBraceletTile, $C989)
+
+org $04C997
+    %CopGiveNpcReward(!NPC_SuperBraceletTile)
+    ; Lets also give the Queen's reward if the player never got it while the queen was alive.
+    BRL SuperBraceletTileExtension
+
+; Patch text to remove reference to vanilla reward
+org $04CAB6
+    db !Text_Start,!Dict_There,!Dict_is,!Dict_something,!Text_CR,"where ",!Dict_the,"Queen ",!Dict_was,!Text_CR,"standing.",!Text_ChangeStreamPtr : dw TextEndStandardBank4
+
+;04C978  BD 16 00       LDA $0016,X
+;04C97B  09 00 20       ORA #$2000
+;04C97E  9D 16 00       STA $0016,X
+;04C981  02 18          COP #$18 ; replace with copjumpifnpcrewardnotobtained
+;04C983               --------data--------
+;04C983  00 00 00     .db $37 $89 $C9
+;04C985               ----------------
+;04C986  02 86          COP #$86
+;04C988  6B             RTL
+;                     ----------------
+;04C989  02 91          COP #$91
+;04C98B  02 0D          COP #$0D
+;04C98D               --------data--------
+;04C98D  00 00 00 00 00 .db $00 $36 $17 $93 $C9
+;04C991               ----------------
+;04C992  6B             RTL
+;                     ----------------
+;04C993  02 01          COP #$01
+;04C995               --------data--------
+;04C995  00 00        .db $B6 $CA
+;04C996               ----------------
+;04C997  00 5E          BRK #$5E
+;04C999  02 0A          COP #$0A
+;04C99B               --------data--------
+;04C99B  00           .db $37
+;04C99B               ----------------
+;04C99C  02 91          COP #$91
+;04C99E  6B             RTL
+
 
 ;-------------------------------------------------;
 
 
 ;------------ Queen Magridd VIP Card -------------;
 
-;TODO: This
+; Patch CopJumpIfItemNotObtained to CopJumpIfNpcRewardNotObtained
+org $04C99F
+    %CopJumpIfNpcRewardNotObtained(!NPC_QueenMagriddVIPCard, $C9A9)
+
+; Give reward
+org $04C9BE
+    %CopGiveNpcReward(!NPC_QueenMagriddVIPCard)
+
+; Patch text to remove refernce to vanilla rewards.
+org $04CA59
+    db !Text_ChangeStreamPtr : dw TextEndStandardBank4
+
+org $04CA80
+    db !Text_ChangeStreamPtr : dw TextEndStandardBank4
+
+;04C99F  02 18          COP #$18
+;04C9A1               --------data--------
+;04C9A1  00 00 00     .db $29 $A9 $C9
+;04C9A3               ----------------
+;04C9A4  02 01          COP #$01
+;04C9A6               --------data--------
+;04C9A6  00 00        .db $76 $CA
+;04C9A7               ----------------
+;04C9A8  6B             RTL
+;                     ----------------
+;04C9A9  02 01          COP #$01
+;04C9AB               --------data--------
+;04C9AB  00 00        .db $21 $CA
+;04C9AC               ----------------
+;04C9AD  02 1A          COP #$1A
+;04C9AF               --------data--------
+;04C9AF  00 00 00 00 00 .db $02 $CF $02 $C8 $C9
+;04C9B3               ----------------
+;04C9B4  AF D0 03 00    LDA $0003D0
+;04C9B8  D0 0E          BNE $04C9C8
+;04C9BA  02 01          COP #$01
+;04C9BC               --------data--------
+;04C9BC  00 00        .db $47 $CA
+;04C9BD               ----------------
+;04C9BE  00 5E          BRK #$5E
+;04C9C0  02 0A          COP #$0A
+;04C9C2               --------data--------
+;04C9C2  00           .db $29
+;04C9C2               ----------------
+;04C9C3  02 09          COP #$09
+;04C9C5               --------data--------
+;04C9C5  00 00        .db $00 $00
+;04C9C6               ----------------
+;04C9C7  6B             RTL
+;                     ----------------
+;04C9C8  02 01          COP #$01
+;04C9CA               --------data--------
+;04C9CA  00 00        .db $A8 $CA
+;04C9CB               ----------------
+;04C9CC  02 09          COP #$09
+;04C9CE               --------data--------
+;04C9CE  00 00        .db $00 $80
+;04C9CF               ----------------
+;04C9D0  6B             RTL
+;                     ----------------
+;04C9D1  02 01          COP #$01
+;04C9D3               --------data--------
+;04C9D3  00 00        .db $D8 $C9
+;04C9D4               ----------------
+;04C9D5  02 86          COP #$86
+;04C9D7  6B             RTL
+
 
 ;-------------------------------------------------;
 
 
 ;------------- Platinum Card Soldier -------------;
 
-;TODO: This
+; Update the map load script
+
+org $04CBE9
+    ; Relocate the underfoot talkback script so we have enough room to hint
+    %CopAssignTalkCallback(UnderGuardsFootText)
+    ; Also patch CopJumpIfItemNotObtained to CopJumpIfNpcRewardNotObtained
+    %CopJumpIfNpcRewardNotObtained(!NPC_PlatinumCardSoldier, $CBF8)
+
+; Update reward
+org $04CC3C
+    %CopGiveNpcReward(!NPC_PlatinumCardSoldier)
+    NOP #6
+
+;Place hint script and text in place of old text
+org $04CC48
+UnderGuardsFootText:
+    %CopShowText($CD1B)
+    %CopPrintNpcReward(+, !NPC_PlatinumCardSoldier)
+    RTL
++
+    db !Text_Start,!Text_HeroName," sees",!Text_CR,!Text_Break,!Text_CR,"under ",!Dict_the,"guard`s",!Text_CR,"feet.",!Text_WaitBlinkCursor
+    db !Dict_But,!Text_HeroName," can`t",!Text_CR,!Dict_get,"it ",!Dict_because,!Dict_the,!Text_CR,"guard ",!Dict_is,"standing ",!Dict_on,!Text_CR
+    db "it.",!Text_ChangeStreamPtr : dw TextEndStandardBank4
+
+; Some script setup routines
+;04CBDE  02 85          COP #$85
+;04CBE0               --------data--------
+;04CBE0  00 00 00     .db $9D $A9 $00
+;04CBE2               ----------------
+;04CBE3  02 07          COP #$07
+;04CBE5               --------data--------
+;04CBE5  00 00 00 00  .db $05 $88 $20 $CC
+;04CBE8               ----------------
+;04CBE9  02 17          COP #$17 ; setup Talkback, under guards feet.
+;04CBEB               --------data--------
+;04CBEB  00 00        .db $23 $CC
+;04CBEC               ----------------
+;04CBED  02 18          COP #$18 ; Runs during map load, Setup platinum card script?
+;04CBEF               --------data--------
+;04CBEF  00 00 00     .db $28 $F8 $CB
+;04CBF1               ----------------
+;04CBF2  02 17          COP #$17
+;04CBF4               --------data--------
+;04CBF4  00 00        .db $2D $CC
+;04CBF5               ----------------
+;04CBF6  80 07          BRA $04CBFF
+;04CBF8  02 B0          COP #$B0
+;04CBFA               --------data--------
+;04CBFA  00 00 00 00 00 .db $32 $CC $04 $00 $20
+;04CBFE               ----------------
+;04CBFF  02 15          COP #$15
+;04CC01  02 05          COP #$05
+;04CC03               --------data--------
+;04CC03  00 00        .db $01 $00
+;04CC04               ----------------
+;04CC05  02 16          COP #$16
+;04CC07  02 17          COP #$17
+;04CC09               --------data--------
+;04CC09  00 00        .db $00 $00
+;04CC0A               ----------------
+;04CC0B  02 81          COP #$81
+;04CC0D               --------data--------
+;04CC0D  00 00        .db $17 $02
+;04CC0E               ----------------
+;04CC0F  02 83          COP #$83
+;04CC11  02 81          COP #$81
+;04CC13               --------data--------
+;04CC13  00 00        .db $16 $03
+;04CC14               ----------------
+;04CC15  02 83          COP #$83
+;04CC17  02 17          COP #$17
+;04CC19               --------data--------
+;04CC19  00 00        .db $28 $CC
+;04CC1A               ----------------
+;04CC1B  02 15          COP #$15
+;04CC1D  02 91          COP #$91
+;04CC1F  6B             RTL
+;                     ----------------
+;04CC20  02 86          COP #$86
+;04CC22  6B             RTL
+;                     ----------------
+;04CC23  02 01          COP #$01 ; Something under guards feet.
+;04CC25               --------data--------
+;04CC25  00 00        .db $48 $CC
+;04CC26               ----------------
+;04CC27  6B             RTL
+;                     ----------------
+;04CC28  02 01          COP #$01
+;04CC2A               --------data--------
+;04CC2A  00 00        .db $DF $CC
+;04CC2B               ----------------
+;04CC2C  6B             RTL
+;                     ----------------
+;04CC2D  02 01          COP #$01
+;04CC2F               --------data--------
+;04CC2F  00 00        .db $1B $CD
+;04CC30               ----------------
+;04CC31  6B             RTL
+;                     ----------------
+;04CC32  02 91          COP #$91
+;04CC34  02 0D          COP #$0D
+;04CC36               --------data--------
+;04CC36  00 00 00 00 00 .db $00 $0B $30 $3C $CC
+;04CC3A               ----------------
+;04CC3B  6B             RTL
+;                     ----------------
+;04CC3C  02 01          COP #$01 ; see something under guards feet. Replace with hint
+;04CC3E               --------data--------
+;04CC3E  00 00        .db $45 $CD
+;04CC3F               ----------------
+;04CC40  00 5E          BRK #$5E
+;04CC42  02 0A          COP #$0A
+;04CC44               --------data--------
+;04CC44  00           .db $28
+;04CC44               ----------------
+;04CC45  02 86          COP #$86
+;04CC47  6B             RTL
+
+
+; Bard script.
+;04C5D1  02 19          COP #$19
+;04C5D3               --------data--------
+;04C5D3  00 00 00     .db $1A $10 $C6
+;04C5D5               ----------------
+;04C5D6  02 01          COP #$01
+;04C5D8               --------data--------
+;04C5D8  00 00        .db $0A $C8
+;04C5D9               ----------------
+;04C5DA  02 1A          COP #$1A
+;04C5DC               --------data--------
+;04C5DC  00 00 00 00 00 .db $02 $CF $02 $FA $C5
+;04C5E0               ----------------
+;04C5E1  AF D0 03 00    LDA $0003D0
+;04C5E5  D0 13          BNE $04C5FA
+;04C5E7  02 09          COP #$09
+;04C5E9               --------data--------
+;04C5E9  00 00        .db $03 $87
+;04C5EA               ----------------
+;04C5EB  02 01          COP #$01
+;04C5ED               --------data--------
+;04C5ED  00 00        .db $4C $C8
+;04C5EE               ----------------
+;04C5EF  02 0B          COP #$0B ; Remove harpstring
+;04C5F1               --------data--------
+;04C5F1  00           .db $1A
+;04C5F1               ----------------
+;04C5F2  02 17          COP #$17
+;04C5F4               --------data--------
+;04C5F4  00 00        .db $0B $C6
+;04C5F5               ----------------
+;04C5F6  02 27          COP #$27
+;04C5F8               --------data--------
+;04C5F8  00 00        .db $B3 $C5
+;04C5F9               ----------------
+;04C5FA  02 01          COP #$01
+;04C5FC               --------data--------
+;04C5FC  00 00        .db $71 $C8
+;04C5FD               ----------------
+;04C5FE  6B             RTL
+;                     ----------------
+;04C5FF  02 01          COP #$01
+;04C601               --------data--------
+;04C601  00 00        .db $76 $C6
+;04C602               ----------------
+;04C603  02 17          COP #$17
+;04C605               --------data--------
+;04C605  00 00        .db $0B $C6
+;04C606               ----------------
+;04C607  02 27          COP #$27
+;04C609               --------data--------
+;04C609  00 00        .db $B3 $C5
+;04C60A               ----------------
+;04C60B  02 01          COP #$01
+;04C60D               --------data--------
+;04C60D  00 00        .db $9E $C7
+;04C60E               ----------------
+;04C60F  6B             RTL
+;                     ----------------
+;04C610  02 01          COP #$01
+;04C612               --------data--------
+;04C612  00 00        .db $DE $C7
+;04C613               ----------------
+;04C614  6B             RTL
+;                     ----------------
+;04C615  02 01          COP #$01
+;04C617               --------data--------
+;04C617  00 00        .db $1C $C6
+;04C618               ----------------
+;04C619  02 86          COP #$86
+;04C61B  6B             RTL
+
+
 
 ;-------------------------------------------------;
 
 
 ;------------------- Maid Herb -------------------;
 
-;TODO: This
+; This NPC starts their conversation automatically, so we need to tweak the shopkeeper template a bit.
+org $04CE5A
+MaidHerbScript:
+    skip 10
+.endScript:
+    skip 12
+    ; Begin shopkeeper template
+    %CopJumpIfNpcRewardNotObtained(!NPC_MaidHerb, .doYouWantOne)
+    %CopShowText(.textThatsAll)
+    BRA .endScript
+.doYouWantOne:
+    %CopPrintNpcReward(.textWantOne, !NPC_MaidHerb)
+    %CopShowChoices($CF02, $02, .dontWant)
+    LDA $0003D0 ; Read menu choice
+    BNE .dontWant
+    %CopShowText(.textGive)
+    %CopGiveNpcReward(!NPC_MaidHerb)
+    BRA .endScript
+.dontWant:
+    %CopShowText(.textComeBackAgain)
+    BRA .endScript
+.textThatsAll:
+    ; "That's all I have, sorry."
+    db !Text_Start,"That`",!Dict_s,!Dict_all,!Dict_I,"have,",!Text_CR,"sorry.",!Text_ChangeStreamPtr : dw TextEndStandardBank4
+.textWantOne:
+    ; "You want <x> don't you?"
+    db !Text_Start,!Dict_You,!Dict_want,!Text_CR,!Text_Break,!Text_CR,"don`t you?",!Text_Break
+.textGive:
+    ; See? I have the ability to read peoples` minds. Here I will give you one.
+    db !Text_Start,"See?",!Text_CR,!Dict_I,!Dict_have,!Dict_the,"ability ",!Dict_to,!Text_CR,"read peoples` minds.",!Text_WaitBlinkCursor
+    db "Here ",!Dict_I,!Dict_will,!Dict_give,!Dict_you,!Text_CR,"one.",!Text_ChangeStreamPtr : dw TextEndStandardBank4
+.textComeBackAgain:
+    ; "Oh, I guess my ability is not perfect."
+    db !Text_Start,"Oh, ",!Dict_I,"guess ",!Dict_my,"ability",!Text_CR,!Dict_is,!Dict_not,"perfect.",!Text_ChangeStreamPtr : dw TextEndStandardBank4
+
+; We have a some more free space here, so lets use it for letting you get the Queen's reward on the superbracelet tile if she is already gone.
+SuperBraceletTileExtension:
+    %CopJumpIfNpcRewardNotObtained(!NPC_QueenMagriddVIPCard, +)
+.end
+    COP #$91
+    RTL
++
+    %CopShowText(.butWaitTheresMore)
+    ; TODO: This breaks if you release two lairs at once. Figure out a way around that.
+    %CopGiveNpcReward(!NPC_QueenMagriddVIPCard)
+    BRA .end
+.butWaitTheresMore
+    db !Text_Start,!Dict_There,!Dict_is,!Dict_something,!Text_CR,"else too!",!Text_ChangeStreamPtr : dw TextEndStandardBank4
+
+warnpc $04CF49
+;04CE5A  02 91          COP #$91
+;04CE5C  02 0D          COP #$0D
+;04CE5E               --------data--------
+;04CE5E  00 00 00 00 00 .db $00 $39 $2F $70 $CE
+;04CE62               ----------------
+;04CE63  6B             RTL
+;                     ----------------
+;04CE64  02 91          COP #$91
+;04CE66  02 0D          COP #$0D
+;04CE68               --------data--------
+;04CE68  00 00 00 00 00 .db $00 $39 $2F $6F $CE
+;04CE6C               ----------------
+;04CE6D  80 EB          BRA $04CE5A
+;04CE6F  6B             RTL
+;                     ----------------
+;04CE70  02 01          COP #$01
+;04CE72               --------data--------
+;04CE72  00 00        .db $9D $CE
+;04CE73               ----------------
+;04CE74  02 1A          COP #$1A
+;04CE76               --------data--------
+;04CE76  00 00 00 00 00 .db $02 $CF $02 $97 $CE
+;04CE7A               ----------------
+;04CE7B  AF D0 03 00    LDA $0003D0
+;04CE7F  D0 16          BNE $04CE97
+;04CE81  02 18          COP #$18
+;04CE83               --------data--------
+;04CE83  00 00 00     .db $38 $8C $CE
+;04CE85               ----------------
+;04CE86  02 01          COP #$01
+;04CE88               --------data--------
+;04CE88  00 00        .db $0E $CF
+;04CE89               ----------------
+;04CE8A  80 D8          BRA $04CE64
+;04CE8C  02 01          COP #$01
+;04CE8E               --------data--------
+;04CE8E  00 00        .db $B9 $CE
+;04CE8F               ----------------
+;04CE90  00 5E          BRK #$5E
+;04CE92  02 0A          COP #$0A
+;04CE94               --------data--------
+;04CE94  00           .db $38
+;04CE94               ----------------
+;04CE95  80 CD          BRA $04CE64
+;04CE97  02 01          COP #$01
+;04CE99               --------data--------
+;04CE99  00 00        .db $27 $CF
+;04CE9A               ----------------
+;04CE9B  80 C7          BRA $04CE64
+
 
 ;-------------------------------------------------;
 
 
 ;----------------- Emblem H Tile -----------------;
 
-;TODO: This
+org $04D33D
+    %CopGiveNpcReward(!NPC_EmblemHTile)
+    NOP #6
 
 ;-------------------------------------------------;
 
 
 ;----------------- Magridd King ------------------;
 
-;TODO: This
+org $04D5D5
+    %CopGiveNpcReward(!NPC_MagriddKing)
+    NOP #2
+
+org $04D75D
+    db !Dict_Please,!Dict_take,"this.",!Text_ChangeStreamPtr : dw TextEndStandardBank4
+
+;04D5C7  02 09          COP #$09
+;04D5C9               --------data--------
+;04D5C9  00 00        .db $07 $80
+;04D5CA               ----------------
+;04D5CB  02 07          COP #$07
+;04D5CD               --------data--------
+;04D5CD  00 00 00 00  .db $05 $9B $DF $D5
+;04D5D0               ----------------
+;04D5D1  02 01          COP #$01
+;04D5D3               --------data--------
+;04D5D3  00 00        .db $39 $D6
+;04D5D4               ----------------
+;04D5D5  00 5E          BRK #$5E
+;04D5D7  02 0A          COP #$0A
+;04D5D9               --------data--------
+;04D5D9  00           .db $3F
+;04D5D9               ----------------
+;04D5DA  02 09          COP #$09
+;04D5DC               --------data--------
+;04D5DC  00 00        .db $05 $9B
+;04D5DD               ----------------
+;04D5DE  6B             RTL
 
 ;-------------------------------------------------;
 
 
 ;------ Leo On The Airship Deck Mobile Key -------;
 
-;TODO: This
+; Hack so Leo doesn't dissapear after Demon Bird is dead
+org $04DE6F
+    NOP #6
+
+; Jump if demon bird dead (flag set).
+;04DE6F  02 07          COP #$07
+;04DE71               --------data--------
+;04DE71  00 00 00 00  .db $05 $9F $DC $DF
+
+; Give reward
+org $04DF4D
+    %CopGiveNpcReward(!NPC_LeoOnTheAirshipDeckMobileKey)
+    NOP #2
+
+;04DF49  02 01          COP #$01
+;04DF4B               --------data--------
+;04DF4B  00 00        .db $C3 $E4
+;04DF4C               ----------------
+;04DF4D  00 5E          BRK #$5E
+;04DF4F  02 0A          COP #$0A
+;04DF51               --------data--------
+;04DF51  00           .db $23
+;04DF51               ----------------
+
+; Remove reference to king magridd's vanilla reward.
+org $04E1D3
+    db !Text_ChangeStreamPtr : dw TextEndStandardBank4
+;04DFE4  02 01          COP #$01
+;04DFE6               --------data--------
+;04DFE6  00 00        .db $44 $E1
+
+
+
 
 ;-------------------------------------------------;
 
 
 ;--------------- Harp String Tile ----------------;
 
-;TODO: This
+org $04EA0A
+    %CopGiveNpcReward(!NPC_HarpStringTile)
+    NOP #2
+
+; Keep "the body is holding something" but remove vanilla reward reference
+org $04EA32
+    db !Text_ChangeStreamPtr : dw TextEndStandardBank4
+
+;04EA06  02 01          COP #$01
+;04EA08               --------data--------
+;04EA08  00 00        .db $16 $EA
+;04EA09               ----------------
+;04EA0A  00 5E          BRK #$5E
+;04EA0C  02 0A          COP #$0A
+;04EA0E               --------data--------
+;04EA0E  00           .db $1A
+;04EA0E               ----------------
+;04EA0F  02 09          COP #$09
+;04EA11               --------data--------
+;04EA11  00 00        .db $02 $87
+;04EA12               ----------------
+;04EA13  02 86          COP #$86
+;04EA15  6B             RTL
+
 
 ;-------------------------------------------------;
 
@@ -1485,13 +2054,13 @@ NorthEasternMermaidHerbScript:
     RTL
 .textThatsAll
     ; "That's all I have, sorry."
-    db !Text_Start,"That`",$D7,$9A,$88,"have,",!Text_CR,"sorry.",!Text_ChangeStreamPtr : dw TextEndStandardBank1F
+    db !Text_Start,"That`",!Dict_s,!Dict_all,!Dict_I,"have,",!Text_CR,"sorry.",!Text_ChangeStreamPtr : dw TextEndStandardBank1F
 .textWantOne
     ; "Hello, I have <x>. Would you like one?"
-    db !Text_Start,"Hello, ",$88,$B5,!Text_CR,!Text_Break,".",!Text_CR,"Would ",$FE,$BE,"one?",!Text_Break
+    db !Text_Start,"Hello, ",!Dict_I,!Dict_have,!Text_CR,!Text_Break,".",!Text_CR,"Would ",!Dict_you,!Dict_like,"one?",!Text_Break
 .textComeBackAgain
     ; "Come back if you change your mind."
-    db !Text_Start,$84,$A0,"if ",$FE,!Text_CR,"change ",$FF,"mind.",!Text_ChangeStreamPtr : dw TextEndStandardBank1F
+    db !Text_Start,!Dict_Come,!Dict_back,"if ",!Dict_you,!Text_CR,"change ",!Dict_your,"mind.",!Text_ChangeStreamPtr : dw TextEndStandardBank1F
 
 warnpc $1F83AC
 
@@ -1507,7 +2076,7 @@ org $1F8BB5
     RTL
 +
     ; Abridge Release text and hint NPC Reward.
-    db $10,$0E,$3C,"Does anyone need",!Text_CR,!Text_Break,"? ",!Text_ChangeStreamPtr : dw TextEndStandardBank1F
+    db !Text_Start,!Text_DelayAndContinue,$3C,"Does anyone need",!Text_CR,!Text_Break,"? ",!Text_ChangeStreamPtr : dw TextEndStandardBank1F
 
 ; Patch script to give NPC Reward
 org $1F8B9B
@@ -1592,7 +2161,7 @@ org $1F9890
 
 ;---------------------- Lue ----------------------;
 
-;TODO: Also fix mermaid guarding lue's entrance
+;TODO: Also fix mermaid guarding lue's entrance?
 
 ; Patch CopJumpIfItemNotObtained to CopJumpIfNpcRewardNotObtained
 org $1F9BB5
@@ -1605,7 +2174,7 @@ org $1F9BE7
 
 ; Patch text to remove reference to vanilla reward
 org $1F9D5A
-    db "hope ",$E4,$F1,$B7,!Text_CR,$D2,$E6,"it.",!Text_ChangeStreamPtr : dw TextEndStandardBank1F
+    db "hope ",!Dict_this,!Dict_will,!Dict_help,!Text_CR,!Dict_please,!Dict_take,"it.",!Text_ChangeStreamPtr : dw TextEndStandardBank1F
 
 ;-------------------------------------------------;
 
@@ -1659,5 +2228,16 @@ org $1FA4E9
 
 ;-------------------------------------------------;
 
+; TODO: Add sword hints for cystal in magrid castle basement
+;04EF29  02 01          COP #$01
+;04EF2B               --------data--------
+;04EF2B  00 00        .db $B8 $EE
+;04EF2C               ----------------
+;04EF2D  82 49 FF       BRL $04EE79 ; Jump to would you like to return.
+
+;TODO: misc other randomizer hacks that are important
+; Make Lisa's dream accessible always/move old woman
+; Correct typo's, make leaves distinguishable
+; Make All 6 stones actually required.
 
 pullpc

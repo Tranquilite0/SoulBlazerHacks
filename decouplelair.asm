@@ -148,15 +148,36 @@ DecoupleLairReward:
     SEP #$20
     JML $028C75 ; Jump back and continue releasing lair with updated target lair
 
-; TODO: Patch cop14 to check for target of lair rather than lair. This could be majorly risky though
 ; TODO: run through game with breakpoint on cop14 and see how things could break if it was patched.
-; Alternatively, selectively patch known issues like with Ghost Ship.
+; TODO: Cop3B is similar, but with lair dependencies.
+; We need to, selectively patch known issues like with Ghost Ship.
+; Right now, the only ones I can think of are Ghost Ship and Air Ship (surprise surprise)
 ; Alternatively alternatively, create a new alternate cop14 that checks the target of the lair.
 ; This controls whether or not the final breaking plank spawns on map load in ghost ship.
 ; There are other ones for the worms and flames too which could be patched as well to point to whatever this lair seals
 ;00C24C  02 14          COP #$14 
 ;00C24E               --------data--------
 ;00C24E  00 00 00 00  .db $B6 $00 $7E $C2
+
+;TODO: Hack below to work with decoupled lairs so you can ride airship if king magridd has been released.
+;04ED80  02 14          COP #$14
+;04ED82               --------data--------
+;04ED82  00 00 00 00  .db $95 $01 $8C $ED
+;04ED85               ----------------
+;04ED86  02 3B          COP #$3B ; Unsure if this needs to change. double check.
+;04ED88               --------data--------
+;04ED88  00 00 00 00  .db $95 $01 $9E $ED
+;04ED8B               ----------------
+;04ED8C  BD 16 00       LDA $0016,X
+;04ED8F  29 EF FF       AND #$FFEF
+;04ED92  9D 16 00       STA $0016,X
+;04ED95  02 91          COP #$91
+;04ED97  02 0D          COP #$0D
+;04ED99               --------data--------
+;04ED99  00 00 00 00 00 .db $00 $17 $0F $9F $ED
+;04ED9D               ----------------
+;04ED9E  6B             RTL
+;                     ----------------
 
 
 ; Hooks and original rom data overwrite section
