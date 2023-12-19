@@ -1,3 +1,5 @@
+includeonce
+
 !LifeSword       = $01
 !PsychoSword     = $02
 !CriticalSword   = $03

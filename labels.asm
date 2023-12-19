@@ -2,6 +2,14 @@ includeonce
 
 ; Misc Labels and defines to (hopefully) make the code easier to read
 
+CopTemp = $7E0038 ; Argument storage for COP routines.
+
+; Pointers to places containing the standard Text End Command ($12,$08,$08,$04,$0C)
+TextEndStandardBank2 = $02E25F
+TextEndStandardBank3 = $03B988
+TextEndStandardBank4 = $04A51E
+TextEndStandardBank1F = $1FAA44
+
 ; Prints OSD String in bank 2 from Address in Y
 PrintOsdStringFromBank2 = $02A769
 
@@ -24,6 +32,29 @@ CheckIfBitIsSet = $04F3A2
 ; Text Speed ram location
 TextSpeedRam = $7E1B84
 
+; TODO: move these macros somewhere else?
+macro CopShowText(textPtr)
+    COP #$01
+    dw <textPtr>
+endmacro
+
+macro CopAssignTalkCallback(ptr)
+    COP #$17
+    dw <ptr>
+endmacro
+
+macro CopJumpIfItemNotObtained(itemId, target)
+    COP #$18
+    db <itemId>
+    dw <target>
+endmacro
+
+macro CopShowChoices(choicesTxtPtr, numberOfChoices, abortPtr)
+    COP #$1A
+    dw <choicesTxtPtr>
+    db <numberOfChoices>
+    dw <abortPtr>
+endmacro
 
 ; Text Processing Commands for PrintOsdStringFromBankX
 ; PrintOsdStringFromBank2 only uses a subset of these commands, and implements $0B
@@ -53,7 +84,7 @@ TextSpeedRam = $7E1B84
 ; For the most part, other character codes will line up with ascii, but there are some differences 
 ; and a bunch of non-printing code points are used for various text glyphs.
 
-; Common Text Processing functions
+; Common Text Processing combinations
 !Text_YellowStyle     = $03,$24 ; Switch to printing yellow text.
 !Text_EndStyle        = $03,$20 ; Switch back to regular text color.
 !Text_EndText12       = $12,$08,$08,$04,$0C ; Wait for user, then undraw textbox and break from text processing.

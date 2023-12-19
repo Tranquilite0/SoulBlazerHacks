@@ -10,8 +10,15 @@ if not(defined("initialized"))
     !initialized = 1
 endif
 
-; $01FE44 to $01FFFF is Unused. Lets put this hack here since it is small and standalone.
-org $01FE44
+namespace SemiProgressive
+
+; There is some space starting in $1FFC90 So lets put our hack there.
+StartAddress = $1FFC9D
+; At the time of writing, this file uses up to $1FFD67
+; This should be enough extra space for any small changes without needing a major version bump.
+EndAddress = $1FFD7F
+
+org StartAddress
 
 ; New code section.
 
@@ -206,4 +213,5 @@ org $02E1CE
 
 pullpc
 
-warnpc $01FFFF
+warnpc EndAddress
+namespace off

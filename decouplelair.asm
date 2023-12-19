@@ -1,22 +1,6 @@
 ; Routines for decoupling item/lair checks
 ; Allow lairs to give items and chests to release NPCs
 
-if not(defined("initialized"))
-    arch 65816
-    lorom
-    optimize address mirrors
-
-    check title "SOULBLAZER - 1 USA   "
-
-    ; 7A57 to 7FBF is Unused. Lets put our hacks there.
-    org $00FA57
-
-    !initialized = 1
-endif
-
-incsrc "npcreward.asm"
-incsrc "npcscriptpatches.asm"
-incsrc "chestrelease.asm"
 
 ; New Code Section
 

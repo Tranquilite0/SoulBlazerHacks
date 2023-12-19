@@ -1,10 +1,3 @@
-
-pushpc
-
-; According to the data crystal rom map, this section is unused, so I guess I will put strings here.
-; TODO: If not many strings are needed, just put them in the same place as code
-org $1EF967
-
 PrintItemNameShort:
 db !Text_YellowStyle,$05,$74,$CF,$C8,$03,!Text_EndStyle,!Text_Break
 
@@ -35,6 +28,3 @@ db $10,!Dict_You,"already ",!Dict_have,!Dict_my,!Text_CR,"reward. ",!Text_EndTex
 ;This is only worthwhile if we put lots of strings in this bank.
 EndTextForBank:
 db !Text_EndText12 
-
-warnpc $1EFFFF
-pullpc

@@ -1,69 +1,10 @@
 ; I think the easiest way to deal with NPCs is to make a new COP dedicated to their rewards.
-
-CopTemp = $7E0038 ; Argument storage for COP routines.
-
 ; Soulblazer has 420 entries in the lair table, but has 512 bits to store lair sealed flags
 ; We will use 60 of the unused flags for NPC reward tracking
 NpcReceivedFlags = $7E1B13
 
-; Macros for the new COP routines
-
-; Gives an NPC Reward and prints message
-; Checks if NPC has already given the reward and prints message.
-; Size: 3 bytes
-macro CopGiveNpcReward(npcId)
-    COP #!CopGiveNpcRewardId
-    db <npcId>
-endmacro
-
-
-; Prints what the the given NPC ID where the previous textbox left off.
-; Must be used after printing a message that ends in the $C0 Text Command.
-macro CopResumePrintNpcReward(npcId)
-    COP #!CopResumePrintNpcRewardId
-    db <npcId>
-endmacro
-
-
-; Prints a message where the previous textbox left off.
-; Must be used after printing a message that ends in the $C0 Text Command.
-macro CopResumePrint(textPtr)
-    COP #!CopResumePrintId
-    dw <textPtr>
-endmacro
-
-
-macro CopJumpIfNpcRewardNotObtained(npcId, target)
-    COP #!CopJumpIfNpcRewardNotObtainedId
-    db <npcId>
-    dw <target>
-endmacro
-
-macro CopPrintNpcReward(textPtr, npcId)
-    COP #!CopPrintNpcRewardId
-    dw <textPtr>
-    db <npcId>
-endmacro
-
-; Shows Text using Text speed 1
-; TODO: Move to own file?
-macro CopShowTextNotInstant(textPtr)
-    COP #!CopShowTextNotInstantId
-    dw <textPtr>
-endmacro
 
 ; New Code Section
-
-GiveNpcRewardCop:
-    TYX ; Cop Handler puts X in Y
-    PHX ; Push X since some NPC scripts expect X to be preserved
-    LDA.B [CopTemp] ; NPC ID in A
-    INC.B CopTemp
-    AND #$00FF
-    JSL GiveNpcReward
-    REP #$20
-    PLX ; Restore X so that some NPC scripts wont break.
-    BRL RetInTmp
 
 
 ; NPC ID in A
@@ -153,103 +94,6 @@ GiveNpcReward:
     PLP
     RTL
 
-
-ResumePrintNpcRewardCop:
-    TYX ; Cop Handler puts X in Y
-    PHX ; Push X since some NPC scripts expect X to be preserved
-    LDA.B [CopTemp] ; NPC ID in A
-    INC.B CopTemp
-    AND #$00FF
-    JSL ResumePrintNpcReward
-    REP #$20
-    PLX ; Restore X so that some NPC scripts wont break.
-    BRL RetInTmp
-
-
-ResumePrintNpcReward:
-    PHP
-    PHB
-    REP #$20
-    TAY ; NPC ID in Y
-    ASL #2
-    TAX ; Table Index in X
-    SEP #$20
-    LDA.L NpcRewardTable,X
-    BEQ .nothing
-    CMP #!Gems
-    BEQ .gems
-    CMP #!Exp
-    BEQ .exp
-    CMP #!LairRelease
-    BEQ .lair
-    ; Print regular item
-    STA $03C8 ; Used by the print routine to load item name
-    STZ $03C9 ; Second byte unused
-    LDY.W #PrintItemNameShort
-    LDA.B #PrintItemNameShort>>16 ; Load bank to switch to
-    BRA .end
-.nothing
-    LDY.W #PrintNothingShort
-    LDA.B #PrintNothingShort>>16 ; Load bank to switch to
-    BRA .end
-.gems:
-    REP #$20
-    LDA.L RewardQuantity,X
-    STA $03C8 ; Used by the print routine to load Gems/Exp Amount
-    SEP #$20
-    LDY.W #PrintGemsShort
-    LDA.B #PrintGemsShort>>16 ; Load bank to switch to
-    BRA .end
-.exp
-    REP #$20
-    LDA.L RewardQuantity,X
-    STA $03C8 ; Used by the print routine to load Gems/Exp Amount
-    SEP #$20
-    LDY.W #PrintExpShort
-    LDA.B #PrintExpShort>>16 ; Load bank to switch to
-    BRA .end
-.lair
-    REP #$20
-    LDA.L RewardQuantity,X ;
-    ASL #5
-    TAX ; Lair Index in X
-    SEP #$20
-    LDA $BA16,X ; Load NPC Name index from lair data field 09
-    STA $03C8 ; Used by the print routine to load npc name
-    STZ $03C9 ; Second byte unused
-    LDY.W #PrintRevivableNpcNameShort
-    LDA.B #PrintRevivableNpcNameShort>>16 ; Load bank to switch to
-.end:
-    PHA ; Switch Bank
-    PLB
-    JSL ResumePrintOsdStringFromBankX
-    PLB
-    PLP
-    RTL
-
-PrintNPCRewardCop:
-    TYX
-    LDA.B [CopTemp]
-    INC.B CopTemp
-    INC.B CopTemp
-    TAY
-    LDA.B [CopTemp]
-    INC.B CopTemp
-    AND #$00FF
-    SEP #$20
-    PHX
-    PHB
-    PHA
-    LDA.B CopTemp+2
-    PHA
-    PLB
-    PLA
-    JSL PrintNpcReward
-    PLB
-    PLX
-    REP #$20
-    BRL RetInTmp
-
 ; String to print in Y
 ; NPC ID in A
 ; NPC reward will be printed in place of the first $0C command that occurs in the string
@@ -322,66 +166,8 @@ PrintNpcReward:
     PLP
     RTL
 
-; Like COP #$01 ShowText, but forces Text Speed 1 and restores afterwards.
-ShowTextNotInstantCop:
-    TYX
-    LDA.B [CopTemp] ; loads 24-bit textpointer
-    INC.B CopTemp
-    INC.B CopTemp
-    TAY             ; print expects the textpointer in Y
-    SEP #$20
-    PHX
-    PHB
-    LDA.B CopTemp+2
-    PHA
-    PLB
-    LDA TextSpeedRam
-    PHA
-    BNE +
-    INC TextSpeedRam
-    +
-    JSL.L PrintOsdStringFromBankX
-    PLA
-    STA TextSpeedRam
-    PLB
-    PLX
-    REP #$20
-    BRL RetInTmp
-
-ResumePrintCop:
-    TYX
-    LDA.B [CopTemp]
-    INC.B CopTemp
-    INC.B CopTemp
-    TAY
-    SEP #$20
-    PHX
-    PHB
-    LDA.B CopTemp+2
-    PHA
-    PLB
-    JSL ResumePrintOsdStringFromBankX
-    PLB
-    PLX
-    REP #$20
-    BRL RetInTmp
-
-
-JumpIfNpcRewardNotObtainedCop:
-    TYX
-    LDA.B [CopTemp]
-    INC.B CopTemp
-    AND.W #$FF
-    JSL CheckNpcFlag
-    BCC .isNotObtained
-    BRL Skip2Args
-.isNotObtained:
-    LDA.B [CopTemp]
-    INC.B CopTemp
-    INC.B CopTemp
-    BRL RetInA
-
-
+; Expects NPC ID in A
+; Result in Carry flag.
 CheckNpcFlag:
     PHY
     LDY #NpcReceivedFlags
@@ -390,6 +176,7 @@ CheckNpcFlag:
     RTL
 
 
+; Expects NPC ID in A
 SetNpcFlag:
     PHY
     LDY #NpcReceivedFlags
@@ -398,41 +185,10 @@ SetNpcFlag:
     RTL
 
 
-; Hooks and original rom data overwrite section
-pushpc
-
-;Insert our new COP routines into slots $3D through $41
-!CopIndex = $3D
-org $00D6B2
-    dw GiveNpcRewardCop              : !CopGiveNpcRewardId              := !CopIndex : !CopIndex #= !CopIndex+1
-    dw ResumePrintNpcRewardCop       : !CopResumePrintNpcRewardId       := !CopIndex : !CopIndex #= !CopIndex+1
-    dw ResumePrintCop                : !CopResumePrintId                := !CopIndex : !CopIndex #= !CopIndex+1
-    dw JumpIfNpcRewardNotObtainedCop : !CopJumpIfNpcRewardNotObtainedId := !CopIndex : !CopIndex #= !CopIndex+1
-    dw PrintNPCRewardCop             : !CopPrintNpcRewardId             := !CopIndex : !CopIndex #= !CopIndex+1
-    dw ShowTextNotInstantCop         : !CopShowTextNotInstantId         := !CopIndex : !CopIndex #= !CopIndex+1
-
-; Labels for reusing existing code for returning from COP Routines
-org $00E4B5
-Skip5Args: skip 2
-Skip4Args: skip 2
-Skip3Args: skip 2
-Skip2Args: skip 2
-Skip1Arg:  skip 2
-RetInTmp:  skip 2
-RetInA:
-    skip 2
-    skip 1
-SetScriptRetAddrAndGetOut:
-    skip 2
-    skip 3
-RetOutOfScript:
-
-pullpc
-
-
 ; NPC Reward Table section
-; TODO: We can put this table somewhere else if it takes up too much space.
+; TODO: Relocate.
 ; TODO: Change first entry to byte and add something else to keep it 4 bytes?
+; TODO: Use structs
 NpcRewardTable:
     dw !MedicalHerb ; Tool shop owner
 RewardQuantity:
