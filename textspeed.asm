@@ -12,9 +12,9 @@ if not(defined("initialized"))
     !initialized = 1
 endif
 
-; For text speeds that can be any speed
+; For most text.
 !text_speed = $00
-; Text speed for the epilogue (Doesn't feel right for it to be instant)
+; Text speed for the epilogue (Doesnt auto-advance if it is instant.)
 !text_speed_epilogue = $01
 
 ; General text speed set at game start. Covers 90 percent of text boxes.
@@ -71,12 +71,6 @@ org $03B466
 db !text_speed_epilogue
 
 ; Patch cutscenes which break if text is instant
-
-; Dolphin release: Lue's Friend
-; Instant text causes a softlock
-; This should no longer be needed if the delay print command fix works as expected.
-;org $1F9E36
-;    %CopShowTextNotInstant($9E3D)
 
 ; The delay print command ($0E) does not delay when text speed is instant.
 ; This behavior appears to be the source of problems with instant text.

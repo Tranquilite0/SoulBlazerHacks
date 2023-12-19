@@ -4,6 +4,27 @@ pushpc
 
 ;----------------- Mountain King -----------------;
 
+; Check for NPC Reward instead of vanilla reward
+org $048633
+    %CopJumpIfNpcRewardNotObtained(!NPC_MountainKing, $863D)
+
+; Give NPC Reward
+org $04859D
+%CopGiveNpcReward(!NPC_MountainKing)
+NOP #6
+
+;Give phoenix
+;04859D  02 01          COP #$01
+;04859F               --------data--------
+;04859F  00 00        .db $D4 $89
+;0485A0               ----------------
+;0485A1  00 5E          BRK #$5E
+;0485A3  02 0A          COP #$0A
+;0485A5               --------data--------
+;0485A5  00           .db $18
+;0485A5               ----------------
+
+; Check for requirement script
 ;04862D  02 07          COP #$07
 ;04862F               --------data--------
 ;04862F  00 00 00 00  .db $05 $07 $76 $86
@@ -57,6 +78,8 @@ pushpc
 ;048669  00 00        .db $04 $80
 ;04866A               ----------------
 ;04866B  6B             RTL
+
+
 
 
 ;-------------------------------------------------;
@@ -1305,6 +1328,11 @@ org $04EA32
 
 ;-------------------------------------------------;
 
-
+; TODO: Add sword hints for cystal in magrid castle basement
+;04EF29  02 01          COP #$01
+;04EF2B               --------data--------
+;04EF2B  00 00        .db $B8 $EE
+;04EF2C               ----------------
+;04EF2D  82 49 FF       BRL $04EE79 ; Jump to would you like to return.
 
 pullpc

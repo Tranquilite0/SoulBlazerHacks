@@ -33,6 +33,14 @@ macro CopPrintNpcReward(textPtr, npcId)
     db <npcId>
 endmacro
 
+; Jumps if Lair has been stepped on, rather than if the NPC
+; assotiated with it has been released.
+macro CopJumpIfLairRewardObtained(lairId, target)
+    COP #!CopJumpIfLairRewardObtainedId
+    dw <lairId>
+    dw <target>
+endmacro
+
 
 ; Original Code Section
 ; 
@@ -110,6 +118,26 @@ CopResumePrint:
     REP #$20
     BRL RetInTmp
 
+; Jumps if the Lair was stepped on, rather than if the NPC
+; assotiated with it has been released.
+CopJumpIfLairRewardObtained:
+    TYX
+    PHX
+    LDA.B [CopTemp]
+    INC.B CopTemp
+    INC.B CopTemp
+    TAX
+    LDA LairStateTable,X
+    AND.W #$0080 ; Check Lair Sealed flag
+    BNE .isObtained
+    PLX
+    BRL Skip2Args
+.isObtained:
+    LDA.B [CopTemp]
+    INC.B CopTemp
+    INC.B CopTemp
+    PLX
+    BRL RetInA
 
 ; Hooks and original rom data overwrite section
 pushpc
@@ -121,6 +149,7 @@ org $00D6B2
     dw CopJumpIfNpcRewardNotObtained : !CopJumpIfNpcRewardNotObtainedId := !CopIndex : !CopIndex #= !CopIndex+1
     dw CopPrintNPCReward             : !CopPrintNpcRewardId             := !CopIndex : !CopIndex #= !CopIndex+1
     dw CopResumePrint                : !CopResumePrintId                := !CopIndex : !CopIndex #= !CopIndex+1
+    dw CopJumpIfLairRewardObtained   : !CopJumpIfLairRewardObtainedId   := !CopIndex : !CopIndex #= !CopIndex+1
 
 ; Labels for reusing existing code for returning from COP Routines
 org $00E4B5

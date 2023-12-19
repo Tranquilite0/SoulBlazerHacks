@@ -712,10 +712,24 @@ WorldOfEvilStoneCheck:
 
 pullpc ; Place this new code in the freespace region.
 .checkStones
-; Code we replaced
-LDA #$7FC0
-BRL .resumeOpening
-
+    %CopJumpIfItemNotObtained(!BrownStone,  .notEnoughStones)
+    %CopJumpIfItemNotObtained(!GreenStone,  .notEnoughStones)
+    %CopJumpIfItemNotObtained(!BlueStone,   .notEnoughStones)
+    %CopJumpIfItemNotObtained(!SilverStone, .notEnoughStones)
+    %CopJumpIfItemNotObtained(!PurpleStone, .notEnoughStones)
+    %CopJumpIfItemNotObtained(!BlackStone,  .notEnoughStones)
+    ; Code we replaced
+    LDA #$7FC0
+    BRL .resumeOpening
+.notEnoughStones
+    %CopShowText(.text)
+    %CopTeleportPlayerToMap($0700,$01,$70,$50)
+    RTL
+.text
+    db !Text_Start,!Dict_You,"need ",!Dict_all,"6 stones",!Text_CR
+    db !Dict_to,"open ",!Dict_the,"World ",!Dict_of,!Text_CR,"Evil.",!Text_ChangeStreamPtr : dw TextEndStandardBank3
+;0x02, 0x01, 0x8A, 0xED,                                       /* New text */
+;0x02, 0x10, 0x00, 0x07, 0x01, 0x70, 0x00, 0x50, 0x00, 0x6B};  /* Teleport player away from center tile */
 ;03EC61  A9 C0 7F       LDA #$7FC0
 ;03EC64  0C 26 03       TSB $0326
 
@@ -724,16 +738,129 @@ pushpc
 
 ;-------------------------------------------------;
 
-; TODO: Add sword hints for cystal in magrid castle basement
-;04EF29  02 01          COP #$01
-;04EF2B               --------data--------
-;04EF2B  00 00        .db $B8 $EE
-;04EF2C               ----------------
-;04EF2D  82 49 FF       BRL $04EE79 ; Jump to would you like to return.
 
-;TODO: misc other randomizer hacks that are important
+;----------- Miscelaneous Accesibility -----------;
+; TODO: move elsewhere? Clean Up.
+
+; Correct typos and and make Greenwood/Actinidia leaves distinguishable
+; Magic Flair->Magic Flare
+org $02D0EC
+    db "re"
+
+; Leaves->G.Leaf
+org $02D14C
+    db "G.Leaf"
+
+; Leaves->A.Leaf
+org $02D1B2
+    db "A.Leaf"
+
+; Recieved->Received
+org $02E21E
+    db "ei"
+
 ; Make Lisa's dream accessible always/move old woman
-; Correct typo's, make leaves distinguishable
-; Make All 6 stones actually required.
+; Move old woman to different position around Lisa's bed.
+org $038121
+    db $3C,$20 ; originally $3B,$1E
+
+; Make Lisa's dream accessible
+; Stop lisa from getting kidnapped when you get the VIP Card
+BranchTargetLisa = $038A75
+org $038A6D
+BRL.W BranchTargetLisa
+NOP #2
+
+; Remove a branch in Lisa's script that normally occurs when village chief has been revived.
+org $038A79
+NOP #6
+
+; TODO: Any other misc randomizer hacks that are important?
+
+; Fix Mermaid's Tear Chest condition
+BranchTargetMermaidsTearChest = $1F8CA9
+org $1F8CA2
+    BRL.W BranchTargetMermaidsTearChest
+    NOP #2
+;1F8CA2  02 18          COP #$18
+;1F8CA4               --------data--------
+;1F8CA4  00 00 00     .db $21 $A9 $8C
+
+
+
+; TODO: run through game with breakpoint on cop14 and see how things could break if it was patched.
+; TODO: Cop3B is similar, but with lair dependencies.
+; We need to, selectively patch known issues like with Ghost Ship.
+; Right now, the only ones I can think of are Ghost Ship and Air Ship (surprise surprise)
+; Alternatively alternatively, create a new alternate cop14 that checks the target of the lair.
+; This controls whether or not the final breaking plank spawns on map load in ghost ship.
+; There are other ones for the worms and flames too which could be patched as well to point to whatever this lair seals
+
+; Fix lair checks in the ghost ship
+; Change flames and worms checks to check Lair state, not NPC release state.
+org $00C102
+    COP #!CopJumpIfLairRewardObtainedId
+;00C102  02 14          COP #$14
+;00C104               --------data--------
+;00C104  00 00 00 00  .db $B6 $00 $9D $C1
+
+org $00C1A0
+    COP #!CopJumpIfLairRewardObtainedId
+;00C1A0  02 14          COP #$14
+;00C1A2               --------data--------
+;00C1A2  00 00 00 00  .db $B6 $00 $45 $C2
+
+; Remove the last exploding plank entity.
+org $00C248
+    COP #$82
+    COP #$86
+    RTL
+    NOP #5
+
+;00C248  02 A4          COP #$A4
+;00C24A  02 16          COP #$16
+;00C24C  02 14          COP #$14 
+;00C24E               --------data--------
+;00C24E  00 00 00 00  .db $B6 $00 $7E $C2
+
+; Also edit underlying tile to not be a hole
+org $1E83A0
+    db $2B
+
+; Change Airship Lair checks to check lair state, not NPC release state.
+org $04ED80
+    COP #!CopJumpIfLairRewardObtainedId
+; I think the COP#3B check is no longer needed.
+org $04ED86
+    RTL
+    NOP #5
+
+; Also edit map tile to allow airship access even if Dr. Leo is there.
+; Changes a railing tile to a bridge tile.
+org $1AFE98
+    db $35,$E5
+
+;04ED80  02 14          COP #$14
+;04ED82               --------data--------
+;04ED82  00 00 00 00  .db $95 $01 $8C $ED
+;04ED85               ----------------
+;04ED86  02 3B          COP #$3B ; Lair dependency check. Unsure if this needs to change. double check.
+;04ED88               --------data--------
+;04ED88  00 00 00 00  .db $95 $01 $9E $ED
+;04ED8B               ----------------
+;04ED8C  BD 16 00       LDA $0016,X
+;04ED8F  29 EF FF       AND #$FFEF
+;04ED92  9D 16 00       STA $0016,X
+;04ED95  02 91          COP #$91
+;04ED97  02 0D          COP #$0D
+;04ED99               --------data--------
+;04ED99  00 00 00 00 00 .db $00 $17 $0F $9F $ED
+;04ED9D               ----------------
+;04ED9E  6B             RTL
+;                     ----------------
+
+;TODO: recent QOL improvements from randoblazer such as double transition effect apeed and enemy spawn animation speed.
+
+;-------------------------------------------------;
 
 pullpc

@@ -32,10 +32,20 @@ CheckIfBitIsSet = $04F3A2
 ; Text Speed ram location
 TextSpeedRam = $7E1B84
 
+;Holds the current state of each lair. Either number of monsters remaining/sealed/sealing.
+LairStateTable = $7F0203
+
 ; TODO: move these macros somewhere else?
 macro CopShowText(textPtr)
     COP #$01
     dw <textPtr>
+endmacro
+
+macro CopTeleportPlayerToMap(map, facing, x, y)
+    COP #$10
+    dw <map>
+    db <facing>
+    dw <x>, <y>
 endmacro
 
 macro CopAssignTalkCallback(ptr)

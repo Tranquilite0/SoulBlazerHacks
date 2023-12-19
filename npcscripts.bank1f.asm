@@ -129,7 +129,14 @@ org $1F9890
 
 ;---------------------- Lue ----------------------;
 
-;TODO: Also fix mermaid guarding lue's entrance?
+; Fix condition for Mermaid guarding Lue's Entrance
+org $1F98FC
+    %CopJumpIfNpcRewardNotObtained(!NPC_Lue, $9903)
+
+;1F98FC  02 18          COP #$18
+;1F98FE               --------data--------
+;1F98FE  00 00 00     .db $24 $03 $99
+
 
 ; Patch CopJumpIfItemNotObtained to CopJumpIfNpcRewardNotObtained
 org $1F9BB5

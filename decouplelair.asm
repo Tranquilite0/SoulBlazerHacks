@@ -7,7 +7,7 @@
 ; Loads lair data with lair index in X
 ; Filters out Sealing in progress flag.
 LoadLairForTileData:
-    LDA $7F0203,X
+    LDA LairStateTable,X
     AND #$BF
     RTL
 
@@ -15,7 +15,7 @@ LoadLairForTileData:
 ; Loads lair data with lair index in X
 ; Filters out Sealing in progress flag.
 LoadLairForMonsters:
-    LDA $7F0203,X
+    LDA LairStateTable,X
     AND #$BFBF
     RTL
 
@@ -23,7 +23,7 @@ LoadLairForMonsters:
 ; Stores lair data with value in A to lair index in X
 ; Preserves existing Sealing In Progress flag
 StoreLairDataPreserveFlag:
-    ;BIT $7F0203,X ; Cant do this, no long addressing mode
+    ;BIT LairStateTable,X ; Cant do this, no long addressing mode
     ; There is probably a better way to do this, but here we are
     PEA $017F ; Push Data Bank register values
     PLB
@@ -32,18 +32,18 @@ StoreLairDataPreserveFlag:
     ORA #$40 ; Set Sealing in Progress flag.
     .skip
     PLB
-    STA $7F0203,X ; Original Code
+    STA LairStateTable,X ; Original Code
     RTL
 
 ;Check if the current Lair index is the currently sealing lair id
 CheckForSealingLair:
     CPX $0405
     BEQ .isSealingLair
-    LDA $7F0203,X
+    LDA LairStateTable,X
     RTL
 .isSealingLair
     LDA #$80 ; Add back in the lair sealed flag for the purpose of the next branch
-    ORA $7F0203,X
+    ORA LairStateTable,X
     RTL
 
 ; Decouple Lair reward by making it so that the lair cleared is not necessarily the lair released
@@ -63,9 +63,9 @@ DecoupleLairReward:
     PHA
     TYX
     LDA #$40
-    AND $7F0203,X ; Check if Lair had released flag
+    AND LairStateTable,X ; Check if Lair had released flag
     ORA $01,S ; combine with town area and lair cleared flag
-    STA $7F0203,X
+    STA LairStateTable,X
     PLA
     PLX
     ; Load alternate release reward ID from lair field 17
@@ -132,36 +132,7 @@ DecoupleLairReward:
     SEP #$20
     JML $028C75 ; Jump back and continue releasing lair with updated target lair
 
-; TODO: run through game with breakpoint on cop14 and see how things could break if it was patched.
-; TODO: Cop3B is similar, but with lair dependencies.
-; We need to, selectively patch known issues like with Ghost Ship.
-; Right now, the only ones I can think of are Ghost Ship and Air Ship (surprise surprise)
-; Alternatively alternatively, create a new alternate cop14 that checks the target of the lair.
-; This controls whether or not the final breaking plank spawns on map load in ghost ship.
-; There are other ones for the worms and flames too which could be patched as well to point to whatever this lair seals
-;00C24C  02 14          COP #$14 
-;00C24E               --------data--------
-;00C24E  00 00 00 00  .db $B6 $00 $7E $C2
 
-;TODO: Hack below to work with decoupled lairs so you can ride airship if king magridd has been released.
-;04ED80  02 14          COP #$14
-;04ED82               --------data--------
-;04ED82  00 00 00 00  .db $95 $01 $8C $ED
-;04ED85               ----------------
-;04ED86  02 3B          COP #$3B ; Unsure if this needs to change. double check.
-;04ED88               --------data--------
-;04ED88  00 00 00 00  .db $95 $01 $9E $ED
-;04ED8B               ----------------
-;04ED8C  BD 16 00       LDA $0016,X
-;04ED8F  29 EF FF       AND #$FFEF
-;04ED92  9D 16 00       STA $0016,X
-;04ED95  02 91          COP #$91
-;04ED97  02 0D          COP #$0D
-;04ED99               --------data--------
-;04ED99  00 00 00 00 00 .db $00 $17 $0F $9F $ED
-;04ED9D               ----------------
-;04ED9E  6B             RTL
-;                     ----------------
 
 
 ; Hooks and original rom data overwrite section
@@ -219,7 +190,7 @@ org $00A8E5
 ; Sets lair reward to vanilla values
 org $01BA0D+$18       ; Set PC to first instance of Lair Table Field
 !i = $0
-while !i < $1A3
+while !i < $1A4
     db !LairRelease     ; "Item ID" for lair reward
     dw !i               ; Same reward as lair being released
     skip $20-$3         ; Move PC to next entry
