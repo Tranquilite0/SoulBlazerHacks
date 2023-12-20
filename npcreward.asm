@@ -30,7 +30,7 @@ GiveNpcReward:
     ASL #2
     TAX ; Table Index in X
     SEP #$20
-    LDA.L NpcRewardTable,X
+    LDA.L NpcRewardTable.Type,X
     BEQ .nothing
     CMP #!Gems
     BEQ .gems
@@ -58,7 +58,7 @@ GiveNpcReward:
     BRA .end
 .gems:
     REP #$20
-    LDA.L RewardQuantity,X
+    LDA.L NpcRewardTable.Operand,X
     STA $03C8 ; Used by the print routine to load Gems/Exp Amount
     JSL $04F6A5 ; GiveGems
     LDA #$0010 ; UpdateHud?
@@ -70,7 +70,7 @@ GiveNpcReward:
     BRA .end
 .exp
     REP #$20
-    LDA.L RewardQuantity,X
+    LDA.L NpcRewardTable.Operand,X
     STA $7E043D ; Address that stores EXP to recieve.
     STA $03C8 ; Used by the print routine to load Gems/Exp Amount
     SEP #$20
@@ -84,7 +84,7 @@ GiveNpcReward:
     BRA .end
 .lair
     REP #$20
-    LDA.L RewardQuantity,X ;
+    LDA.L NpcRewardTable.Operand,X ;
     TAY ; Lair ID in Y
     ASL #5
     TAX ; Lair Index in X
@@ -110,7 +110,7 @@ PrintNpcReward:
     PLX ; Pull NPC Table index into X
     PHY ; Store current string position for later
     ; Determine NPC reward and set up string for printing.
-    LDA.L NpcRewardTable,X
+    LDA.L NpcRewardTable.Type,X
     BEQ .nothing
     CMP #!Gems
     BEQ .gems
@@ -130,7 +130,7 @@ PrintNpcReward:
     BRA .end
 .gems:
     REP #$20
-    LDA.L RewardQuantity,X
+    LDA.L NpcRewardTable.Operand,X
     STA $03C8 ; Used by the print routine to load Gems/Exp Amount
     SEP #$20
     LDY.W #PrintGemsShort
@@ -138,7 +138,7 @@ PrintNpcReward:
     BRA .end
 .exp
     REP #$20
-    LDA.L RewardQuantity,X
+    LDA.L NpcRewardTable.Operand,X
     STA $03C8 ; Used by the print routine to load Gems/Exp Amount
     SEP #$20
     LDY.W #PrintExpShort
@@ -146,7 +146,7 @@ PrintNpcReward:
     BRA .end
 .lair
     REP #$20
-    LDA.L RewardQuantity,X ;
+    LDA.L NpcRewardTable.Operand,X ;
     ASL #5
     TAX ; Lair Index in X
     SEP #$20
@@ -186,13 +186,14 @@ SetNpcFlag:
 
 
 ; NPC Reward Table section
-; TODO: Relocate.
-; TODO: Change first entry to byte and add something else to keep it 4 bytes?
-; TODO: Use structs
-NpcRewardTable:
-    dw !MedicalHerb ; Tool shop owner
-RewardQuantity:
-    dw $0000                   : !NPC_ToolShopOwner = $00
+; TODO: Relocate to fixed location.
+NpcRewardTableStart:
+struct NpcRewardTable NpcRewardTableStart
+    .Type: skip 1
+    .Unused: skip 1
+    .Operand: skip 2 ; Reward quantity or LairID
+endstruct
+    dw !MedicalHerb,     $0000 : !NPC_ToolShopOwner = $00
     dw !EmblemA,         $0000 : !NPC_EmblemATile = $01
     dw !MedicalHerb,     $0000 : !NPC_GoatPenCorner = $02
     dw !GoatsFood,       $0000 : !NPC_ToolShopOwnersSonTeddy = $03

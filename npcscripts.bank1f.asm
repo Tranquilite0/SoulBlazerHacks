@@ -11,7 +11,7 @@ NorthEasternMermaidHerbScript:
     %CopShowText(.textThatsAll)
     RTL
 .doYouWantOne
-    %CopPrintNpcReward(.textWantOne, !NPC_NorthEasternMermaidHerb)
+    %CopPrintNpcReward(!NPC_NorthEasternMermaidHerb, .textWantOne)
     %CopShowChoices($CF02, $02, .dontWant)
     LDA $0003D0 ; Read menu choice
     BNE .dontWant
@@ -39,7 +39,7 @@ warnpc $1F83AC
 
 ; Modify release script/text to hint reward.
 org $1F8BB5
-    %CopPrintNpcReward(+,!NPC_BubbleArmorMermaid)
+    %CopPrintNpcReward(!NPC_BubbleArmorMermaid, +)
     COP #$86
     RTL
 +

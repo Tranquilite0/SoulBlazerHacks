@@ -26,11 +26,10 @@ endmacro
 
 ; Prints an NPC reward. Prints the string pointed to by textPtr.
 ; Will replace first instance of $0C in the string with the NPC's reward.
-; TODO: rearange parameters.
-macro CopPrintNpcReward(textPtr, npcId)
+macro CopPrintNpcReward(npcId, textPtr)
     COP #!CopPrintNpcRewardId
-    dw <textPtr>
     db <npcId>
+    dw <textPtr>
 endmacro
 
 ; Jumps if Lair has been stepped on, rather than if the NPC
@@ -65,11 +64,13 @@ CopPrintNPCReward:
     TYX
     LDA.B [CopTemp]
     INC.B CopTemp
-    INC.B CopTemp
-    TAY
+    AND #$00FF
+    PHA
     LDA.B [CopTemp]
     INC.B CopTemp
-    AND #$00FF
+    INC.B CopTemp
+    TAY
+    PLA
     SEP #$20
     PHX
     PHB

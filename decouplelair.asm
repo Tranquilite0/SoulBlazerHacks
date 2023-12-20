@@ -69,7 +69,6 @@ DecoupleLairReward:
     PLA
     PLX
     ; Load alternate release reward ID from lair field 17
-    ; TODO: Refactor code so that it can be reused elsewhere?
     LDA $BA25,X
     BEQ .nothing
     CMP #!Gems
@@ -98,7 +97,7 @@ DecoupleLairReward:
     JML $028CFD ; Play lair closed sound and finish animating lair closing
 .gems:
     REP #$20
-    LDA $BA26,X ; Load GemExp amount from lair field 18-19 
+    LDA $BA26,X ; Load Gem amount from lair field 18-19 
     STA $03C8 ; Used by the print routine to load Gems/Exp Amount
     JSL $04F6A5 ; GiveGems
     LDA #$0010 ; Unsure what this and the next instruction does...
@@ -111,7 +110,7 @@ DecoupleLairReward:
     JML $028D03 ; Finish by animating the lair closing
 .exp:
     REP #$20
-    LDA.L RewardQuantity,X
+    LDA.L $BA26,X ; Load Exp amount from lair field 18-19 
     STA $7E043D ; Address that stores EXP to recieve.
     STA $03C8 ; Used by the print routine to load Gems/Exp Amount
     SEP #$20

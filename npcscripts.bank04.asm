@@ -29,7 +29,7 @@ NOP #6
 ;04862F               --------data--------
 ;04862F  00 00 00 00  .db $05 $07 $76 $86
 ;048632               ----------------
-;048633  02 18          COP #$18 ; Check for Phoenix TODO: patch to check for NPC reward
+;048633  02 18          COP #$18 ; Check for Phoenix
 ;048635               --------data--------
 ;048635  00 00 00     .db $18 $3D $86
 ;048637               ----------------
@@ -99,7 +99,7 @@ MushroomShoesBoyScript:
 
 ; Patch release script to hint reward.
 org $048D69
-    %CopPrintNpcReward(.hintRewardText, !NPC_MushroomShoesBoy)
+    %CopPrintNpcReward(!NPC_MushroomShoesBoy, .hintRewardText)
     STZ $03FB
     COP #$86
     RTL
@@ -236,7 +236,7 @@ HerbPlantLeosLabScript:
     %CopShowText(.textThatsAll)
     RTL
 .doYouWantOne
-    %CopPrintNpcReward(.textWantOne, !NPC_HerbPlantInLeosLab)
+    %CopPrintNpcReward(!NPC_HerbPlantInLeosLab, .textWantOne)
     %CopShowChoices($CF02, $02, .dontWant)
     LDA $0003D0 ; Read menu choice
     BNE .dontWant
@@ -425,7 +425,7 @@ ChestOfDrawersHerbScript:
     %CopShowText(.textThatsAll)
     RTL
 .doYouWantOne
-    %CopPrintNpcReward(.textWantOne, !NPC_ChestOfDrawersHerb)
+    %CopPrintNpcReward(!NPC_ChestOfDrawersHerb, .textWantOne)
     %CopShowChoices($CF02, $02, .dontWant)
     LDA $0003D0 ; Read menu choice
     BNE .dontWant
@@ -528,7 +528,7 @@ org $04B549
 
 ;Patch release script to hint reward.
 org $04B558
-    %CopPrintNpcReward(+, !NPC_Marie)
+    %CopPrintNpcReward(!NPC_Marie, +)
     COP #$37
     COP #$86
     RTL
@@ -564,7 +564,7 @@ org $04B623
 ;04B556               ----------------
 ;04B557  6B             RTL
 ;                     ----------------
-;04B558  02 01          COP #$01 ; TODO: change to hint reward.
+;04B558  02 01          COP #$01 ; 
 ;04B55A               --------data--------
 ;04B55A  00 00        .db $61 $B5
 ;04B55B               ----------------
@@ -771,7 +771,7 @@ org $04C39A
 ; Fortunately his text segment is adjacent to his script so we can
 ; Safely expand the script to include the hint.
 org $04C111
-    %CopPrintNpcReward(+, !NPC_ElementalMailSoldier)
+    %CopPrintNpcReward(!NPC_ElementalMailSoldier, +)
     COP #$86
     RTL
 +
@@ -931,7 +931,7 @@ org $04CC3C
 org $04CC48
 UnderGuardsFootText:
     %CopShowText($CD1B)
-    %CopPrintNpcReward(+, !NPC_PlatinumCardSoldier)
+    %CopPrintNpcReward(!NPC_PlatinumCardSoldier, +)
     RTL
 +
     db !Text_Start,!Text_HeroName," sees",!Text_CR,!Text_Break,!Text_CR,"under ",!Dict_the,"guard`s",!Text_CR,"feet.",!Text_WaitBlinkCursor
@@ -1123,7 +1123,7 @@ MaidHerbScript:
     %CopShowText(.textThatsAll)
     BRA .endScript
 .doYouWantOne:
-    %CopPrintNpcReward(.textWantOne, !NPC_MaidHerb)
+    %CopPrintNpcReward(!NPC_MaidHerb, .textWantOne)
     %CopShowChoices($CF02, $02, .dontWant)
     LDA $0003D0 ; Read menu choice
     BNE .dontWant

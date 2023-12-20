@@ -19,6 +19,8 @@ warnpc !Bank00FreespaceEnd
 
 org !Bank01FreeSpaceStart
     ; TODO: Anything needed in bank 1?
+    ; We could allocate space for NPC hints here? Would make printing them easier for sure.
+    ; 447 bytes.
 warnpc !Bank01FreespaceEnd
 
 
@@ -47,8 +49,9 @@ org !Bank1FFreeSpaceStart
     incsrc "npcscripts.bank1f.asm"
 warnpc !Bank1FFreespaceEnd
 
-incsrc "randoproofofconcept.asm"
-
+if defined("randopoc")
+    incsrc "randoproofofconcept.asm"
+endif
 
 ; Standalone hacks
 incsrc "semiprogressive.asm"

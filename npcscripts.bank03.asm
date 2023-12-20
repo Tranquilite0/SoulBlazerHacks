@@ -72,7 +72,7 @@ org $039320
 org $03922C
     %CopJumpIfNpcRewardNotObtained(!NPC_ToolShopOwnersSonTeddy, $9236)
     skip 5
-    %CopPrintNpcReward($9255,!NPC_ToolShopOwnersSonTeddy)
+    %CopPrintNpcReward(!NPC_ToolShopOwnersSonTeddy, $9255)
     ; This choice doesnt matter (But thou must!)
     %CopShowChoices($CF02,$02,+)
 + 
@@ -301,7 +301,7 @@ org $03C112
     %CopGiveNpcReward(!NPC_MagicBellCrystal)
     RTL
 +
-    %CopPrintNpcReward($C11D,!NPC_MagicBellCrystal)
+    %CopPrintNpcReward(!NPC_MagicBellCrystal, $C11D)
     RTL
 
 ; Patch hint text to remove vanilla item reference
@@ -426,7 +426,7 @@ org $03D174
     skip 1
     db "Let`s start the show!",!Text_CR,"The prize is",!Text_CR,!Text_Break,".",!Text_ChangeStreamPtr : dw TextEndStandardBank3
 +
-    %CopPrintNpcReward(-,!NPC_WoodstinTrio)
+    %CopPrintNpcReward(!NPC_WoodstinTrio, -)
     BRL --
 
 
@@ -458,7 +458,7 @@ org $03D531
 
 org $03D5CE
 +
-    %CopPrintNpcReward(+,!NPC_GreenwoodsGuardian)
+    %CopPrintNpcReward(!NPC_GreenwoodsGuardian, +)
     BRL -
 +
     ; "I will give you \r<reward>\r upon your return."
@@ -545,7 +545,7 @@ org $03DC13
 
 ; Ghost Mole
 ; Jump item not equiped (mole's ribbon)
-; TODO: QOL suggestion. Change item not equipped to item not obtained?
+; TODO: QOL suggestion. Change item not equipped to item not obtained? Same with dolphin pearl
 ;03D908  02 19          COP #$19 
 ;03D90A               --------data--------
 ;03D90A  00 00 00     .db $1F $1C $D9
@@ -565,7 +565,7 @@ BRL +
 org $03E1A0
     db !Text_CR,!Text_Break,!Text_CR,!Dict_with,"them.....",!Text_ChangeStreamPtr : dw TextEndStandardBank3
 +
-    %CopPrintNpcReward($E14C,!NPC_PsychoSwordSquirrel)
+    %CopPrintNpcReward(!NPC_PsychoSwordSquirrel ,$E14C)
     COP #$86
     RTL
 ; We have 8 bytes to spare starting at $03E1B8, so if the next script happens to need it we can use it.
@@ -593,7 +593,7 @@ org $03E035
     RTL
 +
     ; Give hint about reward if you do not have seeds.
-    %CopPrintNpcReward($E045,!NPC_PsychoSwordSquirrel)
+    %CopPrintNpcReward(!NPC_PsychoSwordSquirrel, $E045)
     RTL
 
 ;-------------------------------------------------;
@@ -728,10 +728,6 @@ pullpc ; Place this new code in the freespace region.
 .text
     db !Text_Start,!Dict_You,"need ",!Dict_all,"6 stones",!Text_CR
     db !Dict_to,"open ",!Dict_the,"World ",!Dict_of,!Text_CR,"Evil.",!Text_ChangeStreamPtr : dw TextEndStandardBank3
-;0x02, 0x01, 0x8A, 0xED,                                       /* New text */
-;0x02, 0x10, 0x00, 0x07, 0x01, 0x70, 0x00, 0x50, 0x00, 0x6B};  /* Teleport player away from center tile */
-;03EC61  A9 C0 7F       LDA #$7FC0
-;03EC64  0C 26 03       TSB $0326
 
 warnpc !Bank03FreespaceEnd
 pushpc
@@ -789,7 +785,7 @@ org $1F8CA2
 
 
 ; TODO: run through game with breakpoint on cop14 and see how things could break if it was patched.
-; TODO: Cop3B is similar, but with lair dependencies.
+; TODO: Cop3B is similar, but with lair dependencies. It also sets entity flags.
 ; We need to, selectively patch known issues like with Ghost Ship.
 ; Right now, the only ones I can think of are Ghost Ship and Air Ship (surprise surprise)
 ; Alternatively alternatively, create a new alternate cop14 that checks the target of the lair.
@@ -834,6 +830,9 @@ org $04ED80
 org $04ED86
     RTL
     NOP #5
+
+;Event flags while releasing King Magrid
+; 1AD0: 0F->2F
 
 ; Also edit map tile to allow airship access even if Dr. Leo is there.
 ; Changes a railing tile to a bridge tile.
