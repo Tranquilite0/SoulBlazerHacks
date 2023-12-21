@@ -100,6 +100,7 @@ endmacro
 !Text_EndText12       = $12,$08,$08,$04,$0C ; Wait for user, then undraw textbox and break from text processing.
 !Text_CleanUpAndBreak = $08,$08,$04,$0C ; Undraw textbox and break without waiting.
 !Text_HeroName        = $02,$02 ; Prints the character name.
+!Text_PrintDecimal4   = $06,$04,$C8,$03 ; Print 4 decimal digits from the usual location.
 
 ; Text dictionary terms. All of these also end with a space character, so using punctuation often means you can't use these.
 !Dict_All        = $80

@@ -771,7 +771,6 @@ NOP #2
 org $038A79
 NOP #6
 
-; TODO: Any other misc randomizer hacks that are important?
 
 ; Fix Mermaid's Tear Chest condition
 BranchTargetMermaidsTearChest = $1F8CA9
@@ -784,13 +783,7 @@ org $1F8CA2
 
 
 
-; TODO: run through game with breakpoint on cop14 and see how things could break if it was patched.
-; TODO: Cop3B is similar, but with lair dependencies. It also sets entity flags.
-; We need to, selectively patch known issues like with Ghost Ship.
-; Right now, the only ones I can think of are Ghost Ship and Air Ship (surprise surprise)
-; Alternatively alternatively, create a new alternate cop14 that checks the target of the lair.
-; This controls whether or not the final breaking plank spawns on map load in ghost ship.
-; There are other ones for the worms and flames too which could be patched as well to point to whatever this lair seals
+
 
 ; Fix lair checks in the ghost ship
 ; Change flames and worms checks to check Lair state, not NPC release state.

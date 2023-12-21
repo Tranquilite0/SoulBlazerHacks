@@ -129,10 +129,57 @@ DecoupleLairReward:
     ASL #5
     TAX ; Lair Index in X
     SEP #$20
+    ;JSL CheckForRoof
     JML $028C75 ; Jump back and continue releasing lair with updated target lair
 
 
+; Checks to see if your current position is in a building (where the roof is removed.)
+CheckForRoof:
+    PHP
+    PHY
+    PHX
+    LDA $1C6E
+    CMP #$02
+    BNE .end
+    REP #20
+    LDX #$1C64
+    LDY #$1C84
+    LDA.W #$000F
+    MVN $01,$01
+    SEP #$20
+    LDA #$02
+    STA $1E7F
+.end
+    PLX
+    PLY
+    PLP
+    RTL
 
+;Attempts to make it so that when you teleport back in the roof will still be there.
+; I dont understand enough about how this works to make things work correctly though.
+ApplyRoofFix:
+    JSL $029445 ; Original code that was replaced.
+    PHP
+    PHY
+    PHX
+    SEP #$20
+    LDA $1E7F
+    BEQ .end
+    DEC
+    STA $1E7F
+    BNE .end
+    REP #$20
+    LDX #$1C84
+    LDY #$1C64
+    LDA #$000F
+    MVN $01,$01
+    SEP #$20
+    JSL $0294AE
+.end 
+    PLX
+    PLY
+    PLP
+    RTL
 
 ; Hooks and original rom data overwrite section
 pushpc
@@ -183,6 +230,10 @@ org $009455
 ; Called when storing back to lair data after monsters are dead
 org $00A8E5
     JSL StoreLairDataPreserveFlag
+
+
+;org $04FA70
+;    JSL ApplyRoofFix
 
 
 ; Patches Lair Data to add decoupled rewards

@@ -92,6 +92,7 @@ Receive:
     ASL #5
     TAX ; Lair index in X
     SEP #$20
+    JSL CheckForRoof
     JSL $028C75
 .end:
     STZ.W ReceiveStruct.Command ; Finished processing command, but wait until next main loop to become ready to recieve.

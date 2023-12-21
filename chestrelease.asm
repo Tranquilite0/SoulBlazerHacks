@@ -35,6 +35,7 @@ ExtendChestReward:
     ASL A
     TAX ; Lair Index in X
     SEP #$20
+    JSL CheckForRoof
     JML $028C75 ; Jump to lair release code.
 
 ; Hooks and original rom data overwrite section

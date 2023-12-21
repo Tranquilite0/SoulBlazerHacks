@@ -1,5 +1,8 @@
 includeonce
 
+; Reward IDs
+; Mostly ItemIDs, with unused IDs being used for more complex rewards.
+
 !LifeSword       = $01
 !PsychoSword     = $02
 !CriticalSword   = $03
@@ -67,6 +70,8 @@ includeonce
 !PurpleStone     = $3E
 !BlackStone      = $3F
 !MagicBell       = $40
+
+; TODO: extend with more rewards (Multiworld rewards, traps, deathlink)
 
 !LairRelease     = $FD
 !Exp             = $FE

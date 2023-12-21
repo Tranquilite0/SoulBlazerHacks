@@ -14,7 +14,7 @@ endif
 
 ; For most text.
 !text_speed = $00
-; Text speed for the epilogue (Doesnt auto-advance if it is instant.)
+; Text speed for the epilogue (Doesn't auto-advance if it is instant.)
 !text_speed_epilogue = $01
 
 ; General text speed set at game start. Covers 90 percent of text boxes.
@@ -45,7 +45,6 @@ db !text_speed
 org $00D3AF
 db !text_speed_epilogue
 
-;TODO: See if epilogue breaks with instant text now.
 ; Post Credits Text Speed change. For speech given by Master.
 org $03B356
 db !text_speed_epilogue

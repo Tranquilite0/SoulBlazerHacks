@@ -69,7 +69,7 @@ GiveItemHook:
 
 ; Calculates strength based off of the number of swords obtained
 CalcStrength:
-    PHP ; TODO: Figure out which registers dont need to be saved/restored
+    PHP
     PHX
     PHY
     REP #$10

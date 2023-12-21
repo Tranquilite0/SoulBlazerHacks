@@ -25,12 +25,13 @@ warnpc !Bank01FreespaceEnd
 
 
 org !Bank02FreeSpaceStart
+    incsrc "npcrewardtable.asm" ; Keep at start of bank to prevent address from moving.
     incsrc "textengineextensions.asm"
     incsrc "decouplelair.asm"
     incsrc "npcreward.asm"
     incsrc "chestrelease.asm"
-    incsrc "dataadditions.asm"
     incsrc "receive.asm"
+    incsrc "strings.asm"
 warnpc !Bank02FreespaceEnd
 
 org !Bank03FreeSpaceStart
