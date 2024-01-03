@@ -129,11 +129,15 @@ DecoupleLairReward:
     ASL #5
     TAX ; Lair Index in X
     SEP #$20
-    ;JSL CheckForRoof
+    JSL CheckForRoof
     JML $028C75 ; Jump back and continue releasing lair with updated target lair
 
 
 ; Checks to see if your current position is in a building (where the roof is removed.)
+; TODO: $1C84 isnt safe since a release might use this space to build a building.
+; Also store the values of $0343/$0345? Also Make sure $03A8/$03AA/$03AC all get saved or set to the correct values.
+; TODO: Struct for roof data saved in memory.
+; TODO: better location for temporary saved stuff. currently need 12 bytes
 CheckForRoof:
     PHP
     PHY
@@ -141,11 +145,17 @@ CheckForRoof:
     LDA $1C6E
     CMP #$02
     BNE .end
-    REP #20
-    LDX #$1C64
-    LDY #$1C84
-    LDA.W #$000F
+    REP #$20
+    LDX #$1C6D
+    LDY #$1D90
+    LDA.W #$0007
     MVN $01,$01
+    ;LDA $03A8
+    ;STA $1DA0
+    LDA $03AA
+    STA $1DA2
+    LDA $03AC
+    STA $1DA4
     SEP #$20
     LDA #$02
     STA $1E7F
@@ -155,10 +165,8 @@ CheckForRoof:
     PLP
     RTL
 
-;Attempts to make it so that when you teleport back in the roof will still be there.
-; I dont understand enough about how this works to make things work correctly though.
+; Attempts to make it so that when you teleport back in the roof will still be pulled back.
 ApplyRoofFix:
-    JSL $029445 ; Original code that was replaced.
     PHP
     PHY
     PHX
@@ -169,13 +177,23 @@ ApplyRoofFix:
     STA $1E7F
     BNE .end
     REP #$20
-    LDX #$1C84
-    LDY #$1C64
-    LDA #$000F
+    LDX #$1D90
+    LDY #$1C6D
+    LDA #$0007
     MVN $01,$01
+    ;LDA $1DA0
+    ;STA $03A8
+    STZ $03A8
+    LDA $1DA2
+    STA $03AA
+    LDA $1DA4
+    STA $03AC
     SEP #$20
     JSL $0294AE
-.end 
+    BRA +
+.end:
+    JSL $029445 ; Original code that was replaced.
++
     PLX
     PLY
     PLP
@@ -232,8 +250,8 @@ org $00A8E5
     JSL StoreLairDataPreserveFlag
 
 
-;org $04FA70
-;    JSL ApplyRoofFix
+org $04FA70
+    JSL ApplyRoofFix
 
 
 ; Patches Lair Data to add decoupled rewards
