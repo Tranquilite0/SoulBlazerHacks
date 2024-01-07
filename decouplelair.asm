@@ -1,5 +1,33 @@
 ; Routines for decoupling item/lair checks
 ; Allow lairs to give items and chests to release NPCs
+; TODO: If a boss lair gives an item without teleporting, you might be stuck in the boss arena. Force those lairs to teleport player just to reload map?
+
+; Variables used during roof rollback.
+struct RoofRollback $7E03A8
+    .RoofState: skip 2 ; Bit $01 is toggled when removing roofs. Unsure if any other bits are used, but from what I can tell is always 0 (outside) or 1 (inside).
+    .PointerIndex: skip 2 ; Index into interior roof-rollback pointers (Current Map * 4)
+    .DataIndex: skip 2 ; Pointer into rollback data minus offset (B69A) essentially creating index into start of data table relative to start of pointer table.
+endstruct
+
+; The first 8 bytes of a Roof Lair Data Entry
+; Used for both the resurection sequence and Roof Rollback
+struct RoofLair $7E1C6D
+    .Map: skip 1
+    .RoofState: skip 1 ; 2 = Indoors, 3 = Outdoors, 0/1 = N/A?
+    .X: skip 1
+    .Y: skip 1
+    .TLX: skip 1
+    .TLY: skip 1
+    .Width: skip 1
+    .Height: skip 1
+endstruct
+
+; Used to store rollback state so you can teleport back into a map with the roof removed.
+; The Act 2 boss actually uses 1D7D through 1D9B, but we can share this space since roof rollback never needs to happen in the boss room.
+; Only Needsrollback cant be shared. 
+RoofLairTemp = $7E1D90 ; Temporarilly holds copy of RoofLair struct
+TempRollbackDataIndex = $7E1D9A ; Temporary backup of RoofRollback.DataIndex
+NeedsRollback = $7E1D9C ; 0 if roof rollback uneeded, otherwise holds the number of screen transitions before fix is applied.
 
 
 ; New Code Section
@@ -134,60 +162,52 @@ DecoupleLairReward:
 
 
 ; Checks to see if your current position is in a building (where the roof is removed.)
-; TODO: $1C84 isnt safe since a release might use this space to build a building.
-; Also store the values of $0343/$0345? Also Make sure $03A8/$03AA/$03AC all get saved or set to the correct values.
-; TODO: Struct for roof data saved in memory.
-; TODO: better location for temporary saved stuff. currently need 12 bytes
 CheckForRoof:
     PHP
     PHY
     PHX
-    LDA $1C6E
-    CMP #$02
-    BNE .end
+    LDA #$01
+    BIT RoofRollback.RoofState
+    BEQ .end
     REP #$20
-    LDX #$1C6D
-    LDY #$1D90
+    LDX #RoofLair.Map
+    LDY #RoofLairTemp
     LDA.W #$0007
     MVN $01,$01
-    ;LDA $03A8
-    ;STA $1DA0
-    LDA $03AA
-    STA $1DA2
-    LDA $03AC
-    STA $1DA4
+    LDA RoofRollback.DataIndex
+    STA TempRollbackDataIndex
     SEP #$20
     LDA #$02
-    STA $1E7F
+    STA NeedsRollback
 .end
     PLX
     PLY
     PLP
     RTL
 
-; Attempts to make it so that when you teleport back in the roof will still be pulled back.
+; Makes it so that when you teleport back in the roof will still be pulled back.
 ApplyRoofFix:
     PHP
     PHY
     PHX
     SEP #$20
-    LDA $1E7F
+    LDA NeedsRollback
     BEQ .end
     DEC
-    STA $1E7F
+    STA NeedsRollback
     BNE .end
     REP #$20
-    LDX #$1D90
-    LDY #$1C6D
+    LDX #RoofLairTemp
+    LDY #RoofLair.Map
     LDA #$0007
     MVN $01,$01
-    ;LDA $1DA0
-    ;STA $03A8
-    STZ $03A8
-    LDA $1DA2
-    STA $03AA
-    LDA $1DA4
-    STA $03AC
+    STZ RoofRollback.RoofState
+    LDA RoofLair.Map
+    AND #$00FF
+    ASL #2
+    STA RoofRollback.PointerIndex
+    LDA TempRollbackDataIndex
+    STA RoofRollback.DataIndex
     SEP #$20
     JSL $0294AE
     BRA +

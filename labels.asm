@@ -2,13 +2,26 @@ includeonce
 
 ; Misc Labels and defines to (hopefully) make the code easier to read
 
-CopTemp = $7E0038 ; Argument storage for COP routines.
+; Ram Locations
+
+; Argument storage for COP routines.
+CopTemp = $7E0038
+
+; Text Speed ram location
+TextSpeedRam = $7E1B84
+
+; Holds the current state of each lair. Either number of monsters remaining/sealed/sealing.
+LairStateTable = $7F0203
+
+; Rom Locations
 
 ; Pointers to places containing the standard Text End Command ($12,$08,$08,$04,$0C)
 TextEndStandardBank2 = $02E25F
 TextEndStandardBank3 = $03B988
 TextEndStandardBank4 = $04A51E
 TextEndStandardBank1F = $1FAA44
+
+; Functions
 
 ; Prints OSD String in bank 2 from Address in Y
 PrintOsdStringFromBank2 = $02A769
@@ -26,14 +39,10 @@ SetBit = $04F348
 ; Checks if Bit is set
 ; A contains the bit position to check (0-$3F8?)
 ; Y contains the pointer to the start of a table to check
-; returns the result in the carry bit: it's clear if the bit is clear and the carry bit is set if the bit is set
+; returns the result in the carry flag: it's clear if the bit is clear and set if the bit is set
 CheckIfBitIsSet = $04F3A2
 
-; Text Speed ram location
-TextSpeedRam = $7E1B84
 
-;Holds the current state of each lair. Either number of monsters remaining/sealed/sealing.
-LairStateTable = $7F0203
 
 ; TODO: move these macros somewhere else?
 macro CopShowText(textPtr)
@@ -67,7 +76,7 @@ macro CopShowChoices(choicesTxtPtr, numberOfChoices, abortPtr)
 endmacro
 
 ; Text Processing Commands for PrintOsdStringFromBankX
-; PrintOsdStringFromBank2 only uses a subset of these commands, and implements $0B
+; PrintOsdStringFromBank2 only uses a subset of these commands, and implements $0B while PrintOsdStringFromBankX does not
 !Text_WaitAndBreak      = $00 ; Waits for input, then ends text processing (does not undraw textbox).
 !Text_RepositionCursor  = $01 ; Takes 1 word parameter and repositions text cursor there.
 !Text_QuickPrint        = $02 ; Takes 1 byte parameter. For printing special things like hero name.
@@ -102,20 +111,20 @@ endmacro
 !Text_HeroName        = $02,$02 ; Prints the character name.
 !Text_PrintDecimal4   = $06,$04,$C8,$03 ; Print 4 decimal digits from the usual location.
 
-; Text dictionary terms. All of these also end with a space character, so using punctuation often means you can't use these.
+; Text dictionary terms. All of these also end with a space character, so using punctuation means you can't use the dictionary.
 !Dict_All        = $80
 !Dict_A          = $81
 !Dict_And        = $82
 !Dict_But        = $83
 !Dict_Come       = $84
 !Dict_Dream      = $85
-!Dict_Deathtole  = $86
+!Dict_Deathtole  = $86 ; Mispelled, so unused in the game.
 !Dict_Green      = $87
 !Dict_I          = $88
 !Dict_If         = $89
 !Dict_King       = $8A
 !Dict_Leo        = $8B
-!Dict_Liesa      = $8C
+!Dict_Liesa      = $8C ; Mispelled, so unused in the game.
 !Dict_Magridd    = $8D
 !Dict_Necessary  = $8E
 !Dict_Please     = $8F

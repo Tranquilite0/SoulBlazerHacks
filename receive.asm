@@ -2,9 +2,10 @@
 ; Used for Multiworld/Archipelago integration
 
 
-; According to hellow554, ram addresses $7E1E00 through $7E1F00 are available
+; According to hellow554, ram addresses $7E1E00 through $7E1F00 are unused
 ; Start a bit later to hopefully avoid conflicts
 ; Writing to this struct is how the multiworld client will control sending things.
+; TODO: Pick a better spot in memory to put this and stick with it.
 struct ReceiveStruct $7E1E80
     .Command: skip 2
     .Operand1: skip 2
@@ -104,7 +105,7 @@ Receive:
 ; TODO: better check that prevents getting softlocked when teleporting back in to something that got released.
 ; TODO: Perhaps also check both teleport map, and original lair location map?
 ; TODO: And also check if current map is town map and set a new return location to prevent getting locked.
-; TODO: Move to decouplelair, since NPCs sending rewards also trigger this behavior.
+; TODO: Move to decouplelair, since NPCs sending rewards can also trigger this behavior.
 SameMapCheckBypass:
     LDA ReceiveStruct.Command
     CMP #$03
