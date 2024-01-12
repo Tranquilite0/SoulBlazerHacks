@@ -85,8 +85,8 @@ Receive:
     ;  Need to figure out how to force the "MapsNotEqual" branch here.
     ; Ok the SameMapBpass check works, but now there is a chance of getting trapped by a released house or something when you teleport back in.
     ; Now we need to figure out how safely set your return location if you are in a town area.
-    LDA #$03
-    STA ReceiveStruct.Command ; Signal that lair is being released so MapCheckBypass can bypass
+    ;LDA #$03
+    ;STA ReceiveStruct.Command ; Signal that lair is being released so MapCheckBypass can bypass
     REP #$20
     LDA ReceiveStruct.Operand2 ; Operand 1 is Lair ID
     TAY ; Lair ID in Y
@@ -100,25 +100,6 @@ Receive:
     RTL
 
 
-; If we release a cutscene NPC on the same map that it gets unlocked on then things will break
-; This check bypasses that when we are sending releases.
-; TODO: better check that prevents getting softlocked when teleporting back in to something that got released.
-; TODO: Perhaps also check both teleport map, and original lair location map?
-; TODO: And also check if current map is town map and set a new return location to prevent getting locked.
-; TODO: Move to decouplelair, since NPCs sending rewards can also trigger this behavior.
-SameMapCheckBypass:
-    LDA ReceiveStruct.Command
-    CMP #$03
-    BNE .originalCode
-    LDA $BA0D,X ; Load Teleport map
-    REP #$02 ; Ensure Zero Flag is clear
-    RTL
-.originalCode ; The original code that was replaced
-    LDA $BA0D,X ; Load Teleport map
-    CMP $1C6A ; Compare with current map
-.end
-    RTL
-
 ; Hooks and original rom data overwrite section
 pushpc
 
@@ -127,13 +108,6 @@ pushpc
 org $008049
 JSL MainHook
 
-; Insert hook to bypass same-map check
-; TODO: There is another same-map check in one of the other lair release branches, do we need to patch that one too?
-org $028D24
-SameMapCheckBypassHook:
-    JSL SameMapCheckBypass
-    NOP ; No-op the code we replaced
-    NOP
 
 pullpc
 

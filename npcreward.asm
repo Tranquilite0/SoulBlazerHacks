@@ -88,6 +88,7 @@ GiveNpcReward:
     ASL #5
     TAX ; Lair Index in X
     SEP #$20
+    JSL CheckForRoof
     JSL $028C75 ; Release Lair. Still needs more testing.
 .end:
     PLP

@@ -25,9 +25,9 @@ endstruct
 ; Used to store rollback state so you can teleport back into a map with the roof removed.
 ; The Act 2 boss actually uses 1D7D through 1D9B, but we can share this space since roof rollback never needs to happen in the boss room.
 ; Only Needsrollback cant be shared. 
-RoofLairTemp = $7E1D90 ; Temporarilly holds copy of RoofLair struct
+RoofLairTemp = $7E1D90 ; Temporary backup of RoofLair struct
 TempRollbackDataIndex = $7E1D9A ; Temporary backup of RoofRollback.DataIndex
-NeedsRollback = $7E1D9C ; 0 if roof rollback uneeded, otherwise holds the number of screen transitions before fix is applied.
+NeedsRollback = $7E1D9C ; 0 if roof rollback not needed, otherwise holds the number of screen transitions before fix is applied.
 
 
 ; New Code Section
@@ -96,7 +96,7 @@ DecoupleLairReward:
     STA LairStateTable,X
     PLA
     PLX
-    ; Load alternate release reward ID from lair field 17
+    ; Load alternate release reward ID from lair field $17
     LDA $BA25,X
     BEQ .nothing
     CMP #!Gems
@@ -125,7 +125,7 @@ DecoupleLairReward:
     JML $028CFD ; Play lair closed sound and finish animating lair closing
 .gems:
     REP #$20
-    LDA $BA26,X ; Load Gem amount from lair field 18-19 
+    LDA $BA26,X ; Load Gem amount from lair field $18-$19 
     STA $03C8 ; Used by the print routine to load Gems/Exp Amount
     JSL $04F6A5 ; GiveGems
     LDA #$0010 ; Unsure what this and the next instruction does...
@@ -138,7 +138,7 @@ DecoupleLairReward:
     JML $028D03 ; Finish by animating the lair closing
 .exp:
     REP #$20
-    LDA.L $BA26,X ; Load Exp amount from lair field 18-19 
+    LDA.L $BA26,X ; Load Exp amount from lair field $18-$19 
     STA $7E043D ; Address that stores EXP to recieve.
     STA $03C8 ; Used by the print routine to load Gems/Exp Amount
     SEP #$20
@@ -152,7 +152,7 @@ DecoupleLairReward:
     JML $028CFD ; Play lair closed sound and finish animating lair closing
 .lair:
     REP #$20
-    LDA $BA26,X ; Load NPC ID from lair field 18-19
+    LDA $BA26,X ; Load NPC ID from lair field $18-$19
     TAY ; NPC ID in Y
     ASL #5
     TAX ; Lair Index in X
@@ -219,6 +219,25 @@ ApplyRoofFix:
     PLP
     RTL
 
+
+; If we release a cutscene NPC on the same map that it gets unlocked on then things will break
+; This check bypasses that when there is a cutscene NPC (I am assuming that if they have a name pointer, there is also a release cutscene)
+; TODO: better check that prevents getting softlocked when teleporting back in to something that got released.
+; TODO: Perhaps also check both teleport map, and original lair location map?
+; TODO: And also check if current map is town map and set a new return location to prevent getting locked?
+SameMapCheckBypass:
+    LDA $BA0D+$09,X
+    BEQ .originalCode
+    LDA $BA0D,X ; Load Teleport map
+    REP #$02 ; Ensure Zero Flag is clear
+    RTL
+.originalCode ; The original code that was replaced
+    LDA $BA0D,X ; Load Teleport map
+    CMP $1C6A ; Compare with current map
+.end
+    RTL
+
+
 ; Hooks and original rom data overwrite section
 pushpc
 
@@ -251,9 +270,19 @@ org $028C7B
     warnpc $028C8B ; next instruction should be REP #$20
 
 
+; Insert hook to bypass same-map check
+; TODO: There is another same-map check in one of the other lair release branches, do we need to patch that one too?
+org $028D24
+SameMapCheckBypassHook:
+    JSL SameMapCheckBypass
+    NOP ; No-op the code we replaced
+    NOP
+
+
 ; Called when loading lair tile data.
 org $029597
     JSL LoadLairForTileData
+
 
 ; Called during map load. Checks for sealing lairs.
 org $029398
