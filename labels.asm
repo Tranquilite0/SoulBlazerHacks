@@ -69,6 +69,10 @@ RoofLairTemp = $7E1D90 ; Temporary backup of RoofLair struct
 TempRollbackDataIndex = $7E1D9A ; Temporary backup of RoofRollback.DataIndex
 NeedsRollback = $7E1D9C ; 0 if roof rollback not needed, otherwise holds the number of screen transitions before fix is applied.
 
+; Stores whether each tile is passable or not.
+; $F0 = Impassable, $00 = Passable
+PassableMap = $7F8000
+
 ; Rom Locations
 
 ; Pointers to places containing the standard Text End Command ($12,$08,$08,$04,$0C)
@@ -97,6 +101,11 @@ SetBit = $04F348
 ; Y contains the pointer to the start of a table to check
 ; returns the result in the carry flag: it's clear if the bit is clear and set if the bit is set
 CheckIfBitIsSet = $04F3A2
+
+; Calculates the passable map offset and places it in X
+; Expects X coord in $16 and Y coord in $18
+; Expects 16bit accumulator
+CalcPassableMapOffset = $04F2B8
 
 
 

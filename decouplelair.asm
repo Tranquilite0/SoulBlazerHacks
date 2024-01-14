@@ -1,8 +1,5 @@
 ; Routines for decoupling item/lair checks
 ; Allow lairs to give items and chests to release NPCs
-; TODO: If a boss lair gives an item without teleporting, you might be stuck in the boss arena. Force those lairs to teleport player just to reload map?
-
-
 
 
 ; New Code Section
@@ -201,7 +198,7 @@ ApplyRoofFix:
     RTL
 
 ; Boss lairs close off the exit and require a map reload/teleport to make the exit open again.
-; I'm not super happy with this solution, but it works which is good enough.
+; I'm not super happy with this solution, but it works which is good enough for now.
 CheckBossLair:
     LDA CurrentMapID
     CMP #$0C ; Solid Arm

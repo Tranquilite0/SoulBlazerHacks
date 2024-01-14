@@ -11,7 +11,7 @@ pushpc
 org $0383ED
     db !Text_ChangeStreamPtr : dw TextEndStandardBank3
 
-; Patch NPC Script TODO: Revisit and make fancy?
+; Patch NPC Script TODO: Revisit and do this like the other shopkeepers.
 org $038399
     %CopShowText($83AD) ; Display shopkeepers message
     %CopGiveNpcReward(!NPC_ToolShopOwner)
@@ -824,9 +824,6 @@ org $04ED86
     RTL
     NOP #5
 
-;Event flags while releasing King Magrid
-; 1AD0: 0F->2F
-
 ; Also edit map tile to allow airship access even if Dr. Leo is there.
 ; Changes a railing tile to a bridge tile.
 org $1AFE98
@@ -851,7 +848,7 @@ org $1AFE98
 ;04ED9E  6B             RTL
 ;                     ----------------
 
-;TODO: recent QOL improvements from randoblazer such as double transition effect apeed and enemy spawn animation speed.
+;TODO: recent QOL improvements from randoblazer such as double transition effect speed and enemy spawn animation speed.
 
 ;-------------------------------------------------;
 

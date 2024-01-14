@@ -86,7 +86,7 @@ Receive:
     ; Ok the SameMapBpass check works, but now there is a chance of getting trapped by a released house or something when you teleport back in.
     ; Now we need to figure out how safely set your return location if you get stuck on return.
     ;LDA #$03
-    ;STA ReceiveStruct.Command ; Signal that lair is being released so MapCheckBypass can bypass
+    ;STA ReceiveStruct.Command ; Signal that lair is being released for impassible check?
     REP #$20
     LDA ReceiveStruct.Operand2 ; Operand 1 is Lair ID
     TAY ; Lair ID in Y
