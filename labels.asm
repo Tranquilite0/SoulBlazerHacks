@@ -1,5 +1,7 @@
 includeonce
 
+org $7E0000 ; My struct definitions cause errors if there isnt an org/freespace statement. this seems to help.
+
 ; Misc Labels and defines to (hopefully) make the code easier to read
 
 ; Ram Locations
@@ -10,8 +12,62 @@ CopTemp = $7E0038
 ; Text Speed ram location
 TextSpeedRam = $7E1B84
 
+; These are different from Map IDs.
+MapNumber = $7E0314
+MapSubNumber = $7E0316
+
+; When you change this it will teleport you to that map sub number.
+; If TeleportPos is all zero it sometimes puts you in a known good spot.
+TeleportMapSubNumber = $7E0318 ; This byte set to zero after teleport
+TeleportMapNumber = $7E0319 ; Usually already the
+
 ; Holds the current state of each lair. Either number of monsters remaining/sealed/sealing.
 LairStateTable = $7F0203
+
+struct PlayerPosReal $7E0374
+    .X: skip 2
+    .Y: skip 2
+endstruct
+
+struct PlayerPosInt $7E0378
+    .X: skip 2
+    .Y: skip 2
+endstruct
+
+struct TeleportPos $7E037C
+    .X: skip 2
+    .Y: skip 2
+    .Facing: skip 1
+endstruct
+
+; Variables used during roof rollback.
+struct RoofRollback $7E03A8
+    .RoofState: skip 2 ; Bit $01 is toggled when removing roofs. Unsure if any other bits are used, but from what I can tell is always 0 (outside) or 1 (inside).
+    .PointerIndex: skip 2 ; Index into interior roof-rollback pointers (Current Map * 4)
+    .DataIndex: skip 2 ; Pointer into rollback data minus offset (B69A) essentially creating index into start of data table relative to start of pointer table.
+endstruct
+
+CurrentMapID = $7E1C6A
+
+; The first 8 bytes of a Roof Lair Data Entry
+; Used for both the resurection sequence and Roof Rollback
+struct RoofLair $7E1C6D
+    .Map: skip 1
+    .RoofState: skip 1 ; 2 = Indoors, 3 = Outdoors, 0/1 = N/A?
+    .X: skip 1
+    .Y: skip 1
+    .TLX: skip 1
+    .TLY: skip 1
+    .Width: skip 1
+    .Height: skip 1
+endstruct
+
+; Used to store rollback state so you can teleport back into a map with the roof removed.
+; The Act 2 boss actually uses 1D7D through 1D9B, but we can share this space since roof rollback never needs to happen in the boss room.
+; Only Needsrollback cant be shared. 
+RoofLairTemp = $7E1D90 ; Temporary backup of RoofLair struct
+TempRollbackDataIndex = $7E1D9A ; Temporary backup of RoofRollback.DataIndex
+NeedsRollback = $7E1D9C ; 0 if roof rollback not needed, otherwise holds the number of screen transitions before fix is applied.
 
 ; Rom Locations
 

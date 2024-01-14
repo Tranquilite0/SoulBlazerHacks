@@ -2,32 +2,7 @@
 ; Allow lairs to give items and chests to release NPCs
 ; TODO: If a boss lair gives an item without teleporting, you might be stuck in the boss arena. Force those lairs to teleport player just to reload map?
 
-; Variables used during roof rollback.
-struct RoofRollback $7E03A8
-    .RoofState: skip 2 ; Bit $01 is toggled when removing roofs. Unsure if any other bits are used, but from what I can tell is always 0 (outside) or 1 (inside).
-    .PointerIndex: skip 2 ; Index into interior roof-rollback pointers (Current Map * 4)
-    .DataIndex: skip 2 ; Pointer into rollback data minus offset (B69A) essentially creating index into start of data table relative to start of pointer table.
-endstruct
 
-; The first 8 bytes of a Roof Lair Data Entry
-; Used for both the resurection sequence and Roof Rollback
-struct RoofLair $7E1C6D
-    .Map: skip 1
-    .RoofState: skip 1 ; 2 = Indoors, 3 = Outdoors, 0/1 = N/A?
-    .X: skip 1
-    .Y: skip 1
-    .TLX: skip 1
-    .TLY: skip 1
-    .Width: skip 1
-    .Height: skip 1
-endstruct
-
-; Used to store rollback state so you can teleport back into a map with the roof removed.
-; The Act 2 boss actually uses 1D7D through 1D9B, but we can share this space since roof rollback never needs to happen in the boss room.
-; Only Needsrollback cant be shared. 
-RoofLairTemp = $7E1D90 ; Temporary backup of RoofLair struct
-TempRollbackDataIndex = $7E1D9A ; Temporary backup of RoofRollback.DataIndex
-NeedsRollback = $7E1D9C ; 0 if roof rollback not needed, otherwise holds the number of screen transitions before fix is applied.
 
 
 ; New Code Section
@@ -104,7 +79,9 @@ DecoupleLairReward:
     CMP #!Exp
     BEQ .exp
     CMP #!LairRelease
-    BEQ .lair
+    BNE .regularItem
+    BRL .lair
+.regularItem
     ; Give regular item
     STA $03C8 ; Used by the print routine to load item name
     STZ $03C9 ; Second byte unused
@@ -112,6 +89,7 @@ DecoupleLairReward:
     LDY #$E216 ; String pointer "Hero received <item>"
     JSL PrintOsdStringFromBankX
     JSL $008173 ; Unsure what this does
+    JSL CheckBossLair
     BRK #$9E ; Play Item Get sound
     JML $028D03 ; Finish by animating the lair closing
 .nothing:
@@ -122,6 +100,7 @@ DecoupleLairReward:
     LDY.W #NothingReceived 
     JSL PrintOsdStringFromBankX
     PLB ; restore bank
+    JSL CheckBossLair
     JML $028CFD ; Play lair closed sound and finish animating lair closing
 .gems:
     REP #$20
@@ -134,6 +113,7 @@ DecoupleLairReward:
     LDY #$E246 ; Text Pointer "Hero found <amount> GEMs"
     JSL PrintOsdStringFromBankX
     JSL $008173 ; Unsure what this does
+    JSL CheckBossLair
     BRK #$8D ; Play Gem-get sound
     JML $028D03 ; Finish by animating the lair closing
 .exp:
@@ -149,6 +129,7 @@ DecoupleLairReward:
     LDY.W #ExpReceived 
     JSL PrintOsdStringFromBankX
     PLB ; restore bank
+    JSL CheckBossLair
     JML $028CFD ; Play lair closed sound and finish animating lair closing
 .lair:
     REP #$20
@@ -219,6 +200,85 @@ ApplyRoofFix:
     PLP
     RTL
 
+; Boss lairs close off the exit and require a map reload/teleport to make the exit open again.
+; I'm not super happy with this solution, but it works which is good enough.
+CheckBossLair:
+    LDA CurrentMapID
+    CMP #$0C ; Solid Arm
+    BEQ .solidArm
+    CMP #$22 ; Elemental Statues
+    BEQ .elementalStatues
+    ;CMP #$32 ; Ghost Ship
+    ;BEQ .isBossRoom
+    CMP #$44 ; Poseidon
+    BEQ .poseidon
+    CMP #$59 ; Tin Doll
+    BEQ .tinDoll
+    ;CMP #$72 ; Demon Bird
+    ;BEQ .isBossRoom
+    RTL
+.solidArm:
+    LDA #$05
+    STA TeleportMapSubNumber
+    LDA #$00
+    STA TeleportPos.Facing
+    REP #$20
+    LDA #$0078
+    STA TeleportPos.X 
+    LDA #$0050
+    STA TeleportPos.Y
+    SEP #$20
+    RTL
+.elementalStatues:
+    LDA #$09
+    STA TeleportMapSubNumber
+    LDA #$00
+    STA TeleportPos.Facing
+    REP #$20
+    LDA #$0198
+    STA TeleportPos.X 
+    LDA #$0020
+    STA TeleportPos.Y
+    SEP #$20
+    RTL
+.poseidon:
+    LDA #$05
+    STA TeleportMapSubNumber
+    LDA #$00
+    STA TeleportPos.Facing
+    REP #$20
+    LDA #$01A0
+    STA TeleportPos.X 
+    LDA #$0050
+    STA TeleportPos.Y
+    SEP #$20
+    RTL
+.tinDoll:
+    LDA #$03
+    STA TeleportMapSubNumber
+    LDA #$01
+    STA TeleportPos.Facing
+    REP #$20
+    LDA #$0200
+    STA TeleportPos.X 
+    LDA #$01C0
+    STA TeleportPos.Y
+    SEP #$20
+    RTL
+;.isBossRoom
+    ; Teleport to current position to trigger map reload.
+    ; TODO: Unfortunately this doesnt actually reload the map and give us an exit.
+    ;LDA MapSubNumber
+    ;STA TeleportMapSubNumber
+    ;REP #$20
+    ;LDA PlayerPosReal.X
+    ;STA TeleportPos.X 
+    ;LDA PlayerPosReal.Y
+    ;SEC
+    ;SBC #$0010
+    ;STA TeleportPos.Y
+    ;SEP #$20
+    ;RTL
 
 ; If we release a cutscene NPC on the same map that it gets unlocked on then things will break
 ; This check bypasses that when there is a cutscene NPC (I am assuming that if they have a name pointer, there is also a release cutscene)
