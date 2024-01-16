@@ -81,12 +81,8 @@ Receive:
     PLB ; restore bank
     BRA .end
 .lairReward:
-    ; TODO: Works unless you are on the same screen as lair which expects teleport.
-    ;  Need to figure out how to force the "MapsNotEqual" branch here.
-    ; Ok the SameMapBpass check works, but now there is a chance of getting trapped by a released house or something when you teleport back in.
-    ; Now we need to figure out how safely set your return location if you get stuck on return.
-    ;LDA #$03
-    ;STA ReceiveStruct.Command ; Signal that lair is being released for impassible check?
+    LDA #$02
+    STA NeedsImpassibleCheck ; Check for impassable terrain on return.
     REP #$20
     LDA ReceiveStruct.Operand2 ; Operand 1 is Lair ID
     TAY ; Lair ID in Y

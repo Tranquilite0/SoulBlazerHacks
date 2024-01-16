@@ -47,6 +47,8 @@ struct RoofRollback $7E03A8
     .DataIndex: skip 2 ; Pointer into rollback data minus offset (B69A) essentially creating index into start of data table relative to start of pointer table.
 endstruct
 
+DoorDataPointer = $7E03B2 ; Index into door data
+
 CurrentMapID = $7E1C6A
 
 ; The first 8 bytes of a Roof Lair Data Entry
@@ -69,6 +71,8 @@ RoofLairTemp = $7E1D90 ; Temporary backup of RoofLair struct
 TempRollbackDataIndex = $7E1D9A ; Temporary backup of RoofRollback.DataIndex
 NeedsRollback = $7E1D9C ; 0 if roof rollback not needed, otherwise holds the number of screen transitions before fix is applied.
 
+NeedsImpassibleCheck = $7E1D9D ; 0 if no check needed, otherwise holds the number of screen transitions before check applied.
+
 ; Stores whether each tile is passable or not.
 ; $F0 = Impassable, $00 = Passable
 PassableMap = $7F8000
@@ -80,6 +84,8 @@ TextEndStandardBank2 = $02E25F
 TextEndStandardBank3 = $03B988
 TextEndStandardBank4 = $04A51E
 TextEndStandardBank1F = $1FAA44
+
+
 
 ; Functions
 
@@ -106,7 +112,6 @@ CheckIfBitIsSet = $04F3A2
 ; Expects X coord in $16 and Y coord in $18
 ; Expects 16bit accumulator
 CalcPassableMapOffset = $04F2B8
-
 
 
 ; TODO: move these macros somewhere else?

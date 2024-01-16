@@ -163,11 +163,9 @@ CheckForRoof:
     PLP
     RTL
 
+
 ; Makes it so that when you teleport back in the roof will still be pulled back.
 ApplyRoofFix:
-    PHP
-    PHY
-    PHX
     SEP #$20
     LDA NeedsRollback
     BEQ .end
@@ -175,6 +173,7 @@ ApplyRoofFix:
     STA NeedsRollback
     BNE .end
     REP #$20
+    PHY ; Unsure if Y state needs to be preserved.
     LDX #RoofLairTemp
     LDY #RoofLair.Map
     LDA #$0007
@@ -187,18 +186,58 @@ ApplyRoofFix:
     LDA TempRollbackDataIndex
     STA RoofRollback.DataIndex
     SEP #$20
-    JSL $0294AE
+    JSL $0294AE ; The secret sauce that rolls back the roof.
+    PLY
     BRA +
 .end:
     JSL $029445 ; Original code that was replaced.
 +
-    PLX
-    PLY
-    PLP
+    RTL
+
+
+; Checks for impassible terrain after releasing an NPC
+; If terrain became impassable, warp to first door entry for map.
+; TODO: there are still a handful of places where you can get stuck.
+CheckImpassible:
+    JSL $0294D0 ; Original code that was replaced (also sets DoorDataPointer)
+    LDA NeedsImpassibleCheck
+    BEQ .end
+    DEC
+    STA NeedsImpassibleCheck
+    BNE .end
+    REP #$20
+    LDA PlayerPosReal.X
+    STA $16
+    LDA PlayerPosReal.Y
+    SEC
+    SBC #$0010
+    STA $18
+    JSL CalcPassableMapOffset
+    SEP #$20
+    LDA PassableMap,x
+    ;AND #$00FF
+    BEQ .end
+    ; We are stuck now. Fix posision.
+    ;SEP #$20
+    ; Teleport to the first entry in the doors table for this map. Usually the master's shrine for the world.
+    LDX DoorDataPointer
+    LDA $AC9A,X
+    STA TeleportMapNumber
+    LDA $AC9B,X
+    STA TeleportMapSubNumber
+    LDA $AC9C,X
+    STA TeleportPos.Facing
+    LDY $AC9D,X
+    STY TeleportPos.X
+    LDY $AC9F,X
+    STY TeleportPos.Y
+.end:
+    ;SEP #$20
     RTL
 
 ; Boss lairs close off the exit and require a map reload/teleport to make the exit open again.
 ; I'm not super happy with this solution, but it works which is good enough for now.
+; TODO: use door data pointer and take first exit instead of hardcoding.
 CheckBossLair:
     LDA CurrentMapID
     CMP #$0C ; Solid Arm
@@ -278,12 +317,10 @@ CheckBossLair:
     ;RTL
 
 ; If we release a cutscene NPC on the same map that it gets unlocked on then things will break
-; This check bypasses that when there is a cutscene NPC (I am assuming that if they have a name pointer, there is also a release cutscene)
-; TODO: better check that prevents getting softlocked when teleporting back in to something that got released.
-; TODO: Perhaps also check both teleport map, and original lair location map?
-; TODO: And also check if current map is town map and set a new return location to prevent getting locked?
+; This check bypasses that when there is a cutscene NPC (any of the bits in resurrection sequence X/Y coord set)
 SameMapCheckBypass:
-    LDA $BA0D+$09,X
+    LDA $BA0D+$02,X
+    ORA $BA0D+$03,X
     BEQ .originalCode
     LDA $BA0D,X ; Load Teleport map
     REP #$02 ; Ensure Zero Flag is clear
@@ -355,9 +392,11 @@ org $009455
 org $00A8E5
     JSL StoreLairDataPreserveFlag
 
-
+; First hook during map load to do roof rollback
+; Also hook the method that loads door data for our impassible terain check
 org $04FA70
     JSL ApplyRoofFix
+    JSL CheckImpassible
 
 
 ; Patches Lair Data to add decoupled rewards

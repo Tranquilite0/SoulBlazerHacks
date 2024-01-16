@@ -71,7 +71,7 @@ includeonce
 !BlackStone      = $3F
 !MagicBell       = $40
 
-; TODO: extend with more rewards (Multiworld rewards, traps, deathlink)
+; TODO: extend with more rewards (Multiworld rewards and optionally traps/deathlink)
 
 !LairRelease     = $FD
 !Exp             = $FE
