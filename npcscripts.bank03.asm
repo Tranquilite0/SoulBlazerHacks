@@ -1,5 +1,7 @@
 ; Patch NPC scripts in Bank 03 to use new NPC Reward COP routine.
 
+; TODO: Patch Goat Food Goat to give hint (and dont remove goat food)
+
 pushpc
 
 ; Patches for Item-giving NPC Scripts
@@ -737,6 +739,10 @@ pushpc
 
 ;----------- Miscelaneous Accesibility -----------;
 ; TODO: move elsewhere? Clean Up.
+; TODO: Rebuild string table so that G.Leaf and A.Leaf can have more characters (we can remove 'the' in the Big Pearl for more space elsewhere.)
+;       While doing so perhaps make other item names more consistent.
+; TODO: Patch item descriptions to be Rando-focused?
+; TODO: If we can find enough space in the bank, perhaps we can give NPCs unique names.
 
 ; Correct typos and and make Greenwood/Actinidia leaves distinguishable
 ; Magic Flair->Magic Flare
