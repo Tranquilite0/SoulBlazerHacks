@@ -31,6 +31,7 @@ org !Bank02FreeSpaceStart
     incsrc "npcreward.asm"
     incsrc "chestrelease.asm"
     incsrc "receive.asm"
+    incsrc "misc.asm"
     incsrc "strings.asm"
 assert pc() <= !Bank02FreespaceEnd
 
