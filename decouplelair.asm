@@ -361,7 +361,7 @@ org $028C7B
     NewBranchNotEqualTarget: 
     PHX ; Get Stack back to expected state
     TYX ; Get registers back into expected state
-    warnpc $028C8B ; next instruction should be REP #$20
+    assert pc() <= $028C8B
 
 
 ; Insert hook to bypass same-map check
@@ -402,12 +402,11 @@ org $04FA70
 ; Patches Lair Data to add decoupled rewards
 ; Sets lair reward to vanilla values
 org $01BA0D+$18       ; Set PC to first instance of Lair Table Field
-!i = $0
-while !i < $1A4
+for i = $0..$1A4
     db !LairRelease     ; "Item ID" for lair reward
     dw !i               ; Same reward as lair being released
     skip $20-$3         ; Move PC to next entry
     !i #= !i+1
-endif
+endfor
 
 pullpc

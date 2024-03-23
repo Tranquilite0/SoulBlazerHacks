@@ -30,7 +30,7 @@ NorthEasternMermaidHerbScript:
     ; "Come back if you change your mind."
     db !Text_Start,!Dict_Come,!Dict_back,"if ",!Dict_you,!Text_CR,"change ",!Dict_your,"mind.",!Text_ChangeStreamPtr : dw TextEndStandardBank1F
 
-warnpc $1F83AC
+assert pc() <= $1F83AC
 
 ;-------------------------------------------------;
 

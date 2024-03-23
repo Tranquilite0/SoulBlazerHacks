@@ -213,5 +213,5 @@ org $02E1CE
 
 pullpc
 
-warnpc EndAddress
+assert pc() <= EndAddress
 namespace off

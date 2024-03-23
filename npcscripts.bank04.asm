@@ -255,7 +255,7 @@ HerbPlantLeosLabScript:
     ; "Come back if you change your mind."
     db !Text_Start,!Dict_Come,!Dict_back,"if ",!Dict_you,!Text_CR,"change ",!Dict_your,"mind.",!Text_ChangeStreamPtr : dw TextEndStandardBank4
 
-warnpc $04AC7B
+assert pc() <= $04AC7B
 
 ;04AB9E  02 01          COP #$01
 ;04ABA0               --------data--------
@@ -444,7 +444,7 @@ ChestOfDrawersHerbScript:
     ; "Come back if you change your mind."
     db !Text_Start,!Dict_Come,!Dict_back,"if ",!Dict_you,!Text_CR,"change ",!Dict_your,"mind.",!Text_ChangeStreamPtr : dw TextEndStandardBank4
 
-warnpc $04B45C
+assert pc() <= $04B45C
 ;04B2CD  02 07          COP #$07
 ;04B2CF               --------data--------
 ;04B2CF  00 00 00 00  .db $07 $88 $FF $B2
@@ -1161,7 +1161,7 @@ SuperBraceletTileExtension:
 .butWaitTheresMore
     db !Text_Start,!Dict_There,!Dict_is,!Dict_something,!Text_CR,"else too!",!Text_ChangeStreamPtr : dw TextEndStandardBank4
 
-warnpc $04CF49
+assert pc() <= $04CF49
 ;04CE5A  02 91          COP #$91
 ;04CE5C  02 0D          COP #$0D
 ;04CE5E               --------data--------

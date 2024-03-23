@@ -170,4 +170,4 @@ RetOutOfScript:
 
 pullpc
 
-warnpc !Bank00FreespaceEnd
+assert pc() <= !Bank00FreespaceEnd

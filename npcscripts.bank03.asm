@@ -731,7 +731,7 @@ pullpc ; Place this new code in the freespace region.
     db !Text_Start,!Dict_You,"need ",!Dict_all,"6 stones",!Text_CR
     db !Dict_to,"open ",!Dict_the,"World ",!Dict_of,!Text_CR,"Evil.",!Text_ChangeStreamPtr : dw TextEndStandardBank3
 
-warnpc !Bank03FreespaceEnd
+assert pc() <= !Bank03FreespaceEnd
 pushpc
 
 ;-------------------------------------------------;
