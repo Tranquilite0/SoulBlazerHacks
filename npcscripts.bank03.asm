@@ -242,13 +242,27 @@ org $03AD13
 
 
 ;-------------- Red-Hot Mirror Bird --------------;
-
-org $03BE42
-    %CopJumpIfNpcRewardNotObtained(!NPC_RedHotMirrorBird, $BE4C)\
-
-org $03BE50
+; This script normally checks for phoenix and for the presense of an item.
+; We can replace all of that.
+org $03BE3B
+RedHotMirrorBirdScript:
+    %CopJumpIfNpcRewardNotObtained(!NPC_RedHotMirrorBird, +)
+    %CopShowText($BED2)
+    RTL
++
+    %CopShowText($BE56)
     %CopGiveNpcReward(!NPC_RedHotMirrorBird)
-    NOP #2
+    RTL
+
+    ; Clean up after ourselves.
+    NOP #8
+    
+;org $03BE42
+;    %CopJumpIfNpcRewardNotObtained(!NPC_RedHotMirrorBird, $BE4C)
+;
+;org $03BE50
+;    %CopGiveNpcReward(!NPC_RedHotMirrorBird)
+;    NOP #2
 
 ;Patch text to remove reference to vanilla reward.
 org $03BEB4

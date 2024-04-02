@@ -92,12 +92,21 @@ org $1F9349
 
 ;------------- Red-Hot Stick Mermaid -------------;
 
-org $1F985F
-    %CopJumpIfNpcRewardNotObtained(!NPC_RedHotStickMermaid, $9869)
-
-org $1F986D
+; This script normally checks for phoenix and for the presense of an item.
+; We can replace all of that.
+org $1F9858
+RedHotMermaidScript:
+    %CopJumpIfNpcRewardNotObtained(!NPC_RedHotStickMermaid, +)
+    %CopShowText($98C6)
+    RTL
++
+    %CopShowText($9873)
     %CopGiveNpcReward(!NPC_RedHotStickMermaid)
-    NOP #2
+    RTL
+
+    ; Clean up after ourselves.
+    NOP #8
+
 
 org $1F9890
     db "this.",!Text_ChangeStreamPtr : dw TextEndStandardBank1F

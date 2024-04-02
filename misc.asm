@@ -51,7 +51,9 @@ org $1F8CA2
 ;1F8CA4  00 00 00     .db $21 $A9 $8C
 
 
-
+; Move Rockbird statue to improve seabed logic.
+org $01A108
+    db $60,$20
 
 
 ; Fix lair checks in the ghost ship
