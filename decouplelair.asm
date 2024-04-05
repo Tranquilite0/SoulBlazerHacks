@@ -58,7 +58,7 @@ DecoupleLairReward:
     PLX 
     ; At this point Lair index is in X, Lair ID in Y
     PHX
-    LDA $BA17,X ; Load Town Area.
+    LDA.W $BA17,X ; Load Town Area.
     ORA #$80 ; Set Lair Cleared Flag.
     PHA
     TYX
@@ -69,7 +69,7 @@ DecoupleLairReward:
     PLA
     PLX
     ; Load alternate release reward ID from lair field $17
-    LDA $BA25,X
+    LDA.W $BA25,X
     BEQ .nothing
     CMP #!Gems
     BEQ .gems
@@ -101,7 +101,7 @@ DecoupleLairReward:
     JML $028CFD ; Play lair closed sound and finish animating lair closing
 .gems:
     REP #$20
-    LDA $BA26,X ; Load Gem amount from lair field $18-$19 
+    LDA.W $BA26,X ; Load Gem amount from lair field $18-$19 
     STA $03C8 ; Used by the print routine to load Gems/Exp Amount
     JSL $04F6A5 ; GiveGems
     LDA #$0010 ; Unsure what this and the next instruction does...
@@ -115,7 +115,7 @@ DecoupleLairReward:
     JML $028D03 ; Finish by animating the lair closing
 .exp:
     REP #$20
-    LDA.L $BA26,X ; Load Exp amount from lair field $18-$19 
+    LDA.W $BA26,X ; Load Exp amount from lair field $18-$19 
     STA $7E043D ; Address that stores EXP to recieve.
     STA $03C8 ; Used by the print routine to load Gems/Exp Amount
     SEP #$20
@@ -130,7 +130,7 @@ DecoupleLairReward:
     JML $028CFD ; Play lair closed sound and finish animating lair closing
 .lair:
     REP #$20
-    LDA $BA26,X ; Load NPC ID from lair field $18-$19
+    LDA.W $BA26,X ; Load NPC ID from lair field $18-$19
     TAY ; NPC ID in Y
     ASL #5
     TAX ; Lair Index in X
