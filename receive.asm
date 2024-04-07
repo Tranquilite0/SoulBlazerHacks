@@ -1,15 +1,25 @@
 ; Routines for Receiving stuff, from anywhere.
 ; Used for Multiworld/Archipelago integration
 
+; Use some SRAM-backed WRAM from the unused secton of LairReleaseTable Shadow copy.
+; Used
+ReceiveCount = $7E1AD3
 
 ; According to hellow554, ram addresses $7E1E00 through $7E1F00 are unused
-; Start a bit later to hopefully avoid conflicts
+; From my own observations, I have found that the US version also doesnt use $7E1DA0 and onward
 ; Writing to this struct is how the multiworld client will control sending things.
-; TODO: Pick a better spot in memory to put this and stick with it.
-struct ReceiveStruct $7E1E80
-    .Command: skip 2
-    .Operand1: skip 2
-    .Operand2: skip 2
+struct ReceiveStruct $7E1DA0
+    ; 0: Uninitialized
+    ; 1: Ready to receive
+    ; 2: Receipt requested by client
+    ; 3+: Receiving
+    .Status: skip 1
+    ; If non-zero, Increment receive counter
+    .Increment: skip 1
+    ; Item ID
+    .ID: skip 1
+    .Unused: skip 1
+    .Operand: skip 2
 endstruct
 
 ; New code section.
@@ -20,16 +30,16 @@ MainHook:
 
 
 Receive:
-    LDA ReceiveStruct.Command
+    LDA ReceiveStruct.Status
     BNE +
     INC A
-    STA ReceiveStruct.Command
+    STA ReceiveStruct.Status
 +
     CMP #$01
     BNE +
     RTL
 +
-    LDA ReceiveStruct.Operand1
+    LDA ReceiveStruct.ID
     BEQ .nothing
     CMP #!Gems
     BEQ .gems
@@ -37,6 +47,8 @@ Receive:
     BEQ .exp
     CMP #!LairRelease
     BEQ .lairReward
+    CMP #!RemoteItem
+    BEQ .remoteItem
     STA $03C8 ; Used by the print routine to load item name
     STZ $03C9 ; Second byte unused
     JSL $02A0F9 ; GiveItem
@@ -56,7 +68,7 @@ Receive:
     BRA .end
 .gems:
     REP #$20
-    LDA ReceiveStruct.Operand2
+    LDA ReceiveStruct.Operand
     STA $03C8 ; Used by the print routine to load Gems/Exp Amount
     JSL $04F6A5 ; GiveGems
     LDA #$0010 ; UpdateHud?
@@ -68,7 +80,7 @@ Receive:
     BRA .end
 .exp:
     REP #$20
-    LDA ReceiveStruct.Operand2
+    LDA ReceiveStruct.Operand
     STA $7E043D ; Address that stores EXP to recieve.
     STA $03C8 ; Used by the print routine to load Gems/Exp Amount
     SEP #$20
@@ -84,16 +96,26 @@ Receive:
     LDA #$02
     STA NeedsImpassibleCheck ; Check for impassable terrain on return.
     REP #$20
-    LDA ReceiveStruct.Operand2 ; Operand 1 is Lair ID
+    LDA ReceiveStruct.Operand ; Operand is Lair ID
     TAY ; Lair ID in Y
     ASL #5
     TAX ; Lair index in X
     SEP #$20
     JSL CheckForRoof
     JSL $028C75
+.remoteItem:
+    ; TODO: this
 .end:
-    STZ.W ReceiveStruct.Command ; Finished processing command, but wait until next main loop to become ready to recieve.
+    ; Increment Receive Count if the client requested it.
+    LDA ReceiveStruct.Increment
+    BEQ +
+    REP #$20
+    INC ReceiveCount
++
+    STZ.W ReceiveStruct.Status ; Finished processing request, but wait until next main loop to become ready to recieve.
+    SEP #$20
     RTL
+
 
 
 ; Hooks and original rom data overwrite section

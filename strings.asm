@@ -1,5 +1,7 @@
 ; New strings
 
+PrintItemReceivedShort:
+db !Text_Start,!Text_HeroName," ",!Dict_received,!Text_CR
 PrintItemNameShort:
 db !Text_YellowStyle,!Text_TableLookup,$74,$CF,$C8,$03,!Text_EndStyle,!Text_Break
 

@@ -71,6 +71,8 @@ DecoupleLairReward:
     ; Load alternate release reward ID from lair field $17
     LDA.W $BA25,X
     BEQ .nothing
+    CMP #!RemoteItem
+    BEQ .remoteItem
     CMP #!Gems
     BEQ .gems
     CMP #!Exp
@@ -78,7 +80,7 @@ DecoupleLairReward:
     CMP #!LairRelease
     BNE .regularItem
     BRL .lair
-.regularItem
+.regularItem:
     ; Give regular item
     STA $03C8 ; Used by the print routine to load item name
     STZ $03C9 ; Second byte unused
@@ -98,6 +100,7 @@ DecoupleLairReward:
     JSL PrintOsdStringFromBankX
     PLB ; restore bank
     JSL CheckBossLair
+.remoteItem: ; Do nothing, let the client figure out what it is and who it is for and send a message.
     JML $028CFD ; Play lair closed sound and finish animating lair closing
 .gems:
     REP #$20

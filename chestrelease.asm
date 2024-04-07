@@ -1,6 +1,8 @@
 ; Routines for decoupling item/lair checks
 ; Modifications to treasure chests
 
+; TODO: sometimes the chest sprite doesn't open. Might have something to do with returning early? Fix.
+
 ; New Code Section
 
 ExtendChestReward:
@@ -8,6 +10,11 @@ ExtendChestReward:
     BEQ .exp
     CMP #!LairRelease ; 
     BEQ .lair
+    CMP #!RemoteItem
+    BNE +
+    ; Do nothing, let the client figure out what it is and who it is for and send a message.
+    RTL
++
     JSL $02A0F9 ; Original replaced code
     JML $028ABF ; Return back to original code flow (give regular item or gems)
 .exp

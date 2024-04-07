@@ -19,7 +19,7 @@ assert pc() <= !Bank00FreespaceEnd
 
 org !Bank01FreeSpaceStart
     ; TODO: Anything needed in bank 1?
-    ; We could allocate space for NPC hints here? Would make printing them easier for sure.
+    ; Could create additional treasure chest data if needed.
     ; 447 bytes.
 assert pc() <= !Bank01FreespaceEnd
 
@@ -50,10 +50,6 @@ assert pc() <= !Bank1EFreespaceEnd
 org !Bank1FFreeSpaceStart
     incsrc "npcscripts.bank1f.asm"
 assert pc() <= !Bank1FFreespaceEnd
-
-if defined("randopoc")
-    incsrc "randoproofofconcept.asm"
-endif
 
 ; Standalone hacks
 incsrc "semiprogressive.asm"

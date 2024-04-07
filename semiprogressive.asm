@@ -47,7 +47,7 @@ GiveItemHook:
     ; Save register state to prevent softlocks when NPCs give items.
     PHA
     PHX
-    ; This is a copy of the routine that sets STR/DEF after equiping a sword/armor (I hope it works here)
+    ; This is a copy of the routine that sets STR/DEF after equiping a sword/armor
     LDX $1B5E
     JSL CalcStrength
     STA $1B70

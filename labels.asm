@@ -9,8 +9,7 @@ org $7E0000 ; My struct definitions cause errors if there isnt an org/freespace 
 ; Argument storage for COP routines.
 CopTemp = $7E0038
 
-; Text Speed ram location
-TextSpeedRam = $7E1B84
+
 
 ; These are different from Map IDs.
 MapNumber = $7E0314
@@ -19,10 +18,8 @@ MapSubNumber = $7E0316
 ; When you change this it will teleport you to that map sub number.
 ; If TeleportPos is all zero it sometimes puts you in a known good spot.
 TeleportMapSubNumber = $7E0318 ; This byte set to zero after teleport
-TeleportMapNumber = $7E0319 ; Usually already the
-
-; Holds the current state of each lair. Either number of monsters remaining/sealed/sealing.
-LairStateTable = $7F0203
+TeleportMapNumber = $7E0319
+TeleportUnknown = $7E032E ; TODO: Setting this to a zero/nonzero value does something during map change. Figure out what it is.
 
 struct PlayerPosReal $7E0374
     .X: skip 2
@@ -47,7 +44,23 @@ struct RoofRollback $7E03A8
     .DataIndex: skip 2 ; Pointer into rollback data minus offset (B69A) essentially creating index into start of data table relative to start of pointer table.
 endstruct
 
-DoorDataPointer = $7E03B2 ; Index into door data
+; Index into door data
+DoorDataPointer = $7E03B2 
+
+; ; 64 bytes * 8 bits = 512 possible lairs
+LairReleaseTable = $7E1ADE
+; Shadow copy of the Lair Release Table. Used during lair release process, possibly for lair dependency checks?
+; Unsure, but these tables always match after lair release is finished.
+LairReleaseTableShadow = $7E1A9E
+
+; Text Speed ram location
+TextSpeedRam = $7E1B84
+
+; US release supports names that are 8 char + 1 null terminator. Names longer than this will occasionally cause textbox overflow.
+PlayerName = $7E1B92
+
+; $7E1B9B-$7E1C57 ; 188 bytes of apparently unused memory that is also backed up to SRAM.
+; I should probably be using this instead of the unused parts of the NPC release table.
 
 CurrentMapID = $7E1C6A
 
@@ -55,7 +68,7 @@ CurrentMapID = $7E1C6A
 ; Used for both the resurection sequence and Roof Rollback
 struct RoofLair $7E1C6D
     .Map: skip 1
-    .RoofState: skip 1 ; 2 = Indoors, 3 = Outdoors, 0/1 = N/A?
+    .RoofState: skip 1 ; Corresponds to the "Layer" to use from map arrangment data. 2 = Indoors, 3 = Outdoors, 0/1 = N/A?
     .X: skip 1
     .Y: skip 1
     .TLX: skip 1
@@ -72,6 +85,9 @@ TempRollbackDataIndex = $7E1D9A ; Temporary backup of RoofRollback.DataIndex
 NeedsRollback = $7E1D9C ; 0 if roof rollback not needed, otherwise holds the number of screen transitions before fix is applied.
 
 NeedsImpassibleCheck = $7E1D9D ; 0 if no check needed, otherwise holds the number of screen transitions before check applied.
+
+; Holds the current state of each lair. Either number of monsters remaining or sealed/sealing state.
+LairStateTable = $7F0203
 
 ; Stores whether each tile is passable or not.
 ; $F0 = Impassable, $00 = Passable

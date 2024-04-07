@@ -73,6 +73,7 @@ includeonce
 
 ; TODO: extend with more rewards (Multiworld rewards and optionally traps/deathlink)
 
+!RemoteItem      = $FC
 !LairRelease     = $FD
 !Exp             = $FE
 !Gems            = $FF

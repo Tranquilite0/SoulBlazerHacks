@@ -1,7 +1,8 @@
 ; I think the easiest way to deal with NPCs is to make a new COP dedicated to their rewards.
 ; Soulblazer has 420 entries in the lair table, but has 512 bits to store lair sealed flags
 ; We will use 60 of the unused flags for NPC reward tracking
-NpcReceivedFlags = $7E1B13
+; 4 extra flags to keep things in 8 bytes with 3 unallocated bytes
+NpcReceivedFlags = $7E1B13 ; TODO: move this into labels?
 
 
 ; New Code Section
@@ -37,6 +38,8 @@ GiveNpcReward:
     BEQ .exp
     CMP #!LairRelease
     BEQ .lair
+    CMP #!RemoteItem
+    BEQ .remoteItem
     ; Give regular item
     STA $03C8 ; Used by the print routine to load item name
     STZ $03C9 ; Second byte unused
@@ -45,7 +48,7 @@ GiveNpcReward:
     JSL PrintOsdStringFromBankX
     BRK #$5E ; Play Item Get sound
     BRL .end
-.nothing
+.nothing:
     SEP #$20
     PHB
     LDA.B #NothingReceived>>16 ; Switch bank
@@ -67,7 +70,7 @@ GiveNpcReward:
     JSL PrintOsdStringFromBankX
     BRK #$8D ; Play Gem get sound
     BRA .end
-.exp
+.exp:
     REP #$20
     LDA.L NpcRewardTable.Operand,X
     STA $7E043D ; Address that stores EXP to recieve.
@@ -81,7 +84,7 @@ GiveNpcReward:
     JSL PrintOsdStringFromBankX
     PLB ; restore bank
     BRA .end
-.lair
+.lair:
     REP #$20
     LDA.L NpcRewardTable.Operand,X ;
     TAY ; Lair ID in Y
@@ -90,6 +93,8 @@ GiveNpcReward:
     SEP #$20
     JSL CheckForRoof
     JSL $028C75 ; Release Lair. Still needs more testing.
+.remoteItem:
+    ; Do nothing, let the client figure out what it is and who it is for and send a message.
 .end:
     PLP
     RTL
@@ -145,6 +150,7 @@ PrintNpcReward:
     LDA.B #PrintExpShort>>16 ; Load bank to switch to
     BRA .end
 .lair
+    ; TODO: I think this stopped working when i switched to asar 1.9. fix.
     REP #$20
     LDA.L NpcRewardTable.Operand,X ;
     ASL #5
