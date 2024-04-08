@@ -19,7 +19,7 @@ MapSubNumber = $7E0316
 ; If TeleportPos is all zero it sometimes puts you in a known good spot.
 TeleportMapSubNumber = $7E0318 ; This byte set to zero after teleport
 TeleportMapNumber = $7E0319
-TeleportUnknown = $7E032E ; TODO: Setting this to a zero/nonzero value does something during map change. Figure out what it is.
+TeleportFadeout = $7E032E ; Setting this to a zero disables fadeout/in when changing maps.
 
 struct PlayerPosReal $7E0374
     .X: skip 2
@@ -37,6 +37,8 @@ struct TeleportPos $7E037C
     .Facing: skip 1
 endstruct
 
+; $7E0380: TODO: Is set when changing zones, typically to 01? what does this do?
+
 ; Variables used during roof rollback.
 struct RoofRollback $7E03A8
     .RoofState: skip 2 ; Bit $01 is toggled when removing roofs. Unsure if any other bits are used, but from what I can tell is always 0 (outside) or 1 (inside).
@@ -46,6 +48,9 @@ endstruct
 
 ; Index into door data
 DoorDataPointer = $7E03B2 
+
+; Used by text engine table lookup.
+TableLookupIndex = $7E03C8
 
 ; ; 64 bytes * 8 bits = 512 possible lairs
 LairReleaseTable = $7E1ADE
@@ -94,6 +99,9 @@ LairStateTable = $7F0203
 PassableMap = $7F8000
 
 ; Rom Locations
+
+ItemNameTable = $02CF74
+NpcNamePointerTable = $02D2E6
 
 ; Pointers to places containing the standard Text End Command ($12,$08,$08,$04,$0C)
 TextEndStandardBank2 = $02E25F

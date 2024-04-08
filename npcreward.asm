@@ -150,7 +150,7 @@ PrintNpcReward:
     LDA.B #PrintExpShort>>16 ; Load bank to switch to
     BRA .end
 .lair
-    ; TODO: I think this stopped working when i switched to asar 1.9. fix.
+    ; TODO: I think this may have stopped working when i switched to asar 1.9. fix.
     REP #$20
     LDA.L NpcRewardTable.Operand,X ;
     ASL #5

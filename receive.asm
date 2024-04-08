@@ -20,18 +20,67 @@ struct ReceiveStruct $7E1DA0
     .ID: skip 1
     .Unused: skip 1
     .Operand: skip 2
+    ; Null terminated mostly-ascii string 16 chars max
+    .Sender: skip 17
+endstruct
+
+; Writing to this struct is how the multiworld client communicates what
+; was sent when a location containing a remote item is checked.
+struct SendStruct $7E1DC0
+    ; 0: Uninitialized
+    ; 1: Ready to send
+    ; 2: Send notification requested by client
+    ; 3+: Sending
+    .Status: skip 1
+    .ItemName: skip 23
+    .Addressee: skip 19
 endstruct
 
 ; New code section.
 MainHook:
     JSL $0298FC ; Original Code
+    JSL Send
     JSL Receive
     RTL
 
+Send:
+    LDA SendStruct.Status
+    BNE +
+    ; Initialize strings in case the client does not populate them.
+    LDA #!Dict_something
+    STA SendStruct.ItemName
+    STZ SendStruct.ItemName+1
+    LDA #!Dict_somewhere
+    STA SendStruct.Addressee
+    STZ SendStruct.Addressee+1
+    LDA SendStruct.Status
+    INC A
+    STA SendStruct.Status
++
+    CMP #$01
+    BNE +
+    RTL
++
+    PHB
+    LDA.B #SendString>>16 ; Switch bank
+    PHA
+    PLB
+    LDY.W #SendString 
+    JSL PrintOsdStringFromBankX
+    PLB ; restore bank
+    STZ.W SendStruct.Status ; Finished processing request, but wait until next main loop to become ready to recieve.
+    SEP #$20
+    RTL
 
+; TODO: Also print the sender. Still trying to figure out how best to handle these text boxes.
 Receive:
     LDA ReceiveStruct.Status
     BNE +
+    ; Initialize string in case the client does not populate them.
+    LDA #!Dict_somewhere
+    STA ReceiveStruct.Sender
+    STZ ReceiveStruct.Sender+1
+    LDA ReceiveStruct.Status
     INC A
     STA ReceiveStruct.Status
 +
@@ -93,6 +142,7 @@ Receive:
     PLB ; restore bank
     BRA .end
 .lairReward:
+    ; TODO: also print NPC name so that player knows who sent them the thing
     LDA #$02
     STA NeedsImpassibleCheck ; Check for impassable terrain on return.
     REP #$20
@@ -104,16 +154,18 @@ Receive:
     JSL CheckForRoof
     JSL $028C75
 .remoteItem:
-    ; TODO: this
+    ; This shouldnt happen.
 .end:
     ; Increment Receive Count if the client requested it.
     LDA ReceiveStruct.Increment
     BEQ +
     REP #$20
-    INC ReceiveCount
-+
-    STZ.W ReceiveStruct.Status ; Finished processing request, but wait until next main loop to become ready to recieve.
+    INC.W ReceiveCount
     SEP #$20
+    STZ ReceiveStruct.Increment
++
+    STZ ReceiveStruct.Status ; Finished processing request, but wait until next main loop to become ready to recieve.
+    
     RTL
 
 
