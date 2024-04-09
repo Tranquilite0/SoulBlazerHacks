@@ -97,21 +97,28 @@ Receive:
     CMP #!LairRelease
     BEQ .lairReward
     CMP #!RemoteItem
-    BEQ .remoteItem
+    BNE +
+    BRL .remoteItem
++
     STA $03C8 ; Used by the print routine to load item name
     STZ $03C9 ; Second byte unused
     JSL $02A0F9 ; GiveItem
-    LDY #$E216 ; String pointer "Hero received <item>"
+    PHB
+    LDA.B #ReceivedItemFrom>>16 ; Switch bank
+    PHA
+    PLB
+    LDY.W #ReceivedItemFrom
     JSL PrintOsdStringFromBankX
+    PLB ; restore bank
     BRK #$9E ; Play Item Get sound
     BRA .end
 .nothing:
     SEP #$20
     PHB
-    LDA.B #NothingReceived>>16 ; Switch bank
+    LDA.B #ReceivedNothingFrom>>16 ; Switch bank
     PHA
     PLB
-    LDY.W #NothingReceived 
+    LDY.W #ReceivedNothingFrom
     JSL PrintOsdStringFromBankX
     PLB ; restore bank
     BRA .end
@@ -123,8 +130,13 @@ Receive:
     LDA #$0010 ; UpdateHud?
     TSB $0332
     SEP #$20
-    LDY #$E246 ; Text Pointer "Hero found <amount> GEMs"
+    PHB
+    LDA.B #ReceivedGemsFrom>>16 ; Switch bank
+    PHA
+    PLB
+    LDY.W #ReceivedGemsFrom
     JSL PrintOsdStringFromBankX
+    PLB ; restore bank
     BRK #$8D ; Play Gem-get sound
     BRA .end
 .exp:
@@ -134,10 +146,10 @@ Receive:
     STA $03C8 ; Used by the print routine to load Gems/Exp Amount
     SEP #$20
     PHB
-    LDA.B #ExpReceived>>16 ; Switch bank
+    LDA.B #ReceivedExpFrom>>16 ; Switch bank
     PHA
     PLB
-    LDY.W #ExpReceived 
+    LDY.W #ReceivedExpFrom
     JSL PrintOsdStringFromBankX
     PLB ; restore bank
     BRA .end
@@ -150,6 +162,10 @@ Receive:
     TAY ; Lair ID in Y
     ASL #5
     TAX ; Lair index in X
+    ; TODO: finish the print, make sure any important registers get saved/restored.
+    ;LDA $BA16,X ; Load NPC Name index from lair data field 09
+    ;STA $03C8 ; Used by the print routine to load npc name
+    ;STZ $03C9 ; Second byte unused
     SEP #$20
     JSL CheckForRoof
     JSL $028C75

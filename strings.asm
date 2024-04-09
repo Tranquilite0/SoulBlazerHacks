@@ -1,14 +1,10 @@
 ; New strings
 
-PrintItemReceivedShort:
-db !Text_Start,!Text_HeroName," ",!Dict_received,!Text_CR
 PrintItemNameShort:
 db !Text_YellowStyle,!Text_TableLookup
 dw ItemNameTable,TableLookupIndex
 db !Text_EndStyle,!Text_Break
 
-PrintRevivableNpcNameReceivedShort:
-db !Text_Start,!Text_HeroName," ",!Dict_received,!Text_CR
 PrintRevivableNpcNameShort:
 db !Text_YellowStyle,!Text_TableLookup
 dw NpcNamePointerTable,TableLookupIndex
@@ -48,3 +44,30 @@ dw SendItemName, NullIndex
 db !Text_EndStyle, !Text_CR, !Dict_to, !Text_YellowStyle,!Text_TableLookup
 dw SendAddressee, NullIndex
 db !Text_EndStyle, ".",!Text_EndText12
+
+ReceivedItemFrom:
+db !Text_Start,!Text_HeroName," ",!Dict_received,!Text_CR,!Text_YellowStyle,!Text_TableLookup
+dw ItemNameTable,TableLookupIndex
+db !Text_EndStyle
+ReceivedFrom:
+db !Text_CR,!Dict_from,!Text_YellowStyle,!Text_TableLookup
+dw ReceiveSender, NullIndex
+db !Text_EndStyle, ".",!Text_EndText12
+
+ReceivedRevivableNpcFrom:
+db !Text_YellowStyle,!Text_TableLookup
+dw NpcNamePointerTable,TableLookupIndex
+db !Text_EndStyle,!Text_ChangeStreamPtr
+dw ReceivedFrom
+
+ReceivedExpFrom:
+db !Text_Start,!Text_HeroName," ",!Dict_received,!Text_CR,!Text_YellowStyle,!Text_PrintDecimal4," EXP",!Text_EndStyle,!Text_ChangeStreamPtr
+dw ReceivedFrom
+
+ReceivedGemsFrom:
+db !Text_Start,!Text_HeroName," ",!Dict_received,!Text_CR,!Text_YellowStyle,!Text_PrintDecimal4," GEMs",!Text_EndStyle,!Text_ChangeStreamPtr
+dw ReceivedFrom
+
+ReceivedNothingFrom:
+db !Text_Start,!Text_HeroName,!Dict_received,!Text_CR,!Text_YellowStyle," Nothing",!Text_EndStyle,!Text_ChangeStreamPtr
+dw ReceivedFrom
