@@ -82,8 +82,8 @@ DecoupleLairReward:
     BRL .lair
 .regularItem:
     ; Give regular item
-    STA $03C8 ; Used by the print routine to load item name
-    STZ $03C9 ; Second byte unused
+    STA TableLookupIndex ; Used by the print routine to load item name
+    STZ TableLookupIndex+1 ; Second byte unused
     JSL $02A0F9 ; GiveItem
     LDY #$E216 ; String pointer "Hero received <item>"
     JSL PrintOsdStringFromBankX
@@ -104,8 +104,8 @@ DecoupleLairReward:
     JML $028CFD ; Play lair closed sound and finish animating lair closing
 .gems:
     REP #$20
-    LDA.W $BA26,X ; Load Gem amount from lair field $18-$19 
-    STA $03C8 ; Used by the print routine to load Gems/Exp Amount
+    LDA $BA26,X ; Load Gem amount from lair field $18-$19 
+    STA TableLookupIndex ; Used by the print routine to load Gems/Exp Amount
     JSL $04F6A5 ; GiveGems
     LDA #$0010 ; Unsure what this and the next instruction does...
     TSB $0332
@@ -120,7 +120,7 @@ DecoupleLairReward:
     REP #$20
     LDA.W $BA26,X ; Load Exp amount from lair field $18-$19 
     STA $7E043D ; Address that stores EXP to recieve.
-    STA $03C8 ; Used by the print routine to load Gems/Exp Amount
+    STA TableLookupIndex ; Used by the print routine to load Gems/Exp Amount
     SEP #$20
     PHB
     LDA.B #ExpReceived>>16 ; Switch bank

@@ -41,8 +41,8 @@ GiveNpcReward:
     CMP #!RemoteItem
     BEQ .remoteItem
     ; Give regular item
-    STA $03C8 ; Used by the print routine to load item name
-    STZ $03C9 ; Second byte unused
+    STA TableLookupIndex ; Used by the print routine to load item name
+    STZ TableLookupIndex+1 ; Second byte unused
     JSL $02A0F9 ; GiveItem
     LDY #$E216 ; String pointer "<Hero> received <item>"
     JSL PrintOsdStringFromBankX
@@ -61,7 +61,7 @@ GiveNpcReward:
 .gems:
     REP #$20
     LDA.L NpcRewardTable.Operand,X
-    STA $03C8 ; Used by the print routine to load Gems/Exp Amount
+    STA TableLookupIndex ; Used by the print routine to load Gems/Exp Amount
     JSL $04F6A5 ; GiveGems
     LDA #$0010 ; UpdateHud?
     TSB $0332
@@ -74,7 +74,7 @@ GiveNpcReward:
     REP #$20
     LDA.L NpcRewardTable.Operand,X
     STA $7E043D ; Address that stores EXP to recieve.
-    STA $03C8 ; Used by the print routine to load Gems/Exp Amount
+    STA TableLookupIndex ; Used by the print routine to load Gems/Exp Amount
     SEP #$20
     PHB
     LDA.B #ExpReceived>>16 ; Switch bank
@@ -123,33 +123,37 @@ PrintNpcReward:
     BEQ .exp
     CMP #!LairRelease
     BEQ .lair
+CMP #!RemoteItem
+    BNE +
+    BRL .remoteItem
++
     ; Print regular item
-    STA $03C8 ; Used by the print routine to load item name
-    STZ $03C9 ; Second byte unused
+    STA TableLookupIndex ; Used by the print routine to load item name
+    STZ TableLookupIndex+1 ; Second byte unused
     LDY.W #PrintItemNameShort
     LDA.B #PrintItemNameShort>>16 ; Load bank to switch to
     BRA .end
-.nothing
+.nothing:
     LDY.W #PrintNothingShort
     LDA.B #PrintNothingShort>>16 ; Load bank to switch to
     BRA .end
 .gems:
     REP #$20
     LDA.L NpcRewardTable.Operand,X
-    STA $03C8 ; Used by the print routine to load Gems/Exp Amount
+    STA TableLookupIndex ; Used by the print routine to load Gems/Exp Amount
     SEP #$20
     LDY.W #PrintGemsShort
     LDA.B #PrintGemsShort>>16 ; Load bank to switch to
     BRA .end
-.exp
+.exp:
     REP #$20
     LDA.L NpcRewardTable.Operand,X
-    STA $03C8 ; Used by the print routine to load Gems/Exp Amount
+    STA TableLookupIndex ; Used by the print routine to load Gems/Exp Amount
     SEP #$20
     LDY.W #PrintExpShort
     LDA.B #PrintExpShort>>16 ; Load bank to switch to
     BRA .end
-.lair
+.lair:
     ; TODO: I think this may have stopped working when i switched to asar 1.9. fix.
     REP #$20
     LDA.L NpcRewardTable.Operand,X ;
@@ -157,10 +161,17 @@ PrintNpcReward:
     TAX ; Lair Index in X
     SEP #$20
     LDA $BA16,X ; Load NPC Name index from lair data field 09
-    STA $03C8 ; Used by the print routine to load npc name
-    STZ $03C9 ; Second byte unused
+    STA TableLookupIndex ; Used by the print routine to load npc name
+    STZ TableLookupIndex+1 ; Second byte unused
     LDY.W #PrintRevivableNpcNameShort
     LDA.B #PrintRevivableNpcNameShort>>16 ; Load bank to switch to
+.remoteItem:
+    REP #$20
+    LDA.L NpcRewardTable.Operand,X
+    STA TableLookupIndex ; Used by the print routine index into AP Icons table
+    SEP #$20
+    LDY.W #RemoteItemShort
+    LDA.B #RemoteItemShort>>16 ; Load bank to switch to
 .end:
     PHA ; Switch Bank
     PLB

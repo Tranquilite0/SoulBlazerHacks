@@ -72,7 +72,6 @@ Send:
     SEP #$20
     RTL
 
-; TODO: Also print the sender. Still trying to figure out how best to handle these text boxes.
 Receive:
     LDA ReceiveStruct.Status
     BNE +
@@ -100,8 +99,8 @@ Receive:
     BNE +
     BRL .remoteItem
 +
-    STA $03C8 ; Used by the print routine to load item name
-    STZ $03C9 ; Second byte unused
+    STA TableLookupIndex ; Used by the print routine to load item name
+    STZ TableLookupIndex+1 ; Second byte unused
     JSL $02A0F9 ; GiveItem
     PHB
     LDA.B #ReceivedItemFrom>>16 ; Switch bank
@@ -111,7 +110,7 @@ Receive:
     JSL PrintOsdStringFromBankX
     PLB ; restore bank
     BRK #$9E ; Play Item Get sound
-    BRA .end
+    BRL .end
 .nothing:
     SEP #$20
     PHB
@@ -125,7 +124,7 @@ Receive:
 .gems:
     REP #$20
     LDA ReceiveStruct.Operand
-    STA $03C8 ; Used by the print routine to load Gems/Exp Amount
+    STA TableLookupIndex ; Used by the print routine to load Gems/Exp Amount
     JSL $04F6A5 ; GiveGems
     LDA #$0010 ; UpdateHud?
     TSB $0332
@@ -143,7 +142,7 @@ Receive:
     REP #$20
     LDA ReceiveStruct.Operand
     STA $7E043D ; Address that stores EXP to recieve.
-    STA $03C8 ; Used by the print routine to load Gems/Exp Amount
+    STA TableLookupIndex ; Used by the print routine to load Gems/Exp Amount
     SEP #$20
     PHB
     LDA.B #ReceivedExpFrom>>16 ; Switch bank
@@ -154,7 +153,6 @@ Receive:
     PLB ; restore bank
     BRA .end
 .lairReward:
-    ; TODO: also print NPC name so that player knows who sent them the thing
     LDA #$02
     STA NeedsImpassibleCheck ; Check for impassable terrain on return.
     REP #$20
@@ -162,11 +160,21 @@ Receive:
     TAY ; Lair ID in Y
     ASL #5
     TAX ; Lair index in X
-    ; TODO: finish the print, make sure any important registers get saved/restored.
-    ;LDA $BA16,X ; Load NPC Name index from lair data field 09
-    ;STA $03C8 ; Used by the print routine to load npc name
-    ;STZ $03C9 ; Second byte unused
     SEP #$20
+    LDA $BA16,X ; Load NPC Name index from lair data field 09
+    STA TableLookupIndex ; Used by the print routine to load npc name
+    STZ TableLookupIndex+1 ; Second byte unused
+    PHY
+    PHX
+    PHB
+    LDA.B #ReceivedRevivableNpcFrom>>16 ; Switch bank
+    PHA
+    PLB
+    LDY.W #ReceivedRevivableNpcFrom
+    JSL PrintOsdStringFromBankX
+    PLB
+    PLX
+    PLY
     JSL CheckForRoof
     JSL $028C75
 .remoteItem:

@@ -21,7 +21,7 @@ ExtendChestReward:
     REP #$20
     LDA $A9E2,X ; Exp amount from chest quantity field.
     STA $7E043D ; Address that stores EXP to recieve.
-    STA $03C8 ; Used by the print routine to load Gems/Exp Amount
+    STA TableLookupIndex ; Used by the print routine to load Gems/Exp Amount
     SEP #$20
     PHB
     LDA.B #ExpReceived>>16 ; Switch bank

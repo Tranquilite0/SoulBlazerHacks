@@ -119,7 +119,44 @@ org $1AFE98
 ;04ED9E  6B             RTL
 ;                     ----------------
 
-;TODO: recent QOL improvements from randoblazer such as double transition effect speed and enemy spawn animation speed.
+; QOL improvements ported over from randoblazer
+; Double screen transition effect speed
+org $04F894
+    NOP #4
+
+; Enemy spawn animation speed
+; These values affect the explosion animation that happens when enemies spawn in
+; Default values are 6, 6, 6, 5
+; Lowering them means enemy spawns in faster.
+; Does not affect multispawn spawn rates.
+; They still get iframes after this
+; This also makes other explosion animations run faster
+org $0E8022
+    db $02
+org $0E802A
+    db $02
+org $0E8032
+    db $02
+org $0E803A
+    db $01
+
+; This value controls how long the xp value hangs after finishing an enemy
+; Default is 16. Lowering it speeds up single spawn lairs
+org $00AB55
+    db $01
+
+; This makes death animation faster
+org $0E8138
+    db $01
+org $0E8140
+    db $01
+org $0E8148
+    db $01
+org $0E8150
+    db $01
+org $0E8158
+    db $01
+
 
 ; Move the dissapearing chest
 ; Move the Y location of chest in chest data table
@@ -128,9 +165,15 @@ org $1AB51
 
 ; Edit Map arrengement data to move chest tile
 ; Its compressed and bruteforcing a small patch to the data stream to put the chest where we want seems tricky
-; Instead just include a recompressed version of the whole segment.
+; Instead just include a recompressed version of the whole segment
 org $1DDE60
     incbin "data/maparrangement_0EDE60_mod_comp.bin"
+
+; Font modifications
+; Its all commpressed so individual edits are not really possible
+; so include a recompressed version of the modified font data stream
+org $1791B8
+    incbin "data/font_mod_comp.bin"
 
 ;-------------------------------------------------;
 

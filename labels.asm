@@ -194,8 +194,13 @@ endmacro
 !Text_Wait              = $12 ; Waits for user input and then continues.
 !Text_ChangeStreamPtr   = $13 ; Takes 1 word argument which becomes the new string stream pointer.
 
+
 ; For the most part, other character codes will line up with ascii, but there are some differences 
 ; and a bunch of non-printing code points are used for various text glyphs.
+
+; Char codes $16 through $18 were unused and repurposed to be the Archipelago Icon
+!Text_APIcon          = $16,$17
+!Text_APIconUpArrow   = $16,$18
 
 ; Common Text Processing combinations
 !Text_YellowStyle     = $03,$24 ; Switch to printing yellow text.
@@ -204,6 +209,8 @@ endmacro
 !Text_CleanUpAndBreak = $08,$08,$04,$0C ; Undraw textbox and break without waiting.
 !Text_HeroName        = $02,$02 ; Prints the character name.
 !Text_PrintDecimal4   = $06,$04,$C8,$03 ; Print 4 decimal digits from the usual location.
+
+
 
 ; Text dictionary terms. All of these also end with a space character, so using punctuation means you can't use the dictionary.
 !Dict_All        = $80
