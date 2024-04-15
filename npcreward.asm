@@ -123,7 +123,7 @@ PrintNpcReward:
     BEQ .exp
     CMP #!LairRelease
     BEQ .lair
-CMP #!RemoteItem
+    CMP #!RemoteItem
     BNE +
     BRL .remoteItem
 +
@@ -154,17 +154,17 @@ CMP #!RemoteItem
     LDA.B #PrintExpShort>>16 ; Load bank to switch to
     BRA .end
 .lair:
-    ; TODO: I think this may have stopped working when i switched to asar 1.9. fix.
     REP #$20
     LDA.L NpcRewardTable.Operand,X ;
     ASL #5
     TAX ; Lair Index in X
     SEP #$20
-    LDA $BA16,X ; Load NPC Name index from lair data field 09
+    LDA.L $01BA16,X ; Load NPC Name index from lair data field 09
     STA TableLookupIndex ; Used by the print routine to load npc name
     STZ TableLookupIndex+1 ; Second byte unused
     LDY.W #PrintRevivableNpcNameShort
     LDA.B #PrintRevivableNpcNameShort>>16 ; Load bank to switch to
+    BRA .end
 .remoteItem:
     REP #$20
     LDA.L NpcRewardTable.Operand,X
