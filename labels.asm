@@ -89,7 +89,11 @@ RoofLairTemp = $7E1D90 ; Temporary backup of RoofLair struct
 TempRollbackDataIndex = $7E1D9A ; Temporary backup of RoofRollback.DataIndex
 NeedsRollback = $7E1D9C ; 0 if roof rollback not needed, otherwise holds the number of screen transitions before fix is applied.
 
-NeedsImpassibleCheck = $7E1D9D ; 0 if no check needed, otherwise holds the number of screen transitions before check applied.
+; 0 if no check needed, otherwise holds the number of screen transitions before check applied.
+NeedsImpassibleCheck = $7E1D9D 
+
+; Set to non-zero value to disable checking for messages from the server.
+DisableCommunication = $7E1D9E
 
 ; Holds the current state of each lair. Either number of monsters remaining or sealed/sealing state.
 LairStateTable = $7F0203
@@ -142,6 +146,57 @@ CalcPassableMapOffset = $04F2B8
 macro CopShowText(textPtr)
     COP #$01
     dw <textPtr>
+endmacro
+
+macro CopLoopStart(times)
+    COP #$03
+    db <times>
+endmacro
+
+macro CopLoopEnd()
+    COP #$04
+endmacro
+
+macro CopWaitForEventFlagToBeSet(eventId)
+    assert <eventId>&$FF < 8, "Second byte must be less than 8"
+    assert <eventId> < $8000, "EventId must be less than $8000"
+    COP #$05
+    dw <eventId>
+endmacro
+
+macro CopJumpIfEventFlagIsUnset(eventId, addr)
+    assert <eventId>&$FF < 8, "Second byte must be less than 8"
+    assert <eventId> < $8000, "EventId must be less than $8000"
+    COP #$07
+    dw <eventId>
+    dw <addr>
+endmacro
+
+macro CopJumpIfEventFlagIsSet(eventId, addr)
+    assert <eventId>&$FF < 8, "Second byte must be less than 8"
+    assert <eventId> < $8000, "EventId must be less than $8000"
+    COP #$07
+    dw <eventId>|$8000
+    dw <addr>
+endmacro
+
+macro CopSetEventFlag(eventId)
+    assert <eventId>&$FF < 8, "Second byte must be less than 8"
+    assert <eventId> < $8000, "EventId must be less than $8000"
+    COP #$09
+    dw <eventId>|$8000
+endmacro
+
+macro CopClearEventFlag(eventId)
+    assert <eventId>&$FF < 8, "Second byte must be less than 8"
+    assert <eventId> < $8000, "EventId must be less than $8000"
+    COP #$09
+    dw <eventId>
+endmacro
+
+macro CopRemoveItem(itemId)
+    COP #$0B
+    db <itemId>
 endmacro
 
 macro CopTeleportPlayerToMap(map, facing, x, y)

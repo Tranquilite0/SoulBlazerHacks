@@ -2,7 +2,7 @@
 ; Used for Multiworld/Archipelago integration
 
 ; Use some SRAM-backed WRAM from the unused secton of LairReleaseTable Shadow copy.
-; Used
+; Used to keep track of the number of items recieved from the server
 ReceiveCount = $7E1AD3
 
 ; According to hellow554, ram addresses $7E1E00 through $7E1F00 are unused
@@ -39,8 +39,11 @@ endstruct
 ; New code section.
 MainHook:
     JSL $0298FC ; Original Code
+    LDA DisableCommunication
+    BNE +
     JSL Send
     JSL Receive
++
     RTL
 
 Send:

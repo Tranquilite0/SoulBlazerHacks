@@ -11,17 +11,56 @@ org $0484DD
     %CopJumpIfNpcRewardNotObtained(!NPC_MountainKing, $84E7)
 
 ; Check for NPC Reward instead of vanilla reward
-org $048588
-    %CopJumpIfNpcRewardNotObtained(!NPC_MountainKing, $858F)
-
-; Check for NPC Reward instead of vanilla reward
 org $048633
     %CopJumpIfNpcRewardNotObtained(!NPC_MountainKing, $863D)
 
-; Give NPC Reward
-org $04859D
-%CopGiveNpcReward(!NPC_MountainKing)
-NOP #6
+; Change entrypoint after cutscene teleport from Deathtoll's Lair
+org $048577
+    %CopJumpIfEventFlagIsSet($0A01, MountainKingNewEntryPoint)
+
+; Give NPC Reward. To prevent NPC rewards from breaking the cutscene and breaking ability to finish
+; the game, the item send needs to be moved to the end of the script. Rather than do weird branching,
+; we will just rewrite this portion of the script.
+
+org $048588
+    ; Check for NPC Reward instead of vanilla reward
+    %CopJumpIfNpcRewardNotObtained(!NPC_MountainKing, +)
+    BRA $0485EF
++
+    %CopWaitForEventFlagToBeSet($0004)
+    ; This script can still be interupted by a remote item, but only at the very start, which is good enough I hope.
+    INC.W DisableCommunication
+    LDA #$2F80  ; Unsure what this is for. Might be controller input related.
+    TSB $0326
+    %CopWaitForEventFlagToBeSet($0005)
+    %CopLoopStart($3D)
+    %CopLoopEnd()
+    %CopShowText($892A)
+    ; Pretty sure this is the flag that opens Deathtoll's Lair
+    %CopSetEventFlag($0A00)
+    ; Temporary. Used to reenter the script after teleport.
+    %CopSetEventFlag($0A01)
+    LDA #$0020
+    STA $03B4 ; Unsure what this address is for. Worth investigating since it happens before a teleport.
+    %CopTeleportPlayerToMap($0314, $01, $00F8, $0128)
+    COP #$91
+    RTL
+MountainKingNewEntryPoint:
+    LDA #$2F80 ; Unsure what this is for. Might be controller input related.
+    TSB $0326
+    %CopClearEventFlag($0A01)
+    %CopLoopStart($29)
+    %CopLoopEnd()
+    %CopShowText($89F2)
+    ; We have delayed these til the end to prevent NPC releases from breaking the cutscene.
+    ; Remote sends can still interupt, but by saving these til the last means you can just
+    ; start the cutscene over.
+    STZ.W DisableCommunication
+    %CopGiveNpcReward(!NPC_MountainKing)
+    %CopRemoveItem(!RedHotMirror)
+    %CopRemoveItem(!RedHotBall)
+    %CopRemoveItem(!RedHotStick)
+    assert pc() == $0485E5
 
 ;Give phoenix
 ;04859D  02 01          COP #$01
@@ -83,7 +122,7 @@ NOP #6
 ;048666               --------data--------
 ;048666  00           .db $00
 ;048666               ----------------
-;048667  02 09          COP #$09
+;048667  02 09          COP #$09 ; Which flag is this?
 ;048669               --------data--------
 ;048669  00 00        .db $04 $80
 ;04866A               ----------------
