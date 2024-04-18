@@ -156,8 +156,7 @@ Receive:
     PLB ; restore bank
     BRA .end
 .lairReward:
-    LDA #$02
-    STA NeedsImpassibleCheck ; Check for impassable terrain on return.
+    JSL IsAntiStuckNeeded
     REP #$20
     LDA ReceiveStruct.Operand ; Operand is Lair ID
     TAY ; Lair ID in Y
@@ -191,8 +190,7 @@ Receive:
     SEP #$20
     STZ ReceiveStruct.Increment
 +
-    STZ ReceiveStruct.Status ; Finished processing request, but wait until next main loop to become ready to recieve.
-    
+    STZ ReceiveStruct.Status ; Finished processing request, but wait until next main loop to become ready to receive.
     RTL
 
 

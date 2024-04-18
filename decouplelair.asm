@@ -35,6 +35,7 @@ StoreLairDataPreserveFlag:
     STA LairStateTable,X ; Original Code
     RTL
 
+
 ;Check if the current Lair index is the currently sealing lair id
 CheckForSealingLair:
     CPX $0405
@@ -45,6 +46,7 @@ CheckForSealingLair:
     LDA #$80 ; Add back in the lair sealed flag for the purpose of the next branch
     ORA LairStateTable,X
     RTL
+
 
 ; Decouple Lair reward by making it so that the lair cleared is not necessarily the lair released
 ; Uses Lair struct fields 18,19,1A to determine what reward to give (so randomizers only need to modify those fields now)
@@ -101,6 +103,7 @@ DecoupleLairReward:
     PLB ; restore bank
     JSL CheckBossLair
 .remoteItem: ; Do nothing, let the client figure out what it is and who it is for and send a message.
+    JSL CheckBossLair
     JML $028CFD ; Play lair closed sound and finish animating lair closing
 .gems:
     REP #$20
@@ -198,30 +201,53 @@ ApplyRoofFix:
     RTL
 
 
-; Checks for impassible terrain after releasing an NPC
-; If terrain became impassable, warp to first door entry for map.
-; TODO: there are still a handful of places where you can get stuck.
-CheckImpassible:
+; Determines if Anti-Stuck protection should trigger.
+; For now just trigger it if you are on a town map.
+; TODO: Check the Release area rect and only unstuck if you are in them.
+; TODO2: Redirect return address instead of the current hook.
+IsAntiStuckNeeded:
+    LDA CurrentMapID
+    CMP #$01 ; grass valley
+    BEQ .needsAntiStuck
+    CMP #$15 ; Greenwood
+    BEQ .needsAntiStuck
+    CMP #$29 ; Seabed Sanctuary
+    BEQ .needsAntiStuck
+    CMP #$3D ; Mountain Home
+    BEQ .needsAntiStuck
+    CMP #$51 ; Leo's Lab F1
+    BEQ .needsAntiStuck
+    CMP #$52 ; Leo's Lab F2
+    BEQ .needsAntiStuck
+    CMP #$65 ; Magridd Castle Town
+    BNE .end
+.needsAntiStuck:
+    LDA #$02
+    STA NeedsAntiStuck
+.end:
+    RTL
+
+CheckAntiStuck:
     JSL $0294D0 ; Original code that was replaced (also sets DoorDataPointer)
-    LDA NeedsImpassibleCheck
+    LDA NeedsAntiStuck
     BEQ .end
     DEC
-    STA NeedsImpassibleCheck
+    STA NeedsAntiStuck
     BNE .end
-    REP #$20
-    LDA PlayerPosReal.X
-    STA $16
-    LDA PlayerPosReal.Y
-    SEC
-    SBC #$0010
-    STA $18
-    JSL CalcPassableMapOffset
-    SEP #$20
-    LDA PassableMap,x
-    ;AND #$00FF
-    BEQ .end
-    ; We are stuck now. Fix posision.
-    ;SEP #$20
+    ; Handle Grass Valley special since teleporting to the masters shrine from there retriggers the choose your name cutscene and breaks things
+    LDA CurrentMapID
+    CMP #$01 ; Are we in Grass Valley?
+    BNE +
+    LDA MapNumber
+    STA TeleportMapNumber
+    LDA MapSubNumber
+    STA TeleportMapSubNumber
+    ; Somehow 0,0 coords for Grass Valley seem to work, there might be a hardcoded check in the game somewhere that allows this.
+    LDY #$0000
+    STY TeleportPos.X
+    STY TeleportPos.Y 
+    RTL
++
     ; Teleport to the first entry in the doors table for this map. Usually the master's shrine for the world.
     LDX DoorDataPointer
     LDA $AC9A,X
@@ -235,8 +261,50 @@ CheckImpassible:
     LDY $AC9F,X
     STY TeleportPos.Y
 .end:
-    ;SEP #$20
     RTL
+
+
+; Checks for impassible terrain after releasing an NPC
+; If terrain became impassable, warp to first door entry for map.
+; TODO: there are still a handful of places where you can get stuck.
+; TODO2: This seems to be causing more problems than it fixes.
+;CheckImpassible:
+;    JSL $0294D0 ; Original code that was replaced (also sets DoorDataPointer)
+;    LDA NeedsAntiStuck
+;    BEQ .end
+;    DEC
+;    STA NeedsAntiStuck
+;    BNE .end
+;    REP #$20
+;    LDA PlayerPosReal.X
+;    STA $16
+;    LDA PlayerPosReal.Y
+;    SEC
+;    SBC #$0010
+;    STA $18
+;    JSL CalcPassableMapOffset
+;    SEP #$20
+;    LDA PassableMap,x
+;    ;AND #$00FF
+;    BEQ .end
+;    ; We are stuck now. Fix posision.
+;    ;SEP #$20
+;    ; Teleport to the first entry in the doors table for this map. Usually the master's shrine for the world.
+;    LDX DoorDataPointer
+;    LDA $AC9A,X
+;    STA TeleportMapNumber
+;    LDA $AC9B,X
+;    STA TeleportMapSubNumber
+;    LDA $AC9C,X
+;    STA TeleportPos.Facing
+;    LDY $AC9D,X
+;    STY TeleportPos.X
+;    LDY $AC9F,X
+;    STY TeleportPos.Y
+;.end:
+;    ;SEP #$20
+;    RTL
+
 
 ; Boss lairs close off the exit and require a map reload/teleport to make the exit open again.
 ; I'm not super happy with this solution, but it works which is good enough for now.
@@ -319,6 +387,7 @@ CheckBossLair:
     ;SEP #$20
     ;RTL
 
+
 ; If we release a cutscene NPC on the same map that it gets unlocked on then things will break
 ; This check bypasses that when there is a cutscene NPC (any of the bits in resurrection sequence X/Y coord set)
 SameMapCheckBypass:
@@ -395,11 +464,12 @@ org $009455
 org $00A8E5
     JSL StoreLairDataPreserveFlag
 
+
 ; First hook during map load to do roof rollback
 ; Also hook the method that loads door data for our impassible terain check
 org $04FA70
     JSL ApplyRoofFix
-    JSL CheckImpassible
+    JSL CheckAntiStuck
 
 
 ; Patches Lair Data to add decoupled rewards

@@ -90,7 +90,7 @@ TempRollbackDataIndex = $7E1D9A ; Temporary backup of RoofRollback.DataIndex
 NeedsRollback = $7E1D9C ; 0 if roof rollback not needed, otherwise holds the number of screen transitions before fix is applied.
 
 ; 0 if no check needed, otherwise holds the number of screen transitions before check applied.
-NeedsImpassibleCheck = $7E1D9D 
+NeedsAntiStuck = $7E1D9D 
 
 ; Set to non-zero value to disable checking for messages from the server.
 DisableCommunication = $7E1D9E

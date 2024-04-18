@@ -32,6 +32,14 @@ ExtendChestReward:
     PLB ; restore bank
     RTL
 .lair
+    ; Big Pearl chest will strand you if it is a lair release
+    LDA $A9E0,X ; Chest memory flag index
+    CMP #$18 ; Is this big pearl chest?
+    BNE +
+    LDA #$02
+    STA NeedsAntiStuck
+    ; TODO: hardcode return location to a better spot, or find a way to bring dolphin back?
++
     REP #$20
     LDA $A9E2,X ; Load Lair ID from GemsExp Quantity field.
     TAY ; Lair ID in Y
