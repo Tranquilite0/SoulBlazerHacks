@@ -25,7 +25,7 @@ org $048577
 org $048588
     ; Check for NPC Reward instead of vanilla reward
     %CopJumpIfNpcRewardNotObtained(!NPC_MountainKing, +)
-    BRA $0485EF
+    BRA MountainKingScriptEnd
 +
     %CopWaitForEventFlagToBeSet($0004)
     ; This script can still be interupted by a remote item, but only at the very start, which is good enough I hope.
@@ -62,6 +62,7 @@ MountainKingNewEntryPoint:
     %CopRemoveItem(!RedHotStick)
     assert pc() == $0485E5
 
+MountainKingScriptEnd = $0485EF
 ;Give phoenix
 ;04859D  02 01          COP #$01
 ;04859F               --------data--------

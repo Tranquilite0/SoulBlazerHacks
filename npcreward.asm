@@ -39,7 +39,9 @@ GiveNpcReward:
     CMP #!LairRelease
     BEQ .lair
     CMP #!RemoteItem
-    BEQ .remoteItem
+    BNE +
+    BRL .remoteItem
++
     ; Give regular item
     STA TableLookupIndex ; Used by the print routine to load item name
     STZ TableLookupIndex+1 ; Second byte unused
@@ -85,6 +87,7 @@ GiveNpcReward:
     PLB ; restore bank
     BRA .end
 .lair:
+    JSL NpcAntiStuckChecks
     REP #$20
     LDA.L NpcRewardTable.Operand,X ;
     TAY ; Lair ID in Y
@@ -182,6 +185,20 @@ PrintNpcReward:
     JSL ResumePrintOsdStringFromBankX ; Finish printing rest of string.
     PLP
     RTL
+
+
+; Some NPCs can softlock you if they have an NPC release.
+NpcAntiStuckChecks:
+    TYA
+    ; The pushable tulip will trap you if it has an NPC release.
+    ; TODO: the emblem under chest of drawers tile also brings you back in a solid object, but it is doesn't softlock you. Consider putting in a fix later as time allows.
+    CMP #!NPC_APass
+    BNE +
+    LDA #$02
+    STA NeedsAntiStuck
++
+    RTL
+
 
 ; Expects NPC ID in A
 ; Result in Carry flag.
