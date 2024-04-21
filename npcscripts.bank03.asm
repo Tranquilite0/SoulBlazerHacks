@@ -544,6 +544,16 @@ org $03D816
 ;-------------------------------------------------;
 
 
+;-------------- Mole's Ribbon Chest --------------;
+
+; This chest will show as opened if you have Mole's Ribbon already unless you patch this.
+; TODO: redo the script check chest state rather than item state.
+org $03D9B3
+    db $00
+
+;-------------------------------------------------;
+
+
 ;------------- Shield Bracelet Mole --------------;
 
 ;Change text to remove reference to vanilla reward.
