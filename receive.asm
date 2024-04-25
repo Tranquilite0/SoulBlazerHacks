@@ -1,6 +1,9 @@
 ; Routines for Receiving stuff, from anywhere.
 ; Used for Multiworld/Archipelago integration
 
+; Number of frames to wait before becoming ready.
+!FrameDelay = $03
+
 ; Use some SRAM-backed WRAM from the unused secton of LairReleaseTable Shadow copy.
 ; Used to keep track of the number of items recieved from the server
 ReceiveCount = $7E1AD3
@@ -8,11 +11,12 @@ ReceiveCount = $7E1AD3
 ; According to hellow554, ram addresses $7E1E00 through $7E1F00 are unused
 ; From my own observations, I have found that the US version also doesnt use $7E1DA0 and onward
 ; Writing to this struct is how the multiworld client will control sending things.
+; Client should only write to this struct when Status is in the Ready state
 struct ReceiveStruct $7E1DA0
     ; 0: Uninitialized
-    ; 1: Ready to receive
-    ; 2: Receipt requested by client
-    ; 3+: Receiving
+    ; 1-!FrameDelay-1: Delaying to become ready
+    ; !FrameDelay: Ready
+    ; !FrameDelay+1: Receipt requested by client
     .Status: skip 1
     ; If non-zero, Increment receive counter
     .Increment: skip 1
@@ -26,11 +30,12 @@ endstruct
 
 ; Writing to this struct is how the multiworld client communicates what
 ; was sent when a location containing a remote item is checked.
+; Client should only write to this struct when Status is in the Ready state
 struct SendStruct $7E1DC0
     ; 0: Uninitialized
-    ; 1: Ready to send
-    ; 2: Send notification requested by client
-    ; 3+: Sending
+    ; 1-!FrameDelay-1: Delaying to become ready
+    ; !FrameDelay: Ready
+    ; !FrameDelay+1: Send notification requested by client
     .Status: skip 1
     .ItemName: skip 23
     .Addressee: skip 19
@@ -59,11 +64,16 @@ Send:
     LDA SendStruct.Status
     INC A
     STA SendStruct.Status
-+
-    CMP #$01
-    BNE +
     RTL
 +
+    CMP #!FrameDelay
+    BEQ +  ; In ready state, return without incrementing status.
+    BCS ++ ; Client request received. Process request.
+    INC A  ; Still delaying to become ready, increment status.
+    STA SendStruct.Status
++
+    RTL
+++
     PHB
     LDA.B #SendString>>16 ; Switch bank
     PHA
@@ -71,7 +81,7 @@ Send:
     LDY.W #SendString 
     JSL PrintOsdStringFromBankX
     PLB ; restore bank
-    STZ.W SendStruct.Status ; Finished processing request, but wait until next main loop to become ready to recieve.
+    STZ.W SendStruct.Status ; Finished processing request, but wait !FrameDelay frames to become ready again.
     SEP #$20
     RTL
 
@@ -85,11 +95,16 @@ Receive:
     LDA ReceiveStruct.Status
     INC A
     STA ReceiveStruct.Status
-+
-    CMP #$01
-    BNE +
     RTL
 +
+    CMP #!FrameDelay
+    BEQ +  ; In ready state, return without incrementing status.
+    BCS ++ ; Client request received. Process request.
+    INC A  ; Still delaying to become ready, increment status.
+    STA ReceiveStruct.Status
++
+    RTL
+++
     LDA ReceiveStruct.ID
     BEQ .nothing
     CMP #!Gems
@@ -180,7 +195,7 @@ Receive:
     JSL CheckForRoof
     JSL $028C75
 .remoteItem:
-    ; This shouldnt happen.
+    ; If this happens then the client is malfunctioning.
 .end:
     ; Increment Receive Count if the client requested it.
     LDA ReceiveStruct.Increment
@@ -190,7 +205,7 @@ Receive:
     SEP #$20
     STZ ReceiveStruct.Increment
 +
-    STZ ReceiveStruct.Status ; Finished processing request, but wait until next main loop to become ready to receive.
+    STZ ReceiveStruct.Status ; Finished processing request, but wait !FrameDelay frames to become ready again.
     RTL
 
 
