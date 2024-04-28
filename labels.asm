@@ -9,8 +9,6 @@ org $7E0000 ; My struct definitions cause errors if there isnt an org/freespace 
 ; Argument storage for COP routines.
 CopTemp = $7E0038
 
-
-
 ; These are different from Map IDs.
 MapNumber = $7E0314
 MapSubNumber = $7E0316
@@ -51,6 +49,27 @@ DoorDataPointer = $7E03B2
 
 ; Used by text engine table lookup.
 TableLookupIndex = $7E03C8
+
+; Values that control where you return from after a lair release teleport.
+LairRevealInProgress = $7E03FB
+ReturnMapNumber = $7E03FD
+ReturnMapSubNumber = $7E03FF
+LairIdRevealed = $7E0405
+
+struct ReturnPos $7E0401
+    .X: skip 2
+    .Y: skip 2
+endstruct
+
+LairSealingId = $7E0405
+
+; Selectively stops some button from being read out.
+ButtonMask = $7E0326
+
+; Stops buttons from being read?
+DisableButtonReadout = $7E0474
+
+EventFlags = $7E1A5E
 
 ; ; 64 bytes * 8 bits = 512 possible lairs
 LairReleaseTable = $7E1ADE

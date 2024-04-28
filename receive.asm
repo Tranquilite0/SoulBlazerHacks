@@ -44,8 +44,8 @@ endstruct
 ; New code section.
 MainHook:
     JSL $0298FC ; Original Code
-    LDA DisableCommunication
-    BNE +
+    JSL IsCommunicationBlocked
+    BCS +
     JSL Send
     JSL Receive
 +
@@ -209,6 +209,21 @@ Receive:
     RTL
 
 
+; Checks if communication is blocked. Sets carry flag is communicaion is blocked.
+IsCommunicationBlocked:
+    CLC
+    REP #$20
+    LDA ButtonMask
+    BEQ +
+    SEC
++
+    SEP #$20
+    LDA DisableCommunication ; TODO: I dont think this is needed any more,
+    BEQ +
+    SEC
++
+    ; Put Boss Checks here?
+    RTL
 
 ; Hooks and original rom data overwrite section
 pushpc

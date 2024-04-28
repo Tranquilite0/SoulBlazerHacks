@@ -38,7 +38,7 @@ StoreLairDataPreserveFlag:
 
 ;Check if the current Lair index is the currently sealing lair id
 CheckForSealingLair:
-    CPX $0405
+    CPX LairIdRevealed
     BEQ .isSealingLair
     LDA LairStateTable,X
     RTL
@@ -227,6 +227,7 @@ IsAntiStuckNeeded:
 .end:
     RTL
 
+; TODO: refactor this to instead alter return coords.
 CheckAntiStuck:
     JSL $0294D0 ; Original code that was replaced (also sets DoorDataPointer)
     LDA NeedsAntiStuck
@@ -441,8 +442,7 @@ org $028C7B
 org $028D24
 SameMapCheckBypassHook:
     JSL SameMapCheckBypass
-    NOP ; No-op the code we replaced
-    NOP
+    NOP #2 ; No-op the code we replaced
 
 
 ; Called when loading lair tile data.
@@ -469,7 +469,7 @@ org $00A8E5
 ; Also hook the method that loads door data for our impassible terain check
 org $04FA70
     JSL ApplyRoofFix
-    JSL CheckAntiStuck
+    JSL CheckAntiStuck ; TODO: replace this with more elegant alternative of changing return address.
 
 
 ; Patches Lair Data to add decoupled rewards

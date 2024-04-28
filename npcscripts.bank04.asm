@@ -29,7 +29,8 @@ org $048588
 +
     %CopWaitForEventFlagToBeSet($0004)
     ; This script can still be interupted by a remote item, but only at the very start, which is good enough I hope.
-    INC.W DisableCommunication
+    INC.W DisableCommunication ; Is this still needed?
+    ;NOP #3
     LDA #$2F80  ; Unsure what this is for. Might be controller input related.
     TSB $0326
     %CopWaitForEventFlagToBeSet($0005)

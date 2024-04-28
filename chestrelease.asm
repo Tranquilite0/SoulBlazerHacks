@@ -1,8 +1,6 @@
 ; Routines for decoupling item/lair checks
 ; Modifications to treasure chests
 
-; TODO: sometimes the chest sprite doesn't open. Might have something to do with returning early? Fix.
-
 ; New Code Section
 
 ExtendChestReward:
