@@ -38,7 +38,7 @@ StoreLairDataPreserveFlag:
 
 ;Check if the current Lair index is the currently sealing lair id
 CheckForSealingLair:
-    CPX LairIdRevealed
+    CPX ReturnFromTeleport.LairIdRevealing
     BEQ .isSealingLair
     LDA LairStateTable,X
     RTL
@@ -204,65 +204,105 @@ ApplyRoofFix:
 ; Determines if Anti-Stuck protection should trigger.
 ; For now just trigger it if you are on a town map.
 ; TODO: Check the Release area rect and only unstuck if you are in them.
+; (though some zones like Seabed Sanc have additional problematic positions like the dolphin ferry island)
 ; TODO2: Redirect return address instead of the current hook.
 IsAntiStuckNeeded:
     LDA CurrentMapID
     CMP #$01 ; grass valley
-    BEQ .needsAntiStuck
+    BNE +
+    LDY #$0140
+    STY TeleportOverride.X
+    LDY #$0270
+    STY TeleportOverride.Y
+    BRA .needsAntiStuck
++
     CMP #$15 ; Greenwood
-    BEQ .needsAntiStuck
+    BNE +
+    LDY #$0170
+    STY TeleportOverride.X
+    LDY #$00E0
+    STY TeleportOverride.Y
+    BRA .needsAntiStuck
++
     CMP #$29 ; Seabed Sanctuary
-    BEQ .needsAntiStuck
+    BNE +
+    LDY #$01F8
+    STY TeleportOverride.X
+    LDY #$0200
+    STY TeleportOverride.Y
+    BRA .needsAntiStuck
++
     CMP #$3D ; Mountain Home
-    BEQ .needsAntiStuck
+    BNE +
+    LDY #$0290
+    STY TeleportOverride.X
+    LDY #$0060
+    STY TeleportOverride.Y
+    BRA .needsAntiStuck
++
     CMP #$51 ; Leo's Lab F1
-    BEQ .needsAntiStuck
+    BNE +
+    LDY #$01D0
+    STY TeleportOverride.X
+    LDY #$01A0
+    STY TeleportOverride.Y
+    BRA .needsAntiStuck
++
     CMP #$52 ; Leo's Lab F2
-    BEQ .needsAntiStuck
+    BNE +
+    LDY #$01E0
+    STY TeleportOverride.X
+    LDY #$0060
+    STY TeleportOverride.Y
+    BRA .needsAntiStuck
++
     CMP #$65 ; Magridd Castle Town
     BNE .end
+    LDY #$0340
+    STY TeleportOverride.X
+    LDY #$0070
+    STY TeleportOverride.Y
 .needsAntiStuck:
-    LDA #$02
-    STA NeedsAntiStuck
+    JSL InitTeleportOverrideNoXY
 .end:
     RTL
 
 ; TODO: refactor this to instead alter return coords.
-CheckAntiStuck:
-    JSL $0294D0 ; Original code that was replaced (also sets DoorDataPointer)
-    LDA NeedsAntiStuck
-    BEQ .end
-    DEC
-    STA NeedsAntiStuck
-    BNE .end
-    ; Handle Grass Valley special since teleporting to the masters shrine from there retriggers the choose your name cutscene and breaks things
-    LDA CurrentMapID
-    CMP #$01 ; Are we in Grass Valley?
-    BNE +
-    LDA MapNumber
-    STA TeleportMapNumber
-    LDA MapSubNumber
-    STA TeleportMapSubNumber
-    ; Somehow 0,0 coords for Grass Valley seem to work, there might be a hardcoded check in the game somewhere that allows this.
-    LDY #$0000
-    STY TeleportPos.X
-    STY TeleportPos.Y 
-    RTL
-+
-    ; Teleport to the first entry in the doors table for this map. Usually the master's shrine for the world.
-    LDX DoorDataPointer
-    LDA $AC9A,X
-    STA TeleportMapNumber
-    LDA $AC9B,X
-    STA TeleportMapSubNumber
-    LDA $AC9C,X
-    STA TeleportPos.Facing
-    LDY $AC9D,X
-    STY TeleportPos.X
-    LDY $AC9F,X
-    STY TeleportPos.Y
-.end:
-    RTL
+;CheckAntiStuck:
+;    JSL $0294D0 ; Original code that was replaced (also sets DoorDataPointer)
+;    LDA NeedsAntiStuck
+;    BEQ .end
+;    DEC
+;    STA NeedsAntiStuck
+;    BNE .end
+;    ; Handle Grass Valley special since teleporting to the masters shrine from there retriggers the choose your name cutscene and breaks things
+;    LDA CurrentMapID
+;    CMP #$01 ; Are we in Grass Valley?
+;    BNE +
+;    LDA MapNumber
+;    STA TeleportMapNumber
+;    LDA MapSubNumber
+;    STA TeleportMapSubNumber
+;    ; Somehow 0,0 coords for Grass Valley seem to work, there might be a hardcoded check in the game somewhere that allows this.
+;    LDY #$0000
+;    STY TeleportPos.X
+;    STY TeleportPos.Y 
+;    RTL
+;+
+;    ; Teleport to the first entry in the doors table for this map. Usually the master's shrine for the world.
+;    LDX DoorDataPointer
+;    LDA $AC9A,X
+;    STA TeleportMapNumber
+;    LDA $AC9B,X
+;    STA TeleportMapSubNumber
+;    LDA $AC9C,X
+;    STA TeleportPos.Facing
+;    LDY $AC9D,X
+;    STY TeleportPos.X
+;    LDY $AC9F,X
+;    STY TeleportPos.Y
+;.end:
+;    RTL
 
 
 ; Checks for impassible terrain after releasing an NPC
@@ -405,6 +445,43 @@ SameMapCheckBypass:
     RTL
 
 
+; Check if we should override the teleport return loaction after releasing a lair.
+CheckForOverride:
+    LDA TeleportOverride.ShouldOverride
+    BEQ .end
+    LDA TeleportOverride.MapNumber
+    STA ReturnFromTeleport.MapNumber
+    LDA TeleportOverride.MapSubNumber
+    STA ReturnFromTeleport.MapSubNumber
+    REP #$20
+    LDA TeleportOverride.X
+    STA ReturnFromTeleport.X
+    LDA TeleportOverride.Y
+    STA ReturnFromTeleport.Y
+    SEP #$20
+    STZ TeleportOverride.ShouldOverride
+.end
+    ; Code that was replaced by the hook
+    INC ReturnFromTeleport.LairRevealInProgress
+    RTL
+
+
+; Initializes Teleport Override Map/Position to current location.
+InitTeleportOverride:
+    REP #$20
+    LDA PlayerPosReal.X
+    STA TeleportOverride.X
+    LDA PlayerPosReal.Y
+    STA TeleportOverride.Y
+    SEP #$20
+InitTeleportOverrideNoXY:
+    LDA MapNumber
+    STA TeleportOverride.MapNumber
+    LDA MapSubNumber
+    STA TeleportOverride.MapSubNumber
+    INC TeleportOverride.ShouldOverride
+    RTL
+
 ; Hooks and original rom data overwrite section
 pushpc
 
@@ -445,6 +522,10 @@ SameMapCheckBypassHook:
     NOP #2 ; No-op the code we replaced
 
 
+; Hook the end of SealLair to check for overriden return.
+org $028DB9
+    JML CheckForOverride
+
 ; Called when loading lair tile data.
 org $029597
     JSL LoadLairForTileData
@@ -469,7 +550,7 @@ org $00A8E5
 ; Also hook the method that loads door data for our impassible terain check
 org $04FA70
     JSL ApplyRoofFix
-    JSL CheckAntiStuck ; TODO: replace this with more elegant alternative of changing return address.
+    ;JSL CheckAntiStuck ; TODO: replace this with more elegant alternative of changing return address.
 
 
 ; Patches Lair Data to add decoupled rewards

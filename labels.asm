@@ -51,22 +51,19 @@ DoorDataPointer = $7E03B2
 TableLookupIndex = $7E03C8
 
 ; Values that control where you return from after a lair release teleport.
-LairRevealInProgress = $7E03FB
-ReturnMapNumber = $7E03FD
-ReturnMapSubNumber = $7E03FF
-LairIdRevealed = $7E0405
-
-struct ReturnPos $7E0401
+struct ReturnFromTeleport $7E03FB
+    .LairRevealInProgress: skip 2
+    .MapNumber: skip 2
+    .MapSubNumber: skip 2
     .X: skip 2
     .Y: skip 2
+    .LairIdRevealing: skip 2
 endstruct
 
-LairSealingId = $7E0405
-
-; Selectively stops some button from being read out.
+; Selectively stops some buttons from being read out.
 ButtonMask = $7E0326
 
-; Stops buttons from being read?
+; Stops all buttons from being read?
 DisableButtonReadout = $7E0474
 
 EventFlags = $7E1A5E
@@ -109,10 +106,19 @@ TempRollbackDataIndex = $7E1D9A ; Temporary backup of RoofRollback.DataIndex
 NeedsRollback = $7E1D9C ; 0 if roof rollback not needed, otherwise holds the number of screen transitions before fix is applied.
 
 ; 0 if no check needed, otherwise holds the number of screen transitions before check applied.
+; TODO: this address can be recycled for something else now.
 NeedsAntiStuck = $7E1D9D 
 
 ; Set to non-zero value to disable checking for messages from the server.
 DisableCommunication = $7E1D9E
+
+struct TeleportOverride $7E1E00
+    .ShouldOverride: skip 2
+    .MapNumber: skip 2
+    .MapSubNumber: skip 2
+    .X: skip 2
+    .Y: skip 2
+endstruct
 
 ; Holds the current state of each lair. Either number of monsters remaining or sealed/sealing state.
 LairStateTable = $7F0203

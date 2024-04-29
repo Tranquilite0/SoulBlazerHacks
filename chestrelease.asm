@@ -34,9 +34,12 @@ ExtendChestReward:
     LDA $A9E0,X ; Chest memory flag index
     CMP #$18 ; Is this big pearl chest?
     BNE +
-    LDA #$02
-    STA NeedsAntiStuck
-    ; TODO: hardcode return location to a better spot, or find a way to bring dolphin back?
+    ; Override the player's return location to prevent them from being stranded.
+    JSL InitTeleportOverride
+    LDY #$0030
+    STY TeleportOverride.X
+    LDY #$0340
+    STY TeleportOverride.Y
 +
     REP #$20
     LDA $A9E2,X ; Load Lair ID from GemsExp Quantity field.

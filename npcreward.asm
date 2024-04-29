@@ -188,14 +188,18 @@ PrintNpcReward:
 
 
 ; Some NPCs can softlock you if they have an NPC release.
+; TODO: use the new method with overrided return address.
 NpcAntiStuckChecks:
     TYA
     ; The pushable tulip will trap you if it has an NPC release.
     ; TODO: the emblem under chest of drawers tile also brings you back in a solid object, but it is doesn't softlock you. Consider putting in a fix later as time allows.
+    ; Have the Gem Fairy in the swamp put you in a better place too.
     CMP #!NPC_APass
     BNE +
-    LDA #$02
-    STA NeedsAntiStuck
+    JSL InitTeleportOverride
+    ; Move the return position of the player a couple tiles to the right.
+    LDY #$02F0
+    STY TeleportOverride.X
 +
     RTL
 
