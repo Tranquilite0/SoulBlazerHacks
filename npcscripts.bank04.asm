@@ -847,12 +847,15 @@ org $04C111
 
 org $04C981
     %CopJumpIfNpcRewardNotObtained(!NPC_SuperBraceletTile, $C989)
+    ; Lets also give the Queen's reward if the player never got it while the queen was alive.
+    BRL SuperBraceletTileExtension
 
 org $04C997
     %CopGiveNpcReward(!NPC_SuperBraceletTile)
     ; Lets also give the Queen's reward if the player never got it while the queen was alive.
     BRL SuperBraceletTileExtension
-
+    RTL
+    assert pc() <= $04C99E 
 ; Patch text to remove reference to vanilla reward
 org $04CAB6
     db !Text_Start,!Dict_There,!Dict_is,!Dict_something,!Text_CR,"where ",!Dict_the,"Queen ",!Dict_was,!Text_CR,"standing.",!Text_ChangeStreamPtr : dw TextEndStandardBank4
@@ -1200,17 +1203,21 @@ MaidHerbScript:
 
 ; We have a some more free space here, so lets use it for letting you get the Queen's reward on the superbracelet tile if she is already gone.
 SuperBraceletTileExtension:
-    %CopJumpIfNpcRewardNotObtained(!NPC_QueenMagriddVIPCard, +)
-.end
     COP #$91
+    %CopJumpIfNpcRewardNotObtained(!NPC_QueenMagriddVIPCard, +)
+    COP #$86
+    RTL
++
+    ; Have the Queen's item be one tile down to avoid problems on loading back in.
+    %CopJumpIfEntityHasReachedXY($00, $36, $18, +)
     RTL
 +
     %CopShowText(.butWaitTheresMore)
-    ; TODO: This breaks if you release two lairs at once. Figure out a way around that.
     %CopGiveNpcReward(!NPC_QueenMagriddVIPCard)
-    BRA .end
+    COP #$91
+    RTL
 .butWaitTheresMore
-    db !Text_Start,!Dict_There,!Dict_is,!Dict_something,!Text_CR,"else too!",!Text_ChangeStreamPtr : dw TextEndStandardBank4
+    db !Text_Start,!Dict_There,!Dict_is,!Dict_something,!Text_CR,!Dict_here,"too!",!Text_ChangeStreamPtr : dw TextEndStandardBank4
 
 assert pc() <= $04CF49
 ;04CE5A  02 91          COP #$91

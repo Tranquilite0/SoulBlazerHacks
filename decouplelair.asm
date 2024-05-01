@@ -154,7 +154,7 @@ CheckForRoof:
     BIT RoofRollback.RoofState
     BEQ .end
     REP #$20
-    LDX #RoofLair.Map
+    LDX #RoofLair
     LDY #RoofLairTemp
     LDA.W #$0007
     MVN $01,$01
@@ -172,6 +172,7 @@ CheckForRoof:
 
 ; Makes it so that when you teleport back in the roof will still be pulled back.
 ApplyRoofFix:
+    JSL $0295F1 ; Code that was replaced.
     SEP #$20
     LDA NeedsRollback
     BEQ .end
@@ -181,7 +182,7 @@ ApplyRoofFix:
     REP #$20
     PHY ; Unsure if Y state needs to be preserved.
     LDX #RoofLairTemp
-    LDY #RoofLair.Map
+    LDY #RoofLair
     LDA #$0007
     MVN $01,$01
     STZ RoofRollback.RoofState
@@ -194,10 +195,7 @@ ApplyRoofFix:
     SEP #$20
     JSL $0294AE ; The secret sauce that rolls back the roof.
     PLY
-    BRA +
 .end:
-    JSL $029445 ; Original code that was replaced.
-+
     RTL
 
 
@@ -205,8 +203,20 @@ ApplyRoofFix:
 ; For now just trigger it if you are on a town map.
 ; TODO: Check the Release area rect and only unstuck if you are in them.
 ; (though some zones like Seabed Sanc have additional problematic positions like the dolphin ferry island)
-; TODO2: Redirect return address instead of the current hook.
 IsAntiStuckNeeded:
+    ; All of the master's shrines are in Map Number 00 Submaps 01-07
+    LDA MapNumber
+    BNE +
+    LDA MapSubNumber
+    ;BEQ + Dont think we need the submap 00 special case since that map doesn't exist.
+    CMP #$08
+    BCS +
+    LDY #$0070
+    STY TeleportOverride.X
+    LDY #$0050
+    STY TeleportOverride.Y
+    BRA .overrideTeleport
++
     LDA CurrentMapID
     CMP #$01 ; grass valley
     BNE +
@@ -214,7 +224,7 @@ IsAntiStuckNeeded:
     STY TeleportOverride.X
     LDY #$0270
     STY TeleportOverride.Y
-    BRA .needsAntiStuck
+    BRA .overrideTeleport
 +
     CMP #$15 ; Greenwood
     BNE +
@@ -222,7 +232,7 @@ IsAntiStuckNeeded:
     STY TeleportOverride.X
     LDY #$00E0
     STY TeleportOverride.Y
-    BRA .needsAntiStuck
+    BRA .overrideTeleport
 +
     CMP #$29 ; Seabed Sanctuary
     BNE +
@@ -230,7 +240,7 @@ IsAntiStuckNeeded:
     STY TeleportOverride.X
     LDY #$0200
     STY TeleportOverride.Y
-    BRA .needsAntiStuck
+    BRA .overrideTeleport
 +
     CMP #$3D ; Mountain Home
     BNE +
@@ -238,7 +248,7 @@ IsAntiStuckNeeded:
     STY TeleportOverride.X
     LDY #$0060
     STY TeleportOverride.Y
-    BRA .needsAntiStuck
+    BRA .overrideTeleport
 +
     CMP #$51 ; Leo's Lab F1
     BNE +
@@ -246,7 +256,7 @@ IsAntiStuckNeeded:
     STY TeleportOverride.X
     LDY #$01A0
     STY TeleportOverride.Y
-    BRA .needsAntiStuck
+    BRA .overrideTeleport
 +
     CMP #$52 ; Leo's Lab F2
     BNE +
@@ -254,7 +264,7 @@ IsAntiStuckNeeded:
     STY TeleportOverride.X
     LDY #$0060
     STY TeleportOverride.Y
-    BRA .needsAntiStuck
+    BRA .overrideTeleport
 +
     CMP #$65 ; Magridd Castle Town
     BNE .end
@@ -262,94 +272,16 @@ IsAntiStuckNeeded:
     STY TeleportOverride.X
     LDY #$0070
     STY TeleportOverride.Y
-.needsAntiStuck:
+.overrideTeleport:
     JSL InitTeleportOverrideNoXY
 .end:
     RTL
-
-; TODO: refactor this to instead alter return coords.
-;CheckAntiStuck:
-;    JSL $0294D0 ; Original code that was replaced (also sets DoorDataPointer)
-;    LDA NeedsAntiStuck
-;    BEQ .end
-;    DEC
-;    STA NeedsAntiStuck
-;    BNE .end
-;    ; Handle Grass Valley special since teleporting to the masters shrine from there retriggers the choose your name cutscene and breaks things
-;    LDA CurrentMapID
-;    CMP #$01 ; Are we in Grass Valley?
-;    BNE +
-;    LDA MapNumber
-;    STA TeleportMapNumber
-;    LDA MapSubNumber
-;    STA TeleportMapSubNumber
-;    ; Somehow 0,0 coords for Grass Valley seem to work, there might be a hardcoded check in the game somewhere that allows this.
-;    LDY #$0000
-;    STY TeleportPos.X
-;    STY TeleportPos.Y 
-;    RTL
-;+
-;    ; Teleport to the first entry in the doors table for this map. Usually the master's shrine for the world.
-;    LDX DoorDataPointer
-;    LDA $AC9A,X
-;    STA TeleportMapNumber
-;    LDA $AC9B,X
-;    STA TeleportMapSubNumber
-;    LDA $AC9C,X
-;    STA TeleportPos.Facing
-;    LDY $AC9D,X
-;    STY TeleportPos.X
-;    LDY $AC9F,X
-;    STY TeleportPos.Y
-;.end:
-;    RTL
-
-
-; Checks for impassible terrain after releasing an NPC
-; If terrain became impassable, warp to first door entry for map.
-; TODO: there are still a handful of places where you can get stuck.
-; TODO2: This seems to be causing more problems than it fixes.
-;CheckImpassible:
-;    JSL $0294D0 ; Original code that was replaced (also sets DoorDataPointer)
-;    LDA NeedsAntiStuck
-;    BEQ .end
-;    DEC
-;    STA NeedsAntiStuck
-;    BNE .end
-;    REP #$20
-;    LDA PlayerPosReal.X
-;    STA $16
-;    LDA PlayerPosReal.Y
-;    SEC
-;    SBC #$0010
-;    STA $18
-;    JSL CalcPassableMapOffset
-;    SEP #$20
-;    LDA PassableMap,x
-;    ;AND #$00FF
-;    BEQ .end
-;    ; We are stuck now. Fix posision.
-;    ;SEP #$20
-;    ; Teleport to the first entry in the doors table for this map. Usually the master's shrine for the world.
-;    LDX DoorDataPointer
-;    LDA $AC9A,X
-;    STA TeleportMapNumber
-;    LDA $AC9B,X
-;    STA TeleportMapSubNumber
-;    LDA $AC9C,X
-;    STA TeleportPos.Facing
-;    LDY $AC9D,X
-;    STY TeleportPos.X
-;    LDY $AC9F,X
-;    STY TeleportPos.Y
-;.end:
-;    ;SEP #$20
-;    RTL
 
 
 ; Boss lairs close off the exit and require a map reload/teleport to make the exit open again.
 ; I'm not super happy with this solution, but it works which is good enough for now.
 ; TODO: use door data pointer and take first exit instead of hardcoding.
+; TODO: Alternatively figure out how to bounce from map to map and back.
 CheckBossLair:
     LDA CurrentMapID
     CMP #$0C ; Solid Arm
@@ -546,11 +478,9 @@ org $00A8E5
     JSL StoreLairDataPreserveFlag
 
 
-; First hook during map load to do roof rollback
-; Also hook the method that loads door data for our impassible terain check
-org $04FA70
+; Hook during map load to do roof rollback
+org $04FA7C
     JSL ApplyRoofFix
-    ;JSL CheckAntiStuck ; TODO: replace this with more elegant alternative of changing return address.
 
 
 ; Patches Lair Data to add decoupled rewards

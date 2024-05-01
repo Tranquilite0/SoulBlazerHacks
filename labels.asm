@@ -224,6 +224,12 @@ macro CopRemoveItem(itemId)
     db <itemId>
 endmacro
 
+macro CopJumpIfEntityHasReachedXY(npc_id, x, y, target)
+    COP #$0D
+    db <npc_id>, <x>, <y>
+    dw <target>
+endmacro
+
 macro CopTeleportPlayerToMap(map, facing, x, y)
     COP #$10
     dw <map>
