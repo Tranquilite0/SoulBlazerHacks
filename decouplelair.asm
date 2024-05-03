@@ -285,80 +285,21 @@ IsAntiStuckNeeded:
 CheckBossLair:
     LDA CurrentMapID
     CMP #$0C ; Solid Arm
-    BEQ .solidArm
+    BEQ .isBossRoom
     CMP #$22 ; Elemental Statues
-    BEQ .elementalStatues
-    ;CMP #$32 ; Ghost Ship
-    ;BEQ .isBossRoom
+    BEQ .isBossRoom
+    CMP #$32 ; Ghost Ship ; TODO: I think I can undo some of the changes i made to the NPC scripts.
+    BEQ .isBossRoom
     CMP #$44 ; Poseidon
-    BEQ .poseidon
+    BEQ .isBossRoom
     CMP #$59 ; Tin Doll
-    BEQ .tinDoll
+    BEQ .isBossRoom
     ;CMP #$72 ; Demon Bird
     ;BEQ .isBossRoom
     RTL
-.solidArm:
-    LDA #$05
-    STA TeleportMapSubNumber
-    LDA #$00
-    STA TeleportPos.Facing
-    REP #$20
-    LDA #$0078
-    STA TeleportPos.X 
-    LDA #$0050
-    STA TeleportPos.Y
-    SEP #$20
+.isBossRoom
+    JSL BouncePlayer
     RTL
-.elementalStatues:
-    LDA #$09
-    STA TeleportMapSubNumber
-    LDA #$00
-    STA TeleportPos.Facing
-    REP #$20
-    LDA #$0198
-    STA TeleportPos.X 
-    LDA #$0020
-    STA TeleportPos.Y
-    SEP #$20
-    RTL
-.poseidon:
-    LDA #$05
-    STA TeleportMapSubNumber
-    LDA #$00
-    STA TeleportPos.Facing
-    REP #$20
-    LDA #$01A0
-    STA TeleportPos.X 
-    LDA #$0050
-    STA TeleportPos.Y
-    SEP #$20
-    RTL
-.tinDoll:
-    LDA #$03
-    STA TeleportMapSubNumber
-    LDA #$01
-    STA TeleportPos.Facing
-    REP #$20
-    LDA #$0200
-    STA TeleportPos.X 
-    LDA #$01C0
-    STA TeleportPos.Y
-    SEP #$20
-    RTL
-;.isBossRoom
-    ; Teleport to current position to trigger map reload.
-    ; TODO: Unfortunately this doesnt actually reload the map and give us an exit.
-    ;LDA MapSubNumber
-    ;STA TeleportMapSubNumber
-    ;REP #$20
-    ;LDA PlayerPosReal.X
-    ;STA TeleportPos.X 
-    ;LDA PlayerPosReal.Y
-    ;SEC
-    ;SBC #$0010
-    ;STA TeleportPos.Y
-    ;SEP #$20
-    ;RTL
 
 
 ; If we release a cutscene NPC on the same map that it gets unlocked on then things will break
@@ -377,7 +318,7 @@ SameMapCheckBypass:
     RTL
 
 
-; Check if we should override the teleport return loaction after releasing a lair.
+; Check if we should override the teleport return location after releasing a lair.
 CheckForOverride:
     LDA TeleportOverride.ShouldOverride
     BEQ .end
@@ -404,6 +345,10 @@ InitTeleportOverride:
     LDA PlayerPosReal.X
     STA TeleportOverride.X
     LDA PlayerPosReal.Y
+    ; For reasons still unknown to me, teleport positions are 1 tile lower than your 'actual' position.
+    ; Or is it that your actual position 1 tile higher...
+    SEC
+    SBC #$0010
     STA TeleportOverride.Y
     SEP #$20
 InitTeleportOverrideNoXY:
@@ -414,9 +359,43 @@ InitTeleportOverrideNoXY:
     INC TeleportOverride.ShouldOverride
     RTL
 
+
+CheckForBounce:
+    JSL $02B1A2 ; Code that we replaced for our hook
+    LDA ShouldBounce
+    BEQ .end
+    LDA TeleportOverride.MapNumber
+    STA TeleportMapNumber
+    LDA TeleportOverride.MapSubNumber
+    STA TeleportMapSubNumber
+    STZ TeleportFadeout ; Is this useful?
+    REP #$20
+    LDA TeleportOverride.X
+    STA TeleportPos.X
+    LDA TeleportOverride.Y
+    STA TeleportPos.Y
+    SEP #$20
+    STZ ShouldBounce
+    JML MapChanged ; Reload the map.
+.end
+    JML BounceReturn ; Continue with map load.
+
+
+BouncePlayer:
+    INC ShouldBounce
+    JSL InitTeleportOverride
+    STZ TeleportOverride.ShouldOverride
+    LDA #$01
+    STA TeleportMapNumber
+    STA TeleportMapSubNumber
+    RTL
+
 ; Hooks and original rom data overwrite section
 pushpc
 
+org $04F7B8 ;04F7B8  22 A2 B1 02    JSL $02B1A2
+    JML CheckForBounce
+BounceReturn:
 
 ; Called after the lair tile information has been updated, but before the lair has been released.
 org $028C69

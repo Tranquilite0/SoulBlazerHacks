@@ -71,11 +71,16 @@ org $00C1A0
 ;00C1A2  00 00 00 00  .db $B6 $00 $45 $C2
 
 ; Remove the last exploding plank entity.
-org $00C248
-    COP #$82
-    COP #$86
-    RTL
-    NOP #5
+; TODO: no longer needed
+;org $00C248
+;    COP #$82
+;    COP #$86
+;    RTL
+;    NOP #5
+
+; Change exploding plank condition.
+org $00C24C
+    COP #!CopJumpIfLairRewardObtainedId
 
 ;00C248  02 A4          COP #$A4
 ;00C24A  02 16          COP #$16
@@ -83,9 +88,9 @@ org $00C248
 ;00C24E               --------data--------
 ;00C24E  00 00 00 00  .db $B6 $00 $7E $C2
 
-; Also edit underlying tile to not be a hole
-org $1E83A0
-    db $2B
+; Also edit underlying tile to not be a hole ; TODO: no longer needed.
+;org $1E83A0
+;    db $2B
 
 ; Change Airship Lair checks to check lair state, not NPC release state.
 org $04ED80

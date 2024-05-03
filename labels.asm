@@ -82,6 +82,7 @@ PlayerName = $7E1B92
 
 ; $7E1B9B-$7E1C57 ; 188 bytes of apparently unused memory that is also backed up to SRAM.
 ; I should probably be using this instead of the unused parts of the NPC release table.
+; ...But too late.
 
 CurrentMapID = $7E1C6A
 
@@ -105,9 +106,8 @@ RoofLairTemp = $7E1D90 ; Temporary backup of RoofLair struct
 TempRollbackDataIndex = $7E1D9A ; Temporary backup of RoofRollback.DataIndex
 NeedsRollback = $7E1D9C ; 0 if roof rollback not needed, otherwise holds the number of screen transitions before fix is applied.
 
-; 0 if no check needed, otherwise holds the number of screen transitions before check applied.
-; TODO: this address can be recycled for something else now.
-NeedsAntiStuck = $7E1D9D 
+; Set to Nonzero value to cause the next screentransition to send the player to the location in TeleportOverride.
+ShouldBounce = $7E1D9D
 
 ; Set to non-zero value to disable checking for messages from the server.
 DisableCommunication = $7E1D9E
@@ -166,6 +166,8 @@ CheckIfBitIsSet = $04F3A2
 ; Expects 16bit accumulator
 CalcPassableMapOffset = $04F2B8
 
+; Called during main game loop to check if the map has changed and load new map.
+MapChanged = $04F781
 
 ; TODO: move these macros somewhere else?
 macro CopShowText(textPtr)
