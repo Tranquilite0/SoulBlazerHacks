@@ -70,7 +70,7 @@ DecoupleLairReward:
     STA LairStateTable,X
     PLA
     PLX
-    ; Load alternate release reward ID from lair field $17
+    ; Load alternate release reward ID from lair field $18
     LDA.W $BA25,X
     BEQ .nothing
     CMP #!RemoteItem
@@ -385,8 +385,11 @@ BouncePlayer:
     INC ShouldBounce
     JSL InitTeleportOverride
     STZ TeleportOverride.ShouldOverride
+    ; Send player to a simple map to minimize load times.
+    ; TODO: figure out a way to reload map without loading a different map first.
     LDA #$01
     STA TeleportMapNumber
+    LDA #$02
     STA TeleportMapSubNumber
     RTL
 
