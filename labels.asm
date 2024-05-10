@@ -264,7 +264,7 @@ endmacro
 !Text_QuickPrint        = $02 ; Takes 1 byte parameter. For printing special things like hero name.
 !Text_TextStyle         = $03 ; Takes 1 word parameter. For text coloring.
 !Text_PrintHealthBar    = $04 ; Takes 2 word parameters that are pointers to current and max health.
-!Text_TableLookup       = $05 ; Takes 2 word parameters. 1st: Pointer to start of table in Bank 1. 2nd: Pointer to table index (typically $03C8)
+!Text_TableLookup       = $05 ; Takes 2 word parameters. 1st: Pointer to start of table in Bank 2. 2nd: Pointer to table index (typically $03C8)
 !Text_PrintDecimal      = $06 ; Takes 1 byte param and 1 word param. 1st: Number of digits to print. 2nd: Pointer to BCD value to print.
 !Text_DrawTextBox       = $07 ; Takes 2 byte parameters. Possibly coordinates to draw textbox?
 !Text_UndrawTextBox     = $08 ; Takes 1 word parameter. Possibly cordinates to textbox origin to undraw.

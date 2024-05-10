@@ -124,6 +124,14 @@ org $1AFE98
 ;04ED9E  6B             RTL
 ;                     ----------------
 
+; Edit text for Lune Gatekeep to call out that you need the Lucky Blade
+; TODO: also hint location of lucky blade?
+org $049858
+    db !Text_Start,"Hey, ",!Dict_you,"need ",!Dict_the,!Text_CR
+    db !Text_YellowStyle,"Lucky Blade ",!Text_EndStyle,!Dict_to,!Dict_go,!Dict_to,!Text_CR
+    db !Dict_the,"lake. ",!Text_WaitBlinkCursor
+    db "Don`t ask ",!Dict_me,"why, ",!Text_CR,"though...",!Text_EndText12
+
 ; QOL improvements ported over from randoblazer
 ; Double screen transition effect speed
 org $04F894
