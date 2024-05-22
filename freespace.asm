@@ -8,7 +8,6 @@ includeonce
 !Bank00FreespaceEnd   = $00FFBF
 
 ; 447 bytes free. There isnt much free space in bank 1, so it should be used sparingly since the text engine can only do table lookups in this bank.
-; TODO: Wait is it bank 1 or bank 2 that is used exclusively for text table lookups? If so maybe I should relocate some stuff out of bank 2
 !Bank01FreeSpaceStart = $01FE40
 !Bank01FreespaceEnd   = $01FFFF
 
@@ -17,7 +16,7 @@ includeonce
 !Bank02FreespaceEnd   = $02FFFF
 
 ; 3583 bytes free. NPC Scripts/text for Acts 1 and 2 are in this bank.
-; Also contains NPC scripts for the ending.
+; Also contains some NPC scripts for the ending.
 !Bank03FreeSpaceStart = $03F200
 !Bank03FreespaceEnd   = $03FFFF
 

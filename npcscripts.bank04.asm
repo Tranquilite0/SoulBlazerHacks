@@ -4,7 +4,7 @@ pushpc
 
 ;----------------- Mountain King -----------------;
 ; Patching Dancing Grandma Scripts to check NPC reward instead of phoenix
-; TODO: patch them to give hint for item if three red-hots obtained.
+; TODO: patch them to give hint for item if three red-hots obtained?
 org $0483BF
     %CopJumpIfNpcRewardNotObtained(!NPC_MountainKing, $83C9)
 org $0484DD

@@ -22,24 +22,38 @@ org $04F96C
 db !text_speed
 
 ; Dr Leo before he explodes slow text start.
-org $04DF0F
-db !text_speed
+org $04DF0E
+    BRA +
+    NOP #4
++
 
 ; Dr Leo after exploding text speed restore.
-org $04DF19
-db !text_speed
+org $04DF18
+    BRA +
+    NOP #4
++
 
 ; Dr Leo before death slow text start.
-org $04E004
-db !text_speed
+org $04E003
+    BRA +
+    NOP #4
++
 
 ; Dr Leo post death text speed restore.
-org $04E00E
-db !text_speed
+org $04E00D
+    BRA +
+    NOP #4
++
 
 ; In Green Wood, when "you" are on the menu.
-org $03BA48
-db !text_speed
+org $03BA43
+; This script goes through the trouble of pushing your current text speed
+; to the stack and pops it back out afterwards. Lets remove it all.
+    COP #$01
+    dw $BAD8
+    BRA +
+    NOP #12
++
 
 ; Post deathtoll defeat. Begin Epilogue autotext.
 org $00D3AF
@@ -68,8 +82,6 @@ db !text_speed_epilogue
 ; Post Credits Text Speed change. Restore Text Speed right after.
 org $03B466
 db !text_speed_epilogue
-
-; Patch cutscenes which break if text is instant
 
 ; The delay print command ($0E) does not delay when text speed is instant.
 ; This behavior appears to be the source of problems with instant text.

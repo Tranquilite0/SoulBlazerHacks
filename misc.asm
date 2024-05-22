@@ -1,11 +1,113 @@
+WinGame:
+    PHP
+    REP #$20
+    JSL EnsureEndingNpcsReleased
+    ; Now we do the stuff that regularly happens to go to the ending.
+    LDA #$0001
+    STA TextSpeedRam ; Change text speed to not be instant
+    LDA #$0001
+    STA $031E ; Unsure what this is for.
+    ; Teleport to WoE - Master's Shrine.
+    %CopTeleportPlayerToMap($0700, $01, $0070, $0060)
+    PLP
+    RTL
+
+
+EnsureEndingNpcsReleased:
+    ; We need to ensure that certain NPCs are unlocked or the ending breaks hard.
+    ; Alternate between setting bits in the LairReleaseTable and its Shadow copy.
+    LDY #LairReleaseTable
+    LDX #LairReleaseTableShadow
+    ; Lisa
+    LDA #$0010
+    JSL SetBit
+    PHY
+    TXY
+    PLX
+    JSL SetBit
+    ; Sleepy bird (Turbo's Grave)
+    LDA #$0061
+    JSL SetBit
+    PHY
+    TXY
+    PLX
+    JSL SetBit
+    ; Mermaid Queen
+    LDA #$00B6
+    JSL SetBit
+    PHY
+    TXY
+    PLX
+    JSL SetBit
+    ; Mountain King
+    LDA #$0103
+    JSL SetBit
+    PHY
+    TXY
+    PLX
+    JSL SetBit
+    ; Marie
+    LDA #$012F
+    JSL SetBit
+    PHY
+    TXY
+    PLX
+    JSL SetBit
+    ; Soldier (and Magridd Castle)
+    LDA #$018C
+    JSL SetBit
+    PHY
+    TXY
+    PLX
+    JSL SetBit
+    ; King Magridd
+    LDA #$0195
+    JSL SetBit
+    PHY
+    TXY
+    PLX
+    JSL SetBit
+    ; Code that was originally in place of our hook.
+    %CopSetEventFlag($1F02) ; The win flag
+    RTL
+
+
+; Edit Magic cast so that Soul of Magician is required instead of just any Soul
+CastMagicHook:
+    LDA SoulFlags
+    AND #$0001
+    BNE +
+    SEC
+    RTL
++
+    ; Original code that was replaced by hook.
+    JML $04F6C9
+
 pushpc
 
+; Edit Magic cast so that Soul of Magician is required instead of just any Soul
+org $00DB99  ;JSL $04F6C9
+    JSL CastMagicHook
 
 ;----------- Miscelaneous Accesibility -----------;
 ; TODO: Rebuild string table so that G.Leaf and A.Leaf can have more characters (we can remove 'the' in the Big Pearl for more space elsewhere.)
 ;       While doing so perhaps make other item names more consistent.
 ; TODO: Patch item descriptions to be Rando-focused?
 ; TODO: If we can find enough space in the bank, perhaps we can give NPCs unique names.
+
+; Make is so that the ending works even if all the NPCs needed in the ending are not released yet.
+org $00D3AA
+    JSL EnsureEndingNpcsReleased
+
+;Replace space padding with zero padding in soul strings
+org $02C649
+    db $00
+org $02C65B
+    db $00
+org $02C671
+    db $00
+org $02C69C
+    db $00
 
 ; Correct typos and and make Greenwood/Actinidia leaves distinguishable
 ; Magic Flair->Magic Flare
@@ -176,7 +278,7 @@ org $0E8158
 org $1AB51
     db $16
 
-; Edit Map arrengement data to move chest tile
+; Edit Map arrangement data to move chest tile
 ; Its compressed and bruteforcing a small patch to the data stream to put the chest where we want seems tricky
 ; Instead just include a recompressed version of the whole segment
 org $1DDE60

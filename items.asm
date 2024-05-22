@@ -2,6 +2,7 @@ includeonce
 
 ; Reward IDs
 ; Mostly ItemIDs, with unused IDs being used for more complex rewards.
+!Nothing         = $00
 
 !LifeSword       = $01
 !PsychoSword     = $02
@@ -71,8 +72,9 @@ includeonce
 !BlackStone      = $3F
 !MagicBell       = $40
 
-; TODO: extend with more rewards (Multiworld rewards and optionally traps/deathlink)
+; TODO: extend with more rewards (traps/deathlink)?
 
+!Soul            = $FB
 !RemoteItem      = $FC
 !LairRelease     = $FD
 !Exp             = $FE

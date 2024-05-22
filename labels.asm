@@ -19,6 +19,9 @@ TeleportMapSubNumber = $7E0318 ; This byte set to zero after teleport
 TeleportMapNumber = $7E0319
 TeleportFadeout = $7E032E ; Setting this to a zero disables fadeout/in when changing maps.
 
+; Bit field which can be set to control which HUD elements will be redrawn.
+RedrawHudBits = $7E0332
+
 struct PlayerPosReal $7E0374
     .X: skip 2
     .Y: skip 2
@@ -63,6 +66,9 @@ endstruct
 ; Selectively stops some buttons from being read out.
 ButtonMask = $7E0326
 
+; BCD. Writing to this gives EXP to the player.
+ExpToGive = $7E043D
+
 ; Stops all buttons from being read?
 DisableButtonReadout = $7E0474
 
@@ -73,6 +79,10 @@ LairReleaseTable = $7E1ADE
 ; Shadow copy of the Lair Release Table. Used during lair release process, possibly for lair dependency checks?
 ; Unsure, but these tables always match after lair release is finished.
 LairReleaseTableShadow = $7E1A9E
+
+; Player's souls (Magician, Light, etc)
+; Each bit is a soul.
+SoulFlags = $7E1B82
 
 ; Text Speed ram location
 TextSpeedRam = $7E1B84
@@ -141,6 +151,13 @@ TextEndStandardBank1F = $1FAA44
 
 
 ; Functions
+
+;Item ID in A
+GiveItem = $02A0F9
+
+; Gem Amount in A
+; A should be in 16-bit mode.
+GiveGems = $04F6A5
 
 ; Prints OSD String in bank 2 from Address in Y
 PrintOsdStringFromBank2 = $02A769

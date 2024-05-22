@@ -1,6 +1,7 @@
 ; Patch NPC scripts in Bank 03 to use new NPC Reward COP routine.
 
 ; TODO: Patch Goat Food Goat to give hint (and dont remove goat food)
+; TODO: patch NPC scripts for Souls.
 
 pushpc
 
@@ -21,6 +22,11 @@ org $038399
 
 
 ;----------------- Emblem A Tile -----------------;
+
+; TODO: actually repurpose starting tulip script to be the emblem A tile?
+;org $03AA55
+;    JSL WinGame
+;    JSL $00D3AA
 
 org $038756
     %CopGiveNpcReward(!NPC_EmblemATile)
@@ -547,7 +553,7 @@ org $03D816
 ;-------------- Mole's Ribbon Chest --------------;
 
 ; This chest will show as opened if you have Mole's Ribbon already unless you patch this.
-; TODO: redo the script check chest state rather than item state.
+; TODO: redo the script to check chest state rather than item state.
 org $03D9B3
     db $00
 

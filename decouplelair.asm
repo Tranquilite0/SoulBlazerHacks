@@ -70,70 +70,18 @@ DecoupleLairReward:
     STA LairStateTable,X
     PLA
     PLX
-    ; Load alternate release reward ID from lair field $18
+    ; Load Operand from lair field $19-$1A
+    LDY.W $BA26,X
+    ; Load reward ID from lair field $18
     LDA.W $BA25,X
-    BEQ .nothing
-    CMP #!RemoteItem
-    BEQ .remoteItem
-    CMP #!Gems
-    BEQ .gems
-    CMP #!Exp
-    BEQ .exp
+    ; Lairs with vanilla lair rewards are complicated enough to need their own code path.
     CMP #!LairRelease
-    BNE .regularItem
-    BRL .lair
-.regularItem:
-    ; Give regular item
-    STA TableLookupIndex ; Used by the print routine to load item name
-    STZ TableLookupIndex+1 ; Second byte unused
-    JSL $02A0F9 ; GiveItem
-    LDY #$E216 ; String pointer "Hero received <item>"
-    JSL PrintOsdStringFromBankX
-    JSL $008173 ; Unsure what this does
-    JSL CheckBossLair
-    BRK #$9E ; Play Item Get sound
-    JML $028D03 ; Finish by animating the lair closing
-.nothing:
-    PHB
-    LDA.B #NothingReceived>>16 ; Switch bank
-    PHA
-    PLB
-    LDY.W #NothingReceived 
-    JSL PrintOsdStringFromBankX
-    PLB ; restore bank
-    JSL CheckBossLair
-.remoteItem: ; Do nothing, let the client figure out what it is and who it is for and send a message.
-    JSL CheckBossLair
-    JML $028CFD ; Play lair closed sound and finish animating lair closing
-.gems:
-    REP #$20
-    LDA $BA26,X ; Load Gem amount from lair field $18-$19 
-    STA TableLookupIndex ; Used by the print routine to load Gems/Exp Amount
-    JSL $04F6A5 ; GiveGems
-    LDA #$0010 ; Unsure what this and the next instruction does...
-    TSB $0332
-    SEP #$20
-    LDY #$E246 ; Text Pointer "Hero found <amount> GEMs"
-    JSL PrintOsdStringFromBankX
-    JSL $008173 ; Unsure what this does
-    JSL CheckBossLair
-    BRK #$8D ; Play Gem-get sound
-    JML $028D03 ; Finish by animating the lair closing
-.exp:
-    REP #$20
-    LDA.W $BA26,X ; Load Exp amount from lair field $18-$19 
-    STA $7E043D ; Address that stores EXP to recieve.
-    STA TableLookupIndex ; Used by the print routine to load Gems/Exp Amount
-    SEP #$20
-    PHB
-    LDA.B #ExpReceived>>16 ; Switch bank
-    PHA
-    PLB
-    LDY.W #ExpReceived 
-    JSL PrintOsdStringFromBankX
-    PLB ; restore bank
-    JSL CheckBossLair
-    JML $028CFD ; Play lair closed sound and finish animating lair closing
+    BEQ .lair
+    JSL PrintReward
+    JSL GiveReward
+    BCS +
+    BRK #$94 ; Play lair closed sound if no other item get sound played
++   JML $028D03 ; Finish by animating the lair closing
 .lair:
     REP #$20
     LDA.W $BA26,X ; Load NPC ID from lair field $18-$19
@@ -169,6 +117,17 @@ CheckForRoof:
     PLP
     RTL
 
+; Releases NPC for given Lair ID
+; Pass Lair ID in Y
+ReleaseLairNpc:
+    REP #$20
+    TYA ; Lair ID in A and Y
+    ASL #5
+    TAX ; Lair Index in X
+    SEP #$20
+    JSL CheckForRoof
+    ; Entry point into the lair release code to release NPC.
+    JML $028C75 
 
 ; Makes it so that when you teleport back in the roof will still be pulled back.
 ApplyRoofFix:
@@ -280,15 +239,13 @@ IsAntiStuckNeeded:
 
 ; Boss lairs close off the exit and require a map reload/teleport to make the exit open again.
 ; I'm not super happy with this solution, but it works which is good enough for now.
-; TODO: use door data pointer and take first exit instead of hardcoding.
-; TODO: Alternatively figure out how to bounce from map to map and back.
 CheckBossLair:
     LDA CurrentMapID
     CMP #$0C ; Solid Arm
     BEQ .isBossRoom
     CMP #$22 ; Elemental Statues
     BEQ .isBossRoom
-    CMP #$32 ; Ghost Ship ; TODO: I think I can undo some of the changes i made to the NPC scripts.
+    CMP #$32 ; Ghost Ship
     BEQ .isBossRoom
     CMP #$44 ; Poseidon
     BEQ .isBossRoom
@@ -429,7 +386,6 @@ org $028C7B
 
 
 ; Insert hook to bypass same-map check
-; TODO: There is another same-map check in one of the other lair release branches, do we need to patch that one too?
 org $028D24
 SameMapCheckBypassHook:
     JSL SameMapCheckBypass

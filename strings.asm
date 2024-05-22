@@ -1,5 +1,7 @@
 ; New strings
 
+ItemReceived = $02E216
+
 PrintItemNameShort:
 db !Text_YellowStyle,!Text_TableLookup
 dw ItemNameTable,TableLookupIndex
@@ -15,6 +17,8 @@ db !Text_Start,!Text_HeroName," ",!Dict_received,!Text_CR,!Text_YellowStyle,!Tex
 
 PrintExpShort:
 db !Text_YellowStyle,!Text_PrintDecimal4," EXP",!Text_EndStyle,!Text_Break
+
+GemsReceived = $02E246
 
 PrintGemsShort:
 db !Text_YellowStyle,!Text_PrintDecimal4," GEMs",!Text_EndStyle,!Text_Break
@@ -44,7 +48,7 @@ db !Text_APIconUpArrow,$00
 ReceiveSender: dw ReceiveStruct.Sender
 SendItemName: dw SendStruct.ItemName
 SendAddressee: dw SendStruct.Addressee
-ArchipelagoIcons: dw ArchipelagoIconRegular, ArchipelagoIconUpArrow ; TODO: expand table to include player names?
+ArchipelagoIcons: dw ArchipelagoIconRegular, ArchipelagoIconUpArrow
 ; Each string needs a hardcoded address which contains the index into a table.
 ; These "Tables" only have one entry where the pointer is to ram so we need another address containing a "zero" index
 NullIndex: dw $0000
@@ -80,5 +84,32 @@ db !Text_Start,!Text_HeroName," ",!Dict_received,!Text_CR,!Text_YellowStyle,!Tex
 dw ReceivedFrom
 
 ReceivedNothingFrom:
-db !Text_Start,!Text_HeroName,!Dict_received,!Text_CR,!Text_YellowStyle," Nothing",!Text_EndStyle,!Text_ChangeStreamPtr
+db !Text_Start,!Text_HeroName," ",!Dict_received,!Text_CR,!Text_YellowStyle," Nothing",!Text_EndStyle,!Text_ChangeStreamPtr
+dw ReceivedFrom
+
+; The souls strings already exist.
+SoulOfMagician = $02C639
+SoulOfLight = $02C64E
+SoulOfShield = $02C663
+SoulOfDetection = $02C678
+SoulOfReality = $02C68D
+
+; But there doesnt appear to be a lookup table for them.
+SoulsNameTable:
+dw SoulOfMagician, SoulOfLight, SoulOfShield, SoulOfDetection, SoulOfReality
+
+ReceivedSoul:
+db !Text_Start,!Text_HeroName," ",!Dict_received,!Text_CR,!Text_YellowStyle,!Text_TableLookup
+dw SoulsNameTable,TableLookupIndex
+db !Text_EndStyle,".",!Text_EndText12
+
+PrintSoulNameShort:
+db !Text_Start,!Text_HeroName," ",!Dict_received,!Text_CR,!Text_YellowStyle,!Text_TableLookup
+dw SoulsNameTable,TableLookupIndex
+db !Text_EndStyle,!Text_Break
+
+ReceivedSoulFrom:
+db !Text_Start,!Text_HeroName," ",!Dict_received,!Text_CR,!Text_YellowStyle,!Text_TableLookup
+dw SoulsNameTable,TableLookupIndex
+db !Text_EndStyle,!Text_ChangeStreamPtr
 dw ReceivedFrom

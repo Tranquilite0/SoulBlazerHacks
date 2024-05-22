@@ -46,13 +46,13 @@ MainHook:
     JSL $0298FC ; Original Code
     JSL IsCommunicationBlocked
     BCS +
-    JSL Send
+    JSL NofifySend
     JSL Receive
 +
     ; CheckForBounce ; Unsure where the best place to put this is.
     RTL
 
-Send:
+NofifySend:
     LDA SendStruct.Status
     BNE +
     ; Initialize strings in case the client does not populate them.
@@ -86,6 +86,7 @@ Send:
     SEP #$20
     RTL
 
+
 Receive:
     LDA ReceiveStruct.Status
     BNE +
@@ -106,98 +107,10 @@ Receive:
 +
     RTL
 ++
+    LDY ReceiveStruct.Operand
     LDA ReceiveStruct.ID
-    BEQ .nothing
-    CMP #!Gems
-    BEQ .gems
-    CMP #!Exp
-    BEQ .exp
-    CMP #!LairRelease
-    BEQ .lairReward
-    CMP #!RemoteItem
-    BNE +
-    BRL .remoteItem
-+
-    STA TableLookupIndex ; Used by the print routine to load item name
-    STZ TableLookupIndex+1 ; Second byte unused
-    JSL $02A0F9 ; GiveItem
-    PHB
-    LDA.B #ReceivedItemFrom>>16 ; Switch bank
-    PHA
-    PLB
-    LDY.W #ReceivedItemFrom
-    JSL PrintOsdStringFromBankX
-    PLB ; restore bank
-    BRK #$9E ; Play Item Get sound
-    BRL .end
-.nothing:
-    SEP #$20
-    PHB
-    LDA.B #ReceivedNothingFrom>>16 ; Switch bank
-    PHA
-    PLB
-    LDY.W #ReceivedNothingFrom
-    JSL PrintOsdStringFromBankX
-    PLB ; restore bank
-    BRA .end
-.gems:
-    REP #$20
-    LDA ReceiveStruct.Operand
-    STA TableLookupIndex ; Used by the print routine to load Gems/Exp Amount
-    JSL $04F6A5 ; GiveGems
-    LDA #$0010 ; UpdateHud?
-    TSB $0332
-    SEP #$20
-    PHB
-    LDA.B #ReceivedGemsFrom>>16 ; Switch bank
-    PHA
-    PLB
-    LDY.W #ReceivedGemsFrom
-    JSL PrintOsdStringFromBankX
-    PLB ; restore bank
-    BRK #$8D ; Play Gem-get sound
-    BRA .end
-.exp:
-    REP #$20
-    LDA ReceiveStruct.Operand
-    STA $7E043D ; Address that stores EXP to recieve.
-    STA TableLookupIndex ; Used by the print routine to load Gems/Exp Amount
-    SEP #$20
-    PHB
-    LDA.B #ReceivedExpFrom>>16 ; Switch bank
-    PHA
-    PLB
-    LDY.W #ReceivedExpFrom
-    JSL PrintOsdStringFromBankX
-    PLB ; restore bank
-    BRA .end
-.lairReward:
-    JSL IsAntiStuckNeeded
-    REP #$20
-    LDA ReceiveStruct.Operand ; Operand is Lair ID
-    TAY ; Lair ID in Y
-    ASL #5
-    TAX ; Lair index in X
-    SEP #$20
-    LDA.L $01BA16,X ; Load NPC Name index from lair data field 09
-    STA TableLookupIndex ; Used by the print routine to load npc name
-    STZ TableLookupIndex+1 ; Second byte unused
-    PHY
-    PHX
-    PHB
-    LDA.B #ReceivedRevivableNpcFrom>>16 ; Switch bank
-    PHA
-    PLB
-    LDY.W #ReceivedRevivableNpcFrom
-    JSL PrintOsdStringFromBankX
-    PLB
-    PLX
-    PLY
-    JSL CheckForRoof
-    JSL $028C75
-.remoteItem:
-    ; If this happens then the client is malfunctioning.
-.end:
+    JSL PrintRewardFrom
+    JSL GiveReward
     ; Increment Receive Count if the client requested it.
     LDA ReceiveStruct.Increment
     BEQ +
@@ -215,15 +128,17 @@ IsCommunicationBlocked:
     CLC
     REP #$20
     LDA ButtonMask
-    BEQ +
-    SEC
-+
     SEP #$20
+    BNE .isBlocked
     LDA DisableCommunication ; TODO: I dont think this is needed any more,
-    BEQ +
+    BNE .isBlocked
+    ; Check flag for end of game.
+    LDA #$02
+    BIT EventFlags+$1F
+    BNE .isBlocked
+    RTL
+.isBlocked:
     SEC
-+
-    ; Put Boss Checks here?
     RTL
 
 ; Hooks and original rom data overwrite section
