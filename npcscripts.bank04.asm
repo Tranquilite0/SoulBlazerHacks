@@ -349,6 +349,46 @@ assert pc() <= $04AC7B
 ;-------------------------------------------------;
 
 
+;------------ Soul of Detection Door -------------;
+
+org $04AE64
+    %CopGiveNpcReward(!NPC_SoulOfDetection)
+    %CopSetEventFlag($0603)
+    COP #$17
+    dw $0000
+    COP #$27
+    dw $AE53
+    NOP
+
+; Text edits
+org $04AF2A
+    db !Text_ChangeStreamPtr : dw TextEndStandardBank4
+
+;04AE60  02 01          COP #$01
+;04AE62               --------data--------
+;04AE62  00 00        .db $EE $AE
+;04AE63               ----------------
+;04AE64  02 09          COP #$09
+;04AE66               --------data--------
+;04AE66  00 00        .db $03 $86
+;04AE67               ----------------
+;04AE68  00 4E          BRK #$4E
+;04AE6A  E2 20          SEP #$20
+;04AE6C  AD 82 1B       LDA $1B82
+;04AE6F  09 08          ORA #$08
+;04AE71  8D 82 1B       STA $1B82
+;04AE74  C2 20          REP #$20
+;04AE76  02 17          COP #$17
+;04AE78               --------data--------
+;04AE78  00 00        .db $00 $00
+;04AE79               ----------------
+;04AE7A  02 27          COP #$27
+;04AE7C               --------data--------
+;04AE7C  00 00        .db $53 $AE
+
+;-------------------------------------------------;
+
+
 ;-------------- Leo's Cat Door Key ---------------;
 
 ; Patch Reward
@@ -1270,6 +1310,37 @@ assert pc() <= $04CF49
 ;04CE9A               ----------------
 ;04CE9B  80 C7          BRA $04CE64
 
+
+;-------------------------------------------------;
+
+
+;------------ Soul of Reality Soldier ------------;
+
+org $04D203
+    ; Let's reuse the door-soul text since it is suitably generic and in the same bank.
+    %CopShowText($AEEE)
+    %CopGiveNpcReward(!NPC_SoulOfLight)
+    %CopSetEventFlag($0604)
+    RTL
+    NOP #10
+
+
+;04D203  02 01          COP #$01
+;04D205               --------data--------
+;04D205  00 00        .db $66 $D2
+;04D206               ----------------
+;04D207  00 4E          BRK #$4E
+;04D209  02 09          COP #$09
+;04D20B               --------data--------
+;04D20B  00 00        .db $04 $86
+;04D20C               ----------------
+;04D20D  E2 20          SEP #$20
+;04D20F  AD 82 1B       LDA $1B82
+;04D212  09 10          ORA #$10
+;04D214  8D 82 1B       STA $1B82
+;04D217  C2 20          REP #$20
+;04D219  6B             RTL
+;                     ----------------
 
 ;-------------------------------------------------;
 
