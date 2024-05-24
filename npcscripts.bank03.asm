@@ -147,14 +147,42 @@ org $00F790
 
 ;-------------------- Magician -------------------;
 
-org $03A7E0
+org $03A7DC
+    ; Skip first part if we are reentering the text dialog after lair release
+    %CopJumpIfNpcRewardNotObtained(!NPC_Magician, +)
+    BRA ++
++   %CopShowText(MagicianText1)
     %CopGiveNpcReward(!NPC_Magician)
-    NOP #2
+    ; Bail from script if we got a lair release to prevent possibility of softlock.
+    LDA ReturnFromTeleport.LairRevealInProgress
+    BEQ ++
+    RTL
+++  %CopShowText(MagicianText2)
+    %CopGiveNpcReward(!NPC_SoulOfMagician)
+    %CopSetEventFlag($0504)
+    RTL
 
-org $03A8F4
+; We overran our available script space, but there is plenty of text which can be abbreviated to make space.
+; We need to completely rewrite the text from the start, however.
+
+MagicianText1:
+    db !Text_Start,!Dict_I,!Dict_used,!Dict_to,!Dict_live,"up ",!Text_CR
+    db !Dict_in,!Dict_the,"sky ",!Dict_just,!Dict_like,!Text_CR
+    db "you.",!Text_WaitBlinkCursor
+    db "Here, ",!Dict_take,"this."
     db !Text_ChangeStreamPtr : dw TextEndStandardBank3
 
-; TODO: Goodluck and/or blame Everhate.
+MagicianText2:
+    db !Text_Start,"Alright, ",!Text_CR
+    db "let`s work together to",!Text_CR
+    db "revive ",!Dict_the,"world!"
+    db !Text_ChangeStreamPtr : dw TextEndStandardBank3
+
+;TODO: use this instead for MagicianText2?
+GoodLuck:
+    db !Text_Start,"Good luck and/or",!Text_CR
+    db "blame Everhate."
+    db !Text_ChangeStreamPtr : dw TextEndStandardBank3
 
 ;03A7DC  02 01          COP #$01
 ;03A7DE               --------data--------
@@ -534,6 +562,54 @@ org $03D521
 ;03D535  02 37          COP #$37
 ;03D537  02 86          COP #$86
 ;03D539  6B             RTL
+
+;-------------------------------------------------;
+
+
+;-------------- Soul of Light Mole ---------------;
+
+org $03D6D4
+    %CopGiveNpcReward(!NPC_SoulOfLight)
+    %CopSetEventFlag($0303)
+    RTL
+    NOP #28
+
+; Abbreviate text a little and patch out vanilla reward reference
+org $03D723
+    db !Text_ChangeStreamPtr : dw $D74E
+org $03D773
+    db !Text_ChangeStreamPtr : dw TextEndStandardBank3
+
+; 03D6D0  02 01          COP #$01
+; 03D6D2               --------data--------
+; 03D6D2  00 00        .db $F9 $D6
+; 03D6D3               ----------------
+; 03D6D4  E2 20          SEP #$20
+; 03D6D6  AD 82 1B       LDA $1B82
+; 03D6D9  09 02          ORA #$02
+; 03D6DB  8D 82 1B       STA $1B82
+; 03D6DE  C2 20          REP #$20
+; 03D6E0  02 09          COP #$09
+; 03D6E2               --------data--------
+; 03D6E2  00 00        .db $03 $83
+; 03D6E3               ----------------
+; 03D6E4  00 4E          BRK #$4E
+; 03D6E6  02 14          COP #$14
+; 03D6E8               --------data--------
+; 03D6E8  00 00 00 00  .db $4F $00 $EE $D6
+; 03D6EB               ----------------
+; 03D6EC  80 06          BRA $03D6F4
+; 03D6EE  02 14          COP #$14
+; 03D6F0               --------data--------
+; 03D6F0  00 00 00 00  .db $51 $00 $F8 $D6
+; 03D6F3               ----------------
+; 03D6F4  02 01          COP #$01
+; 03D6F6               --------data--------
+; 03D6F6  00 00        .db $A2 $D7
+; 03D6F7               ----------------
+; 03D6F8  6B             RTL
+;                     ----------------
+
 
 ;-------------------------------------------------;
 

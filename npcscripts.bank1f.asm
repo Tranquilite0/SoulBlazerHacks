@@ -2,6 +2,48 @@
 
 pushpc
 
+;----------- Soul of Shield Angelfish ------------;
+
+org $1F80F2
+    %CopGiveNpcReward(!NPC_SoulOfShield)
+    %CopSetEventFlag($0701)
+    COP #$27
+    dw $80D4
+    NOP
+
+; Text edits
+org $1F8177
+    db !Text_ChangeStreamPtr : dw $81A8
+org $1F81D5
+    db !Text_ChangeStreamPtr : dw TextEndStandardBank1F
+
+;1F80DC  BD 16 00       LDA $0016,X
+;1F80DF  29 EF FF       AND #$FFEF
+;1F80E2  9D 16 00       STA $0016,X
+;1F80E5  02 01          COP #$01
+;1F80E7               --------data--------
+;1F80E7  00 00        .db $4A $81
+;1F80E8               ----------------
+;1F80E9  BD 16 00       LDA $0016,X
+;1F80EC  09 10 00       ORA #$0010
+;1F80EF  9D 16 00       STA $0016,X
+;1F80F2  E2 20          SEP #$20
+;1F80F4  AD 82 1B       LDA $1B82
+;1F80F7  09 04          ORA #$04
+;1F80F9  8D 82 1B       STA $1B82
+;1F80FC  C2 20          REP #$20
+;1F80FE  02 09          COP #$09
+;1F8100               --------data--------
+;1F8100  00 00        .db $01 $87
+;1F8101               ----------------
+;1F8102  00 4E          BRK #$4E
+;1F8104  02 27          COP #$27
+;1F8106               --------data--------
+;1F8106  00 00        .db $D4 $80
+
+;-------------------------------------------------;
+
+
 ;---------- North Eastern Mermaid Herb -----------;
 
 ; Probably easier to just redo this NPC script and text than patch it into shape.

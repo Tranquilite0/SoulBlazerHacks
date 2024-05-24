@@ -64,5 +64,10 @@ endstruct
     dw !Exp,             $0200 : !NPC_RockbirdCrystal = $39
     dw !Exp,             $0300 : !NPC_SeabedCrystalNearBlester = $3A
     dw !Exp,             $0250 : !NPC_SeabedCrystalNearDurean = $3B
+    dw !Soul,            $0000 : !NPC_SoulOfMagician = $3C
+    dw !Soul,            $0001 : !NPC_SoulOfLight = $3D
+    dw !Soul,            $0002 : !NPC_SoulOfShield = $3E
+    dw !Soul,            $0003 : !NPC_SoulOfDetection = $3F
+    dw !Soul,            $0004 : !NPC_SoulOfReality = $40
 
 ; TODO: create a string table of npc reward names for hinting?
