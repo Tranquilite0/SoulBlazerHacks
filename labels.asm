@@ -243,6 +243,12 @@ macro CopRemoveItem(itemId)
     db <itemId>
 endmacro
 
+macro CopJumpIfEntityWithinRange(npc_id, range, target)
+    COP #$0C
+    db <npc_id>, <range>
+    dw <target>
+endmacro
+
 macro CopJumpIfEntityHasReachedXY(npc_id, x, y, target)
     COP #$0D
     db <npc_id>, <x>, <y>
@@ -272,6 +278,21 @@ macro CopShowChoices(choicesTxtPtr, numberOfChoices, abortPtr)
     dw <choicesTxtPtr>
     db <numberOfChoices>
     dw <abortPtr>
+endmacro
+
+macro CopPlayAnimation(animationId)
+    COP #$80
+    db <animationId>
+endmacro
+
+macro CopSetScriptAddrToNextInstruction()
+    COP #$91
+endmacro
+
+macro CopSetScriptAddrAndId(scriptAddr24, scriptId)
+    COP #$B0
+    dl <scriptAddr24>
+    dw <scriptId>
 endmacro
 
 ; Text Processing Commands for PrintOsdStringFromBankX

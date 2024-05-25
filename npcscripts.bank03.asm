@@ -28,9 +28,51 @@ org $038399
 ;    JSL WinGame
 ;    JSL $00D3AA
 
-org $038756
+;TODO: remove tulip autotalk?
+;TODO: customize starting message?
+org $03AA26
+StartingTulipScript:
+    %CopSetScriptAddrAndId(.locationChecks, $2000) ; I have no idea what $2000 is for.
+    COP #$15
+    %CopAssignTalkCallback(.tulipTalk)
+.animationLoop:
+    %CopPlayAnimation($1E)
+    COP #$82 ; I think this has something to do with animation end.
+    BRA .animationLoop
+.tulipAutoTalk:
+    %CopShowText($AAC9)
+    %CopSetEventFlag($0905)
+    RTL
+.emblemA:
     %CopGiveNpcReward(!NPC_EmblemATile)
-    NOP #6
+    %CopSetEventFlag($1A00)
+    RTL
+.tulipTalk:
+    %CopShowText($AA6A)
+    RTL
+assert pc() <= $03AA69
+
+; We have some text space no longer being used by the tulip script.
+org $03AAE6
+.locationChecks
+    %CopSetScriptAddrToNextInstruction()
+    %CopJumpIfEventFlagIsSet($0905, +)
+    %CopJumpIfEntityWithinRange($00, $02, .tulipAutoTalk)
++
+    %CopJumpIfEventFlagIsSet($1A00, +)
+    %CopJumpIfEntityHasReachedXY($00, $2F, $32, .emblemA)
+    RTL
++
+    %CopSetScriptAddrToNextInstruction()
+    RTL
+assert pc() <= $03AB4E
+
+; Stub out the original Emblam A tile code.
+org $038756
+    %CopSetScriptAddrToNextInstruction()
+    RTL
+    NOP #13
+assert pc() <= $038766
 
 ;038756  02 01          COP #$01
 ;038758               --------data--------

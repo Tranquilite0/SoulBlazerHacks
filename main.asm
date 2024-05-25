@@ -25,10 +25,6 @@ assert pc() <= !Bank01FreespaceEnd
 ; TODO: we are out of space in Bank2 and Bank2 space is at a premium for text table lookups.
 org !Bank02FreeSpaceStart
     incsrc "npcrewardtable.asm" ; Keep at start of bank's freespace to prevent address from moving.
-    incsrc "textengineextensions.asm"
-    incsrc "decouplelair.asm"
-    incsrc "npcreward.asm"
-    incsrc "chestrelease.asm"
     incsrc "strings.asm" ; This needs to stay in Bank 2
 assert pc() <= !Bank02FreespaceEnd
 
@@ -36,6 +32,10 @@ org !Bank03FreeSpaceStart
     incsrc "npcscripts.bank03.asm"
     incsrc "reward.asm"
     incsrc "receive.asm"
+    incsrc "textengineextensions.asm"
+    incsrc "decouplelair.asm"
+    incsrc "npcreward.asm"
+    incsrc "chestrelease.asm"
     incsrc "misc.asm"
 assert pc() <= !Bank03FreespaceEnd
 
