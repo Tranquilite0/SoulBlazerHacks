@@ -44,7 +44,7 @@ org $048588
     LDA #$0020
     STA $03B4 ; Unsure what this address is for. Worth investigating since it happens before a teleport.
     %CopTeleportPlayerToMap($0314, $01, $00F8, $0128)
-    COP #$91
+    %CopSetScriptAddrToNextInstruction()
     RTL
 MountainKingNewEntryPoint:
     LDA #$2F80 ; Unsure what this is for. Might be controller input related.
@@ -152,7 +152,7 @@ MushroomShoesBoyScript:
 org $048D69
     %CopPrintNpcReward(!NPC_MushroomShoesBoy, .hintRewardText)
     STZ $03FB
-    COP #$86
+    %Cop86()
     RTL
 .hintRewardText
     ; "I will give you <x> if you return to me."
@@ -209,8 +209,7 @@ org $049E9F
 ; so that you dont glitch the game if you get a lair reward and return at the same time.
 org $049EF3
     %CopGiveNpcReward(!NPC_MountainOfSoulsCrystal)
-    COP #$09
-    db $00,$9E
+    %CopSetEventFlag($1E00)
     RTL 
 
 ; Abridge text to remove reward message.
@@ -227,8 +226,7 @@ org $04A4B4
 ; so that you dont glitch the game if you get a lair reward and return at the same time.
 org $049F47
     %CopGiveNpcReward(!NPC_LuneCrystal)
-    COP #$09
-    db $05,$9D
+    %CopSetEventFlag($1D05)
     RTL 
 
 ;-------------------------------------------------;
@@ -354,10 +352,8 @@ assert pc() <= $04AC7B
 org $04AE64
     %CopGiveNpcReward(!NPC_SoulOfDetection)
     %CopSetEventFlag($0603)
-    COP #$17
-    dw $0000
-    COP #$27
-    dw $AE53
+    %CopAssignTalkCallback($0000)
+    %SetScriptAddrAndZeroId($AE53)
     NOP
 
 ; Text edits
@@ -620,11 +616,11 @@ org $04B549
 ;Patch release script to hint reward.
 org $04B558
     %CopPrintNpcReward(!NPC_Marie, +)
-    COP #$37
-    COP #$86
+    %CopRestoreToFullHealth()
+    %Cop86()
     RTL
 +
-    db !Text_Start, !Text_DelayAndContinue,$3C,!Dict_I,!Dict_am,"Marie, ",!Dict_the,"doll. ",!Text_CR,!Dict_I,!Dict_will,!Dict_give,!Dict_you,!Text_CR,!Text_Break,!Text_CR,!Text_ChangeStreamPtr : dw $B585
+    db !Text_Start, !Text_DelayAndContinue,"<",!Dict_I,!Dict_am,"Marie, ",!Dict_the,"doll. ",!Text_CR,!Dict_I,!Dict_will,!Dict_give,!Dict_you,!Text_CR,!Text_Break,!Text_CR,!Text_ChangeStreamPtr : dw $B585
 
 ; Patch item give text to remove reference to vanilla reward
 org $04B623
@@ -708,8 +704,7 @@ org $04B93A
 
 org $04BDF8
     %CopGiveNpcReward(!NPC_LeosLabBasementCrystal)
-    COP #$09
-    db $01,$9D
+    %CopSetEventFlag($1D01)
     RTL 
 
 org $04BF4B
@@ -747,8 +742,7 @@ org $04BF4B
 
 org $04BE4C
     %CopGiveNpcReward(!NPC_ModelTown1Crystal)
-    COP #$09
-    db $02,$9D
+    %CopSetEventFlag($1D02)
     RTL 
 
 ;04BE42  02 07          COP #$07
@@ -776,8 +770,7 @@ org $04BE4C
 
 org $04BE7C
     %CopGiveNpcReward(!NPC_PowerPlantCrystal)
-    COP #$09
-    db $03,$9D
+    %CopSetEventFlag($1D03)
     RTL 
 
 ;04BE72  02 07          COP #$07
@@ -863,7 +856,7 @@ org $04C39A
 ; Safely expand the script to include the hint.
 org $04C111
     %CopPrintNpcReward(!NPC_ElementalMailSoldier, +)
-    COP #$86
+    %Cop86()
     RTL
 +
     db !Text_Start,!Dict_I,!Dict_know,!Dict_a,"sleeping",!Text_CR,"soldier ",!Dict_who,!Dict_has,!Text_CR,!Text_Break,".",!Text_ChangeStreamPtr : dw TextEndStandardBank4
@@ -1243,9 +1236,9 @@ MaidHerbScript:
 
 ; We have a some more free space here, so lets use it for letting you get the Queen's reward on the superbracelet tile if she is already gone.
 SuperBraceletTileExtension:
-    COP #$91
+    %CopSetScriptAddrToNextInstruction()
     %CopJumpIfNpcRewardNotObtained(!NPC_QueenMagriddVIPCard, +)
-    COP #$86
+    %Cop86()
     RTL
 +
     ; Have the Queen's item be one tile down to avoid problems on loading back in.
@@ -1254,7 +1247,7 @@ SuperBraceletTileExtension:
 +
     %CopShowText(.butWaitTheresMore)
     %CopGiveNpcReward(!NPC_QueenMagriddVIPCard)
-    COP #$91
+    %CopSetScriptAddrToNextInstruction()
     RTL
 .butWaitTheresMore
     db !Text_Start,!Dict_There,!Dict_is,!Dict_something,!Text_CR,!Dict_here,"too!",!Text_ChangeStreamPtr : dw TextEndStandardBank4

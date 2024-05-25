@@ -8,6 +8,7 @@ check title "SOULBLAZER - 1 USA   "
 
 ; Labels, defines, macros
 incsrc "labels.asm"
+incsrc "macros.asm"
 incsrc "freespace.asm"
 incsrc "items.asm"
 

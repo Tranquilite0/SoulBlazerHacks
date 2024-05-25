@@ -23,21 +23,16 @@ org $038399
 
 ;----------------- Emblem A Tile -----------------;
 
-; TODO: actually repurpose starting tulip script to be the emblem A tile?
-;org $03AA55
-;    JSL WinGame
-;    JSL $00D3AA
-
 ;TODO: remove tulip autotalk?
 ;TODO: customize starting message?
 org $03AA26
 StartingTulipScript:
     %CopSetScriptAddrAndId(.locationChecks, $2000) ; I have no idea what $2000 is for.
-    COP #$15
+    %CopMakeNpcUnpassable()
     %CopAssignTalkCallback(.tulipTalk)
 .animationLoop:
     %CopPlayAnimation($1E)
-    COP #$82 ; I think this has something to do with animation end.
+    %Cop82()
     BRA .animationLoop
 .tulipAutoTalk:
     %CopShowText($AAC9)
@@ -125,12 +120,10 @@ org $03922C
     %CopPrintNpcReward(!NPC_ToolShopOwnersSonTeddy, $9255)
     ; This choice doesnt matter (But thou must!)
     %CopShowChoices($CF02,$02,+)
-+ 
-    COP #$12
-    db $05, $80, $84
++
+    %CopSetEntityScriptAddr($05, $8480)
     %CopShowText($92D9)
-    COP #$12
-    db $05, $53, $83
+    %CopSetEntityScriptAddr($05, $8353)
     %CopGiveNpcReward(!NPC_ToolShopOwnersSonTeddy)
     RTL
 
@@ -310,8 +303,7 @@ org $03AD05
 ; so that you dont glitch the game if you get a lair reward and return at the same time.
 org $03AD13
     %CopGiveNpcReward(!NPC_UndergroundCastle1stPartCrystal)
-    COP #$09
-    db $02,$9C
+    %CopSetEventFlag($1C02)
     RTL 
 
 ;-------------------------------------------------;
@@ -557,8 +549,7 @@ org $03D5CE
     db !Text_Start,!Dict_I,!Dict_will,!Dict_give,!Dict_you,!Text_CR,!Text_Break,!Text_CR,"upon ",!Dict_your,"return. ",!Text_ChangeStreamPtr : dw TextEndStandardBank3
 -
     %CopGiveNpcReward(!NPC_GreenwoodsGuardian)
-    COP #$09
-    db $02,$85
+    %CopSetEventFlag($0502)
     BRL +
 
 ; Patch script to give reward and also open Southerta
@@ -660,9 +651,8 @@ org $03D773
 
 org $03D816
     %CopGiveNpcReward(!NPC_GreenwoodLeaves)
-    COP #$09
-    db $04,$83
-    COP #$91
+    %CopSetEventFlag($0304)
+    %CopSetScriptAddrToNextInstruction()
     RTL 
 
 ;-------------------------------------------------;
@@ -716,7 +706,7 @@ org $03E1A0
     db !Text_CR,!Text_Break,!Text_CR,!Dict_with,"them.....",!Text_ChangeStreamPtr : dw TextEndStandardBank3
 +
     %CopPrintNpcReward(!NPC_PsychoSwordSquirrel ,$E14C)
-    COP #$86
+    %Cop86()
     RTL
 ; We have 8 bytes to spare starting at $03E1B8, so if the next script happens to need it we can use it.
 
@@ -758,8 +748,7 @@ org $03E20C
 ; Patch script to give NPC reward
 org $03E1DF
     %CopGiveNpcReward(!NPC_EmblemCSquirrel)
-    COP #$09
-    db $02,$9A
+    %CopSetEventFlag($1A02)
     RTL
 
 ;-------------------------------------------------;
@@ -780,10 +769,10 @@ org $03E48E
 ; Change GiveExp COP routine to GiveNpcReward
 ; Also avoid giving the return to town prompt the first time you talk
 ; so that you dont glitch the game if you get a lair reward and return at the same time.
+; TODO: still show textbox in case it is remote reward since it behaves a bit wierdly.
 org $03E561
     %CopGiveNpcReward(!NPC_LightArrowCrystal)
-    COP #$09
-    db $07,$9C
+    %CopSetEventFlag($1C07)
     RTL 
 
 ;-------------------------------------------------;
@@ -794,8 +783,7 @@ org $03E561
 ;Text is already perfect as-is, just patch script to give NPC Reward
 org $03E4E1
     %CopGiveNpcReward(!NPC_LostMarshCrystal)
-    COP #$09
-    db $05,$9C
+    %CopSetEventFlag($1C05)
     RTL 
 
 ;-------------------------------------------------;
@@ -812,8 +800,7 @@ org $03EBDC
 ; so that you dont glitch the game if you get a lair reward and return at the same time.
 org $03E535
     %CopGiveNpcReward(!NPC_WaterShrineCrystal)
-    COP #$09
-    db $06,$9C
+    %CopSetEventFlag($1C06)
     RTL 
 
 ;-------------------------------------------------;

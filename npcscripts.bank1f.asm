@@ -7,8 +7,7 @@ pushpc
 org $1F80F2
     %CopGiveNpcReward(!NPC_SoulOfShield)
     %CopSetEventFlag($0701)
-    COP #$27
-    dw $80D4
+    %SetScriptAddrAndZeroId($80D4)
     NOP
 
 ; Text edits
@@ -82,7 +81,7 @@ assert pc() <= $1F83AC
 ; Modify release script/text to hint reward.
 org $1F8BB5
     %CopPrintNpcReward(!NPC_BubbleArmorMermaid, +)
-    COP #$86
+    %Cop86()
     RTL
 +
     ; Abridge Release text and hint NPC Reward.
@@ -216,8 +215,7 @@ org $1FA9E3
 ; so that you dont glitch the game if you get a lair reward and return at the same time.
 org $1FA465
     %CopGiveNpcReward(!NPC_RockbirdCrystal)
-    COP #$09
-    db $00,$9D
+    %CopSetEventFlag($1D00)
     RTL 
 
 ;-------------------------------------------------;
@@ -232,8 +230,7 @@ org $1FA465
 ; so that you dont glitch the game if you get a lair reward and return at the same time.
 org $1FA4B9
     %CopGiveNpcReward(!NPC_SeabedCrystalNearBlester)
-    COP #$09
-    db $06,$9D
+    %CopSetEventFlag($1D06)
     RTL 
 
 ;-------------------------------------------------;
@@ -248,8 +245,7 @@ org $1FA4B9
 ; so that you dont glitch the game if you get a lair reward and return at the same time.
 org $1FA4E9
     %CopGiveNpcReward(!NPC_SeabedCrystalNearDurean)
-    COP #$09
-    db $07,$9D
+    %CopSetEventFlag($1D07)
     RTL 
 
 ;-------------------------------------------------;
