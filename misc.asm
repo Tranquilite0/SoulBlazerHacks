@@ -1,3 +1,5 @@
+; TODO: Better place to put this code?
+
 WinGame:
     PHP
     REP #$20
@@ -8,7 +10,19 @@ WinGame:
     LDA #$0001
     STA $031E ; Unsure what this is for.
     ; Teleport to WoE - Master's Shrine.
-    %CopTeleportPlayerToMap($0700, $01, $0070, $0060)
+    LDA #$0007
+    STA TeleportMapSubNumber
+    LDA #$0070
+    STA TeleportPos.X
+    LDA #$0060
+    STA TeleportPos.Y
+    SEP #$20
+    LDA #$01
+    STA TeleportPos.Facing
+    ;%CopTeleportPlayerToMap($0700, $01, $0070, $0060)
+    ; Set the Event Flag for Victory and WoE open so that the epilogue can begin playing
+    LDA #$24
+    TSB EventFlags+$1F
     PLP
     RTL
 
@@ -67,6 +81,11 @@ EnsureEndingNpcsReleased:
     TXY
     PLX
     JSL SetBit
+    RTL
+
+
+EndingHook:
+    JSL EnsureEndingNpcsReleased
     ; Code that was originally in place of our hook.
     %CopSetEventFlag($1F02) ; The win flag
     RTL
@@ -97,7 +116,7 @@ org $00DB99  ;JSL $04F6C9
 
 ; Make is so that the ending works even if all the NPCs needed in the ending are not released yet.
 org $00D3AA
-    JSL EnsureEndingNpcsReleased
+    JSL EndingHook
 
 ;Replace space padding with zero padding in soul strings
 org $02C649

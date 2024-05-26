@@ -2,9 +2,14 @@
 ; Pass reward ID in A and Operand in Y
 ; Sets carry flag if a sound is played.
 GiveReward:
+    CLC
     PHP
     SEP #$20
-    CMP #!Gems
+    CMP #!Nothing
+    BNE +
+    PLP
+    RTL
++   CMP #!Gems
     BNE +
     ; GEMs
     REP #$20
@@ -21,39 +26,37 @@ GiveReward:
     ; EXP
     STY ExpToGive
     PLP
-    CLC
     RTL
 +   CMP #!LairRelease
     BNE +
     ; Lair Release
     JSL ReleaseLairNpc
     PLP
-    CLC
-    RTL
-+   CMP #!RemoteItem
-    BNE +
-    ; Nothing to give for remote items. The Client handles that.
-    PLP
-    CLC
     RTL
 +   CMP #!Soul
     BNE +
     ; Soul
-    ; 1 << Y
+    ; Tight loop to compute 1 << Y
     LDA #$01
     BRA ++
 -   ASL
 ++  DEY
     BPL -
     TSB SoulFlags
-    BRK #$0E ; Play soul get sound
+    BRK #$0E ; Play soul get sound TODO: might be a different sound actually.
     PLP
     SEC
     RTL
-+   CMP #!Nothing
++   CMP #!Victory
     BNE +
+    ; Victory
+    JSL WinGame
     PLP
-    CLC
+    RTL
++   ; Catch-all for non-regular items (ID >$40) which don't need special processing.
+    CMP #!MagicBell+1
+    BCC +
+    PLP
     RTL
 +   ; Give regular item
     JSL GiveItem
@@ -72,7 +75,12 @@ PrintReward:
     PHA
     PHY
     SEP #$20
-    CMP #!Gems
+    CMP #!Nothing
+    BNE +
+    LDY #NothingReceived
+    LDA.B #bank(NothingReceived)
+    BRA .printAndEnd
++   CMP #!Gems
     BNE +
     ; GEMs
     STY TableLookupIndex
@@ -86,25 +94,17 @@ PrintReward:
     LDY #ExpReceived
     LDA.B #bank(ExpReceived)
     BRA .printAndEnd
-+   CMP #!LairRelease
-    ; Nothing to print for Lair Releases. That happens during the release cutscene.
-    BEQ .end
-    CMP #!RemoteItem
-    ; Nothing to print for remote items. The Client handles that later.
-    BEQ .end
-    CMP #!Soul
++   CMP #!Soul
     BNE +
     ; Soul
     STY TableLookupIndex
     LDY #ReceivedSoul
     LDA.B #bank(ReceivedSoul)
     BRA .printAndEnd
-+   CMP #!Nothing
-    BNE +
-    LDY #NothingReceived
-    LDA.B #bank(NothingReceived)
-    BRA .printAndEnd
-+   ; Give regular item
++   ; Catch-all for remaining non-regular items (ID >$40) which don't need special processing.
+    CMP #!MagicBell+1
+    BCS .end
+    ; Give regular item
     STA TableLookupIndex
     STZ TableLookupIndex+1
     LDY #ItemReceived
@@ -128,14 +128,17 @@ PrintRewardShort:
     PHP
     PHB
     SEP #$20
-    CMP #!Gems
+    CMP #!Nothing
+    BNE +
+    LDY #PrintNothingShort
+    LDA.B #bank(PrintNothingShort)
+    BRA .printAndEnd
++   CMP #!Gems
     BNE +
     ; GEMs
     STY TableLookupIndex
     LDY #PrintGemsShort
     LDA.B #bank(PrintGemsShort)
-    PHA
-    PLB
     BRA .printAndEnd
 +   CMP #!Exp
     BNE +
@@ -143,8 +146,6 @@ PrintRewardShort:
     STY TableLookupIndex
     LDY #PrintExpShort
     LDA.B #bank(PrintExpShort)
-    PHA
-    PLB
     BRA .printAndEnd
 +   CMP #!LairRelease
     BNE +
@@ -159,8 +160,6 @@ PrintRewardShort:
     STZ TableLookupIndex+1 ; Second byte unused
     LDY #PrintRevivableNpcNameShort
     LDA.B #bank(PrintRevivableNpcNameShort)
-    PHA
-    PLB
     BRA .printAndEnd
 +   CMP #!RemoteItem
     BNE +
@@ -168,8 +167,6 @@ PrintRewardShort:
     STY TableLookupIndex ; Indexes into the AP icons table.
     LDY #RemoteItemShort
     LDA.B #bank(RemoteItemShort)
-    PHA
-    PLB
     BRA .printAndEnd
 +   CMP #!Soul
     BNE +
@@ -177,24 +174,23 @@ PrintRewardShort:
     STY TableLookupIndex
     LDY #PrintSoulNameShort
     LDA.B #bank(PrintSoulNameShort)
-    PHA
-    PLB
     BRA .printAndEnd
-+   CMP #!Nothing
++   CMP #!Victory
     BNE +
-    LDY #PrintNothingShort
-    LDA.B #bank(PrintNothingShort)
-    PHA
-    PLB
+    LDY #PrintVictoryShort
+    LDA.B #bank(PrintVictoryShort)
     BRA .printAndEnd
-+   ; Give regular item
++   ; Catch-all for remaining non-regular items (ID >$40) which don't need special processing.
+    CMP #!MagicBell+1
+    BCS .end
+    ; Give regular item
     STA TableLookupIndex
     STZ TableLookupIndex+1
     LDY #PrintItemNameShort
     LDA.B #bank(PrintItemNameShort)
+.printAndEnd:
     PHA
     PLB
-.printAndEnd:
     JSL ResumePrintOsdStringFromBankX
 .end:
     PLB
@@ -211,7 +207,12 @@ PrintRewardFrom:
     PHA
     PHY
     SEP #$20
-    CMP #!Gems
+    CMP #!Nothing
+    BNE +
+    LDY #ReceivedNothingFrom
+    LDA.B #bank(ReceivedNothingFrom)
+    BRA .printAndEnd
++   CMP #!Gems
     BNE +
     ; GEMs
     STY TableLookupIndex
@@ -239,12 +240,6 @@ PrintRewardFrom:
     LDY #ReceivedRevivableNpcFrom
     LDA.B #bank(ReceivedRevivableNpcFrom)
     BRA .printAndEnd
-+   CMP #!RemoteItem
-    BNE +
-    ; Nothing to print for remote items. The Client handles that.
-    PLB
-    PLP
-    RTL
 +   CMP #!Soul
     BNE +
     ; Soul
@@ -252,12 +247,15 @@ PrintRewardFrom:
     LDY #ReceivedSoulFrom
     LDA.B #bank(ReceivedSoulFrom)
     BRA .printAndEnd
-+   CMP #!Nothing
++   CMP #!Victory
     BNE +
-    LDY #ReceivedNothingFrom
-    LDA.B #bank(ReceivedNothingFrom)
+    LDY #ReceivedVictoryFrom
+    LDA.B #bank(ReceivedVictoryFrom)
     BRA .printAndEnd
-+   ; Give regular item
++   ; Catch-all for remaining non-regular items (ID >$40) which don't need special processing.
+    CMP #!MagicBell+1
+    BCS .end
+    ; Give regular item
     STA TableLookupIndex
     STZ TableLookupIndex+1
     LDY #ReceivedItemFrom

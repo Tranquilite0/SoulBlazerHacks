@@ -1,5 +1,8 @@
 ; New strings
 
+;TODO: make a miscelaneous rewards lookuptable.
+;TODO: move all non-table lookup strings out of bank2
+
 ItemReceived = $02E216
 
 PrintItemNameShort:
@@ -72,20 +75,19 @@ db !Text_EndStyle, ".",!Text_EndText12
 ReceivedRevivableNpcFrom:
 db !Text_Start,!Text_HeroName," ",!Dict_received,!Text_CR,!Text_YellowStyle,!Text_TableLookup
 dw NpcNamePointerTable,TableLookupIndex
-db !Text_EndStyle,!Text_ChangeStreamPtr
-dw ReceivedFrom
+db !Text_EndStyle,!Text_ChangeStreamPtr : dw ReceivedFrom
 
 ReceivedExpFrom:
-db !Text_Start,!Text_HeroName," ",!Dict_received,!Text_CR,!Text_YellowStyle,!Text_PrintDecimal4," EXP",!Text_EndStyle,!Text_ChangeStreamPtr
-dw ReceivedFrom
+db !Text_Start,!Text_HeroName," ",!Dict_received,!Text_CR,!Text_YellowStyle,!Text_PrintDecimal4," EXP",!Text_EndStyle
+db !Text_ChangeStreamPtr : dw ReceivedFrom
 
 ReceivedGemsFrom:
-db !Text_Start,!Text_HeroName," ",!Dict_received,!Text_CR,!Text_YellowStyle,!Text_PrintDecimal4," GEMs",!Text_EndStyle,!Text_ChangeStreamPtr
-dw ReceivedFrom
+db !Text_Start,!Text_HeroName," ",!Dict_received,!Text_CR,!Text_YellowStyle,!Text_PrintDecimal4," GEMs",!Text_EndStyle
+db !Text_ChangeStreamPtr : dw ReceivedFrom
 
 ReceivedNothingFrom:
-db !Text_Start,!Text_HeroName," ",!Dict_received,!Text_CR,!Text_YellowStyle," Nothing",!Text_EndStyle,!Text_ChangeStreamPtr
-dw ReceivedFrom
+db !Text_Start,!Text_HeroName," ",!Dict_received,!Text_CR,!Text_YellowStyle," Nothing",!Text_EndStyle
+db !Text_ChangeStreamPtr : dw ReceivedFrom
 
 ; The souls strings already exist.
 SoulOfMagician = $02C639
@@ -104,12 +106,19 @@ dw SoulsNameTable,TableLookupIndex
 db !Text_EndStyle,".",!Text_EndText12
 
 PrintSoulNameShort:
-db !Text_Start,!Text_HeroName," ",!Dict_received,!Text_CR,!Text_YellowStyle,!Text_TableLookup
+db !Text_YellowStyle,!Text_TableLookup
 dw SoulsNameTable,TableLookupIndex
 db !Text_EndStyle,!Text_Break
 
 ReceivedSoulFrom:
 db !Text_Start,!Text_HeroName," ",!Dict_received,!Text_CR,!Text_YellowStyle,!Text_TableLookup
 dw SoulsNameTable,TableLookupIndex
-db !Text_EndStyle,!Text_ChangeStreamPtr
-dw ReceivedFrom
+db !Text_EndStyle,!Text_ChangeStreamPtr : dw ReceivedFrom
+
+PrintVictoryShort:
+db !Text_YellowStyle,"Victory",!Text_EndStyle,!Text_Break
+
+; Don't think this string will ever be used, but you never know...
+ReceivedVictoryFrom:
+db !Text_Start,!Text_HeroName," ",!Dict_received,!Text_CR,!Text_YellowStyle," Victory",!Text_EndStyle
+db !Text_ChangeStreamPtr : dw ReceivedFrom

@@ -74,6 +74,7 @@ includeonce
 
 ; TODO: extend with more rewards (traps/deathlink)?
 
+!Victory         = $FA
 !Soul            = $FB
 !RemoteItem      = $FC
 !LairRelease     = $FD
