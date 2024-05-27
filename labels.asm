@@ -221,6 +221,7 @@ MapChanged = $04F781
 
 ; Common Text Processing combinations
 !Text_YellowStyle     = $03,$24 ; Switch to printing yellow text.
+!Text_RedStyle        = $03,$3C ; Switch to printing red text.
 !Text_EndStyle        = $03,$20 ; Switch back to regular text color.
 !Text_EndText12       = $12,$08,$08,$04,$0C ; Wait for user, then undraw textbox and break from text processing.
 !Text_CleanUpAndBreak = $08,$08,$04,$0C ; Undraw textbox and break without waiting.

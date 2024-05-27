@@ -1,7 +1,16 @@
 ; New strings
 
-;TODO: make a miscelaneous rewards lookuptable.
-;TODO: move all non-table lookup strings out of bank2
+;TODO: make a miscelaneous rewards string lookuptable?
+; Things in the table would be:
+; AP icon regular, AP icon special, Nothing, Victory, ...?
+;TODO: move all non-table lookup strings out of bank2?
+
+; Labels for existing strings
+SoulOfMagician = $02C639
+SoulOfLight = $02C64E
+SoulOfShield = $02C663
+SoulOfDetection = $02C678
+SoulOfReality = $02C68D
 
 ItemReceived = $02E216
 
@@ -52,6 +61,8 @@ ReceiveSender: dw ReceiveStruct.Sender
 SendItemName: dw SendStruct.ItemName
 SendAddressee: dw SendStruct.Addressee
 ArchipelagoIcons: dw ArchipelagoIconRegular, ArchipelagoIconUpArrow
+; Souls trings exist, but there doesnt appear to be an existing lookup table for them.
+SoulsNameTable: dw SoulOfMagician, SoulOfLight, SoulOfShield, SoulOfDetection, SoulOfReality
 ; Each string needs a hardcoded address which contains the index into a table.
 ; These "Tables" only have one entry where the pointer is to ram so we need another address containing a "zero" index
 NullIndex: dw $0000
@@ -89,16 +100,6 @@ ReceivedNothingFrom:
 db !Text_Start,!Text_HeroName," ",!Dict_received,!Text_CR,!Text_YellowStyle," Nothing",!Text_EndStyle
 db !Text_ChangeStreamPtr : dw ReceivedFrom
 
-; The souls strings already exist.
-SoulOfMagician = $02C639
-SoulOfLight = $02C64E
-SoulOfShield = $02C663
-SoulOfDetection = $02C678
-SoulOfReality = $02C68D
-
-; But there doesnt appear to be a lookup table for them.
-SoulsNameTable:
-dw SoulOfMagician, SoulOfLight, SoulOfShield, SoulOfDetection, SoulOfReality
 
 ReceivedSoul:
 db !Text_Start,!Text_HeroName," ",!Dict_received,!Text_CR,!Text_YellowStyle,!Text_TableLookup

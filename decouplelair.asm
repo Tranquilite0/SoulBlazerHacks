@@ -122,6 +122,17 @@ CheckForRoof:
 ReleaseLairNpc:
     REP #$20
     TYA ; Lair ID in A and Y
+if defined("debug")
+    ; Allow teddy to be unlocked repeatedly for testing purposes.
+    CMP #$0016
+    BEQ +
+endif
+    ; Prevent unlocking the same NPC multiple times since it can cause issues.
+    LDY #LairReleaseTable
+    JSL CheckIfBitIsSet
+    BCC +
+    RTL
++   TAY ; Lair ID back in Y
     ASL #5
     TAX ; Lair Index in X
     SEP #$20
