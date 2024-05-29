@@ -1312,7 +1312,7 @@ assert pc() <= $04CF49
 org $04D203
     ; Let's reuse the door-soul text since it is suitably generic and in the same bank.
     %CopShowText($AEEE)
-    %CopGiveNpcReward(!NPC_SoulOfLight)
+    %CopGiveNpcReward(!NPC_SoulOfReality)
     %CopSetEventFlag($0604)
     RTL
     NOP #10
