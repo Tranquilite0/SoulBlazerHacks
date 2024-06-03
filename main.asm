@@ -31,6 +31,7 @@ assert pc() <= !Bank02FreespaceEnd
 
 org !Bank03FreeSpaceStart
     incsrc "npcscripts.bank03.asm"
+    incsrc "randosettings.asm"
     incsrc "reward.asm"
     incsrc "receive.asm"
     incsrc "textengineextensions.asm"

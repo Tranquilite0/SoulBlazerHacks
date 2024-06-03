@@ -227,6 +227,7 @@ MapChanged = $04F781
 !Text_CleanUpAndBreak = $08,$08,$04,$0C ; Undraw textbox and break without waiting.
 !Text_HeroName        = $02,$02 ; Prints the character name.
 !Text_PrintDecimal4   = $06,$04,$C8,$03 ; Print 4 decimal digits from the usual location.
+!Text_PrintDecimal1   = $06,$01,$C8,$03
 
 
 

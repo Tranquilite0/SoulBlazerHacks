@@ -841,7 +841,7 @@ CrystalReturnDialog = $03E4E9
 
 ;----------------- World of Evil -----------------;
 
-; Open World of evil with 6 stones 
+; Open World of evil with n stones 
 org $03EC61
 WorldOfEvilStoneCheck:
     BRL .checkStones
@@ -849,25 +849,46 @@ WorldOfEvilStoneCheck:
 
 pullpc ; Place this new code in the freespace region.
 .checkStones
-    %CopJumpIfItemNotObtained(!BrownStone,  .notEnoughStones)
-    %CopJumpIfItemNotObtained(!GreenStone,  .notEnoughStones)
-    %CopJumpIfItemNotObtained(!BlueStone,   .notEnoughStones)
-    %CopJumpIfItemNotObtained(!SilverStone, .notEnoughStones)
-    %CopJumpIfItemNotObtained(!PurpleStone, .notEnoughStones)
-    %CopJumpIfItemNotObtained(!BlackStone,  .notEnoughStones)
+    STZ.B $02
+    INC.B $02
+    %CopJumpIfItemNotObtained(!BrownStone,  +)
+    INC.B $02
++   %CopJumpIfItemNotObtained(!GreenStone,  +)
+    INC.B $02
++   %CopJumpIfItemNotObtained(!BlueStone,   +)
+    INC.B $02
++   %CopJumpIfItemNotObtained(!SilverStone, +)
+    INC.B $02
++   %CopJumpIfItemNotObtained(!PurpleStone, +)
+    INC.B $02
++   %CopJumpIfItemNotObtained(!BlackStone,  +)
+    INC.B $02
++   LDA.L RandoSettings.StonesRequired
+    AND #$00FF
+    CMP.B $02
+    BCS .notEnoughStones
     ; Code we replaced
     LDA #$7FC0
     BRL .resumeOpening
 .notEnoughStones
+    STA TableLookupIndex
     %CopShowText(.text)
     %CopTeleportPlayerToMap($0700,$01,$70,$50)
     RTL
 .text
-    db !Text_Start,!Dict_You,"need ",!Dict_all,"6 stones",!Text_CR
+    db !Text_Start,!Dict_You,"need ",!Text_YellowStyle,!Text_PrintDecimal1," stones",!Text_EndStyle,!Text_CR
     db !Dict_to,"open ",!Dict_the,"World ",!Dict_of,!Text_CR,"Evil.",!Text_ChangeStreamPtr : dw TextEndStandardBank3
 
 assert pc() <= !Bank03FreespaceEnd
 pushpc
+
+; TODO: more text edits to account for opening the world of evil with potentially less than 6 stones.
+org $03EC6C
+    %CopShowText(NewStonesConsumedStart)
+
+org $03ED15
+NewStonesConsumedStart:
+    db !Text_Start,!Dict_The
 
 ;-------------------------------------------------;
 

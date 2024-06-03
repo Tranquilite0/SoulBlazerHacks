@@ -7,11 +7,11 @@ includeonce
 !Bank00FreeSpaceStart = $00FA57
 !Bank00FreespaceEnd   = $00FFBF
 
-; 447 bytes free. There isnt much free space in bank 1, so it should be used sparingly since the text engine can only do table lookups in this bank.
+; 447 bytes free. There isnt much free space in bank 1, so it should be used sparingly.
 !Bank01FreeSpaceStart = $01FE40
 !Bank01FreespaceEnd   = $01FFFF
 
-; 2239 bytes free. Much of the core game logic and text is here.
+; 2239 bytes free. Much of the core game logic and text is here. This is the only bank which can do text engine string table lookups.
 !Bank02FreeSpaceStart = $02F740
 !Bank02FreespaceEnd   = $02FFFF
 
