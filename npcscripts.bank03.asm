@@ -150,6 +150,10 @@ org $03990C
 
 ;----------------- Village Chief -----------------;
 
+; Remove flag check to ensure chief still gives item in open mode.
+org $03A11F
+    NOP #6
+
 ; Abridge Village Chief's Dialog
 org $03A1F4
     db !Dict_to,!Dict_a,!Dict_person,"named",!Text_CR,!Text_HeroName,". ",!Text_ChangeStreamPtr : dw TextEndStandardBank3

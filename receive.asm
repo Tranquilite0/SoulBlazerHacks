@@ -107,7 +107,11 @@ Receive:
 +
     RTL
 ++
-    LDY ReceiveStruct.Operand
+    LDA ReceiveStruct.ID
+    CMP #!LairRelease
+    BNE + 
+    JSL IsAntiStuckNeeded
++   LDY ReceiveStruct.Operand
     LDA ReceiveStruct.ID
     JSL PrintRewardFrom
     JSL GiveReward

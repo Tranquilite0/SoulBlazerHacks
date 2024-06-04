@@ -81,7 +81,8 @@ DecoupleLairReward:
     JSL GiveReward
     BCS +
     BRK #$94 ; Play lair closed sound if no other item get sound played
-+   JML $028D03 ; Finish by animating the lair closing
++   JSL CheckBossLair
+    JML $028D03 ; Finish by animating the lair closing
 .lair:
     REP #$20
     LDA.W $BA26,X ; Load NPC ID from lair field $18-$19
@@ -172,7 +173,6 @@ ApplyRoofFix:
 ; Determines if Anti-Stuck protection should trigger.
 ; For now just trigger it if you are on a town map.
 ; TODO: Check the Release area rect and only unstuck if you are in them.
-; (though some zones like Seabed Sanc have additional problematic positions like the dolphin ferry island)
 IsAntiStuckNeeded:
     ; All of the master's shrines are in Map Number 00 Submaps 01-07
     LDA MapNumber

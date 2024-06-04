@@ -119,10 +119,15 @@ org $1F9093
 
 ;----------------- Mermaid Queen -----------------;
 
-; Patch script to give item.
-org $1F921F
+; Patch script. Replace event flag check with item check to allow open mode to function.
+org $1F9215
+    %CopJumpIfNpcRewardObtained(!NPC_MermaidQueen, +)
+    %CopShowText($9252)
     %CopGiveNpcReward(!NPC_MermaidQueen)
-    NOP #2
+    %CopSetEventFlag($1B02)
+    RTL
+    NOP #3
++
 
 ; Remove reference to vanilla item.
 org $1F9349

@@ -169,9 +169,14 @@ org $048D69
 
 ;--------------------- Nome ----------------------;
 
-org $0490BD
+org $0490B3
+    %CopJumpIfNpcRewardObtained(!NPC_Nome, +)
+    %CopShowText($90CC)
     %CopGiveNpcReward(!NPC_Nome)
-    NOP #2
+    %CopSetEventFlag($1B03)
+    RTL
+    NOP #3
++ ; CopShowText
 
 org $0491A9
     db "Here, ",!Dict_take,!Dict_this,!Dict_and,"go",!Text_CR,!Dict_to,"Leo`s Laboratory.",!Text_ChangeStreamPtr : dw TextEndStandardBank4
@@ -609,9 +614,14 @@ assert pc() <= $04B45C
 ;--------------------- Marie ---------------------;
 
 ; Patch script to give NPC reward.
-org $04B549
+org $04B53F
+    %CopJumpIfNpcRewardObtained(!NPC_Marie, +)
+    %CopShowText($B5AC)
     %CopGiveNpcReward(!NPC_Marie)
-    NOP #2
+    %CopSetEventFlag($1B04)
+    RTL
+    NOP #3
++ ; CopShowText
 
 ;Patch release script to hint reward.
 org $04B558
@@ -1349,9 +1359,14 @@ org $04D33D
 
 ;----------------- Magridd King ------------------;
 
-org $04D5D5
+org $04D5CB
+    %CopJumpIfNpcRewardObtained(!NPC_MagriddKing, +)
+    %CopShowText($D639)
     %CopGiveNpcReward(!NPC_MagriddKing)
-    NOP #2
+    %CopSetEventFlag($1B05)
+    RTL
+    NOP #3
++ ; CopShowText
 
 org $04D75D
     db !Dict_Please,!Dict_take,"this.",!Text_ChangeStreamPtr : dw TextEndStandardBank4

@@ -24,6 +24,13 @@ macro CopJumpIfNpcRewardNotObtained(npcId, target)
     dw <target>
 endmacro
 
+; Useful for replacing JumpIfEventFlagSet.
+macro CopJumpIfNpcRewardObtained(npcId, target)
+    COP #!CopJumpIfNpcRewardObtainedId
+    db <npcId>
+    dw <target>
+endmacro
+
 ; Prints an NPC reward. Prints the string pointed to by textPtr.
 ; Will replace first instance of $0C in the string with the NPC's reward.
 macro CopPrintNpcReward(npcId, textPtr)
@@ -101,6 +108,21 @@ CopJumpIfNpcRewardNotObtained:
     BRL RetInA
 
 
+CopJumpIfNpcRewardObtained:
+    TYX
+    LDA.B [CopTemp]
+    INC.B CopTemp
+    AND.W #$FF
+    JSL CheckNpcFlag
+    BCS .isObtained
+    BRL Skip2Args
+.isObtained:
+    LDA.B [CopTemp]
+    INC.B CopTemp
+    INC.B CopTemp
+    BRL RetInA
+
+
 CopResumePrint:
     TYX
     LDA.B [CopTemp]
@@ -148,6 +170,7 @@ pushpc
 org $00D6B2
     dw CopGiveNpcReward              : !CopGiveNpcRewardId              := !CopIndex : !CopIndex #= !CopIndex+1
     dw CopJumpIfNpcRewardNotObtained : !CopJumpIfNpcRewardNotObtainedId := !CopIndex : !CopIndex #= !CopIndex+1
+    dw CopJumpIfNpcRewardObtained    : !CopJumpIfNpcRewardObtainedId    := !CopIndex : !CopIndex #= !CopIndex+1
     dw CopPrintNPCReward             : !CopPrintNpcRewardId             := !CopIndex : !CopIndex #= !CopIndex+1
     dw CopResumePrint                : !CopResumePrintId                := !CopIndex : !CopIndex #= !CopIndex+1
     dw CopJumpIfLairRewardObtained   : !CopJumpIfLairRewardObtainedId   := !CopIndex : !CopIndex #= !CopIndex+1
