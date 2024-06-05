@@ -2,7 +2,7 @@
 Miscelaneous Soul Blazer Romhacks
 
 ## How to Use
-These patches expect an unhdeadered US Soul Blazer rom. The .asm patches can be applied with asar 1.9. The bsdiff4 patches can be applied with any bsdiff4 patcher (I use the python bsdiff4 library).
+These patches expect an unheadered US Soul Blazer rom. The .asm patches can be applied with asar 1.9. The bsdiff4 patches can be applied with any bsdiff4 patcher (I use the python bsdiff4 library).
 
 ## Hacks in this Repo
 
