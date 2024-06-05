@@ -63,10 +63,10 @@ org $03AAE6
 assert pc() <= $03AB4E
 
 ; Stub out the original Emblam A tile code.
-org $038756
+org $038750
     %CopSetScriptAddrToNextInstruction()
     RTL
-    NOP #13
+    NOP #19
 assert pc() <= $038766
 
 ;038756  02 01          COP #$01
