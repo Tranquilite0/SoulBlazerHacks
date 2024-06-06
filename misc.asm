@@ -93,12 +93,14 @@ EndingHook:
 
 ; Edit Magic cast so that Soul of Magician is required instead of just any Soul
 CastMagicHook:
+    PHA
     LDA SoulFlags
     AND #$0001
     BNE +
     SEC
+    PLA
     RTL
-+
++   PLA
     ; Original code that was replaced by hook.
     JML $04F6C9
 
