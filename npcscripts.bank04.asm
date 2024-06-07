@@ -1012,8 +1012,8 @@ org $04CA80
 ;------------- Platinum Card Soldier -------------;
 
 ; Update the map load script
-
-org $04CBE9
+org $04CBE3
+    NOP #6 ; Make it so that guard does not dissapear when Queen explodes
     ; Relocate the underfoot talkback script so we have enough room to hint
     %CopAssignTalkCallback(UnderGuardsFootText)
     ; Also patch CopJumpIfItemNotObtained to CopJumpIfNpcRewardNotObtained
@@ -1029,6 +1029,7 @@ org $04CC48
 UnderGuardsFootText:
     %CopShowText($CD1B)
     %CopPrintNpcReward(!NPC_PlatinumCardSoldier, +)
+    %Cop86()
     RTL
 +
     db !Text_Start,!Text_HeroName," sees",!Text_CR,!Text_Break,!Text_CR,"under ",!Dict_the,"guard`s",!Text_CR,"feet.",!Text_WaitBlinkCursor
@@ -1040,7 +1041,7 @@ UnderGuardsFootText:
 ;04CBE0               --------data--------
 ;04CBE0  00 00 00     .db $9D $A9 $00
 ;04CBE2               ----------------
-;04CBE3  02 07          COP #$07
+;04CBE3  02 07          COP #$07 ; Jump to end if queen exploded. This needs to be removed.
 ;04CBE5               --------data--------
 ;04CBE5  00 00 00 00  .db $05 $88 $20 $CC
 ;04CBE8               ----------------
