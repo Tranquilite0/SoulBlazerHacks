@@ -74,6 +74,8 @@ DisableButtonReadout = $7E0474
 
 EventFlags = $7E1A5E
 
+ChestFlags = $7E1A7E
+
 ; ; 64 bytes * 8 bits = 512 possible lairs
 LairReleaseTable = $7E1ADE
 ; Shadow copy of the Lair Release Table. Used during lair release process, possibly for lair dependency checks?

@@ -665,9 +665,16 @@ org $03D816
 ;-------------- Mole's Ribbon Chest --------------;
 
 ; This chest will show as opened if you have Mole's Ribbon already unless you patch this.
-; TODO: redo the script to check chest state rather than item state.
-org $03D9B3
-    db $00
+; There is no cop routine CopJmpIfChestUnopened, but the Chest Opened flags are close enough
+; in memory to the even flags that we can make an "event flag" which cooresponds to the chest flag.
+; Chest Index $0D or byte 1, bit 5 so... ChestFlags-EventFlags+1 bit $05
+; So the equivalent "event flag" is $2105
+; Replace CopJumpIfItemNotObtained to CopJumpIfEventFlagIsUnset, but we need an extra byte,
+; So branch to some freespace and put our code there.
+org $03D9B1
+    BRL MoleChestExtension
+    NOP #2
+MoleChestReturn:
 
 ;-------------------------------------------------;
 
@@ -677,6 +684,12 @@ org $03D9B3
 ;Change text to remove reference to vanilla reward.
 org $03DCD8
     db "this.",!Text_ChangeStreamPtr : dw TextEndStandardBank3
+; We have a fair amount of free space here now.
+; So we can put the Mole's Ribbon Chest extension code here.
+MoleChestExtension:
+    %CopJumpIfEventFlagIsUnset($2105, $D9BA)
+    BRL MoleChestReturn
+assert pc() <= $03DD40
 
 ; Change CopJumpIfItemNotObtained to CopJumpIfNpcRewardNotObtained
 org $03DC05
