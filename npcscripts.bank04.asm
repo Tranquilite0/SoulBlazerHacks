@@ -1029,7 +1029,6 @@ org $04CC48
 UnderGuardsFootText:
     %CopShowText($CD1B)
     %CopPrintNpcReward(!NPC_PlatinumCardSoldier, +)
-    %Cop86()
     RTL
 +
     db !Text_Start,!Text_HeroName," sees",!Text_CR,!Text_Break,!Text_CR,"under ",!Dict_the,"guard`s",!Text_CR,"feet.",!Text_WaitBlinkCursor
