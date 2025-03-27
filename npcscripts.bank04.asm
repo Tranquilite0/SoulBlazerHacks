@@ -1408,10 +1408,54 @@ org $04DE6F
 ;04DE71               --------data--------
 ;04DE71  00 00 00 00  .db $05 $9F $DC $DF
 
-; Give reward
+; Give reward at the end of the script instead of in the middle.
+;  to prevent having to replay the cutscene if you get an NPC release.
+; Unfortunately that means we need to reduplicate the bulk of the script here.
 org $04DF4D
+    ; Still play the item get sfx to indicate Leo slipped you something on the sly.
+    BRK #$5E
+    %CopLoopStart($1F)
+    %CopLoopEnd()
+    %CopShowText($E509)
+    %CopMakeNpcPassable()
+    %CopPlayAnimation($26)
+    %Cop82()
+    %CopPlayAnimation($23)
+    %Cop82()
+    %CopLoopStart($3D)
+    %CopLoopEnd()
+    %CopShowText($E533)
+    %CopPlayAnimation($26)
+    %Cop82()
+    %CopPlayAnimation($23)
+    %Cop82()
+    %CopSetScriptAddrAndId($04E99C, $0300)
+    %CopLoopStart($3D)
+    %CopLoopEnd()
+    %CopPlayAnimation($22)
+    %Cop82()
+    %CopMakeNpcUnpassable()
+    %CopWaitForEventFlagToBeSet($0006)
+    %CopLoopStart($15)
+    %CopLoopEnd()
+    COP #$31
+    db $13
+    %CopLoopStart($79)
+    %CopLoopEnd()
+    %CopSetEventFlag($0805)
+    ; Now give the reward.
     %CopGiveNpcReward(!NPC_LeoOnTheAirshipDeckMobileKey)
-    NOP #2
+    ; Now finish the script as usual.
+    ; Change the music?
+    LDA #$6FC0
+    TRB $0326
+    %CopAssignTalkCallback($DFF7)
+    %CopSetScriptAddrToNextInstruction()
+    RTL
+    ; 2 bytes to spare (only if SFX at start is skipped).
+    ;NOP #2
+
+assert pc() == $04DFAF
 
 ;04DF49  02 01          COP #$01
 ;04DF4B               --------data--------
