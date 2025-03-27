@@ -782,12 +782,11 @@ org $03E48E
 
 ;--------------- LightArrowCrystal ---------------;
 
-; Reward recieved message is so short already, just skip it entirely.
-; Change GiveExp COP routine to GiveNpcReward
+; Use generic cystal reward message and give NPC Reward.
 ; Also avoid giving the return to town prompt the first time you talk
 ; so that you dont glitch the game if you get a lair reward and return at the same time.
-; TODO: still show textbox in case it is remote reward since it behaves a bit wierdly.
 org $03E561
+    %CopShowText($EBC2)
     %CopGiveNpcReward(!NPC_LightArrowCrystal)
     %CopSetEventFlag($1C07)
     RTL 
