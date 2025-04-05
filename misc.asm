@@ -19,7 +19,6 @@ WinGame:
     SEP #$20
     LDA #$01
     STA TeleportPos.Facing
-    ;%CopTeleportPlayerToMap($0700, $01, $0070, $0060)
     ; Set the Event Flag for Victory and WoE open so that the epilogue can begin playing
     LDA #$24
     TSB EventFlags+$1F
@@ -29,6 +28,7 @@ WinGame:
 
 EnsureEndingNpcsReleased:
     ; We need to ensure that certain NPCs are unlocked or the ending breaks hard.
+    PHX ; Don't clobber X
     ; Alternate between setting bits in the LairReleaseTable and its Shadow copy.
     LDY #LairReleaseTable
     LDX #LairReleaseTableShadow
@@ -81,6 +81,7 @@ EnsureEndingNpcsReleased:
     TXY
     PLX
     JSL SetBit
+    PLX ; Unclobber X
     RTL
 
 
