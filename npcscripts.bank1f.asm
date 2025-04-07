@@ -4,16 +4,16 @@ pushpc
 
 ;----------- Soul of Shield Angelfish ------------;
 
-org $1F80F2
+org $9F80F2
     %CopGiveNpcReward(!NPC_SoulOfShield)
     %CopSetEventFlag($0701)
     %SetScriptAddrAndZeroId($80D4)
     NOP
 
 ; Text edits
-org $1F8177
+org $9F8177
     db !Text_ChangeStreamPtr : dw $81A8
-org $1F81D5
+org $9F81D5
     db !Text_ChangeStreamPtr : dw TextEndStandardBank1F
 
 ;1F80DC  BD 16 00       LDA $0016,X
@@ -46,7 +46,7 @@ org $1F81D5
 ;---------- North Eastern Mermaid Herb -----------;
 
 ; Probably easier to just redo this NPC script and text than patch it into shape.
-org $1F82F2
+org $9F82F2
 NorthEasternMermaidHerbScript:
     %CopJumpIfNpcRewardNotObtained(!NPC_NorthEasternMermaidHerb, .doYouWantOne)
     %CopShowText(.textThatsAll)
@@ -54,7 +54,7 @@ NorthEasternMermaidHerbScript:
 .doYouWantOne
     %CopPrintNpcReward(!NPC_NorthEasternMermaidHerb, .textWantOne)
     %CopShowChoices($CF02, $02, .dontWant)
-    LDA $0003D0 ; Read menu choice
+    LDA $8003D0 ; Read menu choice
     BNE .dontWant
     %CopGiveNpcReward(!NPC_NorthEasternMermaidHerb)
     RTL
@@ -71,7 +71,7 @@ NorthEasternMermaidHerbScript:
     ; "Come back if you change your mind."
     db !Text_Start,!Dict_Come,!Dict_back,"if ",!Dict_you,!Text_CR,"change ",!Dict_your,"mind.",!Text_ChangeStreamPtr : dw TextEndStandardBank1F
 
-assert pc() <= $1F83AC
+assert pc() <= $9F83AC
 
 ;-------------------------------------------------;
 
@@ -79,7 +79,7 @@ assert pc() <= $1F83AC
 ;------------- Bubble Armor Mermaid --------------;
 
 ; Modify release script/text to hint reward.
-org $1F8BB5
+org $9F8BB5
     %CopPrintNpcReward(!NPC_BubbleArmorMermaid, +)
     %Cop86()
     RTL
@@ -88,12 +88,12 @@ org $1F8BB5
     db !Text_Start,!Text_DelayAndContinue,$3C,"Does anyone need",!Text_CR,!Text_Break,"? ",!Text_ChangeStreamPtr : dw TextEndStandardBank1F
 
 ; Patch script to give NPC Reward
-org $1F8B9B
+org $9F8B9B
     %CopGiveNpcReward(!NPC_BubbleArmorMermaid)
     RTL
 
 ; Patch text to remove vanilla reward
-org $1F8C45
+org $9F8C45
     db !Text_ChangeStreamPtr : dw TextEndStandardBank1F
 
 ;-------------------------------------------------;
@@ -102,15 +102,15 @@ org $1F8C45
 ;-------------- Magic Flair Mermaid --------------;
 
 ; Patch text to remove reference to vanilla reward
-org $1F909E
+org $9F909E
     db "this.",!Text_ChangeStreamPtr : dw TextEndStandardBank1F
 
 ; Patch CopJumpIfItemNotObtained to CopJumpIfNpcRewardNotObtained
-org $1F9085
+org $9F9085
     %CopJumpIfNpcRewardNotObtained(!NPC_MagicFlairMermaid,$908F)
 
 ; Patch script to give NPC reward
-org $1F9093
+org $9F9093
     %CopGiveNpcReward(!NPC_MagicFlairMermaid)
     RTL
 
@@ -120,7 +120,7 @@ org $1F9093
 ;----------------- Mermaid Queen -----------------;
 
 ; Patch script. Replace event flag check with item check to allow open mode to function.
-org $1F9215
+org $9F9215
     %CopJumpIfNpcRewardObtained(!NPC_MermaidQueen, +)
     %CopShowText($9252)
     %CopGiveNpcReward(!NPC_MermaidQueen)
@@ -130,7 +130,7 @@ org $1F9215
 +
 
 ; Remove reference to vanilla item.
-org $1F9349
+org $9F9349
     db "this. ",!Text_CR,!Text_ChangeStreamPtr : dw $935C
 
 ;-------------------------------------------------;
@@ -140,7 +140,7 @@ org $1F9349
 
 ; This script normally checks for phoenix and for the presense of an item.
 ; We can replace all of that.
-org $1F9858
+org $9F9858
 RedHotMermaidScript:
     %CopJumpIfNpcRewardNotObtained(!NPC_RedHotStickMermaid, +)
     %CopShowText($98C6)
@@ -154,7 +154,7 @@ RedHotMermaidScript:
     NOP #8
 
 
-org $1F9890
+org $9F9890
     db "this.",!Text_ChangeStreamPtr : dw TextEndStandardBank1F
 
 ;1F985F  02 18          COP #$18
@@ -185,7 +185,7 @@ org $1F9890
 ;---------------------- Lue ----------------------;
 
 ; Fix condition for Mermaid guarding Lue's Entrance
-org $1F98FC
+org $9F98FC
     %CopJumpIfNpcRewardNotObtained(!NPC_Lue, $9903)
 
 ;1F98FC  02 18          COP #$18
@@ -194,16 +194,16 @@ org $1F98FC
 
 
 ; Patch CopJumpIfItemNotObtained to CopJumpIfNpcRewardNotObtained
-org $1F9BB5
+org $9F9BB5
     %CopJumpIfNpcRewardNotObtained(!NPC_Lue,$9BD1)
 
 ; Patch script to give NPC reward
-org $1F9BE7
+org $9F9BE7
     %CopGiveNpcReward(!NPC_Lue)
     NOP #2
 
 ; Patch text to remove reference to vanilla reward
-org $1F9D5A
+org $9F9D5A
     db "hope ",!Dict_this,!Dict_will,!Dict_help,!Text_CR,!Dict_please,!Dict_take,"it.",!Text_ChangeStreamPtr : dw TextEndStandardBank1F
 
 ;-------------------------------------------------;
@@ -212,13 +212,13 @@ org $1F9D5A
 ;--------------- Rockbird Crystal ----------------;
 
 ; Change crystal message to skip EXP received message
-org $1FA9E3
+org $9FA9E3
     db !Text_ChangeStreamPtr : dw TextEndStandardBank1F
 
 ; Change GiveExp COP routine to GiveNpcReward
 ; Also avoid giving the return to town prompt the first time you talk
 ; so that you dont glitch the game if you get a lair reward and return at the same time.
-org $1FA465
+org $9FA465
     %CopGiveNpcReward(!NPC_RockbirdCrystal)
     %CopSetEventFlag($1D00)
     RTL 
@@ -233,7 +233,7 @@ org $1FA465
 ; Change GiveExp COP routine to GiveNpcReward
 ; Also avoid giving the return to town prompt the first time you talk
 ; so that you dont glitch the game if you get a lair reward and return at the same time.
-org $1FA4B9
+org $9FA4B9
     %CopGiveNpcReward(!NPC_SeabedCrystalNearBlester)
     %CopSetEventFlag($1D06)
     RTL 
@@ -248,7 +248,7 @@ org $1FA4B9
 ; Change GiveExp COP routine to GiveNpcReward
 ; Also avoid giving the return to town prompt the first time you talk
 ; so that you dont glitch the game if you get a lair reward and return at the same time.
-org $1FA4E9
+org $9FA4E9
     %CopGiveNpcReward(!NPC_SeabedCrystalNearDurean)
     %CopSetEventFlag($1D07)
     RTL 

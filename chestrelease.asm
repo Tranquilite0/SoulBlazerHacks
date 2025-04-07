@@ -25,7 +25,7 @@ ChestAntiStuckCheck:
 pushpc
 
 ; At this point we can just replace the existing code since we have rewriten it all.
-org $028AAC
+org $828AAC
     JSL ChestAntiStuckCheck
     ;Load operand and ID
     LDY $A9E2,X
@@ -37,7 +37,7 @@ org $028AAC
     NOP #10 ; Nop out remaining unused code.
 
 ;Patch the default GEMs recieved message to allow up to 4 digit values
-org $02E254
+org $82E254
 db $04
 
 pullpc

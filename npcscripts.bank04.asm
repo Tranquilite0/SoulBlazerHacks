@@ -5,24 +5,24 @@ pushpc
 ;----------------- Mountain King -----------------;
 ; Patching Dancing Grandma Scripts to check NPC reward instead of phoenix
 ; TODO: patch them to give hint for item if three red-hots obtained?
-org $0483BF
+org $8483BF
     %CopJumpIfNpcRewardNotObtained(!NPC_MountainKing, $83C9)
-org $0484DD
+org $8484DD
     %CopJumpIfNpcRewardNotObtained(!NPC_MountainKing, $84E7)
 
 ; Check for NPC Reward instead of vanilla reward
-org $048633
+org $848633
     %CopJumpIfNpcRewardNotObtained(!NPC_MountainKing, $863D)
 
 ; Change entrypoint after cutscene teleport from Deathtoll's Lair
-org $048577
+org $848577
     %CopJumpIfEventFlagIsSet($0A01, MountainKingNewEntryPoint)
 
 ; Give NPC Reward. To prevent NPC rewards from breaking the cutscene and breaking ability to finish
 ; the game, the item send needs to be moved to the end of the script. Rather than do weird branching,
 ; we will just rewrite this portion of the script.
 
-org $048588
+org $848588
     ; Check for NPC Reward instead of vanilla reward
     %CopJumpIfNpcRewardNotObtained(!NPC_MountainKing, +)
     BRA MountainKingScriptEnd
@@ -61,9 +61,9 @@ MountainKingNewEntryPoint:
     %CopRemoveItem(!RedHotMirror)
     %CopRemoveItem(!RedHotBall)
     %CopRemoveItem(!RedHotStick)
-    assert pc() == $0485E5
+    assert pc() == $8485E5
 
-MountainKingScriptEnd = $0485EF
+MountainKingScriptEnd = $8485EF
 ;Give phoenix
 ;04859D  02 01          COP #$01
 ;04859F               --------data--------
@@ -138,7 +138,7 @@ MountainKingScriptEnd = $0485EF
 ;-------------- Mushroom Shoes Boy ---------------;
 
 ; Easier to just rewrite script than patch it into shape.
-org $048D51
+org $848D51
 MushroomShoesBoyScript:
     %CopJumpIfNpcRewardNotObtained(!NPC_MushroomShoesBoy, .giveReward)
     %CopShowText(.alreadyHave)
@@ -149,7 +149,7 @@ MushroomShoesBoyScript:
     RTL
 
 ; Patch release script to hint reward.
-org $048D69
+org $848D69
     %CopPrintNpcReward(!NPC_MushroomShoesBoy, .hintRewardText)
     STZ $03FB
     %Cop86()
@@ -169,7 +169,7 @@ org $048D69
 
 ;--------------------- Nome ----------------------;
 
-org $0490B3
+org $8490B3
     %CopJumpIfNpcRewardObtained(!NPC_Nome, +)
     %CopShowText($90CC)
     %CopGiveNpcReward(!NPC_Nome)
@@ -178,7 +178,7 @@ org $0490B3
     NOP #3
 + ; CopShowText
 
-org $0491A9
+org $8491A9
     db "Here, ",!Dict_take,!Dict_this,!Dict_and,"go",!Text_CR,!Dict_to,"Leo`s Laboratory.",!Text_ChangeStreamPtr : dw TextEndStandardBank4
 
 ;-------------------------------------------------;
@@ -187,12 +187,12 @@ org $0491A9
 ;---------------- Emblem E Snail -----------------;
 
 ; Patch NPC script to give item
-org $049A6A
+org $849A6A
     %CopGiveNpcReward(!NPC_EmblemESnail)
     NOP #2
 
 ; Patch text to remove vanilla reward.
-org $049A98
+org $849A98
     db !Text_ChangeStreamPtr : dw TextEndStandardBank4
 
 ;-------------------------------------------------;
@@ -200,7 +200,7 @@ org $049A98
 
 ;----------------- Emblem F Tile -----------------;
 
-org $049E9F
+org $849E9F
     %CopGiveNpcReward(!NPC_EmblemFTile)
     NOP #6
 
@@ -212,13 +212,13 @@ org $049E9F
 ; Change GiveExp COP routine to GiveNpcReward
 ; Also avoid giving the return to town prompt the first time you talk
 ; so that you dont glitch the game if you get a lair reward and return at the same time.
-org $049EF3
+org $849EF3
     %CopGiveNpcReward(!NPC_MountainOfSoulsCrystal)
     %CopSetEventFlag($1E00)
     RTL 
 
 ; Abridge text to remove reward message.
-org $04A4B4
+org $84A4B4
     db !Text_ChangeStreamPtr : dw TextEndStandardBank4
 
 ;-------------------------------------------------;
@@ -229,7 +229,7 @@ org $04A4B4
 ; Change GiveExp COP routine to GiveNpcReward
 ; Also avoid giving the return to town prompt the first time you talk
 ; so that you dont glitch the game if you get a lair reward and return at the same time.
-org $049F47
+org $849F47
     %CopGiveNpcReward(!NPC_LuneCrystal)
     %CopSetEventFlag($1D05)
     RTL 
@@ -239,7 +239,7 @@ org $049F47
 
 ;-------- Emblem G Under Chest of Drawers --------;
 
-org $04AA38
+org $84AA38
     %CopGiveNpcReward(!NPC_EmblemGUnderChestOfDrawers)
     NOP #6
 
@@ -266,16 +266,16 @@ org $04AA38
 ;----------- ChestOfDrawersMysticArmor -----------;
 
 ; Patch NPC script to give item
-org $04AA53
+org $84AA53
     %CopGiveNpcReward(!NPC_ChestOfDrawersMysticArmor)
     NOP #6
 
 ; Change CopJumpIfItemNotObtained to CopJumpIfNpcRewardNotObtained
-org $04AA69
+org $84AA69
     %CopJumpIfNpcRewardNotObtained(!NPC_ChestOfDrawersMysticArmor, $AA73)
 
 ; Patch text to remove vanilla reward.
-org $04AA82
+org $84AA82
     db "contents ",!Text_CR,!Dict_from,!Dict_my,"drawer.",!Text_ChangeStreamPtr : dw TextEndStandardBank4
 
 ;-------------------------------------------------;
@@ -284,7 +284,7 @@ org $04AA82
 ;----------- Herb Plant in Leo's Lab -------------;
 
 ; Probably easier to just redo this NPC script and text than patch it into shape.
-org $04AB9E
+org $84AB9E
 HerbPlantLeosLabScript:
     %CopJumpIfNpcRewardNotObtained(!NPC_HerbPlantInLeosLab, .doYouWantOne)
     %CopShowText(.textThatsAll)
@@ -292,7 +292,7 @@ HerbPlantLeosLabScript:
 .doYouWantOne
     %CopPrintNpcReward(!NPC_HerbPlantInLeosLab, .textWantOne)
     %CopShowChoices($CF02, $02, .dontWant)
-    LDA $0003D0 ; Read menu choice
+    LDA $8003D0 ; Read menu choice
     BNE .dontWant
     %CopGiveNpcReward(!NPC_HerbPlantInLeosLab)
     RTL
@@ -309,7 +309,7 @@ HerbPlantLeosLabScript:
     ; "Come back if you change your mind."
     db !Text_Start,!Dict_Come,!Dict_back,"if ",!Dict_you,!Text_CR,"change ",!Dict_your,"mind.",!Text_ChangeStreamPtr : dw TextEndStandardBank4
 
-assert pc() <= $04AC7B
+assert pc() <= $84AC7B
 
 ;04AB9E  02 01          COP #$01
 ;04ABA0               --------data--------
@@ -354,7 +354,7 @@ assert pc() <= $04AC7B
 
 ;------------ Soul of Detection Door -------------;
 
-org $04AE64
+org $84AE64
     %CopGiveNpcReward(!NPC_SoulOfDetection)
     %CopSetEventFlag($0603)
     %CopAssignTalkCallback($0000)
@@ -362,7 +362,7 @@ org $04AE64
     NOP
 
 ; Text edits
-org $04AF2A
+org $84AF2A
     db !Text_ChangeStreamPtr : dw TextEndStandardBank4
 
 ;04AE60  02 01          COP #$01
@@ -393,12 +393,12 @@ org $04AF2A
 ;-------------- Leo's Cat Door Key ---------------;
 
 ; Patch Reward
-org $04AFAF
+org $84AFAF
     %CopGiveNpcReward(!NPC_LeosCatDoorKey)
     NOP #2
 
 ; Patch Text
-org $04B0E1
+org $84B0E1
     db !Text_ChangeStreamPtr : dw TextEndStandardBank4
 
 ;04AFAB  02 01          COP #$01
@@ -472,14 +472,14 @@ org $04B0E1
 
 ;---------------- Actinidia Plant ----------------;
 
-org $04B199
+org $84B199
     %CopJumpIfNpcRewardNotObtained(!NPC_ActinidiaPlant, $B1A3)
 
-org $04B1A7
+org $84B1A7
     %CopGiveNpcReward(!NPC_ActinidiaPlant)
     RTL
 
-org $04B1BD
+org $84B1BD
     db !Dict_please,!Dict_take,"this.",!Text_ChangeStreamPtr : dw TextEndStandardBank4
 
 ;04B199  02 18          COP #$18
@@ -511,7 +511,7 @@ org $04B1BD
 
 ; Lets turn this NPC into an item-giving NPC
 ; We'll use the shopkeeper template since I have it on hand.
-org $04B2CD
+org $84B2CD
 ChestOfDrawersHerbScript:
     %CopJumpIfNpcRewardNotObtained(!NPC_ChestOfDrawersHerb, .doYouWantOne)
     %CopShowText(.textThatsAll)
@@ -519,7 +519,7 @@ ChestOfDrawersHerbScript:
 .doYouWantOne
     %CopPrintNpcReward(!NPC_ChestOfDrawersHerb, .textWantOne)
     %CopShowChoices($CF02, $02, .dontWant)
-    LDA $0003D0 ; Read menu choice
+    LDA $8003D0 ; Read menu choice
     BNE .dontWant
     %CopGiveNpcReward(!NPC_ChestOfDrawersHerb)
     RTL
@@ -536,7 +536,7 @@ ChestOfDrawersHerbScript:
     ; "Come back if you change your mind."
     db !Text_Start,!Dict_Come,!Dict_back,"if ",!Dict_you,!Text_CR,"change ",!Dict_your,"mind.",!Text_ChangeStreamPtr : dw TextEndStandardBank4
 
-assert pc() <= $04B45C
+assert pc() <= $84B45C
 ;04B2CD  02 07          COP #$07
 ;04B2CF               --------data--------
 ;04B2CF  00 00 00 00  .db $07 $88 $FF $B2
@@ -614,7 +614,7 @@ assert pc() <= $04B45C
 ;--------------------- Marie ---------------------;
 
 ; Patch script to give NPC reward.
-org $04B53F
+org $84B53F
     %CopJumpIfNpcRewardObtained(!NPC_Marie, +)
     %CopShowText($B5AC)
     %CopGiveNpcReward(!NPC_Marie)
@@ -624,7 +624,7 @@ org $04B53F
 + ; CopShowText
 
 ;Patch release script to hint reward.
-org $04B558
+org $84B558
     %CopPrintNpcReward(!NPC_Marie, +)
     %CopRestoreToFullHealth()
     %Cop86()
@@ -633,7 +633,7 @@ org $04B558
     db !Text_Start, !Text_DelayAndContinue,"<",!Dict_I,!Dict_am,"Marie, ",!Dict_the,"doll. ",!Text_CR,!Dict_I,!Dict_will,!Dict_give,!Dict_you,!Text_CR,!Text_Break,!Text_CR,!Text_ChangeStreamPtr : dw $B585
 
 ; Patch item give text to remove reference to vanilla reward
-org $04B623
+org $84B623
     db !Dict_and,!Text_CR,!Dict_go,!Dict_to,!Dict_Magridd,"Castle.",!Text_ChangeStreamPtr : dw TextEndStandardBank4
 
 ;04B53F  02 07          COP #$07
@@ -675,14 +675,14 @@ org $04B623
 
 ;--------------- Spark Bomb Mouse ----------------;
 
-org $04B8E4
+org $84B8E4
     %CopJumpIfNpcRewardNotObtained(!NPC_SparkBombMouse, $B8EE)
 
-org $04B8F2
+org $84B8F2
     %CopGiveNpcReward(!NPC_SparkBombMouse)
     RTL
 
-org $04B93A
+org $84B93A
     db !Text_CR,!Dict_please,!Dict_take,"this. ",!Text_ChangeStreamPtr : dw TextEndStandardBank4
 
 ;04B8E4  02 18          COP #$18
@@ -712,12 +712,12 @@ org $04B93A
 
 ;---------- Leo's Lab Basement Crystal -----------;
 
-org $04BDF8
+org $84BDF8
     %CopGiveNpcReward(!NPC_LeosLabBasementCrystal)
     %CopSetEventFlag($1D01)
     RTL 
 
-org $04BF4B
+org $84BF4B
     db !Text_ChangeStreamPtr : dw TextEndStandardBank4
 
 ;04BDEE  02 07          COP #$07
@@ -750,7 +750,7 @@ org $04BF4B
 
 ;------------ Model Town 1 Crystal ---------------;
 
-org $04BE4C
+org $84BE4C
     %CopGiveNpcReward(!NPC_ModelTown1Crystal)
     %CopSetEventFlag($1D02)
     RTL 
@@ -778,7 +778,7 @@ org $04BE4C
 
 ;-------------- Power Plant Crystal --------------;
 
-org $04BE7C
+org $84BE7C
     %CopGiveNpcReward(!NPC_PowerPlantCrystal)
     %CopSetEventFlag($1D03)
     RTL 
@@ -806,11 +806,11 @@ org $04BE7C
 
 ;------------ Elemental Mail Soldier -------------;
 
-org $04C29F
+org $84C29F
     %CopGiveNpcReward(!NPC_ElementalMailSoldier)
     NOP #2
 
-org $04C39A
+org $84C39A
     db !Dict_please,!Dict_take,"this. ",!Text_ChangeStreamPtr : dw TextEndStandardBank4
 
 ;04C281  02 17          COP #$17
@@ -864,7 +864,7 @@ org $04C39A
 ; There is another soldier who hints what the sleeping soldier has
 ; Fortunately his text segment is adjacent to his script so we can
 ; Safely expand the script to include the hint.
-org $04C111
+org $84C111
     %CopPrintNpcReward(!NPC_ElementalMailSoldier, +)
     %Cop86()
     RTL
@@ -888,19 +888,19 @@ org $04C111
 
 
 
-org $04C981
+org $84C981
     %CopJumpIfNpcRewardNotObtained(!NPC_SuperBraceletTile, $C989)
     ; Lets also give the Queen's reward if the player never got it while the queen was alive.
     BRL SuperBraceletTileExtension
 
-org $04C997
+org $84C997
     %CopGiveNpcReward(!NPC_SuperBraceletTile)
     ; Lets also give the Queen's reward if the player never got it while the queen was alive.
     BRL SuperBraceletTileExtension
     RTL
-    assert pc() <= $04C99E 
+    assert pc() <= $84C99E 
 ; Patch text to remove reference to vanilla reward
-org $04CAB6
+org $84CAB6
     db !Text_Start,!Dict_There,!Dict_is,!Dict_something,!Text_CR,"where ",!Dict_the,"Queen ",!Dict_was,!Text_CR,"standing.",!Text_ChangeStreamPtr : dw TextEndStandardBank4
 
 ;04C978  BD 16 00       LDA $0016,X
@@ -939,18 +939,18 @@ org $04CAB6
 ;------------ Queen Magridd VIP Card -------------;
 
 ; Patch CopJumpIfItemNotObtained to CopJumpIfNpcRewardNotObtained
-org $04C99F
+org $84C99F
     %CopJumpIfNpcRewardNotObtained(!NPC_QueenMagriddVIPCard, $C9A9)
 
 ; Give reward
-org $04C9BE
+org $84C9BE
     %CopGiveNpcReward(!NPC_QueenMagriddVIPCard)
 
 ; Patch text to remove refernce to vanilla rewards.
-org $04CA59
+org $84CA59
     db !Text_ChangeStreamPtr : dw TextEndStandardBank4
 
-org $04CA80
+org $84CA80
     db !Text_ChangeStreamPtr : dw TextEndStandardBank4
 
 ;04C99F  02 18          COP #$18
@@ -1012,7 +1012,7 @@ org $04CA80
 ;------------- Platinum Card Soldier -------------;
 
 ; Update the map load script
-org $04CBE3
+org $84CBE3
     NOP #6 ; Make it so that guard does not dissapear when Queen explodes
     ; Relocate the underfoot talkback script so we have enough room to hint
     %CopAssignTalkCallback(UnderGuardsFootText)
@@ -1020,12 +1020,12 @@ org $04CBE3
     %CopJumpIfNpcRewardNotObtained(!NPC_PlatinumCardSoldier, $CBF8)
 
 ; Update reward
-org $04CC3C
+org $84CC3C
     %CopGiveNpcReward(!NPC_PlatinumCardSoldier)
     NOP #6
 
 ;Place hint script and text in place of old text
-org $04CC48
+org $84CC48
 UnderGuardsFootText:
     %CopShowText($CD1B)
     %CopPrintNpcReward(!NPC_PlatinumCardSoldier, +)
@@ -1210,7 +1210,7 @@ UnderGuardsFootText:
 ;------------------- Maid Herb -------------------;
 
 ; This NPC starts their conversation automatically, so we need to tweak the shopkeeper template a bit.
-org $04CE5A
+org $84CE5A
 MaidHerbScript:
     skip 10
 .endScript:
@@ -1222,7 +1222,7 @@ MaidHerbScript:
 .doYouWantOne:
     %CopPrintNpcReward(!NPC_MaidHerb, .textWantOne)
     %CopShowChoices($CF02, $02, .dontWant)
-    LDA $0003D0 ; Read menu choice
+    LDA $8003D0 ; Read menu choice
     BNE .dontWant
     %CopShowText(.textGive)
     %CopGiveNpcReward(!NPC_MaidHerb)
@@ -1262,7 +1262,7 @@ SuperBraceletTileExtension:
 .butWaitTheresMore
     db !Text_Start,!Dict_There,!Dict_is,!Dict_something,!Text_CR,!Dict_here,"too!",!Text_ChangeStreamPtr : dw TextEndStandardBank4
 
-assert pc() <= $04CF49
+assert pc() <= $84CF49
 ;04CE5A  02 91          COP #$91
 ;04CE5C  02 0D          COP #$0D
 ;04CE5E               --------data--------
@@ -1319,7 +1319,7 @@ assert pc() <= $04CF49
 
 ;------------ Soul of Reality Soldier ------------;
 
-org $04D203
+org $84D203
     ; Let's reuse the door-soul text since it is suitably generic and in the same bank.
     %CopShowText($AEEE)
     %CopGiveNpcReward(!NPC_SoulOfReality)
@@ -1350,7 +1350,7 @@ org $04D203
 
 ;----------------- Emblem H Tile -----------------;
 
-org $04D33D
+org $84D33D
     %CopGiveNpcReward(!NPC_EmblemHTile)
     NOP #6
 
@@ -1359,7 +1359,7 @@ org $04D33D
 
 ;----------------- Magridd King ------------------;
 
-org $04D5CB
+org $84D5CB
     %CopJumpIfNpcRewardObtained(!NPC_MagriddKing, +)
     %CopShowText($D639)
     %CopGiveNpcReward(!NPC_MagriddKing)
@@ -1368,7 +1368,7 @@ org $04D5CB
     NOP #3
 + ; CopShowText
 
-org $04D75D
+org $84D75D
     db !Dict_Please,!Dict_take,"this.",!Text_ChangeStreamPtr : dw TextEndStandardBank4
 
 ;04D5C7  02 09          COP #$09
@@ -1400,7 +1400,7 @@ org $04D75D
 ;------ Leo On The Airship Deck Mobile Key -------;
 
 ; Hack so Leo doesn't dissapear after Demon Bird is dead
-org $04DE6F
+org $84DE6F
     NOP #6
 
 ; Jump if demon bird dead (flag set).
@@ -1411,7 +1411,7 @@ org $04DE6F
 ; Give reward at the end of the script instead of in the middle.
 ;  to prevent having to replay the cutscene if you get an NPC release.
 ; Unfortunately that means we need to reduplicate the bulk of the script here.
-org $04DF4D
+org $84DF4D
     ; Still play the item get sfx to indicate Leo slipped you something on the sly.
     BRK #$5E
     %CopLoopStart($1F)
@@ -1429,7 +1429,7 @@ org $04DF4D
     %Cop82()
     %CopPlayAnimation($23)
     %Cop82()
-    %CopSetScriptAddrAndId($04E99C, $0300)
+    %CopSetScriptAddrAndId($84E99C, $0300)
     %CopLoopStart($3D)
     %CopLoopEnd()
     %CopPlayAnimation($22)
@@ -1455,7 +1455,7 @@ org $04DF4D
     ; 2 bytes to spare (only if SFX at start is skipped).
     ;NOP #2
 
-assert pc() == $04DFAF
+assert pc() == $84DFAF
 
 ;04DF49  02 01          COP #$01
 ;04DF4B               --------data--------
@@ -1468,7 +1468,7 @@ assert pc() == $04DFAF
 ;04DF51               ----------------
 
 ; Remove reference to king magridd's vanilla reward.
-org $04E1D3
+org $84E1D3
     db !Text_ChangeStreamPtr : dw TextEndStandardBank4
 ;04DFE4  02 01          COP #$01
 ;04DFE6               --------data--------
@@ -1482,12 +1482,12 @@ org $04E1D3
 
 ;--------------- Harp String Tile ----------------;
 
-org $04EA0A
+org $84EA0A
     %CopGiveNpcReward(!NPC_HarpStringTile)
     NOP #2
 
 ; Keep "the body is holding something" but remove vanilla reward reference
-org $04EA32
+org $84EA32
     db !Text_ChangeStreamPtr : dw TextEndStandardBank4
 
 ;04EA06  02 01          COP #$01

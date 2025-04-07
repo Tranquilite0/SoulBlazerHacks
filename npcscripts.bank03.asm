@@ -11,11 +11,11 @@ pushpc
 
 ; Patch shopkeeper message to skip mentioning that she only has medical herbs.
 ; Now ends after "Take whatever you need from my store. "
-org $0383ED
+org $8383ED
     db !Text_ChangeStreamPtr : dw TextEndStandardBank3
 
 ; Patch NPC Script TODO: Revisit and do this like the other shopkeepers.
-org $038399
+org $838399
     %CopShowText($83AD) ; Display shopkeepers message
     %CopGiveNpcReward(!NPC_ToolShopOwner)
     RTL
@@ -25,7 +25,7 @@ org $038399
 
 ;TODO: remove tulip autotalk?
 ;TODO: customize starting message?
-org $03AA26
+org $83AA26
 StartingTulipScript:
     %CopSetScriptAddrAndId(.locationChecks, $2000) ; I have no idea what $2000 is for.
     %CopMakeNpcUnpassable()
@@ -45,10 +45,10 @@ StartingTulipScript:
 .tulipTalk:
     %CopShowText($AA6A)
     RTL
-assert pc() <= $03AA69
+assert pc() <= $83AA69
 
 ; We have some text space no longer being used by the tulip script.
-org $03AAE6
+org $83AAE6
 .locationChecks
     %CopSetScriptAddrToNextInstruction()
     %CopJumpIfEventFlagIsSet($0905, +)
@@ -60,14 +60,14 @@ org $03AAE6
 +
     %CopSetScriptAddrToNextInstruction()
     RTL
-assert pc() <= $03AB4E
+assert pc() <= $83AB4E
 
 ; Stub out the original Emblam A tile code.
-org $038750
+org $838750
     %CopSetScriptAddrToNextInstruction()
     RTL
     NOP #19
-assert pc() <= $038766
+assert pc() <= $838766
 
 ;038756  02 01          COP #$01
 ;038758               --------data--------
@@ -92,7 +92,7 @@ assert pc() <= $038766
 ;---------------- Goat Pen Corner ----------------;
 
 ; Patch NPC Script
-org $038958
+org $838958
     %CopGiveNpcReward(!NPC_GoatPenCorner)
     NOP #6
 
@@ -102,19 +102,19 @@ org $038958
 ;---------- Tool Shop Owner's Son Teddy ----------;
 
 ; Break up Teddy's speech so we can print our reward name
-org $039276
+org $839276
     db !Text_CR,!Text_Break,!Text_ChangeStreamPtr : dw $9287
 
 ; And end it early since we will be printing the received message in a different routine
-org $039300
+org $839300
     db !Text_ChangeStreamPtr : dw TextEndStandardBank3
 
 ; Modify the you already have my reward message.
-org $039320
+org $839320
     db "That`s all I`ve got.",!Text_ChangeStreamPtr : dw TextEndStandardBank3
 
 ; Patch NPC Script
-org $03922C
+org $83922C
     %CopJumpIfNpcRewardNotObtained(!NPC_ToolShopOwnersSonTeddy, $9236)
     skip 5
     %CopPrintNpcReward(!NPC_ToolShopOwnersSonTeddy, $9255)
@@ -132,7 +132,7 @@ org $03922C
 
 ;--------------------- A Pass --------------------;
 
-org $039833
+org $839833
     %CopGiveNpcReward(!NPC_APass)
     NOP #6
 
@@ -141,7 +141,7 @@ org $039833
 
 ;---------- Tile in Child's Secret Cave ----------;
 
-org $03990C
+org $83990C
     %CopGiveNpcReward(!NPC_TileInChildsSecretCave)
     NOP #6
 
@@ -151,33 +151,33 @@ org $03990C
 ;----------------- Village Chief -----------------;
 
 ; Remove flag check to ensure chief still gives item in open mode.
-org $03A11F
+org $83A11F
     NOP #6
 
 ; Abridge Village Chief's Dialog
-org $03A1F4
+org $83A1F4
     db !Dict_to,!Dict_a,!Dict_person,"named",!Text_CR,!Text_HeroName,". ",!Text_ChangeStreamPtr : dw TextEndStandardBank3
 
 ; Patch Master's Dialog
-org $03A2F8
+org $83A2F8
     db "next ",!Dict_world,!Dict_is,!Text_CR,"open. Return ",!Dict_to,"me.>",!Text_ChangeStreamPtr : dw TextEndStandardBank3
 
 ; Change CopJumpIfItemNotObtained to CopJumpIfNpcRewardNotObtained
-org $03A125
+org $83A125
     %CopJumpIfNpcRewardNotObtained(!NPC_VillageChief, $A12F)
 
 ; Change reward
-org $03A133
+org $83A133
     %CopGiveNpcReward(!NPC_VillageChief)
     NOP #2
 
 ; Patch the script that checks for brown stone to check for NPC reward instead
 ;  so that Master's text shows and next world can open.
-org $03A0BE
+org $83A0BE
     %CopJumpIfNpcRewardNotObtained(!NPC_VillageChief, $A0C5)
 
 ; Patch out the textbox in the master's shrine
-org $00F790
+org $80F790
     NOP #4
 
 
@@ -186,7 +186,7 @@ org $00F790
 
 ;-------------------- Magician -------------------;
 
-org $03A7DC
+org $83A7DC
     ; Skip first part if we are reentering the text dialog after lair release
     %CopJumpIfNpcRewardNotObtained(!NPC_Magician, +)
     BRA ++
@@ -252,11 +252,11 @@ GoodLuck:
 
 ;------------ Recovery Sword Crystal -------------;
 
-org $03AB74
+org $83AB74
     %CopGiveNpcReward(!NPC_RecoverySwordCrystal)
     NOP #2
 
-org $03AB94
+org $83AB94
     db "this. ",!Text_ChangeStreamPtr : dw TextEndStandardBank3
 
 ;03AB6A  02 07          COP #$07
@@ -285,11 +285,11 @@ org $03AB94
 ;------- Grass Valley Secret Room Crystal --------;
 
 ; Change crystal message to skip EXP received message
-org $03ABD2
+org $83ABD2
     db !Text_ChangeStreamPtr : dw TextEndStandardBank3
 
 ; Change crystal message to skip EXP received message
-org $03AC24
+org $83AC24
     %CopGiveNpcReward(!NPC_GrassValleySecretRoomCrystal)
     NOP
 
@@ -299,13 +299,13 @@ org $03AC24
 ;------ Underground Castle 1st part crystal ------;
 
 ; Change crystal message to skip EXP received message
-org $03AD05
+org $83AD05
     db !Text_ChangeStreamPtr : dw TextEndStandardBank3
 
 ; Change GiveExp COP routine to GiveNpcReward
 ; Also avoid giving the return to town prompt the first time you talk
 ; so that you dont glitch the game if you get a lair reward and return at the same time.
-org $03AD13
+org $83AD13
     %CopGiveNpcReward(!NPC_UndergroundCastle1stPartCrystal)
     %CopSetEventFlag($1C02)
     RTL 
@@ -316,7 +316,7 @@ org $03AD13
 ;-------------- Red-Hot Mirror Bird --------------;
 ; This script normally checks for phoenix and for the presense of an item.
 ; We can replace all of that.
-org $03BE3B
+org $83BE3B
 RedHotMirrorBirdScript:
     %CopJumpIfNpcRewardNotObtained(!NPC_RedHotMirrorBird, +)
     %CopShowText($BED2)
@@ -329,15 +329,15 @@ RedHotMirrorBirdScript:
     ; Clean up after ourselves.
     NOP #8
     
-;org $03BE42
+;org $83BE42
 ;    %CopJumpIfNpcRewardNotObtained(!NPC_RedHotMirrorBird, $BE4C)
 ;
-;org $03BE50
+;org $83BE50
 ;    %CopGiveNpcReward(!NPC_RedHotMirrorBird)
 ;    NOP #2
 
 ;Patch text to remove reference to vanilla reward.
-org $03BEB4
+org $83BEB4
     db !Text_ChangeStreamPtr : dw TextEndStandardBank3
 
 ;03BE42  02 18          COP #$18
@@ -369,12 +369,12 @@ org $03BEB4
 
 
 ; Change CopJumpIfItemNotObtained to CopJumpIfNpcRewardNotObtained
-org $03C0C4
+org $83C0C4
     %CopJumpIfNpcRewardNotObtained(!NPC_MagicBellCrystal, $C0CE)
 
 ; Change the pointer for when you dont have all 8 emblems since we need an extra byte
 ; to use CopPrintNpcReward
-org $03C0CE
+org $83C0CE
     %CopJumpIfItemNotObtained(!EmblemA,+)
     %CopJumpIfItemNotObtained(!EmblemB,+)
     %CopJumpIfItemNotObtained(!EmblemC,+)
@@ -385,7 +385,7 @@ org $03C0CE
     %CopJumpIfItemNotObtained(!EmblemH,+)
 
 ; Give NPC Reward
-org $03C112
+org $83C112
     %CopGiveNpcReward(!NPC_MagicBellCrystal)
     RTL
 +
@@ -393,15 +393,15 @@ org $03C112
     RTL
 
 ; Patch hint text to remove vanilla item reference
-org $03C177
+org $83C177
     db !Dict_and,!Dict_you,!Dict_can,!Dict_have,!Text_CR,!Text_Break,".",!Text_ChangeStreamPtr : dw TextEndStandardBank3
 
 ; Patch reward text to remove vanilla item reference
-org $03C200
+org $83C200
     db "this. Well fought!",!Text_ChangeStreamPtr : dw TextEndStandardBank3
 
 ; Patch out magic bell usage text.
-org $03C224
+org $83C224
     db !Text_Start,!Text_HeroName,", ",!Dict_good,"luck!",!Text_ChangeStreamPtr : dw TextEndStandardBank3
 ;03C0C4  02 18          COP #$18
 ;03C0C6               --------data--------
@@ -503,13 +503,13 @@ org $03C224
 ; Lets add a hint to the initial textbox
 ; We dont have quite enough room in the script, for CopPrintNpcReward,
 ; but we can save some room in the text and relocate our script there.
-org $03D0E3
+org $83D0E3
     BRL.W +
     NOP
 -- ; Our return point to resume the NPC script
 
 ;Now patch the text
-org $03D174
+org $83D174
 -
     skip 1
     db "Let`s start the show!",!Text_CR,"The prize is",!Text_CR,!Text_Break,".",!Text_ChangeStreamPtr : dw TextEndStandardBank3
@@ -520,11 +520,11 @@ org $03D174
 
 ; Edit The "you guessed correctly" text to end early since
 ; We print the reward a different way.
-org $03D2B7
+org $83D2B7
     db !Text_ChangeStreamPtr : dw TextEndStandardBank3
 
 ; Modify script to give NPC Reward
-org $03D11C
+org $83D11C
     %CopGiveNpcReward(!NPC_WoodstinTrio)
     NOP #2
 
@@ -534,17 +534,17 @@ org $03D11C
 ;------------- Greenwood's Guardian --------------;
 
 ; Patch text to remove vanilla item reference.
-org $03D599
+org $83D599
     db !Text_ChangeStreamPtr : dw TextEndStandardBank3
 
 
 ; Patch release text to hint reward. Once again we dont quite have enough space, so abridge text and relocate.
-org $03D531
+org $83D531
     BRL +
     NOP
 -
 
-org $03D5CE
+org $83D5CE
 +
     %CopPrintNpcReward(!NPC_GreenwoodsGuardian, +)
     BRL -
@@ -557,7 +557,7 @@ org $03D5CE
     BRL +
 
 ; Patch script to give reward and also open Southerta
-org $03D521
+org $83D521
     BRL -
     NOP #2
 +
@@ -605,16 +605,16 @@ org $03D521
 
 ;-------------- Soul of Light Mole ---------------;
 
-org $03D6D4
+org $83D6D4
     %CopGiveNpcReward(!NPC_SoulOfLight)
     %CopSetEventFlag($0303)
     RTL
     NOP #28
 
 ; Abbreviate text a little and patch out vanilla reward reference
-org $03D723
+org $83D723
     db !Text_ChangeStreamPtr : dw $D74E
-org $03D773
+org $83D773
     db !Text_ChangeStreamPtr : dw TextEndStandardBank3
 
 ; 03D6D0  02 01          COP #$01
@@ -653,7 +653,7 @@ org $03D773
 
 ;--------------- Greenwood Leaves ----------------;
 
-org $03D816
+org $83D816
     %CopGiveNpcReward(!NPC_GreenwoodLeaves)
     %CopSetEventFlag($0304)
     %CopSetScriptAddrToNextInstruction()
@@ -671,7 +671,7 @@ org $03D816
 ; So the equivalent "event flag" is $2105
 ; Replace CopJumpIfItemNotObtained to CopJumpIfEventFlagIsUnset, but we need an extra byte,
 ; So branch to some freespace and put our code there.
-org $03D9B1
+org $83D9B1
     BRL MoleChestExtension
     NOP #2
 MoleChestReturn:
@@ -682,21 +682,21 @@ MoleChestReturn:
 ;------------- Shield Bracelet Mole --------------;
 
 ;Change text to remove reference to vanilla reward.
-org $03DCD8
+org $83DCD8
     db "this.",!Text_ChangeStreamPtr : dw TextEndStandardBank3
 ; We have a fair amount of free space here now.
 ; So we can put the Mole's Ribbon Chest extension code here.
 MoleChestExtension:
     %CopJumpIfEventFlagIsUnset($2105, $D9BA)
     BRL MoleChestReturn
-assert pc() <= $03DD40
+assert pc() <= $83DD40
 
 ; Change CopJumpIfItemNotObtained to CopJumpIfNpcRewardNotObtained
-org $03DC05
+org $83DC05
     %CopJumpIfNpcRewardNotObtained(!NPC_ShieldBraceletMole, $DC0F)
 
 ; Modify script to give NPC Reward
-org $03DC13
+org $83DC13
     %CopGiveNpcReward(!NPC_ShieldBraceletMole)
     RTL
 
@@ -715,11 +715,11 @@ org $03DC13
 ; Patch the release text box to hint item.
 ; We dont have quite enough room in the script, 
 ; but we can save some room in the text and relocate our script there.
-org $03E145
+org $83E145
 BRL +
 
 ; Patch release text to have reward hint.
-org $03E1A0
+org $83E1A0
     db !Text_CR,!Text_Break,!Text_CR,!Dict_with,"them.....",!Text_ChangeStreamPtr : dw TextEndStandardBank3
 +
     %CopPrintNpcReward(!NPC_PsychoSwordSquirrel ,$E14C)
@@ -729,15 +729,15 @@ org $03E1A0
 
 ; Now Patch the reward recieved text/script
 ; Edit text to make the no seeds obtained message give hint
-org $03E097
+org $83E097
     db !Text_Break,".",!Text_ChangeStreamPtr : dw TextEndStandardBank3
 
 ; Edit text when giving reward
-org $03E0EB
+org $83E0EB
     db !Dict_with,!Dict_you,!Dict_for,!Dict_the,!Text_CR,"seeds.",!Text_ChangeStreamPtr : dw TextEndStandardBank3
 
 ; Patch NPC script
-org $03E01A
+org $83E01A
     ; Skip checks if NPC reward not obtained instead of item not obtained.
     %CopJumpIfNpcRewardNotObtained(!NPC_PsychoSwordSquirrel, +)
     skip 5
@@ -745,7 +745,7 @@ org $03E01A
     ; Relocate jump destination since we need an extra byte for hinting
     %CopJumpIfItemNotObtained(!DeliciousSeeds,+)
 
-org $03E035
+org $83E035
     %CopGiveNpcReward(!NPC_PsychoSwordSquirrel)
     RTL
 +
@@ -759,11 +759,11 @@ org $03E035
 ;--------------- Emblem C Squirrel ---------------;
 
 ; Patch text to remove reward reference.
-org $03E20C
+org $83E20C
     db !Text_ChangeStreamPtr : dw TextEndStandardBank3
 
 ; Patch script to give NPC reward
-org $03E1DF
+org $83E1DF
     %CopGiveNpcReward(!NPC_EmblemCSquirrel)
     %CopSetEventFlag($1A02)
     RTL
@@ -773,7 +773,7 @@ org $03E1DF
 
 ;----------- WaterShrineStrangeBottle ------------;
 
-org $03E48E
+org $83E48E
     %CopGiveNpcReward(!NPC_WaterShrineStrangeBottle)
     NOP #6
 
@@ -785,7 +785,7 @@ org $03E48E
 ; Use generic cystal reward message and give NPC Reward.
 ; Also avoid giving the return to town prompt the first time you talk
 ; so that you dont glitch the game if you get a lair reward and return at the same time.
-org $03E561
+org $83E561
     %CopShowText($EBC2)
     %CopGiveNpcReward(!NPC_LightArrowCrystal)
     %CopSetEventFlag($1C07)
@@ -797,7 +797,7 @@ org $03E561
 ;-------------- Lost Marsh Crystal ---------------;
 
 ;Text is already perfect as-is, just patch script to give NPC Reward
-org $03E4E1
+org $83E4E1
     %CopGiveNpcReward(!NPC_LostMarshCrystal)
     %CopSetEventFlag($1C05)
     RTL 
@@ -808,13 +808,13 @@ org $03E4E1
 ;------------- Water Shrine Crystal --------------;
 
 ; Abridge text to remove reward message.
-org $03EBDC
+org $83EBDC
     db !Text_ChangeStreamPtr : dw TextEndStandardBank3
 
 ; Change GiveExp COP routine to GiveNpcReward
 ; Also avoid giving the return to town prompt the first time you talk
 ; so that you dont glitch the game if you get a lair reward and return at the same time.
-org $03E535
+org $83E535
     %CopGiveNpcReward(!NPC_WaterShrineCrystal)
     %CopSetEventFlag($1C06)
     RTL 
@@ -828,16 +828,16 @@ org $03E535
 ; We dont have enough room to put in the changes, but we are no longer using the
 ; "Recieved Light Arrow magic" string, so we will co-opt that for our script.
 
-org $03E5AF
+org $83E5AF
     %CopJumpIfNpcRewardNotObtained(!NPC_FireShrineCrystal, +)
     BRL CrystalReturnDialog
-org $03E571
+org $83E571
 +   
     %CopShowText($EBC2)
     %CopGiveNpcReward(!NPC_FireShrineCrystal)
     RTL
 
-CrystalReturnDialog = $03E4E9
+CrystalReturnDialog = $83E4E9
 
 ;03E5AF  02 01          COP #$01
 ;03E5B1               --------data--------
@@ -858,7 +858,7 @@ CrystalReturnDialog = $03E4E9
 ;----------------- World of Evil -----------------;
 
 ; Open World of evil with n stones 
-org $03EC61
+org $83EC61
 WorldOfEvilStoneCheck:
     BRL .checkStones
 .resumeOpening
@@ -899,10 +899,10 @@ assert pc() <= !Bank03FreespaceEnd
 pushpc
 
 ; TODO: more text edits to account for opening the world of evil with potentially less than 6 stones.
-org $03EC6C
+org $83EC6C
     %CopShowText(NewStonesConsumedStart)
 
-org $03ED15
+org $83ED15
 NewStonesConsumedStart:
     db !Text_Start,!Dict_The
 

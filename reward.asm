@@ -155,7 +155,7 @@ PrintRewardShort:
     ASL #5
     TAX ; Lair index in X
     SEP #$20
-    LDA.L $01BA16,X ; Load NPC Name index from lair data field 09
+    LDA.L $81BA16,X ; Load NPC Name index from lair data field 09
     STA TableLookupIndex ; Used by the print routine to load npc name
     STZ TableLookupIndex+1 ; Second byte unused
     LDY #PrintRevivableNpcNameShort
@@ -234,7 +234,7 @@ PrintRewardFrom:
     ASL #5
     TAX ; Lair index in X
     SEP #$20
-    LDA.L $01BA16,X ; Load NPC Name index from lair data field 09
+    LDA.L $81BA16,X ; Load NPC Name index from lair data field 09
     STA TableLookupIndex ; Used by the print routine to load npc name
     STZ TableLookupIndex+1 ; Second byte unused
     LDY #ReceivedRevivableNpcFrom

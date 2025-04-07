@@ -13,10 +13,10 @@ endif
 namespace SemiProgressive
 
 ; There is some space starting in $1FFC90 So lets put our hack there.
-StartAddress = $1FFC9D
+StartAddress = $9FFC9D
 ; At the time of writing, this file uses up to $1FFD67
 ; This should be enough extra space for any small changes without needing a major version bump.
-EndAddress = $1FFD7F
+EndAddress = $9FFD7F
 
 org StartAddress
 
@@ -51,10 +51,10 @@ GiveItemHook:
     LDX $1B5E
     JSL CalcStrength
     STA $1B70
-    LDA.L $02E1BD,X
+    LDA.L $82E1BD,X
     STA $1B74
     LDX $1B60
-    LDA.L $02E1AC,X
+    LDA.L $82E1AC,X
     CLC
     ADC $1B70
     STA $1B70
@@ -79,7 +79,7 @@ CalcStrength:
     LDY #$1B1E ; Address of Swords Inventory
     JSL CountSwordArmor
     TAX
-    LDA $02E1C5,X ; User the number of obtained swords as the index into the sword power table
+    LDA $82E1C5,X ; User the number of obtained swords as the index into the sword power table
 .end:
     PLY
     PLX
@@ -96,7 +96,7 @@ CalcSwords:
     LDY #$1B1E ; Address of Swords Inventory
     JSL CountSwordArmor
     TAX
-    LDA $02E1C5,X ; User the number of obtained swords as the index into the sword power table
+    LDA $82E1C5,X ; User the number of obtained swords as the index into the sword power table
     PLY
     PLX
     PLP
@@ -114,7 +114,7 @@ CalcDefense:
     LDY #$1B26 ; Address of Armor Inventory
     JSL CountSwordArmor
     TAX
-    LDA $02E1AC,X ; User the number of obtained armors as the index into the armor defense table
+    LDA $82E1AC,X ; User the number of obtained armors as the index into the armor defense table
 .end:
     PLY
     PLX
@@ -131,7 +131,7 @@ CalcShields:
     LDY #$1B26 ; Address of Armor Inventory
     JSL CountSwordArmor
     TAX
-    LDA $02E1AC,X ; User the number of obtained armors as the index into the armor defense table
+    LDA $82E1AC,X ; User the number of obtained armors as the index into the armor defense table
     PLY
     PLX
     PLP
@@ -159,56 +159,56 @@ CountSwordArmor:
 ; Hooks and original rom data overwrite section
 pushpc
 
-org $029EF0
+org $829EF0
     JSL CalcStrength
 
-org $029F0C
+org $829F0C
     JSL CalcDefense
 
-org $02A837
+org $82A837
     JSL DrawHook
 
-org $02A105
+org $82A105
     JSL GiveItemHook
 
 ; Edit the Weapon Table to modify the strength pointers
-org $02D60F
+org $82D60F
     dw $0000
-org $02D63C
+org $82D63C
     dw $0000
-org $02D67A
+org $82D67A
     dw $0000
-org $02D6A8
+org $82D6A8
     dw $0000
-org $02D6EB
+org $82D6EB
     dw $0000
-org $02D720
+org $82D720
     dw $0000
-org $02D75D
+org $82D75D
     dw $0000
-org $02D79C
+org $82D79C
     dw $0000
 
 ; Edit the Armor Table to modify the defense pointers
-org $02D7CC
+org $82D7CC
     dw $0001
-org $02D806
+org $82D806
     dw $0001
-org $02D838
+org $82D838
     dw $0001
-org $02D864
+org $82D864
     dw $0001
-org $02D895
+org $82D895
     dw $0001
-org $02D8CA
+org $82D8CA
     dw $0001
-org $02D906
+org $82D906
     dw $0001
-org $02D935
+org $82D935
     dw $0001
 
 ; Edit the Level Requirement Table (word, BCD)
-org $02E1CE
+org $82E1CE
     dw $0001, $0001, $0001, $0001, $0001, $0001, $0001, $0001
 
 pullpc

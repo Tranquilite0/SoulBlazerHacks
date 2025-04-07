@@ -1,5 +1,5 @@
 ;Randomizer settings struct
-struct RandoSettings $02F730
+struct RandoSettings $82F730
     .StonesRequired: skip 1
     .ActProgression: skip 1
     .OpenDeathtoll: skip 1
@@ -15,7 +15,7 @@ org RandoSettings
 
 
 ; Hook start of game to apply settings
-org $00F981
+org $80F981
     JSL StartGameHook
 
 pullpc

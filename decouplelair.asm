@@ -82,7 +82,7 @@ DecoupleLairReward:
     BCS +
     BRK #$94 ; Play lair closed sound if no other item get sound played
 +   JSL CheckBossLair
-    JML $028D03 ; Finish by animating the lair closing
+    JML $828D03 ; Finish by animating the lair closing
 .lair:
     REP #$20
     LDA.W $BA26,X ; Load NPC ID from lair field $18-$19
@@ -91,7 +91,7 @@ DecoupleLairReward:
     TAX ; Lair Index in X
     SEP #$20
     JSL CheckForRoof
-    JML $028C75 ; Jump back and continue releasing lair with updated target lair
+    JML $828C75 ; Jump back and continue releasing lair with updated target lair
 
 
 ; Checks to see if your current position is in a building (where the roof is removed.)
@@ -139,11 +139,11 @@ endif
     SEP #$20
     JSL CheckForRoof
     ; Entry point into the lair release code to release NPC.
-    JML $028C75 
+    JML $828C75 
 
 ; Makes it so that when you teleport back in the roof will still be pulled back.
 ApplyRoofFix:
-    JSL $0295F1 ; Code that was replaced.
+    JSL $8295F1 ; Code that was replaced.
     SEP #$20
     LDA NeedsRollback
     BEQ .end
@@ -164,7 +164,7 @@ ApplyRoofFix:
     LDA TempRollbackDataIndex
     STA RoofRollback.DataIndex
     SEP #$20
-    JSL $0294AE ; The secret sauce that rolls back the roof.
+    JSL $8294AE ; The secret sauce that rolls back the roof.
     PLY
 .end:
     RTL
@@ -329,7 +329,7 @@ InitTeleportOverrideNoXY:
 
 
 CheckForBounce:
-    JSL $02B1A2 ; Code that we replaced for our hook
+    JSL $82B1A2 ; Code that we replaced for our hook
     LDA ShouldBounce
     BEQ .end
     LDA TeleportOverride.MapNumber
@@ -364,12 +364,12 @@ BouncePlayer:
 ; Hooks and original rom data overwrite section
 pushpc
 
-org $04F7B8 ;04F7B8  22 A2 B1 02    JSL $02B1A2
+org $84F7B8 ;04F7B8  22 A2 B1 02    JSL $02B1A2
     JML CheckForBounce
 BounceReturn:
 
 ; Called after the lair tile information has been updated, but before the lair has been released.
-org $028C69
+org $828C69
     JML DecoupleLairReward
     ; Replace code we duplicated with NOPs. Not required, but seems safer?
     NOP                   ; PLP
@@ -378,9 +378,9 @@ org $028C69
     NOP                   ; PLX
 
 
-NewBranchLongTarget = $028D1F ; Originally $028D18
+NewBranchLongTarget = $828D1F ; Originally $028D18
 ; Now that lairs are decoupled, we need to skip over and/or replace existing code that set lair state data.
-org $028C7B
+org $828C7B
     ; Alter BNE to skip over code for setting flag that we already handled in a new way earlier
     BNE NewBranchNotEqualTarget
     ; Replace the follow BRL and the now-unused code we skipped over with the code we need to run after the branch but didnt have space for
@@ -393,48 +393,48 @@ org $028C7B
     NewBranchNotEqualTarget: 
     PHX ; Get Stack back to expected state
     TYX ; Get registers back into expected state
-    assert pc() <= $028C8B
+    assert pc() <= $828C8B
 
 
 ; Insert hook to bypass same-map check
-org $028D24
+org $828D24
 SameMapCheckBypassHook:
     JSL SameMapCheckBypass
     NOP #2 ; No-op the code we replaced
 
 
 ; Hook the end of SealLair to check for overriden return.
-org $028DB9
+org $828DB9
     JML CheckForOverride
 
 ; Called when loading lair tile data.
-org $029597
+org $829597
     JSL LoadLairForTileData
 
 
 ; Called during map load. Checks for sealing lairs.
-org $029398
+org $829398
     JSL CheckForSealingLair
 
 
 ; Called when loading the number of monsters to spawn from lair data
-org $009455
+org $809455
     JSL LoadLairForMonsters
 
 
 ; Called when storing back to lair data after monsters are dead
-org $00A8E5
+org $80A8E5
     JSL StoreLairDataPreserveFlag
 
 
 ; Hook during map load to do roof rollback
-org $04FA7C
+org $84FA7C
     JSL ApplyRoofFix
 
 
 ; Patches Lair Data to add decoupled rewards
 ; Sets lair reward to vanilla values
-org $01BA0D+$18       ; Set PC to first instance of Lair Table Field
+org $81BA0D+$18       ; Set PC to first instance of Lair Table Field
 for i = $0..$1A4
     db !LairRelease     ; "Item ID" for lair reward
     dw !i               ; Same reward as lair being released

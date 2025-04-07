@@ -141,52 +141,52 @@ PassableMap = $7F8000
 
 ; Rom Locations
 
-ItemNameTable = $02CF74
-NpcNamePointerTable = $02D2E6
+ItemNameTable = $82CF74
+NpcNamePointerTable = $82D2E6
 
 ; Pointers to places containing the standard Text End Command ($12,$08,$08,$04,$0C)
-TextEndStandardBank2 = $02E25F
-TextEndStandardBank3 = $03B988
-TextEndStandardBank4 = $04A51E
-TextEndStandardBank1F = $1FAA44
+TextEndStandardBank2 = $82E25F
+TextEndStandardBank3 = $83B988
+TextEndStandardBank4 = $84A51E
+TextEndStandardBank1F = $9FAA44
 
 
 
 ; Functions
 
 ;Item ID in A
-GiveItem = $02A0F9
+GiveItem = $82A0F9
 
 ; Gem Amount in A
 ; A should be in 16-bit mode.
-GiveGems = $04F6A5
+GiveGems = $84F6A5
 
 ; Prints OSD String in bank 2 from Address in Y
-PrintOsdStringFromBank2 = $02A769
+PrintOsdStringFromBank2 = $82A769
 
 ; Prints OSD String in current bank from address in Y
 ; ...but if you are in Bank 1 it will switch to Bank 2
 ; A can be 8 or 16 bit prior to calling
-PrintOsdStringFromBankX = $02AC27
+PrintOsdStringFromBankX = $82AC27
 
 ; Pretty sure this routine sets a bit
 ; A contains the bit position to check (0-$3F8?)
 ; Y contains the pointer to the start of a table to use
-SetBit = $04F348
+SetBit = $84F348
 
 ; Checks if Bit is set
 ; A contains the bit position to check (0-$3F8?)
 ; Y contains the pointer to the start of a table to check
 ; returns the result in the carry flag: it's clear if the bit is clear and set if the bit is set
-CheckIfBitIsSet = $04F3A2
+CheckIfBitIsSet = $84F3A2
 
 ; Calculates the passable map offset and places it in X
 ; Expects X coord in $16 and Y coord in $18
 ; Expects 16bit accumulator
-CalcPassableMapOffset = $04F2B8
+CalcPassableMapOffset = $84F2B8
 
 ; Called during main game loop to check if the map has changed and load new map.
-MapChanged = $04F781
+MapChanged = $84F781
 
 ; Text Processing Commands for PrintOsdStringFromBankX
 ; PrintOsdStringFromBank2 only uses a subset of these commands, and implements $0B while PrintOsdStringFromBankX does not

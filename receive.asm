@@ -43,7 +43,7 @@ endstruct
 
 ; New code section.
 MainHook:
-    JSL $0298FC ; Original Code
+    JSL $8298FC ; Original Code
     JSL IsCommunicationBlocked
     BCS +
     JSL NofifySend
@@ -150,7 +150,7 @@ pushpc
 
 
 ; Insert our hook into the main gameloop
-org $008049
+org $808049
 JSL MainHook
 
 

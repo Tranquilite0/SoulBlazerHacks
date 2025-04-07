@@ -23,7 +23,7 @@ ResumePrintOsdStringFromBankX:
     STX $03F3
     LDX $00
     ; Jump back into the text parsing and pick up where we left off
-    JML $02AC6D
+    JML $82AC6D
 
 
 ; Patch text command $0C to also store the current state from the current text cursor position
@@ -41,7 +41,7 @@ PatchTextCommand0C:
 pushpc
 
 ; Patch text command $0C
-org $02AF62
+org $82AF62
     JML PatchTextCommand0C
 PatchTextCommand0CReturn:
 

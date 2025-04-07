@@ -167,7 +167,7 @@ pushpc
 
 ;Insert our new COP routines into slots $3D through $41
 !CopIndex = $3D
-org $00D6B2
+org $80D6B2
     dw CopGiveNpcReward              : !CopGiveNpcRewardId              := !CopIndex : !CopIndex #= !CopIndex+1
     dw CopJumpIfNpcRewardNotObtained : !CopJumpIfNpcRewardNotObtainedId := !CopIndex : !CopIndex #= !CopIndex+1
     dw CopJumpIfNpcRewardObtained    : !CopJumpIfNpcRewardObtainedId    := !CopIndex : !CopIndex #= !CopIndex+1
@@ -176,7 +176,7 @@ org $00D6B2
     dw CopJumpIfLairRewardObtained   : !CopJumpIfLairRewardObtainedId   := !CopIndex : !CopIndex #= !CopIndex+1
 
 ; Labels for reusing existing code for returning from COP Routines
-org $00E4B5
+org $80E4B5
 Skip5Args: skip 2
 Skip4Args: skip 2
 Skip3Args: skip 2

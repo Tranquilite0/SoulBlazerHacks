@@ -6,13 +6,13 @@
 ;TODO: move all non-table lookup strings out of bank2?
 
 ; Labels for existing strings
-SoulOfMagician = $02C639
-SoulOfLight = $02C64E
-SoulOfShield = $02C663
-SoulOfDetection = $02C678
-SoulOfReality = $02C68D
+SoulOfMagician = $82C639
+SoulOfLight = $82C64E
+SoulOfShield = $82C663
+SoulOfDetection = $82C678
+SoulOfReality = $82C68D
 
-ItemReceived = $02E216
+ItemReceived = $82E216
 
 PrintItemNameShort:
 db !Text_YellowStyle,!Text_TableLookup
@@ -30,7 +30,7 @@ db !Text_Start,!Text_HeroName," ",!Dict_received,!Text_CR,!Text_YellowStyle,!Tex
 PrintExpShort:
 db !Text_YellowStyle,!Text_PrintDecimal4," EXP",!Text_EndStyle,!Text_Break
 
-GemsReceived = $02E246
+GemsReceived = $82E246
 
 PrintGemsShort:
 db !Text_YellowStyle,!Text_PrintDecimal4," GEMs",!Text_EndStyle,!Text_Break
