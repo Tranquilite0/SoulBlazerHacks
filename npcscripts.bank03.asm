@@ -504,7 +504,7 @@ org $83C224
 ; We dont have quite enough room in the script, for CopPrintNpcReward,
 ; but we can save some room in the text and relocate our script there.
 org $83D0E3
-    BRL.W +
+    JMP.W +
     NOP
 -- ; Our return point to resume the NPC script
 
@@ -515,7 +515,7 @@ org $83D174
     db "Let`s start the show!",!Text_CR,"The prize is",!Text_CR,!Text_Break,".",!Text_ChangeStreamPtr : dw TextEndStandardBank3
 +
     %CopPrintNpcReward(!NPC_WoodstinTrio, -)
-    BRL --
+    JMP.W --
 
 
 ; Edit The "you guessed correctly" text to end early since
@@ -540,25 +540,25 @@ org $83D599
 
 ; Patch release text to hint reward. Once again we dont quite have enough space, so abridge text and relocate.
 org $83D531
-    BRL +
+    JMP +
     NOP
 -
 
 org $83D5CE
 +
     %CopPrintNpcReward(!NPC_GreenwoodsGuardian, +)
-    BRL -
+    JMP -
 +
     ; "I will give you \r<reward>\r upon your return."
     db !Text_Start,!Dict_I,!Dict_will,!Dict_give,!Dict_you,!Text_CR,!Text_Break,!Text_CR,"upon ",!Dict_your,"return. ",!Text_ChangeStreamPtr : dw TextEndStandardBank3
 -
     %CopGiveNpcReward(!NPC_GreenwoodsGuardian)
     %CopSetEventFlag($0502)
-    BRL +
+    JMP +
 
 ; Patch script to give reward and also open Southerta
 org $83D521
-    BRL -
+    JMP -
     NOP #2
 +
     
@@ -672,7 +672,7 @@ org $83D816
 ; Replace CopJumpIfItemNotObtained to CopJumpIfEventFlagIsUnset, but we need an extra byte,
 ; So branch to some freespace and put our code there.
 org $83D9B1
-    BRL MoleChestExtension
+    JMP MoleChestExtension
     NOP #2
 MoleChestReturn:
 
@@ -688,7 +688,7 @@ org $83DCD8
 ; So we can put the Mole's Ribbon Chest extension code here.
 MoleChestExtension:
     %CopJumpIfEventFlagIsUnset($2105, $D9BA)
-    BRL MoleChestReturn
+    JMP MoleChestReturn
 assert pc() <= $83DD40
 
 ; Change CopJumpIfItemNotObtained to CopJumpIfNpcRewardNotObtained
@@ -716,7 +716,7 @@ org $83DC13
 ; We dont have quite enough room in the script, 
 ; but we can save some room in the text and relocate our script there.
 org $83E145
-BRL +
+JMP +
 
 ; Patch release text to have reward hint.
 org $83E1A0
@@ -830,7 +830,7 @@ org $83E535
 
 org $83E5AF
     %CopJumpIfNpcRewardNotObtained(!NPC_FireShrineCrystal, +)
-    BRL CrystalReturnDialog
+    JMP CrystalReturnDialog
 org $83E571
 +   
     %CopShowText($EBC2)
@@ -860,7 +860,7 @@ CrystalReturnDialog = $83E4E9
 ; Open World of evil with n stones 
 org $83EC61
 WorldOfEvilStoneCheck:
-    BRL .checkStones
+    JMP .checkStones
 .resumeOpening
 
 pullpc ; Place this new code in the freespace region.
@@ -885,7 +885,7 @@ pullpc ; Place this new code in the freespace region.
     BCS .notEnoughStones
     ; Code we replaced
     LDA #$7FC0
-    BRL .resumeOpening
+    JMP .resumeOpening
 .notEnoughStones
     STA TableLookupIndex
     %CopShowText(.text)

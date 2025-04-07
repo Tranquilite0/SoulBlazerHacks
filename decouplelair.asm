@@ -388,7 +388,7 @@ org $828C7B
     TYX
     LDA #$40 ; Release in progress flag.
     ORA $7F0203,X ; Combine with lair data to set flag.
-    BRL NewBranchLongTarget ; Branch to code that stores the updated lair data value.
+    JMP.W NewBranchLongTarget ; Branch to code that stores the updated lair data value.
     NOP ; Clean up remaining byte of unused code we dont need.
     NewBranchNotEqualTarget: 
     PHX ; Get Stack back to expected state

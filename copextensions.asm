@@ -60,7 +60,7 @@ CopGiveNpcReward:
     JSL GiveNpcReward
     REP #$20
     PLX ; Restore X so that some NPC scripts wont break.
-    BRL RetInTmp
+    JMP.W RetInTmp
 
 
 CopJumpIfNpcRewardNotObtainedSpring:
@@ -90,7 +90,7 @@ CopPrintNPCReward:
     PLB
     PLX
     REP #$20
-    BRL RetInTmp
+    JMP.W RetInTmp
 
 
 CopJumpIfNpcRewardNotObtained:
@@ -100,12 +100,12 @@ CopJumpIfNpcRewardNotObtained:
     AND.W #$FF
     JSL CheckNpcFlag
     BCC .isNotObtained
-    BRL Skip2Args
+    JMP.W Skip2Args
 .isNotObtained:
     LDA.B [CopTemp]
     INC.B CopTemp
     INC.B CopTemp
-    BRL RetInA
+    JMP.W RetInA
 
 
 CopJumpIfNpcRewardObtained:
@@ -115,12 +115,12 @@ CopJumpIfNpcRewardObtained:
     AND.W #$FF
     JSL CheckNpcFlag
     BCS .isObtained
-    BRL Skip2Args
+    JMP.W Skip2Args
 .isObtained:
     LDA.B [CopTemp]
     INC.B CopTemp
     INC.B CopTemp
-    BRL RetInA
+    JMP.W RetInA
 
 
 CopResumePrint:
@@ -139,7 +139,7 @@ CopResumePrint:
     PLB
     PLX
     REP #$20
-    BRL RetInTmp
+    JMP.W RetInTmp
 
 ; Jumps if the Lair was stepped on, rather than if the NPC
 ; assotiated with it has been released.
@@ -154,13 +154,13 @@ CopJumpIfLairRewardObtained:
     AND.W #$0080 ; Check Lair Sealed flag
     BNE .isObtained
     PLX
-    BRL Skip2Args
+    JMP.W Skip2Args
 .isObtained:
     LDA.B [CopTemp]
     INC.B CopTemp
     INC.B CopTemp
     PLX
-    BRL RetInA
+    JMP.W RetInA
 
 ; Hooks and original rom data overwrite section
 pushpc

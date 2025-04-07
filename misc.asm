@@ -157,7 +157,7 @@ org $838121
 ; Stop lisa from getting kidnapped when you get the VIP Card
 BranchTargetLisa = $838A75
 org $838A6D
-BRL.W BranchTargetLisa
+JMP.W BranchTargetLisa
 NOP #2
 
 ; Remove a branch in Lisa's script that normally occurs when village chief has been revived.
@@ -168,7 +168,7 @@ NOP #6
 ; Fix Mermaid's Tear Chest condition
 BranchTargetMermaidsTearChest = $9F8CA9
 org $9F8CA2
-    BRL.W BranchTargetMermaidsTearChest
+    JMP.W BranchTargetMermaidsTearChest
     NOP #2
 ;1F8CA2  02 18          COP #$18
 ;1F8CA4               --------data--------

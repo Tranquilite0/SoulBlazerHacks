@@ -891,12 +891,12 @@ org $84C111
 org $84C981
     %CopJumpIfNpcRewardNotObtained(!NPC_SuperBraceletTile, $C989)
     ; Lets also give the Queen's reward if the player never got it while the queen was alive.
-    BRL SuperBraceletTileExtension
+    JMP.W SuperBraceletTileExtension
 
 org $84C997
     %CopGiveNpcReward(!NPC_SuperBraceletTile)
     ; Lets also give the Queen's reward if the player never got it while the queen was alive.
-    BRL SuperBraceletTileExtension
+    JMP.W SuperBraceletTileExtension
     RTL
     assert pc() <= $84C99E 
 ; Patch text to remove reference to vanilla reward
