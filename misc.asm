@@ -297,7 +297,7 @@ org $8E8158
 
 ; Move the dissapearing chest
 ; Move the Y location of chest in chest data table
-org $9AB51
+org $81AB51
     db $16
 
 ; Edit Map arrangement data to move chest tile
