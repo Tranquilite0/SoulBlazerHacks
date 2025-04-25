@@ -2,7 +2,7 @@
 Miscelaneous Soul Blazer Romhacks
 
 ## How to Use
-These patches expect an unheadered US Soul Blazer rom which has been patched with kandowontu's fastrom patch. The .asm patches can be applied with asar 1.91. The bsdiff4 patches can be applied with any bsdiff4 patcher (I use the python bsdiff4 library).
+These patches expect an unheadered US Soul Blazer rom which has been patched with the provided fastrom patch. The .asm patches can be applied with asar 1.91. The bsdiff4 patches can be applied with any bsdiff4 patcher (I use the python bsdiff4 library).
 
 ## Hacks in this Repo
 
@@ -12,9 +12,10 @@ These patches expect an unheadered US Soul Blazer rom which has been patched wit
   - Allows you to change the speed that text renders in text boxes. Now works with instant text without causing problems.
 - fastrom.bsdiff4
   - kandowontu's fastrom patch 1.2. https://romhackplaza.org/romhacks/soul-blazer-english-translation-super-nintendo/
+  - ...with improvements and modifications to have more fastrom data reads
 - basepatch (main.asm):
   - Preps the rom for randomization and decouples lair rewards (lairs/chests/NPCs can all give items/gems/exp/NPC Releases).
   - All the NPCs can that give items have had their scripts edited to give rewards from a table in the ROM.
   - Many small tweaks.
   - Also includes textspeed.asm.
-  - Also includes kandowontu's fastrom patch.
+  - Also includes the fastrom patch.
