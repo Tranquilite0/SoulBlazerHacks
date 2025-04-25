@@ -25,7 +25,7 @@ LoadLairForMonsters:
 StoreLairDataPreserveFlag:
     ;BIT LairStateTable,X ; Cant do this, no long addressing mode
     ; There is probably a better way to do this, but here we are
-    PEA $017F ; Push Data Bank register values
+    PEA $817F ; Push Data Bank register values
     PLB
     BIT $0203,X
     BVC .skip

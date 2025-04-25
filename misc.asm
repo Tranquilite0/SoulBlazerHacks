@@ -314,4 +314,38 @@ org $9791B8
 
 ;-------------------------------------------------;
 
+;-------------- Miscelaneous Fastrom -------------;
+
+;; Patches Lair Data behavior pointers to make bank references fastrom
+;; Sets lair reward to vanilla values
+;org $81BA0D+$12       ; Set PC to first instance of Lair Behavior Pointer Bank
+;for i = $0..$1A4
+;    db $80            ; All lair behavior pointers are now in bank $80
+;    skip $20-$1       ; Move PC to next entry
+;    !i #= !i+1        ; TODO: is this even needed any more?
+;endfor
+;
+;;macro CorrectEntityDataBanks(startAddr, size)
+;org $81800E;<startAddr>
+;for i = $0..$1D5;<size>+1
+;    skip $0A
+;    !bank #= read1(pc())
+;    if !bank < $70
+;        !bank #= !bank|$80
+;    endif
+;
+;    db !bank
+;
+;    skip $02
+;    !bank #= read1(pc())
+;    if !bank < $70
+;        !bank #= !bank|$80
+;    endif
+;    
+;    db !bank
+;endfor
+;endmacro
+
+
+;-------------------------------------------------;
 pullpc
