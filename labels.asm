@@ -218,6 +218,7 @@ MapChanged = $84F781
 !Text_WaitBlinkCursor   = $11 ; Waits for user input while blinking cursor and then continues.
 !Text_Wait              = $12 ; Waits for user input and then continues.
 !Text_ChangeStreamPtr   = $13 ; Takes 1 word argument which becomes the new string stream pointer.
+!Text_PrintSpace        = $14 ; Takes 1 byte argument which is the number of spaces to print.
 
 
 ; For the most part, other character codes will line up with ascii, but there are some differences 
