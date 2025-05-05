@@ -418,7 +418,7 @@ HudText:
     db $C7,$01,$4C,$01,$04,$36,$03,$38   ;02C77F|        |000001;  
     db $03,$00                           ;02C787|        |000000;  
                                                      ;      |        |      ;  
-UNREACH_02C789: ; Various String Pointers ; TODO: Make labels for pointers.
+MiscStringPointers: ; Various String Pointers
     dw Misc1,Misc2,PlayerName,$0447 ; Some address in ram, also hero name?
     dw Misc3,Misc4,Misc5,Misc6
     dw Misc7
@@ -745,289 +745,577 @@ Unknown36:
     db $00
 
 assert pc() == $90CF02
-;TODO: more labeling and decoding.
-                db     $01,$88,$02,$07,$04,$04,$20   ;02CF02|        |      ;  
-                db $59,$65,$73,$0D,$0D,$20,$4E,$6F   ;02CF09|        |007365;  
-                db $01,$0A,$03,$00,$01,$08,$03,$07   ;02CF11|        |00000A;  
-                db $04,$02,$20,$59,$65,$73,$01,$8A   ;02CF19|        |000002;  
-                db $03,$00,$01,$08,$02,$07,$07,$06   ;02CF21|        |000000;  
-                db $20,$52,$65,$63,$6F,$72,$64,$0D   ;02CF29|        |026552;  
-                db $0D,$20,$4D,$6F,$76,$65,$20,$0D   ;02CF31|        |004D20;  
-                db $0D,$20,$51,$75,$69,$74,$01,$8A   ;02CF39|        |005120;  
-                db $02,$00,$01,$88,$02,$07,$07,$04   ;02CF41|        |      ;  
-                db $20,$52,$65,$63,$6F,$72,$64,$0D   ;02CF49|        |026552;  
-                db $0D,$20,$51,$75,$69,$74,$01,$0A   ;02CF51|        |005120;  
-                db $03,$00,$01,$88,$02,$07,$08,$04   ;02CF59|        |000000;  
-                db $20,$53,$74,$61,$79,$0D,$0D,$20   ;02CF61|        |027453;  
-                db $47,$6F,$20,$62,$61,$63,$6B,$01   ;02CF69|        |00006F;  
-                db $0A,$03,$00,$F6,$CF,$00,$D0,$0C   ;02CF71|        |      ;  
-                db $D0,$19,$D0,$28,$D0,$34,$D0,$43   ;02CF79|        |02CF94;  
-                db $D0,$50,$D0,$5F,$D0,$6B,$D0,$76   ;02CF81|        |02CFD3;  
-                db $D0,$80,$D0,$8D,$D0,$99,$D0,$A6   ;02CF89|        |02CF0B;  
-                db $D0,$B2,$D0,$C1,$D0,$CC,$D0,$D7   ;02CF91|        |02CF45;  
-                db $D0,$E3,$D0,$EF,$D0,$F7,$D0,$02   ;02CF99|        |02CF7E;  
-                db $D1,$0F,$D1,$17,$D1,$1F,$D1,$2A   ;02CFA1|        |00000F;  
-                db $D1,$36,$D1,$3C,$D1,$41,$D1,$4C   ;02CFA9|        |000036;  
-                db $D1,$53,$D1,$60,$D1,$6B,$D1,$7A   ;02CFB1|        |000053;  
-                db $D1,$89,$D1,$95,$D1,$A2,$D1,$B2   ;02CFB9|        |000089;  
-                db $D1,$B9,$D1,$C3,$D1,$D1,$D1,$DB   ;02CFC1|        |0000B9;  
-                db $D1,$E4,$D1,$ED,$D1,$F6,$D1,$FF   ;02CFC9|        |0000E4;  
-                db $D1,$08,$D2,$11,$D2,$1A,$D2,$23   ;02CFD1|        |000008;  
-                db $D2,$32,$D2,$3F,$D2,$4D,$D2,$5C   ;02CFD9|        |000032;  
-                db $D2,$6C,$D2,$7B,$D2,$88,$D2,$97   ;02CFE1|        |00006C;  
-                db $D2,$A3,$D2,$AA,$D2,$B5,$D2,$C2   ;02CFE9|        |0000A3;  
-                db $D2,$CF,$D2,$DB,$D2,$CA,$65,$71   ;02CFF1|        |0000CF;  
-                db $75,$69,$70,$70,$65,$64,$00,$53   ;02CFF9|        |000069;  
-                db $77,$6F,$72,$64,$20,$CB,$4C,$69   ;02D001|        |00006F;  
-                db $66,$65,$00,$50,$73,$79,$63,$68   ;02D009|        |000065;  
-                db $6F,$20,$53,$77,$6F,$72,$64,$00   ;02D011|        |775320;  
-                db $43,$72,$69,$74,$69,$63,$61,$6C   ;02D019|        |000072;  
-                db $20,$53,$77,$6F,$72,$64,$00,$4C   ;02D021|        |027753;  
-                db $75,$63,$6B,$79,$20,$42,$6C,$61   ;02D029|        |000063;  
-                db $64,$65,$00,$5A,$61,$6E,$74,$65   ;02D031|        |000065;  
-                db $74,$73,$75,$20,$53,$77,$6F,$72   ;02D039|        |000073;  
-                db $64,$00,$53,$70,$69,$72,$69,$74   ;02D041|        |000000;  
-                db $20,$53,$77,$6F,$72,$64,$00,$52   ;02D049|        |027753;  
-                db $65,$63,$6F,$76,$65,$72,$79,$20   ;02D051|        |000063;  
-                db $53,$77,$6F,$72,$64,$00,$91,$53   ;02D059|        |000077;  
-                db $6F,$75,$6C,$20,$42,$6C,$61,$64   ;02D061|        |206C75;  
-                db $65,$00,$49,$72,$6F,$6E,$20,$41   ;02D069|        |000000;  
-                db $72,$6D,$6F,$72,$00,$49,$63,$65   ;02D071|        |00006D;  
-                db $20,$41,$72,$6D,$6F,$72,$00,$42   ;02D079|        |027241;  
-                db $75,$62,$62,$6C,$65,$20,$41,$72   ;02D081|        |000062;  
-                db $6D,$6F,$72,$00,$4D,$61,$67,$69   ;02D089|        |00726F;  
-                db $63,$20,$41,$72,$6D,$6F,$72,$00   ;02D091|        |000020;  
-                db $4D,$79,$73,$74,$69,$63,$20,$41   ;02D099|        |007379;  
-                db $72,$6D,$6F,$72,$00,$4C,$69,$67   ;02D0A1|        |00006D;  
-                db $68,$74,$20,$41,$72,$6D,$6F,$72   ;02D0A9|        |      ;  
-                db $00,$45,$6C,$65,$6D,$65,$6E,$74   ;02D0B1|        |      ;  
-                db $61,$6C,$20,$4D,$61,$69,$6C,$00   ;02D0B9|        |00006C;  
-                db $53,$6F,$75,$6C,$20,$41,$72,$6D   ;02D0C1|        |00006F;  
-                db $6F,$72,$00,$46,$6C,$61,$6D,$65   ;02D0C9|        |460072;  
-                db $20,$42,$61,$6C,$6C,$00,$4C,$69   ;02D0D1|        |026142;  
-                db $67,$68,$74,$20,$41,$72,$72,$6F   ;02D0D9|        |000068;  
-                db $77,$00,$4D,$61,$67,$69,$63,$20   ;02D0E1|        |000000;  
-                db $46,$6C,$61,$69,$72,$00,$52,$6F   ;02D0E9|        |00006C;  
-                db $74,$61,$74,$6F,$72,$00,$53,$70   ;02D0F1|        |000061;  
-                db $61,$72,$6B,$20,$42,$6F,$6D,$62   ;02D0F9|        |000072;  
-                db $00,$46,$6C,$61,$6D,$65,$20,$50   ;02D101|        |      ;  
-                db $69,$6C,$6C,$61,$72,$00,$54,$6F   ;02D109|        |      ;  
-                db $72,$6E,$61,$64,$6F,$00,$50,$68   ;02D111|        |00006E;  
-                db $6F,$65,$6E,$69,$78,$00,$47,$6F   ;02D119|        |696E65;  
-                db $61,$74,$60,$D7,$46,$6F,$6F,$64   ;02D121|        |000074;  
-                db $00,$48,$61,$72,$70,$20,$73,$74   ;02D129|        |      ;  
-                db $72,$69,$6E,$67,$00,$97,$70,$61   ;02D131|        |000069;  
-                db $73,$73,$00,$85,$52,$6F,$64,$00   ;02D139|        |000073;  
-                db $4C,$65,$6F,$60,$D7,$62,$72,$75   ;02D141|        |026F65;  
-                db $73,$68,$00,$4C,$65,$61,$76,$65   ;02D149|        |000068;  
-                db $73,$00,$4D,$6F,$6C,$65,$60,$D7   ;02D151|        |000000;  
-                db $52,$69,$62,$62,$6F,$6E,$00,$E1   ;02D159|        |000069;  
-                db $42,$69,$67,$20,$50,$65,$61,$72   ;02D161|        |      ;  
-                db $6C,$00,$4D,$65,$72,$6D,$61,$69   ;02D169|        |004D00;  
-                db $64,$60,$D7,$54,$65,$61,$72,$73   ;02D171|        |000060;  
-                db $00,$4D,$75,$73,$68,$72,$6F,$6F   ;02D179|        |      ;  
-                db $6D,$20,$53,$68,$6F,$65,$73,$00   ;02D181|        |005320;  
-                db $97,$6D,$6F,$62,$69,$6C,$65,$20   ;02D189|        |00006D;  
-                db $6B,$65,$79,$00,$54,$68,$75,$6E   ;02D191|        |      ;  
-                db $64,$65,$72,$20,$52,$69,$6E,$67   ;02D199|        |000065;  
-                db $00,$44,$65,$6C,$69,$63,$69,$6F   ;02D1A1|        |      ;  
-                db $75,$73,$20,$53,$65,$65,$64,$73   ;02D1A9|        |000073;  
-                db $00,$4C,$65,$61,$76,$65,$73,$00   ;02D1B1|        |      ;  
-                db $97,$64,$6F,$6F,$72,$20,$6B,$65   ;02D1B9|        |000064;  
-                db $79,$00,$50,$6C,$61,$74,$69,$6E   ;02D1C1|        |005000;  
-                db $75,$6D,$20,$43,$61,$72,$64,$00   ;02D1C9|        |00006D;  
-                db $E1,$56,$49,$50,$20,$43,$61,$72   ;02D1D1|        |000056;  
-                db $64,$00,$45,$6D,$62,$6C,$65,$6D   ;02D1D9|        |000000;  
-                db $20,$41,$00,$45,$6D,$62,$6C,$65   ;02D1E1|        |020041;  
-                db $6D,$20,$42,$00,$45,$6D,$62,$6C   ;02D1E9|        |004220;  
-                db $65,$6D,$20,$43,$00,$45,$6D,$62   ;02D1F1|        |00006D;  
-                db $6C,$65,$6D,$20,$44,$00,$45,$6D   ;02D1F9|        |006D65;  
-                db $62,$6C,$65,$6D,$20,$45,$00,$45   ;02D201|        |023770;  
-                db $6D,$62,$6C,$65,$6D,$20,$46,$00   ;02D209|        |006C62;  
-                db $45,$6D,$62,$6C,$65,$6D,$20,$47   ;02D211|        |00006D;  
-                db $00,$45,$6D,$62,$6C,$65,$6D,$20   ;02D219|        |      ;  
-                db $48,$00,$52,$65,$64,$2D,$48,$6F   ;02D221|        |      ;  
-                db $74,$20,$4D,$69,$72,$72,$6F,$72   ;02D229|        |000020;  
-                db $00,$52,$65,$64,$2D,$48,$6F,$74   ;02D231|        |      ;  
-                db $20,$42,$61,$6C,$6C,$00,$52,$65   ;02D239|        |026142;  
-                db $64,$2D,$48,$6F,$74,$20,$53,$74   ;02D241|        |00002D;  
-                db $69,$63,$6B,$00,$50,$6F,$77,$65   ;02D249|        |      ;  
-                db $72,$20,$42,$72,$61,$63,$65,$6C   ;02D251|        |000020;  
-                db $65,$74,$00,$53,$68,$69,$65,$6C   ;02D259|        |000074;  
-                db $64,$20,$42,$72,$61,$63,$65,$6C   ;02D261|        |000020;  
-                db $65,$74,$00,$53,$75,$70,$65,$72   ;02D269|        |000074;  
-                db $20,$42,$72,$61,$63,$65,$6C,$65   ;02D271|        |027242;  
-                db $74,$00,$4D,$65,$64,$69,$63,$61   ;02D279|        |000000;  
-                db $6C,$20,$48,$65,$72,$62,$00,$53   ;02D281|        |004820;  
-                db $74,$72,$61,$6E,$67,$65,$20,$42   ;02D289|        |000072;  
-                db $6F,$74,$74,$6C,$65,$00,$42,$72   ;02D291|        |6C7474;  
-                db $6F,$77,$6E,$20,$53,$74,$6F,$6E   ;02D299|        |206E77;  
-                db $65,$00,$87,$53,$74,$6F,$6E,$65   ;02D2A1|        |000000;  
-                db $00,$42,$6C,$75,$65,$20,$53,$74   ;02D2A9|        |      ;  
-                db $6F,$6E,$65,$00,$53,$69,$6C,$76   ;02D2B1|        |00656E;  
-                db $65,$72,$20,$53,$74,$6F,$6E,$65   ;02D2B9|        |000072;  
-                db $00,$50,$75,$72,$70,$6C,$65,$20   ;02D2C1|        |      ;  
-                db $53,$74,$6F,$6E,$65,$00,$42,$6C   ;02D2C9|        |000074;  
-                db $61,$63,$6B,$20,$53,$74,$6F,$6E   ;02D2D1|        |000063;  
-                db $65,$00,$4D,$61,$67,$69,$63,$20   ;02D2D9|        |000000;  
-                db $42,$65,$6C,$6C,$00,$50,$D3,$59   ;02D2E1|        |      ;  
-                db $D3,$64,$D3,$69,$D3,$6E,$D3,$76   ;02D2E9|        |000064;  
-                db $D3,$84,$D3,$8F,$D3,$A4,$D3,$B4   ;02D2F1|        |000084;  
-                db $D3,$BA,$D3,$C7,$D3,$CD,$D3,$D1   ;02D2F9|        |0000BA;  
-                db $D3,$E4,$D3,$EE,$D3,$F4,$D3,$FF   ;02D301|        |0000E4;  
-                db $D3,$0D,$D4,$1C,$D4,$22,$D4,$27   ;02D309|        |00000D;  
-                db $D4,$2F,$D4,$35,$D4,$3A,$D4,$43   ;02D311|        |00002F;  
-                db $D4,$4C,$D4,$57,$D4,$5E,$D4,$6C   ;02D319|        |00004C;  
-                db $D4,$7D,$D4,$82,$D4,$88,$D4,$90   ;02D321|        |00007D;  
-                db $D4,$98,$D4,$9F,$D4,$A5,$D4,$AF   ;02D329|        |000098;  
-                db $D4,$BC,$D4,$C2,$D4,$CE,$D4,$D3   ;02D331|        |0000BC;  
-                db $D4,$DA,$D4,$E1,$D4,$F1,$D4,$F7   ;02D339|        |0000DA;  
-                db $D4,$04,$D5,$11,$D5,$1A,$D5,$20   ;02D341|        |000004;  
-                db $D5,$28,$D5,$31,$D5,$38,$D5,$9C   ;02D349|        |000028;  
-                db $6F,$6C,$64,$20,$6D,$61,$6E,$00   ;02D351|        |20646C;  
-                db $9C,$6F,$6C,$64,$20,$77,$6F,$6D   ;02D359|        |006C6F;  
-                db $61,$6E,$00,$97,$62,$6F,$79,$00   ;02D361|        |00006E;  
-                db $4C,$69,$73,$61,$00,$91,$EF,$43   ;02D369|        |027369;  
-                db $68,$69,$65,$66,$00,$91,$62,$72   ;02D371|        |      ;  
-                db $69,$64,$67,$65,$20,$67,$75,$61   ;02D379|        |      ;  
-                db $72,$64,$00,$9C,$61,$72,$63,$68   ;02D381|        |000064;  
-                db $69,$74,$65,$63,$74,$00,$74,$6F   ;02D389|        |      ;  
-                db $6F,$6C,$20,$73,$68,$6F,$70,$20   ;02D391|        |73206C;  
-                db $6F,$77,$6E,$65,$72,$60,$D7,$73   ;02D399|        |656E77;  
-                db $6F,$6E,$00,$74,$6F,$6F,$6C,$20   ;02D3A1|        |74006E;  
-                db $73,$68,$6F,$70,$20,$6F,$77,$6E   ;02D3A9|        |000068;  
-                db $65,$72,$00,$97,$67,$6F,$61,$74   ;02D3B1|        |000072;  
-                db $00,$97,$6C,$6F,$6E,$65,$6C,$79   ;02D3B9|        |      ;  
-                db $20,$67,$6F,$61,$74,$00,$74,$75   ;02D3C1|        |026F67;  
-                db $6C,$69,$70,$00,$69,$76,$79,$00   ;02D3C9|        |007069;  
-                db $91,$77,$61,$74,$65,$72,$20,$6D   ;02D3D1|        |000077;  
-                db $69,$6C,$6C,$20,$6B,$65,$65,$70   ;02D3D9|        |      ;  
-                db $65,$72,$00,$97,$73,$71,$75,$69   ;02D3E1|        |000072;  
-                db $72,$72,$65,$6C,$00,$97,$64,$65   ;02D3E9|        |000072;  
-                db $65,$72,$00,$97,$63,$72,$6F,$63   ;02D3F1|        |000072;  
-                db $6F,$64,$69,$6C,$65,$00,$97,$64   ;02D3F9|        |6C6964;  
-                db $6F,$67,$2C,$20,$3C,$54,$75,$72   ;02D401|        |202C67;  
-                db $62,$6F,$3E,$00,$57,$6F,$6F,$64   ;02D409|        |02127B;  
-                db $60,$D7,$67,$75,$61,$72,$64,$69   ;02D411|        |      ;  
-                db $61,$6E,$00,$97,$6D,$6F,$6C,$65   ;02D419|        |00006E;  
-                db $00,$6E,$6F,$6E,$65,$00,$91,$EF   ;02D421|        |      ;  
-                db $43,$68,$69,$65,$66,$00,$97,$62   ;02D429|        |000068;  
-                db $69,$72,$64,$00,$97,$64,$6F,$67   ;02D431|        |      ;  
-                db $00,$97,$6D,$65,$72,$6D,$61,$69   ;02D439|        |      ;  
-                db $64,$00,$97,$64,$6F,$6C,$70,$68   ;02D441|        |000000;  
-                db $69,$6E,$00,$9C,$61,$6E,$67,$65   ;02D449|        |      ;  
-                db $6C,$66,$69,$73,$68,$00,$E1,$51   ;02D451|        |006966;  
-                db $75,$65,$65,$6E,$00,$E1,$64,$6F   ;02D459|        |000065;  
-                db $6C,$70,$68,$69,$6E,$2C,$20,$4C   ;02D461|        |006870;  
-                db $75,$65,$00,$97,$6D,$65,$72,$6D   ;02D469|        |000065;  
-                db $61,$69,$64,$60,$D7,$73,$74,$61   ;02D471|        |000069;  
-                db $74,$75,$65,$00,$97,$62,$6F,$79   ;02D479|        |000075;  
-                db $00,$97,$67,$69,$72,$6C,$00,$47   ;02D481|        |      ;  
-                db $72,$61,$6E,$64,$70,$61,$00,$47   ;02D489|        |000061;  
-                db $72,$61,$6E,$64,$6D,$61,$00,$97   ;02D491|        |000061;  
-                db $73,$6E,$61,$69,$6C,$00,$E1,$4B   ;02D499|        |00006E;  
-                db $69,$6E,$67,$00,$97,$6D,$75,$73   ;02D4A1|        |      ;  
-                db $68,$72,$6F,$6F,$6D,$00,$E1,$73   ;02D4A9|        |      ;  
-                db $6E,$61,$69,$6C,$2C,$20,$4E,$6F   ;02D4B1|        |006961;  
-                db $6D,$65,$00,$73,$74,$65,$70,$73   ;02D4B9|        |000065;  
-                db $00,$97,$67,$72,$65,$61,$74,$20   ;02D4C1|        |      ;  
-                db $64,$6F,$6F,$72,$00,$97,$63,$61   ;02D4C9|        |00006F;  
-                db $74,$00,$97,$70,$6C,$61,$6E,$74   ;02D4D1|        |000000;  
-                db $00,$97,$6D,$6F,$75,$73,$65,$00   ;02D4D9|        |      ;  
-                db $97,$63,$68,$65,$73,$74,$20,$CB   ;02D4E1|        |000063;  
-                db $64,$72,$61,$77,$65,$72,$73,$00   ;02D4E9|        |000072;  
-                db $97,$64,$6F,$6C,$6C,$00,$E1,$64   ;02D4F1|        |000064;  
-                db $6F,$6C,$6C,$2C,$20,$4D,$61,$72   ;02D4F9|        |2C6C6C;  
-                db $69,$65,$00,$97,$6D,$6F,$64,$65   ;02D501|        |      ;  
-                db $6C,$20,$CB,$74,$6F,$77,$6E,$00   ;02D509|        |00CB20;  
-                db $97,$73,$6F,$6C,$64,$69,$65,$72   ;02D511|        |000073;  
-                db $00,$97,$6D,$61,$69,$64,$00,$97   ;02D519|        |      ;  
-                db $73,$69,$6E,$67,$65,$72,$00,$8A   ;02D521|        |000069;  
-                db $4D,$61,$67,$72,$69,$64,$64,$00   ;02D529|        |006761;  
-                db $44,$72,$2E,$4C,$65,$6F,$00,$51   ;02D531|        |      ;  
-                db $75,$65,$65,$6E,$00,$01,$08,$04   ;02D539|        |000065;  
-                db $07,$16,$08,$01,$AA,$04,$4C,$65   ;02D541|        |000016;  
-                db $76,$3A,$01,$0A,$05,$53,$74,$72   ;02D549|        |00003A;  
-                db $65,$6E,$67,$74,$68,$3A,$00,$01   ;02D551|        |00006E;  
-                db $08,$04,$07,$16,$08,$01,$0A,$05   ;02D559|        |      ;  
-                db $44,$65,$66,$65,$6E,$63,$65,$20   ;02D561|        |      ;  
-                db $3A,$00,$01,$08,$04,$07,$16,$08   ;02D569|        |      ;  
-                db $00                               ;02D571|        |      ;  
-                                                     ;      |        |      ;  
-UNREACH_02D572: db $F4,$D5,$FB,$D5,$28,$D6,$66,$D6   ;02D572|        |00FBD5;  
-                db $94,$D6,$D7,$D6,$0C,$D7,$49,$D7   ;02D57A|        |0000D6;  
-                db $88,$D7,$BF,$D7,$F9,$D7,$2B,$D8   ;02D582|        |      ;  
-                db $57,$D8,$88,$D8,$BD,$D8,$F9,$D8   ;02D58A|        |0000D8;  
-                db $28,$D9,$51,$D9,$87,$D9,$C3,$D9   ;02D592|        |      ;  
-                db $02,$DA,$34,$DA,$6E,$DA,$A1,$DA   ;02D59A|        |      ;  
-                db $D0,$DA,$F9,$DA,$1F,$DB,$3F,$DB   ;02D5A2|        |02D57E;  
-                db $72,$DB,$A7,$DB,$E6,$DB,$2B,$DC   ;02D5AA|        |0000DB;  
-                db $67,$DC,$99,$DC,$BF,$DC,$F7,$DC   ;02D5B2|        |0000DC;  
-                db $38,$DD,$76,$DD,$B2,$DD,$E5,$DD   ;02D5BA|        |      ;  
-                db $16,$DE,$47,$DE,$7D,$DE,$BB,$DE   ;02D5C2|        |0000DE;  
-                db $C6,$DE,$D1,$DE,$DC,$DE,$E7,$DE   ;02D5CA|        |0000DE;  
-                db $F2,$DE,$FD,$DE,$08,$DF,$44,$DF   ;02D5D2|        |0000DE;  
-                db $4F,$DF,$5A,$DF,$90,$DF,$CD,$DF   ;02D5DA|        |DF5ADF;  
-                db $09,$E0,$46,$E0,$7A,$E0,$B9,$E0   ;02D5E2|        |      ;  
-                db $C4,$E0,$CF,$E0,$DA,$E0,$E5,$E0   ;02D5EA|        |0000E0;  
-                db $F0,$E0,$01,$08,$04,$07,$16,$08   ;02D5F2|        |02D5D4;  
-                db $00,$01,$8A,$04,$05,$74,$CF,$2C   ;02D5FA|        |      ;  
-                db $E1,$01,$B2,$04,$06,$02,$CE,$E1   ;02D602|        |000001;  
-                db $01,$1E,$05,$0B,$26,$AD,$E1,$01   ;02D60A|        |00001E;  
-                db $8A,$05,$81,$73,$77,$6F,$72,$64   ;02D612|        |      ;  
-                db $20,$AD,$E1,$0D,$0D,$4D,$61,$73   ;02D61A|        |02E1AD;  
-                db $74,$65,$72,$2E,$20,$00,$01,$8A   ;02D622|        |000065;  
-                db $04,$05,$74,$CF,$2E,$E1,$01,$B2   ;02D62A|        |000005;  
-                db $04,$06,$02,$D0,$E1,$01,$1E,$05   ;02D632|        |000006;  
-                db $0B,$26,$AE,$E1,$01,$8A,$05,$49   ;02D63A|        |      ;  
-                db $6E,$76,$69,$6E,$63,$69,$62,$6C   ;02D642|        |006976;  
-                db $65,$20,$C4,$0D,$0D,$74,$65,$6D   ;02D64A|        |000020;  
-                db $70,$6F,$72,$61,$72,$69,$6C,$79   ;02D652|        |02D6C3;  
-                db $20,$70,$61,$72,$61,$6C,$79,$7A   ;02D65A|        |026170;  
-                db $65,$64,$2E,$00,$01,$8A,$04,$05   ;02D662|        |000064;  
-                db $74,$CF,$30,$E1,$01,$B2,$04,$06   ;02D66A|        |0000CF;  
-                db $02,$D2,$E1,$01,$1E,$05,$0B,$26   ;02D672|        |      ;  
-                db $AF,$E1,$01,$8A,$05,$44,$65,$66   ;02D67A|        |8A01E1;  
-                db $65,$61,$74,$73,$20,$C4,$0D,$0D   ;02D682|        |000061;  
-                db $61,$74,$20,$6F,$6E,$63,$65,$2E   ;02D68A|        |000074;  
-                db $20,$00,$01,$8A,$04,$05,$74,$CF   ;02D692|        |020100;  
-                db $32,$E1,$01,$B2,$04,$06,$02,$D4   ;02D69A|        |0000E1;  
-                db $E1,$01,$1E,$05,$0B,$26,$B0,$E1   ;02D6A2|        |000001;  
-                db $01,$8A,$05,$91,$63,$68,$61,$6E   ;02D6AA|        |00008A;  
-                db $63,$65,$20,$CB,$67,$65,$74,$74   ;02D6B2|        |000065;  
-                db $69,$6E,$67,$20,$0D,$0D,$6C,$61   ;02D6BA|        |      ;  
-                db $72,$67,$65,$72,$20,$47,$45,$4D   ;02D6C2|        |000067;  
-                db $73,$20,$69,$6E,$63,$72,$65,$61   ;02D6CA|        |000020;  
-                db $73,$65,$73,$2E,$00,$01,$8A,$04   ;02D6D2|        |000065;  
-                db $05,$74,$CF,$34,$E1,$01,$B2,$04   ;02D6DA|        |000074;  
-                db $06,$02,$D6,$E1,$01,$1E,$05,$0B   ;02D6E2|        |000002;  
-                db $26,$B1,$E1,$01,$8A,$05,$44,$65   ;02D6EA|        |0000B1;  
-                db $66,$65,$61,$74,$73,$20,$C4,$F2   ;02D6F2|        |000065;  
-                db $0D,$0D,$73,$70,$65,$63,$69,$61   ;02D6FA|        |00730D;  
-                db $6C,$20,$61,$72,$6D,$6F,$72,$2E   ;02D702|        |006120;  
-                db $20,$00,$01,$8A,$04,$05,$74,$CF   ;02D70A|        |020100;  
-                db $36,$E1,$01,$B2,$04,$06,$02,$D8   ;02D712|        |0000E1;  
-                db $E1,$01,$1E,$05,$0B,$26,$B2,$E1   ;02D71A|        |000001;  
-                db $01,$8A,$05,$44,$65,$66,$65,$61   ;02D722|        |00008A;  
-                db $74,$73,$20,$E1,$3C,$73,$70,$69   ;02D72A|        |000073;  
-                db $72,$69,$74,$3E,$20,$0D,$0D,$74   ;02D732|        |000069;  
-                db $79,$70,$65,$20,$6D,$6F,$6E,$73   ;02D73A|        |006570;  
-                db $74,$65,$72,$73,$2E,$20,$00,$01   ;02D742|        |000065;  
-                db $8A,$04,$05,$74,$CF,$38,$E1,$01   ;02D74A|        |      ;  
-                db $B2,$04,$06,$02,$DA,$E1,$01,$1E   ;02D752|        |000004;  
-                db $05,$0B,$26,$B3,$E1,$01,$8A,$05   ;02D75A|        |00000B;  
-                db $48,$50,$20,$F1,$A1,$66,$69,$6C   ;02D762|        |      ;  
-                db $6C,$65,$64,$20,$77,$68,$65,$6E   ;02D76A|        |006465;  
-                db $0D,$0D,$6D,$6F,$6E,$73,$74,$65   ;02D772|        |006D0D;  
-                db $72,$20,$BA,$64,$65,$66,$65,$61   ;02D77A|        |000020;  
-                db $74,$65,$64,$2E,$20,$00,$01,$8A   ;02D782|        |000065;  
-                db $04,$05,$74,$CF,$3A,$E1,$01,$B2   ;02D78A|        |000005;  
-                db $04,$06,$02,$DC,$E1,$01,$1E,$05   ;02D792|        |000006;  
-                db $0B,$26,$B4,$E1,$01,$8A,$05,$91   ;02D79A|        |      ;  
-                db $73,$74,$72,$6F,$6E,$67,$65,$73   ;02D7A2|        |000074;  
-                db $74,$20,$73,$77,$6F,$72,$64,$20   ;02D7AA|        |000020;  
-                db $0D,$0D,$FE,$6D,$61,$79,$20,$75   ;02D7B2|        |00FE0D;  
-                db $73,$65,$2E,$20,$00,$01,$8A,$04   ;02D7BA|        |000065;  
+
+;Menu Options
+YesNoPrompt:
+    db !Text_RepositionCursor
+    dw $0288
+    db !Text_DrawTextBox,$04,$04
+    db " Yes",!Text_CR,!Text_CR
+    db " No"
+    db !Text_RepositionCursor
+    dw $030A
+    db !Text_WaitAndBreak
+OnlyYesPrompt:
+    db !Text_RepositionCursor
+    dw $0308
+    db !Text_DrawTextBox,$04,$02
+    db " Yes"
+    db !Text_RepositionCursor
+    dw $038A
+    db !Text_WaitAndBreak
+RecordMoveQuitPrompt:
+    db !Text_RepositionCursor
+    dw $0208
+    db !Text_DrawTextBox,$07,$06
+    db " Record",!Text_CR,!Text_CR
+    db " Move ",!Text_CR,!Text_CR
+    db " Quit"
+    db !Text_RepositionCursor
+    dw $028A
+    db !Text_WaitAndBreak
+RecordQuitPrompt:
+    db !Text_RepositionCursor
+    dw $0288
+    db !Text_DrawTextBox,$07,$04
+    db " Record",!Text_CR,!Text_CR
+    db " Quit"
+    db !Text_RepositionCursor
+    dw $030A
+    db !Text_WaitAndBreak
+StayGoBackPrompt:
+    db !Text_RepositionCursor
+    dw $0288
+    db !Text_DrawTextBox,$08,$04
+    db " Stay",!Text_CR,!Text_CR
+    db " Go back"
+    db !Text_RepositionCursor
+    dw $030A
+    db !Text_WaitAndBreak
+
+assert pc() == $90CF74
+InventoryPointers:
+NullItemPointer:
+    dw NotEquipped
+SwordNamePointers:
+    dw SwordOfLife, PsychoSword, CriticalSword, LuckyBlade
+    dw ZantetsuSword, SpiritSword, RecoverySword, TheSoulBlade
+
+ArmorNamePointers:
+    dw IronArmor, IceArmor, BubbleArmor, MagicArmor
+    dw MysticArmor, LightArmor, ElementalMail, SoulArmor
+
+MagicNamePointers:
+    dw FlameBall, LightArrow, MagicFlare, Rotator
+    dw SparkBomb, FlamePillar, Tornado, Phoenix
+
+ItemNamePointers:
+    dw GoatsFood, HarpString, APass, DreamRod
+    dw LeosBrush, GLeaf, MolesRibbon, TheBigPearl
+    dw MermaidsTears, MushroomShoes, AMobileKey, ThunderRing
+    dw DeliciousSeeds, ALeaf, ADoorKey, PlatinumCard
+    dw TheVipCard, EmblemA, EmblemB, EmblemC
+    dw EmblemD, EmblemE, EmblemF, EmblemG
+    dw EmblemH, RedHotMirror, RedHotBall, RedHotStick
+    dw PowerBracelet, ShieldBracelet, SuperBracelet, MedicalHerb
+    dw StrangeBottle, BrownStone, GreenStone, BlueStone
+    dw SilverStone, PurpleStone, BlackStone, MagicBell
+
+
+NotEquipped:
+    db !Dict_not,"equipped",$00
+SwordOfLife:
+    db "Sword ",!Dict_of,"Life",$00
+PsychoSword:
+    db "Psycho Sword",$00
+CriticalSword:
+    db "Critical Sword",$00
+LuckyBlade:
+    db "Lucky Blade",$00
+ZantetsuSword:
+    db "Zantetsu Sword",$00
+SpiritSword:
+    db "Spirit Sword",$00
+RecoverySword:
+    db "Recovery Sword",$00
+TheSoulBlade:
+    db !Dict_The,"Soul Blade",$00
+
+IronArmor:
+    db "Iron Armor",$00
+IceArmor:
+    db "Ice Armor",$00
+BubbleArmor:
+    db "Bubble Armor",$00
+MagicArmor:
+    db "MagicArmor",$00
+MysticArmor:
+    db "Mystic Armor",$00
+LightArmor:
+    db "Light Armor",$00
+ElementalMail:
+    db "Elemental Mail",$00
+SoulArmor:
+    db "Soul Armor",$00
+
+FlameBall:
+    db "Flame Ball",$00
+LightArrow:
+    db "Light Arrow",$00
+MagicFlare:
+    db "Magic Flare",$00
+Rotator:
+    db "Rotator",$00
+SparkBomb:
+    db "Spark Bomb",$00
+FlamePillar:
+    db "Flame Pillar",$00
+Tornado:
+    db "Tornado",$00
+Phoenix:
+    db "Phoenix",$00
+
+GoatsFood:
+    db "Goat`",!Dict_s,"Food",$00
+HarpString:
+    db "Harp String",$00
+APass:
+    db !Dict_a,"pass",$00
+DreamRod:
+    db !Dict_Dream,"Rod",$00
+LeosBrush:
+    db "Leo`",!Dict_s,"brush",$00
+GLeaf:
+    db "G.Leaf",$00 ;TODO: expand name
+MolesRibbon:
+    db "Mole`",!Dict_s,"Ribbon",$00
+TheBigPearl:
+    db !Dict_The,"Big Pearl",$00
+MermaidsTears:
+    db "Mermaid`",!Dict_s,"Tears",$00
+MushroomShoes:
+    db "Mushroom Shoes",$00
+AMobileKey:
+    db !Dict_a, "mobile key",$00 ;TODO Better name
+ThunderRing:
+    db "Thunder Ring",$00
+DeliciousSeeds:
+    db "Delicious Seeds",$00
+ALeaf:
+    db "A.Leaf",$00 ;TODO: expand name
+ADoorKey:
+    db !Dict_a,"door key",$00
+PlatinumCard:
+    db "Platinum Card",$00
+TheVipCard:
+    db !Dict_The,"VIP Card",$00
+EmblemA:
+    db "Emblem A",$00
+EmblemB:
+    db "Emblem B",$00
+EmblemC:
+    db "Emblem C",$00
+EmblemD:
+    db "Emblem D",$00
+EmblemE:
+    db "Emblem E",$00
+EmblemF:
+    db "Emblem F",$00
+EmblemG:
+    db "Emblem G",$00
+EmblemH:
+    db "Emblem H",$00
+RedHotMirror:
+    db "Red-Hot Mirror",$00
+RedHotBall:
+    db "Red-Hot Ball",$00
+RedHotStick:
+    db "Red-Hot Stick",$00
+PowerBracelet:
+    db "Power Bracelet",$00
+ShieldBracelet:
+    db "Shield Bracelet",$00
+SuperBracelet:
+    db "Super Bracelet",$00
+MedicalHerb:
+    db "Medical Herb",$00
+StrangeBottle:
+    db "Strange Bottle",$00
+BrownStone:
+    db "Brown Stone",$00
+GreenStone:
+    db !Dict_Green,"Stone",$00
+BlueStone:
+    db "Blue Stone",$00
+SilverStone:
+    db "Silver Stone",$00
+PurpleStone:
+    db "Purple Stone",$00
+BlackStone:
+    db "Black Stone",$00
+MagicBell:
+    db "Magic Bell",$00
+
+assert pc() == $90D2E6
+NpcNamePointers:
+    dw AnOldMan, AnOldWoman, ABoy, Lisa
+    dw TheVillageChief, TheBridgeGuard, AnArchitect, ToolShopOwnersSon
+    dw ToolShopOwner, AGoat, ALonelyGoat, Tulip
+    dw Ivy, TheWaterMillKeeper
+    
+    dw ASquirrel, ADeer, ACrocodile, TheDogTurbo
+    dw WoodsGuardian, AMole, None, TheVillageChief2
+    dw ABird, ADog
+
+    dw AMermaid, ADolphin, AnAngelFish, TheQueen
+    dw TheDolphinLue, AMermaidStatue
+
+    dw ABoy2, AGirl, Grandpa, Grandma
+    dw ASnail, TheKing, AMushroom, TheSnailNome
+    
+    dw Steps, AGreatDoor, ACat, APlant
+    dw AMouse, AChestOfDrawers, ADoll, TheDollMarie
+    dw AModelOfTown
+    
+    dw ASoldier, AMaid, ASinger, KingMagridd
+    dw DrLeo, Queen
+
+;TODO Expand Table, Relocate early names
+
+;NPC Name Strings
+AnOldMan:
+    db !Dict_an,"old man",$00
+AnOldWoman:
+    db !Dict_an,"old woman",$00
+ABoy:
+    db !Dict_a,"boy",$00
+Lisa:
+    db "Lisa",$00
+TheVillageChief:
+    db !Dict_The,!Dict_village,"Chief",$00
+TheBridgeGuard:
+    db !Dict_The,"bridge guard",$00
+AnArchitect:
+    db !Dict_an,"architect",$00
+ToolShopOwnersSon:
+    db "tool shop owner`",!Dict_s,"son",$00
+ToolShopOwner:
+    db "tool shop owner",$00
+AGoat:
+    db !Dict_a,"goat",$00
+ALonelyGoat:
+    db !Dict_a,"lonely goat",$00
+Tulip:
+    db "tulip",$00
+Ivy:
+    db "ivy",$00
+TheWaterMillKeeper:
+    db !Dict_The,"water mill keeper",$00
+ASquirrel:
+    db !Dict_a,"squirrel",$00
+ADeer:
+    db !Dict_a,"deer",$00
+ACrocodile:
+    db !Dict_a,"crocodile",$00
+TheDogTurbo:
+    db !Dict_The,"dog, <Turbo>",$00
+WoodsGuardian:
+    db "Wood`"!Dict_s,"guardian",$00
+AMole:
+    db !Dict_a,"mole",$00
+None:
+    db "none",$00
+TheVillageChief2: ; Wonder why this is here again?
+    db !Dict_The,!Dict_village,"Chief",$00
+ABird:
+    db !Dict_a,"bird",$00
+ADog:
+    db !Dict_a,"dog",$00
+AMermaid:
+    db !Dict_a,"mermaid",$00
+ADolphin:
+    db !Dict_a,"dolphin",$00
+AnAngelFish:
+    db !Dict_an,"angelfish",$00
+TheQueen: ; TODO: rename to Mermaid Queen/Queen Magridd?
+    db !Dict_the,"Queen",$00
+TheDolphinLue:
+    db !Dict_the,"dolphin, Lue",$00
+AMermaidStatue:
+    db !Dict_a,"mermaid`",!Dict_s,"statue",$00
+ABoy2:
+    db !Dict_a,"boy",$00
+AGirl:
+    db !Dict_a,"girl",$00
+Grandpa:
+    db "Grandpa",$00
+Grandma:
+    db "Grandma",$00
+ASnail:
+    db !Dict_a,"snail",$00
+TheKing: ;TODO: rename to Mountain King
+    db !Dict_the,"King",$00
+AMushroom:
+    db !Dict_a,"mushroom",$00
+TheSnailNome:
+    db !Dict_the,"snail, Nome",$00
+Steps:
+    db "steps",$00
+AGreatDoor:
+    db !Dict_a,"great door",$00
+ACat:
+    db !Dict_a,"cat",$00
+APlant:
+    db !Dict_a,"plant",$00
+AMouse:
+    db !Dict_a,"mouse",$00
+AChestOfDrawers:
+    db !Dict_a,"chest ",!Dict_of,"drawers",$00
+ADoll:
+    db !Dict_a,"doll",$00
+TheDollMarie:
+    db !Dict_the,"doll, Marie",$00
+AModelOfTown:
+    db !Dict_a,"model "!Dict_of,"town",$00
+ASoldier:
+    db !Dict_a,"soldier",$00
+AMaid:
+    db !Dict_a,"maid",$00
+ASinger:
+    db !Dict_a,"singer",$00
+KingMagridd:
+    db !Dict_King,"Magridd",$00
+DrLeo:
+    db "Dr.Leo",$00
+Queen: ;TODO: rename to Queen Magridd
+    db "Queen",$00
+
+; Status Screen Text
+assert pc() == $90D53E
+PrintSwordStatsBox:
+    db !Text_RepositionCursor
+    dw $0408
+    db !Text_DrawTextBox,$16,$08
+    db !Text_RepositionCursor
+    dw $04AA
+    db "Lev:"
+    db !Text_RepositionCursor
+    dw $050A
+    db "Strength:"
+    db !Text_WaitAndBreak
+
+PrintArmorStatsBox:
+    db !Text_RepositionCursor
+    dw $0408
+    db !Text_DrawTextBox,$16,$08
+    db !Text_RepositionCursor
+    dw $050A
+    db "Defence :"
+    db !Text_WaitAndBreak
+
+PrintEmptyStatsBox: ;Probably used for magic and item descriptions?
+    db !Text_RepositionCursor
+    dw $0408
+    db !Text_DrawTextBox,$16,$08
+    db !Text_WaitAndBreak
+
+
+;Status Screen Description Pointers:
+assert pc() == $90D572
+NullItemStatusPointer:
+    db $F4,$D5
+
+SwordStatusPointers:
+    db $FB,$D5, $28,$D6, $66,$D6, $94,$D6
+    db $D7,$D6, $0C,$D7, $49,$D7, $88,$D7
+
+ArmorStatusPointers:
+    db $BF,$D7, $F9,$D7, $2B,$D8, $57,$D8
+    db $88,$D8, $BD,$D8, $F9,$D8, $28,$D9
+
+MagicStatusPointers:
+    db $51,$D9, $87,$D9, $C3,$D9, $02,$DA
+    db $34,$DA, $6E,$DA, $A1,$DA, $D0,$DA
+
+ItemStatusPointers:
+    db $F9,$DA, $1F,$DB, $3F,$DB, $72,$DB
+    db $A7,$DB, $E6,$DB, $2B,$DC, $67,$DC
+    db $99,$DC, $BF,$DC, $F7,$DC, $38,$DD
+    db $76,$DD, $B2,$DD, $E5,$DD, $16,$DE
+    db $47,$DE, $7D,$DE, $BB,$DE, $C6,$DE
+    db $D1,$DE, $DC,$DE, $E7,$DE, $F2,$DE
+    db $FD,$DE, $08,$DF, $44,$DF, $4F,$DF
+    db $5A,$DF, $90,$DF, $CD,$DF, $09,$E0
+    db $46,$E0, $7A,$E0, $B9,$E0, $C4,$E0
+    db $CF,$E0, $DA,$E0, $E5,$E0, $F0,$E0
+
+NullItemStatsText:
+    db !Text_RepositionCursor
+    dw $0408
+    db !Text_DrawTextBox,$16,$08
+    db !Text_WaitAndBreak
+
+SwordOfLifeStatsText:
+    db !Text_RepositionCursor
+    dw $048A
+    !Text_TableLookup
+    dw InventoryPointers, $E12C ; TODO: resolve to label
+    db !Text_RepositionCursor
+    dw $04B2
+    db !Text_PrintDecimal
+    db $02
+    dw $E1CE ; TODO: resolve to label
+    db !Text_RepositionCursor
+    dw $051E
+    db !Text_UnknownCmd, $26,$AD,$E1 ;TODO: figure out what this command does?
+    db !Text_RepositionCursor
+    dw $058A
+    db !Dict_A,"sword ",!Dict_from,!Dict_the,!Text_CR,!Text_CR
+    db "Master. "
+    db !Text_WaitAndBreak
+
+PsychoSwordStatsText:
+    db !Text_RepositionCursor
+    dw $048A
+    !Text_TableLookup
+    dw InventoryPointers, $E12E ; TODO: resolve to label
+    db !Text_RepositionCursor
+    dw $04B2
+    db !Text_PrintDecimal
+    db $02
+    dw $E1D0 ; TODO: resolve to label
+    db !Text_RepositionCursor
+    dw $051E
+    db !Text_UnknownCmd, $26 ;TODO: figure out what this command does?
+    dw $E1AE ; TODO: resolve to label
+    db !Text_RepositionCursor
+    dw $058A
+    db "Invincible ",!Dict_monsters,!Text_CR,!Text_CR
+    db "temporarily paralyzed."
+    db !Text_WaitAndBreak
+
+CriticalSwordStatsText:
+    db !Text_RepositionCursor
+    dw $048A
+    !Text_TableLookup
+    dw InventoryPointers, $E130 ; TODO: resolve to label
+    db !Text_RepositionCursor
+    dw $04B2
+    db !Text_PrintDecimal
+    db $02
+    dw $E1D2 ; TODO: resolve to label
+    db !Text_RepositionCursor
+    dw $051E
+    db !Text_UnknownCmd, $26 ;TODO: figure out what this command does?
+    dw $E1AF ; TODO: resolve to label
+    db !Text_RepositionCursor
+    dw $058A
+    db "Defeats ",!Dict_monsters,!Text_CR,!Text_CR
+    db "at once. "
+    db !Text_WaitAndBreak
+
+LuckyBladeStatsText:
+    db !Text_RepositionCursor
+    dw $048A
+    !Text_TableLookup
+    dw InventoryPointers, $E132 ; TODO: resolve to label
+    db !Text_RepositionCursor
+    dw $04B2
+    db !Text_PrintDecimal
+    db $02
+    dw $E1D4 ; TODO: resolve to label
+    db !Text_RepositionCursor
+    dw $051E
+    db !Text_UnknownCmd, $26 ;TODO: figure out what this command does?
+    dw $E1B0 ; TODO: resolve to label
+    db !Text_RepositionCursor
+    dw $058A
+    db !Dict_The,"change ",!Dict_of,"getting ",!Text_CR,!Text_CR
+    db "larger GEMs increases."
+    db !Text_WaitAndBreak
+
+ZantetsuSwordStatsText:
+    db !Text_RepositionCursor
+    dw $048A
+    !Text_TableLookup
+    dw InventoryPointers, $E134 ; TODO: resolve to label
+    db !Text_RepositionCursor
+    dw $04B2
+    db !Text_PrintDecimal
+    db $02
+    dw $E1D6 ; TODO: resolve to label
+    db !Text_RepositionCursor
+    dw $051E
+    db !Text_UnknownCmd, $26 ;TODO: figure out what this command does?
+    dw $E1B1 ; TODO: resolve to label
+    db !Text_RepositionCursor
+    dw $058A
+    db "Defeats ",!Dict_monsters,!Dict_with,!Text_CR,!Text_CR
+    db "special armor. "
+    db !Text_WaitAndBreak
+
+SpiritSwordStatsText:
+    db !Text_RepositionCursor
+    dw $048A
+    !Text_TableLookup
+    dw InventoryPointers, $E136 ; TODO: resolve to label
+    db !Text_RepositionCursor
+    dw $04B2
+    db !Text_PrintDecimal
+    db $02
+    dw $E1D8 ; TODO: resolve to label
+    db !Text_RepositionCursor
+    dw $051E
+    db !Text_UnknownCmd, $26 ;TODO: figure out what this command does?
+    dw $E1B2 ; TODO: resolve to label
+    db !Text_RepositionCursor
+    dw $058A
+    db "Defeats ",!Dict_the,"<spirit> ",!Text_CR,!Text_CR
+    db "type monsters. "
+    db !Text_WaitAndBreak
+
+RecoverySwordStatsText:
+    db !Text_RepositionCursor
+    dw $048A
+    !Text_TableLookup
+    dw InventoryPointers, $E138 ; TODO: resolve to label
+    db !Text_RepositionCursor
+    dw $04B2
+    db !Text_PrintDecimal
+    db $02
+    dw $E1DA ; TODO: resolve to label
+    db !Text_RepositionCursor
+    dw $051E
+    db !Text_UnknownCmd, $26 ;TODO: figure out what this command does?
+    dw $E1B3 ; TODO: resolve to label
+    db !Text_RepositionCursor
+    dw $058A
+    db "HP ",!Dict_will,!Dict_be,"filled when",!Text_CR,!Text_CR
+    db "monster ",!Dict_is,"defeated. "
+    db !Text_WaitAndBreak
+
+TheSoulBladeStatsText:
+    db !Text_RepositionCursor
+    dw $048A
+    !Text_TableLookup
+    dw InventoryPointers, $E13A ; TODO: resolve to label
+    db !Text_RepositionCursor
+    dw $04B2
+    db !Text_PrintDecimal
+    db $02
+    dw $E1DC ; TODO: resolve to label
+    db !Text_RepositionCursor
+    dw $051E
+    db !Text_UnknownCmd, $26 ;TODO: figure out what this command does?
+    dw $E1B4 ; TODO: resolve to label
+    db !Text_RepositionCursor
+    dw $058A
+    db !Dict_The,"strongest sword ",!Text_CR,!Text_CR
+    db !Dict_you,"may use. "
+    db !Text_WaitAndBreak
+
+;TODO: armor stats text
+                db $01,$8A,$04   ;02D7BA|        |000065;  
                 db $05,$74,$CF,$3C,$E1,$01,$1E,$05   ;02D7C2|        |000074;  
                 db $0B,$27,$C6,$E1,$01,$8A,$05,$59   ;02D7CA|        |      ;  
                 db $6F,$75,$72,$20,$64,$65,$66,$65   ;02D7D2|        |207275;  

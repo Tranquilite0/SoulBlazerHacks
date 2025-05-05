@@ -208,7 +208,7 @@ MapChanged = $84F781
                               ; Typical value is $08,$04 ($0408) which is an index into $7F7000. If value stored there is not $01 then this command does nothing.
 !Text_ToggleSmallUiFont = $09 ; XOR $03E9 with #$02, which changes the font to the smaller 8x8 font with transparent background used by the hud.
 !Text_ToggleSmallFont   = $0A ; XOR $03F9 with #$80, which changes the font to the smaller 8x8 font with black background used by NPCs that whisper.
-!Text_Unused            = $0B ; Skip next 3 bytes and continue. Is used as part of hud drawing with PrintOsdStringFromBank2, but is effectively a No-Op here.
+!Text_UnknownCmd        = $0B ; Skip next 3 bytes and continue. Is used as part of hud drawing with PrintOsdStringFromBank2, but is effectively a No-Op here.
 !Text_Break             = $0C ; Exit text processing. Further prints will start on a new line.
 !Text_CR                = $0D ; Advance text cursor to next line. Convienently shares ascii code point with carriage return (\r) which does the same thing.
 !Text_DelayAndContinue  = $0E ; Takes 1 byte parameter. Probably the number of frames to delay.
