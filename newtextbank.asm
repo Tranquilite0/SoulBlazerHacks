@@ -12,16 +12,22 @@ ORG $90BB27
 ;TODO: remove these strings if they are not needed?
 ; Title Screen Text
 TitleScreenText:
-    db $09,$01,$D6,$04, ; Text engine commands
+    db !Text_ToggleSmallUiFont
+    db !Text_RepositionCursor
+    dw $04D6
     db "PUSH START",!Text_WaitAndBreak
-    db $09,$01,$C0,$05,$14,$06 ; More text engine commands
+    db !Text_ToggleSmallUiFont
+    db !Text_RepositionCursor
+    dw $05C0
+    db !Text_PrintSpace,$06
     db "ALL RIGHTS RESERVED",!Text_CR
     db "  COPYRIGHT 1992 QUINTET/ENIX",!Text_CR
-    db $14,$09
+    db !Text_PrintSpace,$09
     db "LICENSED BY NINTENDO",!Text_WaitAndBreak
 PrologueText:
     ; Prologue Text
-    db $01,$80,$02 ; Text engine commands
+    db !Text_RepositionCursor
+    dw $0280
     ;Wise men tell a tale late...
     db $20,$20,$57,$69,$73,$65,$20
     db $6D,$65,$6E,$20,$E7,$97,$74,$61   ;02BB8F|        |006E65;  
@@ -289,7 +295,7 @@ EpilogueText:
     db $68,$65,$20,$62,$65,$6C,$69,$65   ;02C397|        |      ;  
     db $76,$65,$73,$3A,$00,$09,$01,$58   ;02C39F|        |000065;  
     db $03,$54,$48,$45,$20,$45,$4E,$44   ;02C3A7|        |000054;  ;THE END
-    db $00 ;\r
+    db $00 ;
 MenuText:
     db     $01,$88,$00,$07,$16,$16,$01   ;02C3AF|        |      ;  
     db $4A,$01,$8F,$63,$68,$6F,$6F,$73   ;02C3B7|        |      ;  
@@ -1314,58 +1320,129 @@ TheSoulBladeStatsText:
     db !Dict_you,"may use. "
     db !Text_WaitAndBreak
 
-;TODO: armor stats text
-                db $01,$8A,$04   ;02D7BA|        |000065;  
-                db $05,$74,$CF,$3C,$E1,$01,$1E,$05   ;02D7C2|        |000074;  
-                db $0B,$27,$C6,$E1,$01,$8A,$05,$59   ;02D7CA|        |      ;  
-                db $6F,$75,$72,$20,$64,$65,$66,$65   ;02D7D2|        |207275;  
-                db $6E,$73,$65,$20,$70,$6F,$77,$65   ;02D7DA|        |006573;  
-                db $72,$20,$0D,$0D,$62,$65,$63,$6F   ;02D7E2|        |000020;  
-                db $6D,$65,$73,$20,$73,$74,$72,$6F   ;02D7EA|        |007365;  
-                db $6E,$67,$65,$72,$2E,$20,$00,$01   ;02D7F2|        |006567;  
-                db $8A,$04,$05,$74,$CF,$3E,$E1,$01   ;02D7FA|        |      ;  
-                db $1E,$05,$0B,$27,$C7,$E1,$01,$8A   ;02D802|        |000B05;  
-                db $05,$FE,$A7,$63,$72,$6F,$73,$73   ;02D80A|        |0000FE;  
-                db $20,$0D,$0D,$66,$69,$72,$65,$20   ;02D812|        |020D0D;  
-                db $77,$69,$74,$68,$6F,$75,$74,$20   ;02D81A|        |000069;  
-                db $64,$61,$6D,$61,$67,$65,$2E,$20   ;02D822|        |000061;  
-                db $00,$01,$8A,$04,$05,$74,$CF,$40   ;02D82A|        |      ;  
-                db $E1,$01,$1E,$05,$0B,$27,$C8,$E1   ;02D832|        |000001;  
-                db $01,$8A,$05,$45,$6E,$61,$62,$6C   ;02D83A|        |00008A;  
-                db $65,$73,$20,$FE,$E2,$F9,$0D,$0D   ;02D842|        |000073;  
-                db $75,$6E,$64,$65,$72,$20,$E1,$73   ;02D84A|        |00006E;  
-                db $65,$61,$2E,$20,$00,$01,$8A,$04   ;02D852|        |000061;  
-                db $05,$74,$CF,$42,$E1,$01,$1E,$05   ;02D85A|        |000074;  
-                db $0B,$27,$C9,$E1,$01,$8A,$05,$43   ;02D862|        |      ;  
-                db $75,$74,$73,$20,$E1,$6E,$65,$63   ;02D86A|        |000074;  
-                db $65,$73,$73,$61,$72,$79,$20,$0D   ;02D872|        |000073;  
-                db $0D,$47,$45,$4D,$73,$20,$BB,$68   ;02D87A|        |004547;  
-                db $61,$6C,$66,$2E,$20,$00,$01,$8A   ;02D882|        |00006C;  
-                db $04,$05,$74,$CF,$44,$E1,$01,$1E   ;02D88A|        |000005;  
-                db $05,$0B,$27,$CA,$E1,$01,$8A,$05   ;02D892|        |00000B;  
-                db $49,$6E,$76,$69,$6E,$63,$69,$62   ;02D89A|        |      ;  
-                db $6C,$65,$20,$AE,$6C,$6F,$6E,$67   ;02D8A2|        |002065;  
-                db $65,$72,$0D,$0D,$70,$65,$72,$69   ;02D8AA|        |000072;  
-                db $6F,$64,$20,$CB,$74,$69,$6D,$65   ;02D8B2|        |CB2064;  
-                db $2E,$20,$00,$01,$8A,$04,$05,$74   ;02D8BA|        |000020;  
-                db $CF,$46,$E1,$01,$1E,$05,$0B,$27   ;02D8C2|        |01E146;  
-                db $CB,$E1,$01,$8A,$05,$52,$65,$63   ;02D8CA|        |      ;  
-                db $65,$69,$76,$65,$20,$6E,$6F,$20   ;02D8D2|        |000069;  
-                db $64,$61,$6D,$61,$67,$65,$20,$66   ;02D8DA|        |000061;  
-                db $72,$6F,$6D,$0D,$0D,$77,$65,$61   ;02D8E2|        |00006F;  
-                db $6B,$65,$72,$20,$6D,$6F,$6E,$73   ;02D8EA|        |      ;  
-                db $74,$65,$72,$73,$2E,$20,$00,$01   ;02D8F2|        |000065;  
-                db $8A,$04,$05,$74,$CF,$48,$E1,$01   ;02D8FA|        |      ;  
-                db $1E,$05,$0B,$27,$CC,$E1,$01,$8A   ;02D902|        |000B05;  
-                db $05,$50,$72,$6F,$74,$65,$63,$74   ;02D90A|        |000050;  
-                db $73,$20,$02,$02,$0D,$0D,$AD,$E1   ;02D912|        |000020;  
-                db $64,$61,$6D,$61,$67,$65,$20,$7A   ;02D91A|        |000061;  
-                db $6F,$6E,$65,$73,$2E,$00,$01,$8A   ;02D922|        |73656E;  
-                db $04,$05,$74,$CF,$4A,$E1,$01,$1E   ;02D92A|        |000005;  
-                db $05,$0B,$27,$CD,$E1,$01,$8A,$05   ;02D932|        |00000B;  
-                db $45,$6E,$61,$62,$6C,$65,$73,$20   ;02D93A|        |00006E;  
-                db $FE,$E2,$F9,$69,$6E,$0D,$0D,$73   ;02D942|        |00F9E2;  
-                db $70,$61,$63,$65,$2E,$20,$00,$01   ;02D94A|        |02D9AD;  
+
+IronArmorStatsText:
+    db !Text_RepositionCursor
+    dw $048A
+    db !Text_TableLookup
+    dw InventoryPointers, $E13C
+    db !Text_RepositionCursor
+    dw $051E
+    db !Text_UnknownCmd, $27 ;TODO: figure out what this command does?
+    dw $E1C6 ; TODO: resolve to label
+    db !Text_RepositionCursor
+    dw $058A
+    db "Your defense power ",!Text_CR,!Text_CR
+    db "becomes stronger. "
+    db !Text_WaitAndBreak
+
+IceArmorStatsText:
+    db !Text_RepositionCursor
+    dw $048A
+    db !Text_TableLookup
+    dw InventoryPointers, $E13E
+    db !Text_RepositionCursor
+    dw $051E
+    db !Text_UnknownCmd, $27 ;TODO: figure out what this command does?
+    dw $E1C7 ; TODO: resolve to label
+    db !Text_RepositionCursor
+    dw $058A
+    db !Dict_you,!Dict_can,"cross ",!Text_CR,!Text_CR
+    db "fire without damage. "
+    db !Text_WaitAndBreak
+
+BubbleArmorStatsText:
+    db !Text_RepositionCursor
+    dw $048A
+    db !Text_TableLookup
+    dw InventoryPointers, $E140
+    db !Text_RepositionCursor
+    dw $051E
+    db !Text_UnknownCmd, $27 ;TODO: figure out what this command does?
+    dw $E1C8 ; TODO: resolve to label
+    db !Text_RepositionCursor
+    dw $058A
+    db "Enables ",!Dict_you,!Dict_to,!Dict_walk,!Text_CR,!Text_CR
+    db "under ",!Dict_the,"sea. "
+    db !Text_WaitAndBreak
+
+MagicArmorStatsText:
+    db !Text_RepositionCursor
+    dw $048A
+    db !Text_TableLookup
+    dw InventoryPointers, $E142
+    db !Text_RepositionCursor
+    dw $051E
+    db !Text_UnknownCmd, $27 ;TODO: figure out what this command does?
+    dw $E1C9 ; TODO: resolve to label
+    db !Text_RepositionCursor
+    dw $058A
+    db "Cuts ",!Dict_the,"necessary ",!Text_CR,!Text_CR
+    db "GEMs ",!Dict_in,"half. "
+    db !Text_WaitAndBreak
+
+MysticArmorStatsText:
+    db !Text_RepositionCursor
+    dw $048A
+    db !Text_TableLookup
+    dw InventoryPointers, $E144
+    db !Text_RepositionCursor
+    dw $051E
+    db !Text_UnknownCmd, $27 ;TODO: figure out what this command does?
+    dw $E1CA ; TODO: resolve to label
+    db !Text_RepositionCursor
+    dw $058A
+    db "Invincible ",!Dict_for,"longer ",!Text_CR,!Text_CR
+    db "period ",!Dict_of,"time. "
+    db !Text_WaitAndBreak
+
+LightArmorStatsText:
+    db !Text_RepositionCursor
+    dw $048A
+    db !Text_TableLookup
+    dw InventoryPointers, $E146
+    db !Text_RepositionCursor
+    dw $051E
+    db !Text_UnknownCmd, $27 ;TODO: figure out what this command does?
+    dw $E1CB ; TODO: resolve to label
+    db !Text_RepositionCursor
+    dw $058A
+    db "Receive no damage from",!Text_CR,!Text_CR
+    db "weaker monsters. "
+    db !Text_WaitAndBreak
+
+ElementalMailStatsText:
+    db !Text_RepositionCursor
+    dw $048A
+    db !Text_TableLookup
+    dw InventoryPointers, $E148
+    db !Text_RepositionCursor
+    dw $051E
+    db !Text_UnknownCmd, $27 ;TODO: figure out what this command does?
+    dw $E1CC ; TODO: resolve to label
+    db !Text_RepositionCursor
+    dw $058A
+    db "Protects ",!Text_HeroName,!Text_CR,!Text_CR
+    db !Dict_from,!Dict_the,"damage zones."
+    db !Text_WaitAndBreak
+
+SoulArmorStatsText:
+    db !Text_RepositionCursor
+    dw $048A
+    db !Text_TableLookup
+    dw InventoryPointers, $E14A
+    db !Text_RepositionCursor
+    dw $051E
+    db !Text_UnknownCmd, $27 ;TODO: figure out what this command does?
+    dw $E1CD ; TODO: resolve to label
+    db !Text_RepositionCursor
+    dw $058A
+    db "Enables ",!Dict_you,!Dict_to,!Dict_walk,"in",!Text_CR,!Text_CR
+    db "space. "
+    db !Text_WaitAndBreak
+
+; TODO: Magic stats text
+                db $01   ;02D94A|        |02D9AD;  
                 db $8A,$04,$05,$74,$CF,$4C,$E1,$01   ;02D952|        |      ;  
                 db $0A,$05,$8E,$47,$45,$4D,$20,$3A   ;02D95A|        |      ;  
                 db $20,$34,$0D,$0D,$53,$68,$6F,$6F   ;02D962|        |020D34;  
