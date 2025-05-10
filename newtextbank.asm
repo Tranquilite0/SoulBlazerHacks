@@ -1161,6 +1161,7 @@ NullItemStatsText:
     db !Text_DrawTextBox,$16,$08
     db !Text_WaitAndBreak
 
+; Weapon Stats Text
 SwordOfLifeStatsText:
     db !Text_RepositionCursor
     dw $048A
@@ -1320,7 +1321,7 @@ TheSoulBladeStatsText:
     db !Dict_you,"may use. "
     db !Text_WaitAndBreak
 
-
+; Armot Stats Text
 IronArmorStatsText:
     db !Text_RepositionCursor
     dw $048A
@@ -1441,50 +1442,80 @@ SoulArmorStatsText:
     db "space. "
     db !Text_WaitAndBreak
 
-; TODO: Magic stats text
-                db $01   ;02D94A|        |02D9AD;  
-                db $8A,$04,$05,$74,$CF,$4C,$E1,$01   ;02D952|        |      ;  
-                db $0A,$05,$8E,$47,$45,$4D,$20,$3A   ;02D95A|        |      ;  
-                db $20,$34,$0D,$0D,$53,$68,$6F,$6F   ;02D962|        |020D34;  
-                db $74,$73,$20,$97,$66,$69,$72,$65   ;02D96A|        |000073;  
-                db $62,$61,$6C,$6C,$20,$BB,$0D,$0D   ;02D972|        |0245D6;  
-                db $CC,$64,$69,$72,$65,$63,$74,$69   ;02D97A|        |006964;  
-                db $6F,$6E,$2E,$20,$00,$01,$8A,$04   ;02D982|        |202E6E;  
-                db $05,$74,$CF,$4E,$E1,$01,$0A,$05   ;02D98A|        |000074;  
-                db $8E,$47,$45,$4D,$20,$3A,$20,$38   ;02D992|        |004547;  
-                db $0D,$0D,$53,$68,$6F,$6F,$74,$73   ;02D99A|        |00530D;  
-                db $20,$3C,$6C,$69,$67,$68,$74,$3E   ;02D9A2|        |026C3C;  
-                db $20,$61,$72,$72,$6F,$77,$73,$20   ;02D9AA|        |027261;  
-                db $0D,$0D,$BB,$9A,$64,$69,$72,$65   ;02D9B2|        |00BB0D;  
-                db $63,$74,$69,$6F,$6E,$73,$2E,$20   ;02D9BA|        |000074;  
-                db $00,$01,$8A,$04,$05,$74,$CF,$50   ;02D9C2|        |      ;  
-                db $E1,$01,$0A,$05,$8E,$47,$45,$4D   ;02D9CA|        |000001;  
-                db $20,$3A,$20,$38,$0D,$0D,$50,$6F   ;02D9D2|        |02203A;  
-                db $77,$65,$72,$20,$BA,$63,$6F,$6C   ;02D9DA|        |000065;  
-                db $6C,$65,$63,$74,$65,$64,$20,$0D   ;02D9E2|        |006365;  
-                db $0D,$77,$68,$69,$6C,$65,$20,$62   ;02D9EA|        |006877;  
-                db $75,$74,$74,$6F,$6E,$20,$70,$72   ;02D9F2|        |000074;  
-                db $65,$73,$73,$65,$64,$2E,$20,$00   ;02D9FA|        |000073;  
-                db $01,$8A,$04,$05,$74,$CF,$52,$E1   ;02DA02|        |00008A;  
-                db $01,$0A,$05,$8E,$47,$45,$4D,$20   ;02DA0A|        |00000A;  
-                db $3A,$20,$31,$0D,$0D,$81,$6C,$69   ;02DA12|        |      ;  
-                db $67,$68,$74,$20,$72,$69,$6E,$67   ;02DA1A|        |000068;  
-                db $20,$F1,$0D,$0D,$72,$6F,$74,$61   ;02DA22|        |020DF1;  
-                db $74,$65,$20,$9B,$79,$6F,$75,$2E   ;02DA2A|        |000065;  
-                db $20,$00,$01,$8A,$04,$05,$74,$CF   ;02DA32|        |020100;  
-                db $54,$E1,$01,$0A,$05,$8E,$47,$45   ;02DA3A|        |      ;  
-                db $4D,$20,$3A,$20,$38,$0D,$0D,$4D   ;02DA42|        |003A20;  
-                db $69,$6E,$65,$73,$20,$98,$6C,$61   ;02DA4A|        |      ;  
-                db $69,$64,$2C,$20,$F1,$0D,$0D,$65   ;02DA52|        |      ;  
-                db $78,$70,$6C,$6F,$64,$65,$20,$73   ;02DA5A|        |      ;  
-                db $6F,$6F,$6E,$20,$61,$66,$74,$65   ;02DA62|        |206E6F;  
-                db $72,$2E,$20,$00,$01,$8A,$04,$05   ;02DA6A|        |00002E;  
-                db $74,$CF,$56,$E1,$01,$0A,$05,$8E   ;02DA72|        |0000CF;  
-                db $47,$45,$4D,$20,$3A,$20,$32,$30   ;02DA7A|        |000045;  
-                db $0D,$0D,$50,$69,$6C,$6C,$61,$72   ;02DA82|        |00500D;  
-                db $73,$20,$CB,$66,$69,$72,$65,$20   ;02DA8A|        |000020;  
-                db $F1,$0D,$0D,$72,$69,$73,$65,$20   ;02DA92|        |00000D;  
-                db $9B,$79,$6F,$75,$2E,$20,$00,$01   ;02DA9A|        |      ;  
+; Magic Stats Text
+FlameBallStatsText:
+    db !Text_RepositionCursor
+    dw $048A
+    db !Text_TableLookup
+    dw InventoryPointers, $E14C
+    db !Text_RepositionCursor
+    dw $050A
+    db !Dict_Necessary,"GEM : 4",!Text_CR,!Text_CR
+    db "Shoots ",!Dict_a,"fireball ",!Dict_in,!Text_CR,!Text_CR
+    db !Dict_one,"direction. "
+    db !Text_WaitAndBreak
+
+LightArrowStatsText:
+    db !Text_RepositionCursor
+    dw $048A
+    db !Text_TableLookup
+    dw InventoryPointers, $E14E
+    db !Text_RepositionCursor
+    dw $050A
+    db !Dict_Necessary,"GEM : 8",!Text_CR,!Text_CR
+    db "Shoots <light> arrows ",!Text_CR,!Text_CR
+    db !Dict_in,!Dict_all,"directions. "
+    db !Text_WaitAndBreak
+
+MagicFlareStatsText:
+    db !Text_RepositionCursor
+    dw $048A
+    db !Text_TableLookup
+    dw InventoryPointers, $E150
+    db !Text_RepositionCursor
+    dw $050A
+    db !Dict_Necessary,"GEM : 8",!Text_CR,!Text_CR
+    db "Power ",!Dict_is,"collected ",!Text_CR,!Text_CR
+    db "while button pressed. "
+    db !Text_WaitAndBreak
+
+RotatorStatsText:
+    db !Text_RepositionCursor
+    dw $048A
+    db !Text_TableLookup
+    dw InventoryPointers, $E152
+    db !Text_RepositionCursor
+    dw $050A
+    db !Dict_Necessary,"GEM : 1",!Text_CR,!Text_CR
+    db !Dict_A,"light ring ",!Dict_will,!Text_CR,!Text_CR
+    db "rotate ",!Dict_around,"you. "
+    db !Text_WaitAndBreak
+
+SparkBombStatsText:
+    db !Text_RepositionCursor
+    dw $048A
+    db !Text_TableLookup
+    dw InventoryPointers, $E154
+    db !Text_RepositionCursor
+    dw $050A
+    db !Dict_Necessary,"GEM : 8",!Text_CR,!Text_CR
+    db "Mines ",!Dict_are,"laid, ",!Dict_will,!Text_CR,!Text_CR
+    db "explode soon after. "
+    db !Text_WaitAndBreak
+
+FlamePillarStatsText:
+    db !Text_RepositionCursor
+    dw $048A
+    db !Text_TableLookup
+    dw InventoryPointers, $E156
+    db !Text_RepositionCursor
+    dw $050A
+    db !Dict_Necessary,"GEM : 20",!Text_CR,!Text_CR
+    db "Pillars ",!Dict_of,"fire ",!Dict_will,!Text_CR,!Text_CR
+    db "rise ",!Dict_around,"you. "
+    db !Text_WaitAndBreak
+;TODO More Magic stats text
+                db $01   ;02DA9A|        |      ;  
                 db $8A,$04,$05,$74,$CF,$58,$E1,$01   ;02DAA2|        |      ;  
                 db $0A,$05,$8E,$47,$45,$4D,$20,$3A   ;02DAAA|        |      ;  
                 db $20,$38,$0D,$0D,$4D,$61,$67,$69   ;02DAB2|        |020D38;  
