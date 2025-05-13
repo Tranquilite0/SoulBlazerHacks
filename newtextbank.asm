@@ -1514,49 +1514,89 @@ FlamePillarStatsText:
     db "Pillars ",!Dict_of,"fire ",!Dict_will,!Text_CR,!Text_CR
     db "rise ",!Dict_around,"you. "
     db !Text_WaitAndBreak
-;TODO More Magic stats text
-                db $01   ;02DA9A|        |      ;  
-                db $8A,$04,$05,$74,$CF,$58,$E1,$01   ;02DAA2|        |      ;  
-                db $0A,$05,$8E,$47,$45,$4D,$20,$3A   ;02DAAA|        |      ;  
-                db $20,$38,$0D,$0D,$4D,$61,$67,$69   ;02DAB2|        |020D38;  
-                db $63,$61,$6C,$20,$54,$6F,$72,$6E   ;02DABA|        |000061;  
-                db $61,$64,$6F,$20,$F1,$0D,$0D,$63   ;02DAC2|        |000064;  
-                db $6F,$6D,$65,$2E,$20,$00,$01,$8A   ;02DACA|        |2E656D;  
-                db $04,$05,$74,$CF,$5A,$E1,$01,$0A   ;02DAD2|        |000005;  
-                db $05,$8E,$47,$45,$4D,$20,$3A,$20   ;02DADA|        |00008E;  
-                db $32,$0D,$0D,$50,$68,$6F,$65,$6E   ;02DAE2|        |00000D;  
-                db $69,$78,$20,$F1,$6A,$6F,$69,$6E   ;02DAEA|        |      ;  
-                db $20,$0D,$0D,$02,$02,$2E,$00,$01   ;02DAF2|        |020D0D;  
-                db $8A,$04,$05,$74,$CF,$5C,$E1,$01   ;02DAFA|        |      ;  
-                db $0A,$05,$47,$6F,$61,$74,$60,$D7   ;02DB02|        |      ;  
-                db $66,$6F,$6F,$64,$20,$AD,$E1,$0D   ;02DB0A|        |00006F;  
-                db $0D,$74,$6F,$6F,$6C,$20,$73,$68   ;02DB12|        |006F74;  
-                db $6F,$70,$2E,$20,$00,$01,$8A,$04   ;02DB1A|        |202E70;  
-                db $05,$74,$CF,$5E,$E1,$01,$0A,$05   ;02DB22|        |000074;  
-                db $48,$61,$72,$70,$20,$53,$74,$72   ;02DB2A|        |      ;  
-                db $69,$6E,$67,$20,$CB,$73,$69,$6E   ;02DB32|        |      ;  
-                db $67,$65,$72,$2E,$00,$01,$8A,$04   ;02DB3A|        |000065;  
-                db $05,$74,$CF,$60,$E1,$01,$0A,$05   ;02DB42|        |000074;  
-                db $81,$70,$61,$73,$73,$20,$C8,$62   ;02DB4A|        |000070;  
-                db $79,$20,$E1,$0D,$0D,$63,$68,$69   ;02DB52|        |00E120;  
-                db $6C,$64,$72,$65,$6E,$20,$CB,$47   ;02DB5A|        |007264;  
-                db $72,$61,$73,$73,$20,$0D,$0D,$56   ;02DB62|        |000061;  
-                db $61,$6C,$6C,$65,$79,$2E,$20,$00   ;02DB6A|        |00006C;  
-                db $01,$8A,$04,$05,$74,$CF,$62,$E1   ;02DB72|        |00008A;  
-                db $01,$0A,$05,$81,$DA,$73,$74,$69   ;02DB7A|        |00000A;  
-                db $63,$6B,$20,$E3,$0D,$0D,$65,$6E   ;02DB82|        |00006B;  
-                db $61,$62,$6C,$65,$73,$20,$FE,$E2   ;02DB8A|        |000062;  
-                db $6C,$6F,$6F,$6B,$20,$0D,$0D,$69   ;02DB92|        |006F6F;  
-                db $6E,$74,$6F,$20,$97,$64,$72,$65   ;02DB9A|        |006F74;  
-                db $61,$6D,$2E,$20,$00,$01,$8A,$04   ;02DBA2|        |00006D;  
-                db $05,$74,$CF,$64,$E1,$01,$0A,$05   ;02DBAA|        |000074;  
-                db $91,$70,$61,$69,$6E,$74,$62,$72   ;02DBB2|        |000070;  
-                db $75,$73,$68,$20,$EC,$74,$6F,$0D   ;02DBBA|        |000073;  
-                db $0D,$70,$61,$69,$6E,$74,$20,$E1   ;02DBC2|        |006170;  
-                db $70,$69,$63,$74,$75,$72,$65,$3A   ;02DBCA|        |02DC35;  
-                db $20,$0D,$0D,$3C,$91,$57,$6F,$72   ;02DBD2|        |020D0D;  
-                db $6C,$64,$20,$CB,$45,$76,$69,$6C   ;02DBDA|        |002064;  
-                db $3E,$2E,$20,$00,$01,$8A,$04,$05   ;02DBE2|        |00202E;  
+
+TornadoStatsText:
+    db !Text_RepositionCursor
+    dw $048A
+    db !Text_TableLookup
+    dw InventoryPointers, $E158
+    db !Text_RepositionCursor
+    dw $050A
+    db !Dict_Necessary,"GEM : 8",!Text_CR,!Text_CR
+    db "Magical Tornado ",!Dict_will,!Text_CR,!Text_CR
+    db "come. "
+    db !Text_WaitAndBreak
+
+PhoenixStatsText:
+    db !Text_RepositionCursor
+    dw $048A
+    db !Text_TableLookup
+    dw InventoryPointers, $E15A
+    db !Text_RepositionCursor
+    dw $050A
+    db !Dict_Necessary,"GEM : 2",!Text_CR,!Text_CR
+    db "Phoenix ",!Dict_will,"join ",!Text_CR,!Text_CR
+    db !Text_HeroName,"."
+    db !Text_WaitAndBreak
+
+; Item Stats Text
+GoatsFoodStatsText:
+    db !Text_RepositionCursor
+    dw $048A
+    db !Text_TableLookup
+    dw InventoryPointers, $E15C
+    db !Text_RepositionCursor
+    dw $050A
+    db "Goat`"!Dict_s,"food ",!Dict_from,!Dict_the,!Text_CR,!Text_CR
+    db "tool shop. "
+    db !Text_WaitAndBreak
+
+HarpStringStatsText:
+    db !Text_RepositionCursor
+    dw $048A
+    db !Text_TableLookup
+    dw InventoryPointers, $E15E
+    db !Text_RepositionCursor
+    dw $050A
+    db "Harp String"!Dict_of,"singer."
+    db !Text_WaitAndBreak
+
+APassStatsText:
+    db !Text_RepositionCursor
+    dw $048A
+    db !Text_TableLookup
+    dw InventoryPointers, $E160
+    db !Text_RepositionCursor
+    dw $050A
+    db !Dict_A,"pass "!Dict_made,"by ",!Dict_the,!Text_CR,!Text_CR
+    db "children ",!Dict_of,"Grass ",!Text_CR,!Text_CR
+    db "Valley. "
+    db !Text_WaitAndBreak
+
+DreamRodStatsText:
+    db !Text_RepositionCursor
+    dw $048A
+    db !Text_TableLookup
+    dw InventoryPointers, $E162
+    db !Text_RepositionCursor
+    dw $050A
+    db !Dict_A,!Dict_strange,"stick ",!Dict_that,!Text_CR,!Text_CR
+    db "enables ",!Dict_you,!Dict_to,"look ",!Text_CR,!Text_CR
+    db "into ",!Dict_a,"dream. "
+    db !Text_WaitAndBreak
+
+LeosBrushStatsText:
+    db !Text_RepositionCursor
+    dw $048A
+    db !Text_TableLookup
+    dw InventoryPointers, $E164
+    db !Text_RepositionCursor
+    dw $050A
+    db !Dict_The,"paintbrush ",!Dict_used,"to",!Text_CR,!Text_CR
+    db "paint ",!Dict_the,"picture: ",!Text_CR,!Text_CR
+    db "<",!Dict_The,"World ",!Dict_of,"Evil>. "
+    db !Text_WaitAndBreak
+                db $01,$8A,$04,$05   ;02DBE2|        |00202E;  
                 db $74,$CF,$66,$E1,$01,$0A,$05,$54   ;02DBEA|        |0000CF;  
                 db $75,$72,$62,$6F,$60,$D7,$73,$79   ;02DBF2|        |000072;  
                 db $6D,$62,$6F,$6C,$2E,$20,$41,$6E   ;02DBFA|        |006F62;  
