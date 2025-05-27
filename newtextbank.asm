@@ -1174,7 +1174,8 @@ SwordOfLifeStatsText:
     dw $E1CE ; TODO: resolve to label
     db !Text_RepositionCursor
     dw $051E
-    db !Text_UnknownCmd, $26,$AD,$E1 ;TODO: figure out what this command does?
+    db !Text_UnknownCmd, $26, ;TODO: figure out what this command does?
+    dw $E1AD ; TODO: resolve to label
     db !Text_RepositionCursor
     dw $058A
     db !Dict_A,"sword ",!Dict_from,!Dict_the,!Text_CR,!Text_CR
@@ -1596,176 +1597,375 @@ LeosBrushStatsText:
     db "paint ",!Dict_the,"picture: ",!Text_CR,!Text_CR
     db "<",!Dict_The,"World ",!Dict_of,"Evil>. "
     db !Text_WaitAndBreak
-                db $01,$8A,$04,$05   ;02DBE2|        |00202E;  
-                db $74,$CF,$66,$E1,$01,$0A,$05,$54   ;02DBEA|        |0000CF;  
-                db $75,$72,$62,$6F,$60,$D7,$73,$79   ;02DBF2|        |000072;  
-                db $6D,$62,$6F,$6C,$2E,$20,$41,$6E   ;02DBFA|        |006F62;  
-                db $79,$6F,$6E,$65,$0D,$0D,$F2,$E4   ;02DC02|        |006E6F;  
-                db $BA,$61,$63,$63,$65,$70,$74,$65   ;02DC0A|        |      ;  
-                db $64,$20,$0D,$0D,$61,$73,$20,$54   ;02DC12|        |000020;  
-                db $75,$72,$62,$6F,$60,$D7,$6D,$65   ;02DC1A|        |000072;  
-                db $73,$73,$65,$6E,$67,$65,$72,$2E   ;02DC22|        |000073;  
-                db $00,$01,$8A,$04,$05,$74,$CF,$68   ;02DC2A|        |      ;  
-                db $E1,$01,$0A,$05,$81,$72,$69,$62   ;02DC32|        |000001;  
-                db $62,$6F,$6E,$20,$E3,$4D,$6F,$6E   ;02DC3A|        |024AAC;  
-                db $6D,$6F,$2C,$20,$61,$0D,$0D,$6D   ;02DC42|        |002C6F;  
-                db $6F,$6C,$65,$2C,$20,$EC,$E2,$A1   ;02DC4A|        |2C656C;  
-                db $66,$6F,$6E,$64,$20,$0D,$0D,$CB   ;02DC52|        |00006F;  
-                db $F4,$73,$68,$65,$20,$F3,$61,$6C   ;02DC5A|        |006873;  
-                db $69,$76,$65,$2E,$00,$01,$8A,$04   ;02DC62|        |      ;  
-                db $05,$74,$CF,$6A,$E1,$01,$0A,$05   ;02DC6A|        |000074;  
-                db $81,$62,$65,$61,$75,$74,$69,$66   ;02DC72|        |000062;  
-                db $75,$6C,$20,$70,$65,$61,$72,$6C   ;02DC7A|        |00006C;  
-                db $20,$0D,$0D,$E3,$A7,$A1,$AF,$BB   ;02DC82|        |020D0D;  
-                db $0D,$0D,$63,$6F,$72,$61,$6C,$20   ;02DC8A|        |00630D;  
-                db $72,$65,$65,$66,$2E,$20,$00,$01   ;02DC92|        |000065;  
-                db $8A,$04,$05,$74,$CF,$6C,$E1,$01   ;02DC9A|        |      ;  
-                db $0A,$05,$F1,$74,$75,$72,$6E,$20   ;02DCA2|        |      ;  
-                db $6D,$61,$67,$6D,$61,$20,$69,$6E   ;02DCAA|        |006761;  
-                db $74,$6F,$20,$0D,$0D,$73,$74,$6F   ;02DCB2|        |00006F;  
-                db $6E,$65,$2E,$20,$00,$01,$8A,$04   ;02DCBA|        |002E65;  
-                db $05,$74,$CF,$6E,$E1,$01,$0A,$05   ;02DCC2|        |000074;  
-                db $91,$DE,$67,$6F,$6F,$20,$65,$6E   ;02DCCA|        |0000DE;  
-                db $61,$62,$6C,$65,$73,$20,$0D,$0D   ;02DCD2|        |000062;  
-                db $FE,$E2,$F9,$CD,$69,$63,$65,$20   ;02DCDA|        |00F9E2;  
-                db $0D,$0D,$77,$69,$74,$68,$6F,$75   ;02DCE2|        |00770D;  
-                db $74,$20,$73,$6C,$69,$70,$70,$69   ;02DCEA|        |000020;  
-                db $6E,$67,$2E,$20,$00,$01,$8A,$04   ;02DCF2|        |002E67;  
-                db $05,$74,$CF,$70,$E1,$01,$0A,$05   ;02DCFA|        |000074;  
-                db $4B,$65,$79,$20,$E2,$41,$69,$72   ;02DD02|        |      ;  
-                db $73,$68,$69,$70,$2E,$20,$50,$6C   ;02DD0A|        |000068;  
-                db $75,$67,$20,$20,$0D,$0D,$69,$6E   ;02DD12|        |000067;  
-                db $74,$6F,$20,$97,$6B,$65,$79,$68   ;02DD1A|        |00006F;  
-                db $6F,$6C,$65,$20,$6C,$6F,$63,$61   ;02DD22|        |20656C;  
-                db $74,$65,$64,$0D,$0D,$E0,$CD,$E1   ;02DD2A|        |000065;  
-                db $73,$68,$69,$70,$2E,$00,$01,$8A   ;02DD32|        |000068;  
-                db $04,$05,$74,$CF,$72,$E1,$01,$0A   ;02DD3A|        |000005;  
-                db $05,$89,$FE,$74,$6F,$75,$63,$68   ;02DD42|        |000089;  
-                db $20,$97,$0D,$0D,$6C,$69,$67,$68   ;02DD4A|        |020D97;  
-                db $74,$6E,$69,$6E,$67,$20,$70,$79   ;02DD52|        |00006E;  
-                db $72,$61,$6D,$69,$64,$2C,$20,$0D   ;02DD5A|        |000061;  
-                db $0D,$6C,$69,$67,$68,$74,$6E,$69   ;02DD62|        |00696C;  
-                db $6E,$67,$20,$F1,$73,$74,$72,$69   ;02DD6A|        |002067;  
-                db $6B,$65,$2E,$00,$01,$8A,$04,$05   ;02DD72|        |      ;  
-                db $74,$CF,$74,$E1,$01,$0A,$05,$46   ;02DD7A|        |0000CF;  
-                db $61,$76,$6F,$72,$69,$74,$65,$20   ;02DD82|        |000076;  
-                db $53,$65,$65,$64,$73,$2C,$20,$0D   ;02DD8A|        |000065;  
-                db $0D,$65,$78,$63,$68,$61,$6E,$67   ;02DD92|        |007865;  
-                db $65,$20,$AE,$69,$74,$65,$6D,$20   ;02DD9A|        |000020;  
-                db $0D,$0D,$F2,$E1,$65,$78,$63,$68   ;02DDA2|        |00F20D;  
-                db $61,$6E,$67,$65,$72,$2E,$20,$00   ;02DDAA|        |00006E;  
-                db $01,$8A,$04,$05,$74,$CF,$76,$E1   ;02DDB2|        |00008A;  
-                db $01,$0A,$05,$45,$6D,$69,$74,$73   ;02DDBA|        |00000A;  
-                db $20,$97,$70,$65,$63,$75,$6C,$69   ;02DDC2|        |027097;  
-                db $61,$72,$20,$73,$63,$65,$6E,$74   ;02DDCA|        |000072;  
-                db $0D,$0D,$E3,$61,$74,$74,$72,$61   ;02DDD2|        |00E30D;  
-                db $63,$74,$73,$20,$63,$61,$74,$73   ;02DDDA|        |000074;  
-                db $2E,$20,$00,$01,$8A,$04,$05,$74   ;02DDE2|        |000020;  
-                db $CF,$78,$E1,$01,$0A,$05,$92,$6B   ;02DDEA|        |01E178;  
-                db $65,$79,$20,$F1,$6F,$70,$65,$6E   ;02DDF2|        |000079;  
-                db $20,$74,$68,$65,$0D,$0D,$64,$6F   ;02DDFA|        |026874;  
-                db $6F,$72,$20,$E2,$E1,$0D,$0D,$6C   ;02DE02|        |E22072;  
-                db $61,$62,$6F,$72,$61,$74,$6F,$72   ;02DE0A|        |000062;  
-                db $79,$2E,$20,$00,$01,$8A,$04,$05   ;02DE12|        |00202E;  
-                db $74,$CF,$7A,$E1,$01,$0A,$05,$95   ;02DE1A|        |0000CF;  
-                db $6D,$61,$79,$20,$65,$6E,$74,$65   ;02DE22|        |007961;  
-                db $72,$20,$E1,$6C,$65,$66,$74,$0D   ;02DE2A|        |000020;  
-                db $0D,$74,$6F,$77,$65,$72,$20,$BB   ;02DE32|        |006F74;  
-                db $E1,$8D,$0D,$0D,$43,$61,$73,$74   ;02DE3A|        |00008D;  
-                db $6C,$65,$2E,$20,$00,$01,$8A,$04   ;02DE42|        |002E65;  
-                db $05,$74,$CF,$7C,$E1,$01,$0A,$05   ;02DE4A|        |000074;  
-                db $95,$6D,$61,$79,$20,$B3,$77,$68   ;02DE52|        |00006D;  
-                db $65,$72,$65,$76,$65,$72,$20,$0D   ;02DE5A|        |000072;  
-                db $0D,$FE,$77,$69,$73,$68,$20,$77   ;02DE62|        |0077FE;  
-                db $69,$74,$68,$69,$6E,$20,$E1,$0D   ;02DE6A|        |      ;  
-                db $0D,$8D,$43,$61,$73,$74,$6C,$65   ;02DE72|        |00438D;  
-                db $2E,$20,$00,$01,$8A,$04,$05,$74   ;02DE7A|        |000020;  
-                db $CF,$7E,$E1,$01,$0A,$05,$89,$FE   ;02DE82|        |01E17E;  
-                db $63,$6F,$6C,$6C,$65,$63,$74,$20   ;02DE8A|        |00006F;  
-                db $38,$20,$CB,$0D,$0D,$74,$68,$65   ;02DE92|        |      ;  
-                db $73,$65,$2C,$20,$FE,$F1,$62,$65   ;02DE9A|        |000065;  
-                db $63,$6F,$6D,$65,$0D,$0D,$9C,$65   ;02DEA2|        |00006F;  
-                db $78,$70,$65,$72,$74,$20,$61,$74   ;02DEAA|        |      ;  
-                db $20,$6D,$61,$67,$69,$63,$2E,$20   ;02DEB2|        |02616D;  
-                db $00,$01,$8A,$04,$05,$74,$CF,$80   ;02DEBA|        |      ;  
-                db $E1,$13,$85,$DE,$01,$8A,$04,$05   ;02DEC2|        |000013;  
-                db $74,$CF,$82,$E1,$13,$85,$DE,$01   ;02DECA|        |0000CF;  
-                db $8A,$04,$05,$74,$CF,$84,$E1,$13   ;02DED2|        |      ;  
-                db $85,$DE,$01,$8A,$04,$05,$74,$CF   ;02DEDA|        |0000DE;  
-                db $86,$E1,$13,$85,$DE,$01,$8A,$04   ;02DEE2|        |0000E1;  
-                db $05,$74,$CF,$88,$E1,$13,$85,$DE   ;02DEEA|        |000074;  
-                db $01,$8A,$04,$05,$74,$CF,$8A,$E1   ;02DEF2|        |00008A;  
-                db $13,$85,$DE,$01,$8A,$04,$05,$74   ;02DEFA|        |000085;  
-                db $CF,$8C,$E1,$13,$85,$DE,$01,$8A   ;02DF02|        |13E18C;  
-                db $04,$05,$74,$CF,$8E,$E1,$01,$0A   ;02DF0A|        |000005;  
-                db $05,$89,$FE,$6F,$62,$74,$61,$69   ;02DF12|        |000089;  
-                db $6E,$20,$9A,$0D,$0D,$74,$68,$72   ;02DF1A|        |009A20;  
-                db $65,$65,$20,$73,$79,$6D,$62,$6F   ;02DF22|        |000065;  
-                db $6C,$73,$2C,$20,$E1,$0D,$0D,$50   ;02DF2A|        |002C73;  
-                db $68,$6F,$65,$6E,$69,$78,$20,$F1   ;02DF32|        |      ;  
-                db $6A,$6F,$69,$6E,$20,$79,$6F,$75   ;02DF3A|        |      ;  
-                db $2E,$00,$01,$8A,$04,$05,$74,$CF   ;02DF42|        |000100;  
-                db $90,$E1,$13,$10,$DF,$01,$8A,$04   ;02DF4A|        |02DF2D;  
-                db $05,$74,$CF,$92,$E1,$13,$10,$DF   ;02DF52|        |000074;  
-                db $01,$8A,$04,$05,$74,$CF,$94,$E1   ;02DF5A|        |00008A;  
-                db $01,$0A,$05,$89,$FE,$65,$71,$75   ;02DF62|        |00000A;  
-                db $69,$70,$20,$E4,$0D,$0D,$69,$74   ;02DF6A|        |      ;  
-                db $65,$6D,$2C,$20,$FF,$61,$74,$74   ;02DF72|        |00006D;  
-                db $61,$63,$6B,$20,$0D,$0D,$70,$6F   ;02DF7A|        |000063;  
-                db $77,$65,$72,$20,$F1,$64,$6F,$75   ;02DF82|        |000065;  
-                db $62,$6C,$65,$2E,$20,$00,$01,$8A   ;02DF8A|        |0244F9;  
-                db $04,$05,$74,$CF,$96,$E1,$01,$0A   ;02DF92|        |000005;  
-                db $05,$57,$69,$6C,$6C,$20,$72,$65   ;02DF9A|        |000057;  
-                db $64,$75,$63,$65,$20,$E1,$61,$6D   ;02DFA2|        |000075;  
-                db $6F,$75,$6E,$74,$0D,$0D,$CB,$64   ;02DFAA|        |746E75;  
-                db $61,$6D,$61,$67,$65,$20,$D4,$0D   ;02DFB2|        |00006D;  
-                db $0D,$AD,$65,$6E,$65,$6D,$69,$65   ;02DFBA|        |0065AD;  
-                db $73,$20,$62,$79,$20,$31,$2F,$32   ;02DFC2|        |000020;  
-                db $2E,$20,$00,$01,$8A,$04,$05,$74   ;02DFCA|        |000020;  
-                db $CF,$98,$E1,$01,$0A,$05,$59,$6F   ;02DFD2|        |01E198;  
-                db $75,$72,$20,$73,$77,$6F,$72,$64   ;02DFDA|        |000072;  
-                db $20,$96,$61,$72,$6D,$6F,$72,$20   ;02DFE2|        |026196;  
-                db $0D,$0D,$F1,$69,$6E,$63,$72,$65   ;02DFEA|        |00F10D;  
-                db $61,$73,$65,$20,$BB,$0D,$0D,$73   ;02DFF2|        |000073;  
-                db $74,$72,$65,$6E,$67,$74,$68,$20   ;02DFFA|        |000072;  
-                db $62,$79,$20,$32,$2E,$20,$00,$01   ;02E002|        |02007E;  
-                db $8A,$04,$05,$74,$CF,$9A,$E1,$01   ;02E00A|        |      ;  
-                db $0A,$05,$59,$6F,$75,$72,$20,$48   ;02E012|        |      ;  
-                db $50,$20,$F1,$A1,$0D,$0D,$72,$65   ;02E01A|        |02E03C;  
-                db $66,$69,$6C,$6C,$65,$64,$20,$69   ;02E022|        |000069;  
-                db $66,$20,$FF,$6C,$69,$66,$65,$20   ;02E02A|        |000020;  
-                db $0D,$0D,$6D,$65,$74,$65,$72,$20   ;02E032|        |006D0D;  
-                db $72,$65,$61,$63,$68,$65,$73,$20   ;02E03A|        |000065;  
-                db $30,$2E,$20,$00,$01,$8A,$04,$05   ;02E042|        |02E072;  
-                db $74,$CF,$9C,$E1,$01,$0A,$05,$95   ;02E04A|        |0000CF;  
-                db $F1,$CA,$6C,$6F,$73,$65,$20,$61   ;02E052|        |0000CA;  
-                db $6E,$79,$20,$0D,$0D,$47,$45,$4D   ;02E05A|        |002079;  
-                db $73,$20,$DC,$FF,$6C,$69,$66,$65   ;02E062|        |000020;  
-                db $20,$0D,$0D,$6D,$65,$74,$65,$72   ;02E06A|        |020D0D;  
-                db $20,$72,$65,$61,$63,$68,$20,$00   ;02E072|        |026572;  
-                db $01,$8A,$04,$05,$74,$CF,$9E,$E1   ;02E07A|        |00008A;  
-                db $01,$0A,$05,$57,$6F,$72,$6C,$64   ;02E082|        |00000A;  
-                db $20,$CB,$45,$76,$69,$6C,$20,$F1   ;02E08A|        |0245CB;  
-                db $0D,$0D,$61,$70,$70,$65,$61,$72   ;02E092|        |00610D;  
-                db $20,$6F,$6E,$63,$65,$20,$FE,$B5   ;02E09A|        |026E6F;  
-                db $0D,$0D,$63,$6F,$6C,$6C,$65,$63   ;02E0A2|        |00630D;  
-                db $74,$65,$64,$20,$36,$20,$CB,$74   ;02E0AA|        |000065;  
-                db $68,$65,$73,$65,$2E,$20,$00,$01   ;02E0B2|        |      ;  
-                db $8A,$04,$05,$74,$CF,$A0,$E1,$13   ;02E0BA|        |      ;  
-                db $82,$E0,$01,$8A,$04,$05,$74,$CF   ;02E0C2|        |02E2A5;  
-                db $A2,$E1,$13,$82,$E0,$01,$8A,$04   ;02E0CA|        |      ;  
-                db $05,$74,$CF,$A4,$E1,$13,$82,$E0   ;02E0D2|        |000074;  
-                db $01,$8A,$04,$05,$74,$CF,$A6,$E1   ;02E0DA|        |00008A;  
-                db $13,$82,$E0,$01,$8A,$04,$05,$74   ;02E0E2|        |000082;  
-                db $CF,$A8,$E1,$13,$82,$E0,$01,$8A   ;02E0EA|        |13E1A8;  
-                db $04,$05,$74,$CF,$AA,$E1,$01,$0A   ;02E0F2|        |000005;  
-                db $05,$95,$F1,$A1,$61,$62,$6C,$65   ;02E0FA|        |000095;  
-                db $20,$E2,$0D,$0D,$63,$61,$73,$74   ;02E102|        |020DE2;  
-                db $20,$6D,$61,$67,$69,$63,$20,$77   ;02E10A|        |02616D;  
-                db $69,$74,$68,$6F,$75,$74,$20,$0D   ;02E112|        |      ;  
-                db $0D,$75,$73,$69,$6E,$67,$20,$61   ;02E11A|        |007375;  
-                db $6E,$79,$20,$47,$45,$4D,$73,$2E   ;02E122|        |002079;  
-                db $20,$00,$01,$00,$02,$00,$03,$00   ;02E12A|        |020100;  
+
+TurbosLeavesStatsText:
+    db !Text_RepositionCursor
+    dw $048A
+    db !Text_TableLookup
+    dw InventoryPointers, $E166
+    db !Text_RepositionCursor
+    dw $050A
+    db "Turbo`",!Dict_s,"symbol. Anyone",!Text_CR,!Text_CR
+    db !Dict_with,!Dict_this,!Dict_is,"accepted ",!Text_CR,!Text_CR
+    db "as Turbo`",!Dict_s,"messenger."
+    db !Text_WaitAndBreak
+
+MolesRibbonStatsText:
+    db !Text_RepositionCursor
+    dw $048A
+    db !Text_TableLookup
+    dw InventoryPointers, $E168
+    db !Text_RepositionCursor
+    dw $050A
+    db !Dict_A,"ribbon ",!Dict_that,"Monmo, a",!Text_CR,!Text_CR
+    db "mole, ",!Dict_used,!Dict_to,!Dict_be,"fond ",!Text_CR,!Text_CR
+    db !Dict_of,!Dict_when,"she ",!Dict_was,"alive."
+    db !Text_WaitAndBreak
+
+BigPearlStatsText:
+    db !Text_RepositionCursor
+    dw $048A
+    db !Text_TableLookup
+    dw InventoryPointers, $E16A
+    db !Text_RepositionCursor
+    dw $050A
+    db !Dict_A,"beautiful pearl ",!Text_CR,!Text_CR
+    db !Dict_that,!Dict_can,!Dict_be,!Dict_found,!Dict_in,!Text_CR,!Text_CR
+    db "coral reef. "
+    db !Text_WaitAndBreak
+
+MermaidsTearsStatsText:
+    db !Text_RepositionCursor
+    dw $048A
+    db !Text_TableLookup
+    dw InventoryPointers, $E16C
+    db !Text_RepositionCursor
+    dw $050A
+    db !Dict_will,"turn magma into ",!Text_CR,!Text_CR
+    db "stone. "
+    db !Text_WaitAndBreak
+
+MushroomShoesStatsText:
+    db !Text_RepositionCursor
+    dw $048A
+    db !Text_TableLookup
+    dw InventoryPointers, $E16E
+    db !Text_RepositionCursor
+    dw $050A
+    db !Dict_The,!Dict_snail,"goo enables ",!Text_CR,!Text_CR
+    db !Dict_you,!Dict_to,!Dict_walk,!Dict_on,"ice ",!Text_CR,!Text_CR
+    db "without slipping. "
+    db !Text_WaitAndBreak
+
+AirshipKeyStatsText:
+    db !Text_RepositionCursor
+    dw $048A
+    db !Text_TableLookup
+    dw InventoryPointers, $E170
+    db !Text_RepositionCursor
+    dw $050A
+    db "Key ",!Dict_to,"Airship. Plug  ",!Text_CR,!Text_CR
+    db "into ",!Dict_a,"keyhole located",!Text_CR,!Text_CR
+    db !Dict_somewhere,!Dict_on,!Dict_the,"ship."
+    db !Text_WaitAndBreak
+
+ThunderRingStatsText:
+    db !Text_RepositionCursor
+    dw $048A
+    db !Text_TableLookup
+    dw InventoryPointers, $E172
+    db !Text_RepositionCursor
+    dw $050A
+    db !Dict_If,!Dict_you,"touch ",!Dict_a,!Text_CR,!Text_CR
+    db "lightning pyramid, ",!Text_CR,!Text_CR
+    db "lightning ",!!Dict_will,"strike."
+    db !Text_WaitAndBreak
+
+DeliciousSeedsStatsText:
+    db !Text_RepositionCursor
+    dw $048A
+    db !Text_TableLookup
+    dw InventoryPointers, $E174
+    db !Text_RepositionCursor
+    dw $050A
+    db "Favorite Seeds, ",!Text_CR,!Text_CR
+    db "exchange ",!Dict_for,"item ",!Text_CR,!Text_CR
+    db !Dict_with,!Dict_the,"exchanger. "
+    db !Text_WaitAndBreak
+
+ActinidiaLeavesStatsText:
+    db !Text_RepositionCursor
+    dw $048A
+    db !Text_TableLookup
+    dw InventoryPointers, $E176
+    db !Text_RepositionCursor
+    dw $050A
+    db "Emits ",!Dict_a,"peculiar scent",!Text_CR,!Text_CR
+    db !Dict_that,"attracts cats.  "
+    db !Text_WaitAndBreak
+
+DoorKeyStatsText:
+    db !Text_RepositionCursor
+    dw $048A
+    db !Text_TableLookup
+    dw InventoryPointers, $E178
+    db !Text_RepositionCursor
+    dw $050A
+    db !Dict_This,"key ",!Dict_will,"open the",!Text_CR,!Text_CR
+    db "door "!Dict_to,!Dict_the,!Text_CR,!Text_CR
+    db "laboratory. "
+    db !Text_WaitAndBreak
+
+PlatinumCardStatsText:
+    db !Text_RepositionCursor
+    dw $048A
+    db !Text_TableLookup
+    dw InventoryPointers, $E17A
+    db !Text_RepositionCursor
+    dw $050A
+    db !Dict_You,"may enter ",!Dict_the,"left",!Text_CR,!Text_CR
+    db "tower ",!Dict_in,!Dict_the,!Dict_Magridd,!Text_CR,!Text_CR
+    db "Castle. "
+    db !Text_WaitAndBreak
+
+VipCardStatsText:
+    db !Text_RepositionCursor
+    dw $048A
+    db !Text_TableLookup
+    dw InventoryPointers, $E17C
+    db !Text_RepositionCursor
+    dw $050A
+    db !Dict_You,"may ",!Dict_go,"wherever ",!Text_CR,!Text_CR
+    db !Dict_You,"wish within ",!Dict_the,!Text_CR,!Text_CR
+    db !Dict_Magridd,"Castle. "
+    db !Text_WaitAndBreak
+
+EmblemAStatsText:
+    db !Text_RepositionCursor
+    dw $048A
+    db !Text_TableLookup
+    dw InventoryPointers, $E17E
+SharedEmblemText:
+    db !Text_RepositionCursor
+    dw $050A
+    db !Dict_If,!Dict_you,"collect 8 ",!Dict_of,!Text_CR,!Text_CR
+    db "these, ",!Dict_you,!Dict_will,"become",!Text_CR,!Text_CR
+    db !Dict_an,"expert at magic. "
+    db !Text_WaitAndBreak
+
+EmblemBStatsText:
+    db !Text_RepositionCursor
+    dw $048A
+    db !Text_TableLookup
+    dw InventoryPointers, $E180
+    db !Text_ChangeStreamPtr
+    dw SharedEmblemText
+
+EmblemCStatsText:
+    db !Text_RepositionCursor
+    dw $048A
+    db !Text_TableLookup
+    dw InventoryPointers, $E182
+    db !Text_ChangeStreamPtr
+    dw SharedEmblemText
+
+EmblemDStatsText:
+    db !Text_RepositionCursor
+    dw $048A
+    db !Text_TableLookup
+    dw InventoryPointers, $E184
+    db !Text_ChangeStreamPtr
+    dw SharedEmblemText
+
+EmblemEStatsText:
+    db !Text_RepositionCursor
+    dw $048A
+    db !Text_TableLookup
+    dw InventoryPointers, $E186
+    db !Text_ChangeStreamPtr
+    dw SharedEmblemText
+
+EmblemFStatsText:
+    db !Text_RepositionCursor
+    dw $048A
+    db !Text_TableLookup
+    dw InventoryPointers, $E188
+    db !Text_ChangeStreamPtr
+    dw SharedEmblemText
+
+EmblemGStatsText:
+    db !Text_RepositionCursor
+    dw $048A
+    db !Text_TableLookup
+    dw InventoryPointers, $E18A
+    db !Text_ChangeStreamPtr
+    dw SharedEmblemText
+
+EmblemHStatsText:
+    db !Text_RepositionCursor
+    dw $048A
+    db !Text_TableLookup
+    dw InventoryPointers, $E18C
+    db !Text_ChangeStreamPtr
+    dw SharedEmblemText
+
+RedHotMirrorStatsText:
+    db !Text_RepositionCursor
+    dw $048A
+    db !Text_TableLookup
+    dw InventoryPointers, $E18E
+SharedRedHotText:
+    db !Text_RepositionCursor
+    dw $050A
+    db !Dict_If,!Dict_you,"obtain ",!Dict_all,!Text_CR,!Text_CR
+    db "three symbols, ",!Dict_the,!Text_CR,!Text_CR
+    db "Phoenix ",!Dict_will,"join you."
+    db !Text_WaitAndBreak
+
+RedHotBallStatsText:
+    db !Text_RepositionCursor
+    dw $048A
+    db !Text_TableLookup
+    dw InventoryPointers, $E190
+    db !Text_ChangeStreamPtr
+    dw SharedRedHotText
+
+RedHotStickStatsText:
+    db !Text_RepositionCursor
+    dw $048A
+    db !Text_TableLookup
+    dw InventoryPointers, $E192
+    db !Text_ChangeStreamPtr
+    dw SharedRedHotText
+
+PowerBraceletStatsText:
+    db !Text_RepositionCursor
+    dw $048A
+    db !Text_TableLookup
+    dw InventoryPointers, $E194
+    db !Text_RepositionCursor
+    dw $050A
+    db !Dict_If,!Dict_you,"equip ",!Dict_this,!Text_CR,!Text_CR
+    db "item, ",!Dict_your,"attack ",!Text_CR,!Text_CR
+    db "power ",!Dict_will,"double. "
+    db !Text_WaitAndBreak
+
+ShieldBraceletStatsText:
+    db !Text_RepositionCursor
+    dw $048A
+    db !Text_TableLookup
+    dw InventoryPointers, $E196
+    db !Text_RepositionCursor
+    dw $050A
+    db "Will reduce ",!Dict_the,"amount",!Text_CR,!Text_CR
+    db !Dict_of,"damage ",!Dict_received,!Text_CR,!Text_CR
+    db !Dict_from,"enemies by 1/2. "
+    db !Text_WaitAndBreak
+
+SuperBraceletStatsText:
+    db !Text_RepositionCursor
+    dw $048A
+    db !Text_TableLookup
+    dw InventoryPointers, $E198
+    db !Text_RepositionCursor
+    dw $050A
+    db "Your sword ",!Dict_and,"armor ",!Text_CR,!Text_CR
+    db !Dict_will,"increase ",!Dict_in,!Text_CR,!Text_CR
+    db "strength by 2. "
+    db !Text_WaitAndBreak
+
+MedicalHerbStatsText:
+    db !Text_RepositionCursor
+    dw $048A
+    db !Text_TableLookup
+    dw InventoryPointers, $E19A
+    db !Text_RepositionCursor
+    dw $050A
+    db "Your HP ",!Dict_will,!Dict_be,!Text_CR,!Text_CR
+    db "refilled if ",!Dict_your,"life ",!Text_CR,!Text_CR
+    db "meter reaches 0. "
+    db !Text_WaitAndBreak
+
+StrangeBottleStatsText:
+    db !Text_RepositionCursor
+    dw $048A
+    db !Text_TableLookup
+    dw InventoryPointers, $E19C
+    db !Text_RepositionCursor
+    dw $050A
+    db !Dict_You,!Dict_will,!Dict_not,"lose any ",!Text_CR,!Text_CR
+    db "GEMs ",!Dict_should,!Dict_your,"life ",!Text_CR,!Text_CR
+    db "meter reach " ;TODO: fix this to put "0. " in too.
+    db !Text_WaitAndBreak
+
+BrownStoneStatsText:
+    db !Text_RepositionCursor
+    dw $048A
+    db !Text_TableLookup
+    dw InventoryPointers, $E19E
+SharedStonesText:
+    db !Text_RepositionCursor
+    dw $050A
+    db "World ",!Dict_of,"Evil",!Dict_will,!Text_CR,!Text_CR
+    db "appear once ",!Dict_you,!Dict_have,!Text_CR,!Text_CR
+    db "collected 6 ",!Dict_of,"these. "
+    db !Text_WaitAndBreak
+
+GreenStoneStatsText:
+    db !Text_RepositionCursor
+    dw $048A
+    db !Text_TableLookup
+    dw InventoryPointers, $E1A0
+    db !Text_ChangeStreamPtr
+    dw SharedStonesText
+
+BlueStoneStatsText:
+    db !Text_RepositionCursor
+    dw $048A
+    db !Text_TableLookup
+    dw InventoryPointers, $E1A2
+    db !Text_ChangeStreamPtr
+    dw SharedStonesText
+
+SilverStoneStatsText:
+    db !Text_RepositionCursor
+    dw $048A
+    db !Text_TableLookup
+    dw InventoryPointers, $E1A4
+    db !Text_ChangeStreamPtr
+    dw SharedStonesText
+
+PurpleStoneStatsText:
+    db !Text_RepositionCursor
+    dw $048A
+    db !Text_TableLookup
+    dw InventoryPointers, $E1A6
+    db !Text_ChangeStreamPtr
+    dw SharedStonesText
+
+BlackStoneStatsText:
+    db !Text_RepositionCursor
+    dw $048A
+    db !Text_TableLookup
+    dw InventoryPointers, $E1A8
+    db !Text_ChangeStreamPtr
+    dw SharedStonesText
+
+MagicBellStatsText:
+    db !Text_RepositionCursor
+    dw $048A
+    db !Text_TableLookup
+    dw InventoryPointers, $E1AA
+    db !Text_RepositionCursor
+    dw $050A
+    db !Dict_You,!Dict_will,!Dict_be,"able ",!Dict_to,!Text_CR,!Text_CR
+    db "cast magic without ",!Text_CR,!Text_CR
+    db "using any GEMs. "
+    db !Text_WaitAndBreak
+
+assert pc() == $90E12C ;TODO: remove assert once tables below made relocatable.
+InventoryIdValues:
+                db $01,$00,$02,$00,$03,$00   ;02E12A|        |020100;  
                 db $04,$00,$05,$00,$06,$00,$07,$00   ;02E132|        |000000;  
                 db $08,$00,$09,$00,$0A,$00,$0B,$00   ;02E13A|        |      ;  
                 db $0C,$00,$0D,$00,$0E,$00,$0F,$00   ;02E142|        |000D00;  
