@@ -106,7 +106,7 @@ CheckForRoof:
     LDX #RoofLair
     LDY #RoofLairTemp
     LDA.W #$0007
-    MVN $01,$01
+    MVN $81,$81
     LDA RoofRollback.DataIndex
     STA TempRollbackDataIndex
     SEP #$20
@@ -155,7 +155,7 @@ ApplyRoofFix:
     LDX #RoofLairTemp
     LDY #RoofLair
     LDA #$0007
-    MVN $01,$01
+    MVN $81,$81
     STZ RoofRollback.RoofState
     LDA RoofLair.Map
     AND #$00FF

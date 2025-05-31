@@ -10,12 +10,15 @@ ResumePrintOsdStringFromBankX:
     PHB
     SEP #$20
     LDA $01,S
-    CMP #$01
-    BNE +
-    LDA #$02
+    CMP #$81
+    BEQ +
+    CMP #$01 ; Safety net to make this work with bank 1 in both fast and slow rom.
+    BEQ +
+    BRA .skip
++   LDA #$82 ; TODO: if we expand text and relocate from bank $02/$82 we need to change this.
     PHA
     PLB
-+
+.skip
     ; Now restore to the state we saved in the temporary location
     LDX $03F3
     PHX
@@ -37,8 +40,32 @@ PatchTextCommand0C:
     STX $03F3
     JML PatchTextCommand0CReturn
 
+; The text engine will switch to bank $02/$82 whenever it is called from Bank $01.
+; this patches it to check against both Bank $01 and $81 in case the fastrom patch isnt perfect.
+PatchBankCheck:
+    CMP.B #$81
+    BEQ +
+    CMP.B #$01 ; Safety net to make this work with bank 1 in both fast and slow rom.
+    BEQ +
+    BRA .skip
++   LDA.B #$82 ; TODO: if we expand text and relocate from bank $02/$82 we need to change this.
+    PHA
+    PLB
+.skip
+    JML PatchBankCheckReturn
+
 ; Hooks and original rom data overwrite section
 pushpc
+
+; Hook PrintOsdStringFromBankX
+org $82AC2D
+    JML PatchBankCheck ;82AC2D  C9 81          CMP #$81
+                       ;82AC2F  D0 04          BNE $82AC35
+    NOP : NOP          ;82AC31  A9 82          LDA #$82
+    NOP                ;82AC33  48             PHA
+    NOP                ;82AC34  AB             PLB
+
+PatchBankCheckReturn:
 
 ; Patch text command $0C
 org $82AF62
