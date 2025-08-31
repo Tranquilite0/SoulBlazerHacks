@@ -20,7 +20,9 @@ EndAddress = $9FFD7F
 
 org StartAddress
 
-; New code section.
+; New code section. 
+;TODO: I swapped the addresses of the sword power and armor defense tables
+; (not a big deal since they are the same, but...)
 
 ; Hook Into the drawing Function that draws Swords/Shields (and lots of other stuff too)
 ; Address to load is in A

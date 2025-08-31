@@ -423,7 +423,7 @@ HudText:
     db $01,$4C,$01,$03,$2C,$0B,$20,$0D   ;02C777|        |00004C;  
     db $C7,$01,$4C,$01,$04,$36,$03,$38   ;02C77F|        |000001;  
     db $03,$00                           ;02C787|        |000000;  
-                                                     ;      |        |      ;  
+
 MiscStringPointers: ; Various String Pointers
     dw Misc1,Misc2,PlayerName,$0447 ; Some address in ram, also hero name?
     dw Misc3,Misc4,Misc5,Misc6
@@ -451,7 +451,7 @@ Misc6:
 Misc7:
     db $4C,$4D,$4E,$4F,$00
 
-LocationNamePointers: ; TODO: make labels for these.
+LocationNamePointers:
 assert pc() == $90C7C2
 ; Act 1
 dw GrassValleyShrine, GrassValley, ChildsSecretPassage, TreasureRoom
@@ -1119,7 +1119,7 @@ PrintArmorStatsBox:
     db "Defence :"
     db !Text_WaitAndBreak
 
-PrintEmptyStatsBox: ;Probably used for magic and item descriptions?
+PrintEmptyStatsBox: ;Probably used for magic and item descriptions
     db !Text_RepositionCursor
     dw $0408
     db !Text_DrawTextBox,$16,$08
@@ -1129,31 +1129,48 @@ PrintEmptyStatsBox: ;Probably used for magic and item descriptions?
 ;Status Screen Description Pointers:
 assert pc() == $90D572
 NullItemStatusPointer:
-    db $F4,$D5
+    dw NullItemStatsText
 
 SwordStatusPointers:
-    db $FB,$D5, $28,$D6, $66,$D6, $94,$D6
-    db $D7,$D6, $0C,$D7, $49,$D7, $88,$D7
+    dw SwordOfLifeStatsText, PsychoSwordStatsText, CriticalSwordStatsText, LuckyBladeStatsText
+    dw ZantetsuSwordStatsText, SpiritSwordStatsText, RecoverySwordStatsText, TheSoulBladeStatsText
+    ;db $FB,$D5, $28,$D6, $66,$D6, $94,$D6
+    ;db $D7,$D6, $0C,$D7, $49,$D7, $88,$D7
 
 ArmorStatusPointers:
-    db $BF,$D7, $F9,$D7, $2B,$D8, $57,$D8
-    db $88,$D8, $BD,$D8, $F9,$D8, $28,$D9
+    dw IronArmorStatsText, IceArmorStatsText, BubbleArmorStatsText, MagicArmorStatsText
+    dw MysticArmorStatsText, LightArmorStatsText, ElementalMailStatsText, SoulArmorStatsText
+    ;db $BF,$D7, $F9,$D7, $2B,$D8, $57,$D8
+    ;db $88,$D8, $BD,$D8, $F9,$D8, $28,$D9
 
 MagicStatusPointers:
-    db $51,$D9, $87,$D9, $C3,$D9, $02,$DA
-    db $34,$DA, $6E,$DA, $A1,$DA, $D0,$DA
+    dw FlameBallStatsText, LightArrowStatsText, MagicFlareStatsText, RotatorStatsText
+    dw SparkBombStatsText, FlamePillarStatsText, TornadoStatsText, PhoenixStatsText
+    ;db $51,$D9, $87,$D9, $C3,$D9, $02,$DA
+    ;db $34,$DA, $6E,$DA, $A1,$DA, $D0,$DA
 
 ItemStatusPointers:
-    db $F9,$DA, $1F,$DB, $3F,$DB, $72,$DB
-    db $A7,$DB, $E6,$DB, $2B,$DC, $67,$DC
-    db $99,$DC, $BF,$DC, $F7,$DC, $38,$DD
-    db $76,$DD, $B2,$DD, $E5,$DD, $16,$DE
-    db $47,$DE, $7D,$DE, $BB,$DE, $C6,$DE
-    db $D1,$DE, $DC,$DE, $E7,$DE, $F2,$DE
-    db $FD,$DE, $08,$DF, $44,$DF, $4F,$DF
-    db $5A,$DF, $90,$DF, $CD,$DF, $09,$E0
-    db $46,$E0, $7A,$E0, $B9,$E0, $C4,$E0
-    db $CF,$E0, $DA,$E0, $E5,$E0, $F0,$E0
+    dw GoatsFoodStatsText, HarpStringStatsText, APassStatsText, DreamRodStatsText
+    dw LeosBrushStatsText, TurbosLeavesStatsText, MolesRibbonStatsText, BigPearlStatsText
+    dw MermaidsTearsStatsText, MushroomShoesStatsText, AirshipKeyStatsText, ThunderRingStatsText
+    dw DeliciousSeedsStatsText, ActinidiaLeavesStatsText, DoorKeyStatsText, PlatinumCardStatsText
+    dw VipCardStatsText, EmblemAStatsText, EmblemBStatsText, EmblemCStatsText
+    dw EmblemDStatsText, EmblemEStatsText, EmblemFStatsText, EmblemGStatsText
+    dw EmblemHStatsText, RedHotMirrorStatsText, RedHotBallStatsText, RedHotStickStatsText
+    dw PowerBraceletStatsText, ShieldBraceletStatsText, SuperBraceletStatsText, MedicalHerbStatsText
+    dw StrangeBottleStatsText, BrownStoneStatsText, GreenStoneStatsText, BlueStoneStatsText
+    dw SilverStoneStatsText, PurpleStoneStatsText, BlackStoneStatsText, MagicBellStatsText
+
+    ;db $F9,$DA, $1F,$DB, $3F,$DB, $72,$DB
+    ;db $A7,$DB, $E6,$DB, $2B,$DC, $67,$DC
+    ;db $99,$DC, $BF,$DC, $F7,$DC, $38,$DD
+    ;db $76,$DD, $B2,$DD, $E5,$DD, $16,$DE
+    ;db $47,$DE, $7D,$DE, $BB,$DE, $C6,$DE
+    ;db $D1,$DE, $DC,$DE, $E7,$DE, $F2,$DE
+    ;db $FD,$DE, $08,$DF, $44,$DF, $4F,$DF
+    ;db $5A,$DF, $90,$DF, $CD,$DF, $09,$E0
+    ;db $46,$E0, $7A,$E0, $B9,$E0, $C4,$E0
+    ;db $CF,$E0, $DA,$E0, $E5,$E0, $F0,$E0
 
 NullItemStatsText:
     db !Text_RepositionCursor
@@ -1166,16 +1183,16 @@ SwordOfLifeStatsText:
     db !Text_RepositionCursor
     dw $048A
     !Text_TableLookup
-    dw InventoryPointers, $E12C ; TODO: resolve to label
+    dw InventoryPointers, InventoryPointerIndexes_LifeSword ;$E12C
     db !Text_RepositionCursor
     dw $04B2
     db !Text_PrintDecimal
     db $02
-    dw $E1CE ; TODO: resolve to label
+    dw SwordRequiredLevelTable_LifeSword ;$E1CE
     db !Text_RepositionCursor
     dw $051E
-    db !Text_UnknownCmd, $26, ;TODO: figure out what this command does?
-    dw $E1AD ; TODO: resolve to label
+    db !Text_UnknownCmd, $26
+    dw SwordPowerTable_LifeSword ;$E1AD
     db !Text_RepositionCursor
     dw $058A
     db !Dict_A,"sword ",!Dict_from,!Dict_the,!Text_CR,!Text_CR
@@ -1186,16 +1203,16 @@ PsychoSwordStatsText:
     db !Text_RepositionCursor
     dw $048A
     !Text_TableLookup
-    dw InventoryPointers, $E12E ; TODO: resolve to label
+    dw InventoryPointers, InventoryPointerIndexes_PsychoSword ; $E12E
     db !Text_RepositionCursor
     dw $04B2
     db !Text_PrintDecimal
     db $02
-    dw $E1D0 ; TODO: resolve to label
+    dw SwordRequiredLevelTable_PsychoSword ;$E1D0
     db !Text_RepositionCursor
     dw $051E
-    db !Text_UnknownCmd, $26 ;TODO: figure out what this command does?
-    dw $E1AE ; TODO: resolve to label
+    db !Text_UnknownCmd, $26
+    dw SwordPowerTable_PsychoSword ;$E1AE
     db !Text_RepositionCursor
     dw $058A
     db "Invincible ",!Dict_monsters,!Text_CR,!Text_CR
@@ -1206,16 +1223,16 @@ CriticalSwordStatsText:
     db !Text_RepositionCursor
     dw $048A
     !Text_TableLookup
-    dw InventoryPointers, $E130 ; TODO: resolve to label
+    dw InventoryPointers, InventoryPointerIndexes_CriticalSword ;$E130
     db !Text_RepositionCursor
     dw $04B2
     db !Text_PrintDecimal
     db $02
-    dw $E1D2 ; TODO: resolve to label
+    dw SwordRequiredLevelTable_CriticalSword ;$E1D2
     db !Text_RepositionCursor
     dw $051E
-    db !Text_UnknownCmd, $26 ;TODO: figure out what this command does?
-    dw $E1AF ; TODO: resolve to label
+    db !Text_UnknownCmd, $26
+    dw SwordPowerTable_CriticalSword ;$E1AF
     db !Text_RepositionCursor
     dw $058A
     db "Defeats ",!Dict_monsters,!Text_CR,!Text_CR
@@ -1226,16 +1243,16 @@ LuckyBladeStatsText:
     db !Text_RepositionCursor
     dw $048A
     !Text_TableLookup
-    dw InventoryPointers, $E132 ; TODO: resolve to label
+    dw InventoryPointers, InventoryPointerIndexes_LuckyBlade ;$E132
     db !Text_RepositionCursor
     dw $04B2
     db !Text_PrintDecimal
     db $02
-    dw $E1D4 ; TODO: resolve to label
+    dw SwordRequiredLevelTable_LuckyBlade ;$E1D4
     db !Text_RepositionCursor
     dw $051E
-    db !Text_UnknownCmd, $26 ;TODO: figure out what this command does?
-    dw $E1B0 ; TODO: resolve to label
+    db !Text_UnknownCmd, $26
+    dw SwordPowerTable_LuckyBlade ;$E1B0
     db !Text_RepositionCursor
     dw $058A
     db !Dict_The,"change ",!Dict_of,"getting ",!Text_CR,!Text_CR
@@ -1246,16 +1263,16 @@ ZantetsuSwordStatsText:
     db !Text_RepositionCursor
     dw $048A
     !Text_TableLookup
-    dw InventoryPointers, $E134 ; TODO: resolve to label
+    dw InventoryPointers, InventoryPointerIndexes_ZantetsuSword ; $E134
     db !Text_RepositionCursor
     dw $04B2
     db !Text_PrintDecimal
     db $02
-    dw $E1D6 ; TODO: resolve to label
+    dw SwordRequiredLevelTable_ZantetsuSword ;$E1D6
     db !Text_RepositionCursor
     dw $051E
-    db !Text_UnknownCmd, $26 ;TODO: figure out what this command does?
-    dw $E1B1 ; TODO: resolve to label
+    db !Text_UnknownCmd, $26
+    dw SwordPowerTable_ZantetsuSword ;$E1B1
     db !Text_RepositionCursor
     dw $058A
     db "Defeats ",!Dict_monsters,!Dict_with,!Text_CR,!Text_CR
@@ -1266,16 +1283,16 @@ SpiritSwordStatsText:
     db !Text_RepositionCursor
     dw $048A
     !Text_TableLookup
-    dw InventoryPointers, $E136 ; TODO: resolve to label
+    dw InventoryPointers, InventoryPointerIndexes_SpiritSword ;$E136
     db !Text_RepositionCursor
     dw $04B2
     db !Text_PrintDecimal
     db $02
-    dw $E1D8 ; TODO: resolve to label
+    dw SwordRequiredLevelTable_SpiritSword ;$E1D8
     db !Text_RepositionCursor
     dw $051E
-    db !Text_UnknownCmd, $26 ;TODO: figure out what this command does?
-    dw $E1B2 ; TODO: resolve to label
+    db !Text_UnknownCmd, $26
+    dw SwordPowerTable_SpiritSword ;$E1B2
     db !Text_RepositionCursor
     dw $058A
     db "Defeats ",!Dict_the,"<spirit> ",!Text_CR,!Text_CR
@@ -1286,16 +1303,16 @@ RecoverySwordStatsText:
     db !Text_RepositionCursor
     dw $048A
     !Text_TableLookup
-    dw InventoryPointers, $E138 ; TODO: resolve to label
+    dw InventoryPointers, InventoryPointerIndexes_RecoverySword ;$E138
     db !Text_RepositionCursor
     dw $04B2
     db !Text_PrintDecimal
     db $02
-    dw $E1DA ; TODO: resolve to label
+    dw SwordRequiredLevelTable_RecoverySword ;$E1DA 
     db !Text_RepositionCursor
     dw $051E
-    db !Text_UnknownCmd, $26 ;TODO: figure out what this command does?
-    dw $E1B3 ; TODO: resolve to label
+    db !Text_UnknownCmd, $26
+    dw SwordPowerTable_RecoverySword ;$E1B3
     db !Text_RepositionCursor
     dw $058A
     db "HP ",!Dict_will,!Dict_be,"filled when",!Text_CR,!Text_CR
@@ -1306,16 +1323,16 @@ TheSoulBladeStatsText:
     db !Text_RepositionCursor
     dw $048A
     !Text_TableLookup
-    dw InventoryPointers, $E13A ; TODO: resolve to label
+    dw InventoryPointers, InventoryPointerIndexes_SoulBlade ;$E13A
     db !Text_RepositionCursor
     dw $04B2
     db !Text_PrintDecimal
     db $02
-    dw $E1DC ; TODO: resolve to label
+    dw SwordRequiredLevelTable_SoulBlade ;$E1DC
     db !Text_RepositionCursor
     dw $051E
-    db !Text_UnknownCmd, $26 ;TODO: figure out what this command does?
-    dw $E1B4 ; TODO: resolve to label
+    db !Text_UnknownCmd, $26
+    dw SwordPowerTable_SoulBlade ;$E1B4
     db !Text_RepositionCursor
     dw $058A
     db !Dict_The,"strongest sword ",!Text_CR,!Text_CR
@@ -1327,11 +1344,11 @@ IronArmorStatsText:
     db !Text_RepositionCursor
     dw $048A
     db !Text_TableLookup
-    dw InventoryPointers, $E13C
+    dw InventoryPointers, InventoryPointerIndexes_IronArmor ;$E13C
     db !Text_RepositionCursor
     dw $051E
-    db !Text_UnknownCmd, $27 ;TODO: figure out what this command does?
-    dw $E1C6 ; TODO: resolve to label
+    db !Text_UnknownCmd, $27
+    dw ArmorDefenseTable_IronArmor ;$E1C6
     db !Text_RepositionCursor
     dw $058A
     db "Your defense power ",!Text_CR,!Text_CR
@@ -1342,11 +1359,11 @@ IceArmorStatsText:
     db !Text_RepositionCursor
     dw $048A
     db !Text_TableLookup
-    dw InventoryPointers, $E13E
+    dw InventoryPointers, InventoryPointerIndexes_IceArmor ;$E13E
     db !Text_RepositionCursor
     dw $051E
-    db !Text_UnknownCmd, $27 ;TODO: figure out what this command does?
-    dw $E1C7 ; TODO: resolve to label
+    db !Text_UnknownCmd, $27
+    dw ArmorDefenseTable_IceArmor ;$E1C7
     db !Text_RepositionCursor
     dw $058A
     db !Dict_you,!Dict_can,"cross ",!Text_CR,!Text_CR
@@ -1357,11 +1374,11 @@ BubbleArmorStatsText:
     db !Text_RepositionCursor
     dw $048A
     db !Text_TableLookup
-    dw InventoryPointers, $E140
+    dw InventoryPointers, InventoryPointerIndexes_BubbleArmor ;$E140
     db !Text_RepositionCursor
     dw $051E
-    db !Text_UnknownCmd, $27 ;TODO: figure out what this command does?
-    dw $E1C8 ; TODO: resolve to label
+    db !Text_UnknownCmd, $27
+    dw ArmorDefenseTable_BubbleArmor ;$E1C8
     db !Text_RepositionCursor
     dw $058A
     db "Enables ",!Dict_you,!Dict_to,!Dict_walk,!Text_CR,!Text_CR
@@ -1372,11 +1389,11 @@ MagicArmorStatsText:
     db !Text_RepositionCursor
     dw $048A
     db !Text_TableLookup
-    dw InventoryPointers, $E142
+    dw InventoryPointers, InventoryPointerIndexes_MagicArmor ;$E142
     db !Text_RepositionCursor
     dw $051E
-    db !Text_UnknownCmd, $27 ;TODO: figure out what this command does?
-    dw $E1C9 ; TODO: resolve to label
+    db !Text_UnknownCmd, $27
+    dw ArmorDefenseTable_MagicArmor ;$E1C9
     db !Text_RepositionCursor
     dw $058A
     db "Cuts ",!Dict_the,"necessary ",!Text_CR,!Text_CR
@@ -1387,11 +1404,11 @@ MysticArmorStatsText:
     db !Text_RepositionCursor
     dw $048A
     db !Text_TableLookup
-    dw InventoryPointers, $E144
+    dw InventoryPointers, InventoryPointerIndexes_MysticArmor ;$E144
     db !Text_RepositionCursor
     dw $051E
-    db !Text_UnknownCmd, $27 ;TODO: figure out what this command does?
-    dw $E1CA ; TODO: resolve to label
+    db !Text_UnknownCmd, $27
+    dw ArmorDefenseTable_MysticArmor ;$E1CA
     db !Text_RepositionCursor
     dw $058A
     db "Invincible ",!Dict_for,"longer ",!Text_CR,!Text_CR
@@ -1402,11 +1419,11 @@ LightArmorStatsText:
     db !Text_RepositionCursor
     dw $048A
     db !Text_TableLookup
-    dw InventoryPointers, $E146
+    dw InventoryPointers, InventoryPointerIndexes_LightArmor ;$E146
     db !Text_RepositionCursor
     dw $051E
-    db !Text_UnknownCmd, $27 ;TODO: figure out what this command does?
-    dw $E1CB ; TODO: resolve to label
+    db !Text_UnknownCmd, $27
+    dw ArmorDefenseTable_LightArmor ;$E1CB
     db !Text_RepositionCursor
     dw $058A
     db "Receive no damage from",!Text_CR,!Text_CR
@@ -1417,11 +1434,11 @@ ElementalMailStatsText:
     db !Text_RepositionCursor
     dw $048A
     db !Text_TableLookup
-    dw InventoryPointers, $E148
+    dw InventoryPointers, InventoryPointerIndexes_ElementalArmor ;$E148
     db !Text_RepositionCursor
     dw $051E
-    db !Text_UnknownCmd, $27 ;TODO: figure out what this command does?
-    dw $E1CC ; TODO: resolve to label
+    db !Text_UnknownCmd, $27
+    dw ArmorDefenseTable_ElementalArmor ;$E1CC
     db !Text_RepositionCursor
     dw $058A
     db "Protects ",!Text_HeroName,!Text_CR,!Text_CR
@@ -1432,11 +1449,11 @@ SoulArmorStatsText:
     db !Text_RepositionCursor
     dw $048A
     db !Text_TableLookup
-    dw InventoryPointers, $E14A
+    dw InventoryPointers, InventoryPointerIndexes_SoulArmor ;$E14A
     db !Text_RepositionCursor
     dw $051E
-    db !Text_UnknownCmd, $27 ;TODO: figure out what this command does?
-    dw $E1CD ; TODO: resolve to label
+    db !Text_UnknownCmd, $27
+    dw ArmorDefenseTable_SoulArmor ;$E1CD
     db !Text_RepositionCursor
     dw $058A
     db "Enables ",!Dict_you,!Dict_to,!Dict_walk,"in",!Text_CR,!Text_CR
@@ -1448,7 +1465,7 @@ FlameBallStatsText:
     db !Text_RepositionCursor
     dw $048A
     db !Text_TableLookup
-    dw InventoryPointers, $E14C
+    dw InventoryPointers, InventoryPointerIndexes_FlameBall ;$E14C
     db !Text_RepositionCursor
     dw $050A
     db !Dict_Necessary,"GEM : 4",!Text_CR,!Text_CR
@@ -1460,7 +1477,7 @@ LightArrowStatsText:
     db !Text_RepositionCursor
     dw $048A
     db !Text_TableLookup
-    dw InventoryPointers, $E14E
+    dw InventoryPointers, InventoryPointerIndexes_LightArrow ;$E14E
     db !Text_RepositionCursor
     dw $050A
     db !Dict_Necessary,"GEM : 8",!Text_CR,!Text_CR
@@ -1472,7 +1489,7 @@ MagicFlareStatsText:
     db !Text_RepositionCursor
     dw $048A
     db !Text_TableLookup
-    dw InventoryPointers, $E150
+    dw InventoryPointers, InventoryPointerIndexes_MagicFlare ;$E150
     db !Text_RepositionCursor
     dw $050A
     db !Dict_Necessary,"GEM : 8",!Text_CR,!Text_CR
@@ -1484,7 +1501,7 @@ RotatorStatsText:
     db !Text_RepositionCursor
     dw $048A
     db !Text_TableLookup
-    dw InventoryPointers, $E152
+    dw InventoryPointers, InventoryPointerIndexes_Rotator ;$E152
     db !Text_RepositionCursor
     dw $050A
     db !Dict_Necessary,"GEM : 1",!Text_CR,!Text_CR
@@ -1496,7 +1513,7 @@ SparkBombStatsText:
     db !Text_RepositionCursor
     dw $048A
     db !Text_TableLookup
-    dw InventoryPointers, $E154
+    dw InventoryPointers, InventoryPointerIndexes_SparkBomb ;$E154
     db !Text_RepositionCursor
     dw $050A
     db !Dict_Necessary,"GEM : 8",!Text_CR,!Text_CR
@@ -1508,7 +1525,7 @@ FlamePillarStatsText:
     db !Text_RepositionCursor
     dw $048A
     db !Text_TableLookup
-    dw InventoryPointers, $E156
+    dw InventoryPointers, InventoryPointerIndexes_FlamePillar ;$E156
     db !Text_RepositionCursor
     dw $050A
     db !Dict_Necessary,"GEM : 20",!Text_CR,!Text_CR
@@ -1520,7 +1537,7 @@ TornadoStatsText:
     db !Text_RepositionCursor
     dw $048A
     db !Text_TableLookup
-    dw InventoryPointers, $E158
+    dw InventoryPointers, InventoryPointerIndexes_Tornado ;$E158
     db !Text_RepositionCursor
     dw $050A
     db !Dict_Necessary,"GEM : 8",!Text_CR,!Text_CR
@@ -1532,7 +1549,7 @@ PhoenixStatsText:
     db !Text_RepositionCursor
     dw $048A
     db !Text_TableLookup
-    dw InventoryPointers, $E15A
+    dw InventoryPointers, InventoryPointerIndexes_Phoenix ;$E15A
     db !Text_RepositionCursor
     dw $050A
     db !Dict_Necessary,"GEM : 2",!Text_CR,!Text_CR
@@ -1545,7 +1562,7 @@ GoatsFoodStatsText:
     db !Text_RepositionCursor
     dw $048A
     db !Text_TableLookup
-    dw InventoryPointers, $E15C
+    dw InventoryPointers, InventoryPointerIndexes_GoatsFood ;$E15C
     db !Text_RepositionCursor
     dw $050A
     db "Goat`"!Dict_s,"food ",!Dict_from,!Dict_the,!Text_CR,!Text_CR
@@ -1556,7 +1573,7 @@ HarpStringStatsText:
     db !Text_RepositionCursor
     dw $048A
     db !Text_TableLookup
-    dw InventoryPointers, $E15E
+    dw InventoryPointers, InventoryPointerIndexes_HarpString ;$E15E
     db !Text_RepositionCursor
     dw $050A
     db "Harp String"!Dict_of,"singer."
@@ -1566,7 +1583,7 @@ APassStatsText:
     db !Text_RepositionCursor
     dw $048A
     db !Text_TableLookup
-    dw InventoryPointers, $E160
+    dw InventoryPointers, InventoryPointerIndexes_APass ;$E160
     db !Text_RepositionCursor
     dw $050A
     db !Dict_A,"pass "!Dict_made,"by ",!Dict_the,!Text_CR,!Text_CR
@@ -1578,7 +1595,7 @@ DreamRodStatsText:
     db !Text_RepositionCursor
     dw $048A
     db !Text_TableLookup
-    dw InventoryPointers, $E162
+    dw InventoryPointers, InventoryPointerIndexes_DreamRod ;$E162
     db !Text_RepositionCursor
     dw $050A
     db !Dict_A,!Dict_strange,"stick ",!Dict_that,!Text_CR,!Text_CR
@@ -1590,7 +1607,7 @@ LeosBrushStatsText:
     db !Text_RepositionCursor
     dw $048A
     db !Text_TableLookup
-    dw InventoryPointers, $E164
+    dw InventoryPointers, InventoryPointerIndexes_LeosBrush ;$E164
     db !Text_RepositionCursor
     dw $050A
     db !Dict_The,"paintbrush ",!Dict_used,"to",!Text_CR,!Text_CR
@@ -1602,7 +1619,7 @@ TurbosLeavesStatsText:
     db !Text_RepositionCursor
     dw $048A
     db !Text_TableLookup
-    dw InventoryPointers, $E166
+    dw InventoryPointers, InventoryPointerIndexes_TurbosLeaves ;$E166
     db !Text_RepositionCursor
     dw $050A
     db "Turbo`",!Dict_s,"symbol. Anyone",!Text_CR,!Text_CR
@@ -1614,7 +1631,7 @@ MolesRibbonStatsText:
     db !Text_RepositionCursor
     dw $048A
     db !Text_TableLookup
-    dw InventoryPointers, $E168
+    dw InventoryPointers, InventoryPointerIndexes_MolesRibbon ;$E168
     db !Text_RepositionCursor
     dw $050A
     db !Dict_A,"ribbon ",!Dict_that,"Monmo, a",!Text_CR,!Text_CR
@@ -1626,7 +1643,7 @@ BigPearlStatsText:
     db !Text_RepositionCursor
     dw $048A
     db !Text_TableLookup
-    dw InventoryPointers, $E16A
+    dw InventoryPointers, InventoryPointerIndexes_BigPearl ;$E16A
     db !Text_RepositionCursor
     dw $050A
     db !Dict_A,"beautiful pearl ",!Text_CR,!Text_CR
@@ -1638,7 +1655,7 @@ MermaidsTearsStatsText:
     db !Text_RepositionCursor
     dw $048A
     db !Text_TableLookup
-    dw InventoryPointers, $E16C
+    dw InventoryPointers, InventoryPointerIndexes_MermaidsTears ;$E16C
     db !Text_RepositionCursor
     dw $050A
     db !Dict_will,"turn magma into ",!Text_CR,!Text_CR
@@ -1649,7 +1666,7 @@ MushroomShoesStatsText:
     db !Text_RepositionCursor
     dw $048A
     db !Text_TableLookup
-    dw InventoryPointers, $E16E
+    dw InventoryPointers, InventoryPointerIndexes_MushroomShoes ;$E16E
     db !Text_RepositionCursor
     dw $050A
     db !Dict_The,!Dict_snail,"goo enables ",!Text_CR,!Text_CR
@@ -1661,7 +1678,7 @@ AirshipKeyStatsText:
     db !Text_RepositionCursor
     dw $048A
     db !Text_TableLookup
-    dw InventoryPointers, $E170
+    dw InventoryPointers, InventoryPointerIndexes_AirshipKey ;$E170
     db !Text_RepositionCursor
     dw $050A
     db "Key ",!Dict_to,"Airship. Plug  ",!Text_CR,!Text_CR
@@ -1673,7 +1690,7 @@ ThunderRingStatsText:
     db !Text_RepositionCursor
     dw $048A
     db !Text_TableLookup
-    dw InventoryPointers, $E172
+    dw InventoryPointers, InventoryPointerIndexes_ThunderRing ;$E172
     db !Text_RepositionCursor
     dw $050A
     db !Dict_If,!Dict_you,"touch ",!Dict_a,!Text_CR,!Text_CR
@@ -1685,7 +1702,7 @@ DeliciousSeedsStatsText:
     db !Text_RepositionCursor
     dw $048A
     db !Text_TableLookup
-    dw InventoryPointers, $E174
+    dw InventoryPointers, InventoryPointerIndexes_DeliciousSeeds ;$E174
     db !Text_RepositionCursor
     dw $050A
     db "Favorite Seeds, ",!Text_CR,!Text_CR
@@ -1697,7 +1714,7 @@ ActinidiaLeavesStatsText:
     db !Text_RepositionCursor
     dw $048A
     db !Text_TableLookup
-    dw InventoryPointers, $E176
+    dw InventoryPointers, InventoryPointerIndexes_ActinidiaLeaves ;$E176
     db !Text_RepositionCursor
     dw $050A
     db "Emits ",!Dict_a,"peculiar scent",!Text_CR,!Text_CR
@@ -1708,7 +1725,7 @@ DoorKeyStatsText:
     db !Text_RepositionCursor
     dw $048A
     db !Text_TableLookup
-    dw InventoryPointers, $E178
+    dw InventoryPointers, InventoryPointerIndexes_DoorKey ;$E178
     db !Text_RepositionCursor
     dw $050A
     db !Dict_This,"key ",!Dict_will,"open the",!Text_CR,!Text_CR
@@ -1720,7 +1737,7 @@ PlatinumCardStatsText:
     db !Text_RepositionCursor
     dw $048A
     db !Text_TableLookup
-    dw InventoryPointers, $E17A
+    dw InventoryPointers, InventoryPointerIndexes_PlatinumCard ;$E17A
     db !Text_RepositionCursor
     dw $050A
     db !Dict_You,"may enter ",!Dict_the,"left",!Text_CR,!Text_CR
@@ -1732,7 +1749,7 @@ VipCardStatsText:
     db !Text_RepositionCursor
     dw $048A
     db !Text_TableLookup
-    dw InventoryPointers, $E17C
+    dw InventoryPointers, InventoryPointerIndexes_VipCard ;$E17C
     db !Text_RepositionCursor
     dw $050A
     db !Dict_You,"may ",!Dict_go,"wherever ",!Text_CR,!Text_CR
@@ -1744,7 +1761,7 @@ EmblemAStatsText:
     db !Text_RepositionCursor
     dw $048A
     db !Text_TableLookup
-    dw InventoryPointers, $E17E
+    dw InventoryPointers, InventoryPointerIndexes_EmblemA ;$E17E
 SharedEmblemText:
     db !Text_RepositionCursor
     dw $050A
@@ -1757,7 +1774,7 @@ EmblemBStatsText:
     db !Text_RepositionCursor
     dw $048A
     db !Text_TableLookup
-    dw InventoryPointers, $E180
+    dw InventoryPointers, InventoryPointerIndexes_EmblemB ;$E180
     db !Text_ChangeStreamPtr
     dw SharedEmblemText
 
@@ -1765,7 +1782,7 @@ EmblemCStatsText:
     db !Text_RepositionCursor
     dw $048A
     db !Text_TableLookup
-    dw InventoryPointers, $E182
+    dw InventoryPointers, InventoryPointerIndexes_EmblemC ;$E182
     db !Text_ChangeStreamPtr
     dw SharedEmblemText
 
@@ -1773,7 +1790,7 @@ EmblemDStatsText:
     db !Text_RepositionCursor
     dw $048A
     db !Text_TableLookup
-    dw InventoryPointers, $E184
+    dw InventoryPointers, InventoryPointerIndexes_EmblemD ;$E184
     db !Text_ChangeStreamPtr
     dw SharedEmblemText
 
@@ -1781,7 +1798,7 @@ EmblemEStatsText:
     db !Text_RepositionCursor
     dw $048A
     db !Text_TableLookup
-    dw InventoryPointers, $E186
+    dw InventoryPointers, InventoryPointerIndexes_EmblemE ;$E186
     db !Text_ChangeStreamPtr
     dw SharedEmblemText
 
@@ -1789,7 +1806,7 @@ EmblemFStatsText:
     db !Text_RepositionCursor
     dw $048A
     db !Text_TableLookup
-    dw InventoryPointers, $E188
+    dw InventoryPointers, InventoryPointerIndexes_EmblemF ;$E188
     db !Text_ChangeStreamPtr
     dw SharedEmblemText
 
@@ -1797,7 +1814,7 @@ EmblemGStatsText:
     db !Text_RepositionCursor
     dw $048A
     db !Text_TableLookup
-    dw InventoryPointers, $E18A
+    dw InventoryPointers, InventoryPointerIndexes_EmblemG ;$E18A
     db !Text_ChangeStreamPtr
     dw SharedEmblemText
 
@@ -1805,7 +1822,7 @@ EmblemHStatsText:
     db !Text_RepositionCursor
     dw $048A
     db !Text_TableLookup
-    dw InventoryPointers, $E18C
+    dw InventoryPointers, InventoryPointerIndexes_EmblemH ;$E18C
     db !Text_ChangeStreamPtr
     dw SharedEmblemText
 
@@ -1813,7 +1830,7 @@ RedHotMirrorStatsText:
     db !Text_RepositionCursor
     dw $048A
     db !Text_TableLookup
-    dw InventoryPointers, $E18E
+    dw InventoryPointers, InventoryPointerIndexes_RedHotMirror ;$E18E
 SharedRedHotText:
     db !Text_RepositionCursor
     dw $050A
@@ -1826,7 +1843,7 @@ RedHotBallStatsText:
     db !Text_RepositionCursor
     dw $048A
     db !Text_TableLookup
-    dw InventoryPointers, $E190
+    dw InventoryPointers, InventoryPointerIndexes_RedHotBall ;$E190
     db !Text_ChangeStreamPtr
     dw SharedRedHotText
 
@@ -1834,7 +1851,7 @@ RedHotStickStatsText:
     db !Text_RepositionCursor
     dw $048A
     db !Text_TableLookup
-    dw InventoryPointers, $E192
+    dw InventoryPointers, InventoryPointerIndexes_RedHotStick ;$E192
     db !Text_ChangeStreamPtr
     dw SharedRedHotText
 
@@ -1842,7 +1859,7 @@ PowerBraceletStatsText:
     db !Text_RepositionCursor
     dw $048A
     db !Text_TableLookup
-    dw InventoryPointers, $E194
+    dw InventoryPointers, InventoryPointerIndexes_PowerBracelet ;$E194
     db !Text_RepositionCursor
     dw $050A
     db !Dict_If,!Dict_you,"equip ",!Dict_this,!Text_CR,!Text_CR
@@ -1854,7 +1871,7 @@ ShieldBraceletStatsText:
     db !Text_RepositionCursor
     dw $048A
     db !Text_TableLookup
-    dw InventoryPointers, $E196
+    dw InventoryPointers, InventoryPointerIndexes_ShieldBracelet ;$E196
     db !Text_RepositionCursor
     dw $050A
     db "Will reduce ",!Dict_the,"amount",!Text_CR,!Text_CR
@@ -1866,7 +1883,7 @@ SuperBraceletStatsText:
     db !Text_RepositionCursor
     dw $048A
     db !Text_TableLookup
-    dw InventoryPointers, $E198
+    dw InventoryPointers, InventoryPointerIndexes_SuperBracelet ;$E198
     db !Text_RepositionCursor
     dw $050A
     db "Your sword ",!Dict_and,"armor ",!Text_CR,!Text_CR
@@ -1878,7 +1895,7 @@ MedicalHerbStatsText:
     db !Text_RepositionCursor
     dw $048A
     db !Text_TableLookup
-    dw InventoryPointers, $E19A
+    dw InventoryPointers, InventoryPointerIndexes_MedicalHerb ;$E19A
     db !Text_RepositionCursor
     dw $050A
     db "Your HP ",!Dict_will,!Dict_be,!Text_CR,!Text_CR
@@ -1890,7 +1907,7 @@ StrangeBottleStatsText:
     db !Text_RepositionCursor
     dw $048A
     db !Text_TableLookup
-    dw InventoryPointers, $E19C
+    dw InventoryPointers, InventoryPointerIndexes_StrangeBottle ;$E19C
     db !Text_RepositionCursor
     dw $050A
     db !Dict_You,!Dict_will,!Dict_not,"lose any ",!Text_CR,!Text_CR
@@ -1902,7 +1919,7 @@ BrownStoneStatsText:
     db !Text_RepositionCursor
     dw $048A
     db !Text_TableLookup
-    dw InventoryPointers, $E19E
+    dw InventoryPointers, InventoryPointerIndexes_BrownStone ;$E19E
 SharedStonesText:
     db !Text_RepositionCursor
     dw $050A
@@ -1915,7 +1932,7 @@ GreenStoneStatsText:
     db !Text_RepositionCursor
     dw $048A
     db !Text_TableLookup
-    dw InventoryPointers, $E1A0
+    dw InventoryPointers, InventoryPointerIndexes_GreenStone ;$E1A0
     db !Text_ChangeStreamPtr
     dw SharedStonesText
 
@@ -1923,7 +1940,7 @@ BlueStoneStatsText:
     db !Text_RepositionCursor
     dw $048A
     db !Text_TableLookup
-    dw InventoryPointers, $E1A2
+    dw InventoryPointers, InventoryPointerIndexes_BlueStone ;$E1A2
     db !Text_ChangeStreamPtr
     dw SharedStonesText
 
@@ -1931,7 +1948,7 @@ SilverStoneStatsText:
     db !Text_RepositionCursor
     dw $048A
     db !Text_TableLookup
-    dw InventoryPointers, $E1A4
+    dw InventoryPointers, InventoryPointerIndexes_SilverStone ;$E1A4
     db !Text_ChangeStreamPtr
     dw SharedStonesText
 
@@ -1939,7 +1956,7 @@ PurpleStoneStatsText:
     db !Text_RepositionCursor
     dw $048A
     db !Text_TableLookup
-    dw InventoryPointers, $E1A6
+    dw InventoryPointers, InventoryPointerIndexes_PurpleStone ;$E1A6
     db !Text_ChangeStreamPtr
     dw SharedStonesText
 
@@ -1947,7 +1964,7 @@ BlackStoneStatsText:
     db !Text_RepositionCursor
     dw $048A
     db !Text_TableLookup
-    dw InventoryPointers, $E1A8
+    dw InventoryPointers, InventoryPointerIndexes_BlackStone ;$E1A8
     db !Text_ChangeStreamPtr
     dw SharedStonesText
 
@@ -1955,7 +1972,7 @@ MagicBellStatsText:
     db !Text_RepositionCursor
     dw $048A
     db !Text_TableLookup
-    dw InventoryPointers, $E1AA
+    dw InventoryPointers, InventoryPointerIndexes_MagicBell ;$E1AA
     db !Text_RepositionCursor
     dw $050A
     db !Dict_You,!Dict_will,!Dict_be,"able ",!Dict_to,!Text_CR,!Text_CR
@@ -1964,35 +1981,154 @@ MagicBellStatsText:
     db !Text_WaitAndBreak
 
 assert pc() == $90E12C ;TODO: remove assert once tables below made relocatable.
-InventoryIdValues:
-                db $01,$00,$02,$00,$03,$00   ;02E12A|        |020100;  
-                db $04,$00,$05,$00,$06,$00,$07,$00   ;02E132|        |000000;  
-                db $08,$00,$09,$00,$0A,$00,$0B,$00   ;02E13A|        |      ;  
-                db $0C,$00,$0D,$00,$0E,$00,$0F,$00   ;02E142|        |000D00;  
-                db $10,$00,$11,$00,$12,$00,$13,$00   ;02E14A|        |02E14C;  
-                db $14,$00,$15,$00,$16,$00,$17,$00   ;02E152|        |000000;  
-                db $18,$00,$19,$00,$1A,$00,$1B,$00   ;02E15A|        |      ;  
-                db $1C,$00,$1D,$00,$1E,$00,$1F,$00   ;02E162|        |001D00;  
-                db $20,$00,$21,$00,$22,$00,$23,$00   ;02E16A|        |022100;  
-                db $24,$00,$25,$00,$26,$00,$27,$00   ;02E172|        |000000;  
-                db $28,$00,$29,$00,$2A,$00,$2B,$00   ;02E17A|        |      ;  
-                db $2C,$00,$2D,$00,$2E,$00,$2F,$00   ;02E182|        |002D00;  
-                db $30,$00,$31,$00,$32,$00,$33,$00   ;02E18A|        |02E18C;  
-                db $34,$00,$35,$00,$36,$00,$37,$00   ;02E192|        |000000;  
-                db $38,$00,$39,$00,$3A,$00,$3B,$00   ;02E19A|        |      ;  
-                db $3C,$00,$3D,$00,$3E,$00,$3F,$00   ;02E1A2|        |003D00;  
-                db $40,$00                           ;02E1AA|        |      ;  
+; Used as indexes into the inventory pointers table.
+; See items.asm
+InventoryPointerIndexes:
+    ;Swords
+    .LifeSword: dw !LifeSword
+    .PsychoSword: dw !PsychoSword
+    .CriticalSword: dw !CriticalSword
+    .LuckyBlade: dw !LuckyBlade
+    .ZantetsuSword: dw !ZantetsuSword
+    .SpiritSword: dw !SpiritSword
+    .RecoverySword: dw !RecoverySword
+    .SoulBlade: dw !SoulBlade
+
+    ; Armors
+    .IronArmor: dw !IronArmor
+    .IceArmor: dw !IceArmor
+    .BubbleArmor: dw !BubbleArmor
+    .MagicArmor: dw !MagicArmor
+    .MysticArmor: dw !MysticArmor
+    .LightArmor: dw !LightArmor
+    .ElementalArmor: dw !ElementalArmor
+    .SoulArmor: dw !SoulArmor
+
+    ; Magics
+    .FlameBall: dw !FlameBall
+    .LightArrow: dw !LightArrow
+    .MagicFlare: dw !MagicFlare
+    .Rotator: dw !Rotator
+    .SparkBomb: dw !SparkBomb
+    .FlamePillar: dw !FlamePillar
+    .Tornado: dw !Tornado
+    .Phoenix: dw !Phoenix
+
+    ; Items
+    .GoatsFood: dw !GoatsFood
+    .HarpString: dw !HarpString
+    .APass: dw !APass
+    .DreamRod: dw !DreamRod
+    .LeosBrush: dw !LeosBrush
+    .TurbosLeaves: dw !TurbosLeaves
+    .MolesRibbon: dw !MolesRibbon
+    .BigPearl: dw !BigPearl
+    .MermaidsTears: dw !MermaidsTears
+    .MushroomShoes: dw !MushroomShoes
+    .AirshipKey: dw !AirshipKey
+    .ThunderRing: dw !ThunderRing
+    .DeliciousSeeds: dw !DeliciousSeeds
+    .ActinidiaLeaves: dw !ActinidiaLeaves
+    .DoorKey: dw !DoorKey
+    .PlatinumCard: dw !PlatinumCard
+    .VipCard: dw !VipCard
+    .EmblemA: dw !EmblemA
+    .EmblemB: dw !EmblemB
+    .EmblemC: dw !EmblemC
+    .EmblemD: dw !EmblemD
+    .EmblemE: dw !EmblemE
+    .EmblemF: dw !EmblemF
+    .EmblemG: dw !EmblemG
+    .EmblemH: dw !EmblemH
+    .RedHotMirror: dw !RedHotMirror
+    .RedHotBall: dw !RedHotBall
+    .RedHotStick: dw !RedHotStick
+    .PowerBracelet: dw !PowerBracelet
+    .ShieldBracelet: dw !ShieldBracelet
+    .SuperBracelet: dw !SuperBracelet
+    .MedicalHerb: dw !MedicalHerb
+    .StrangeBottle: dw !StrangeBottle
+    .BrownStone: dw !BrownStone
+    .GreenStone: dw !GreenStone
+    .BlueStone: dw !BlueStone
+    .SilverStone: dw !SilverStone
+    .PurpleStone: dw !PurpleStone
+    .BlackStone: dw !BlackStone
+    .MagicBell: dw !MagicBell
+
+                ;db $01,$00,$02,$00,$03,$00   ;02E12A|        |020100;  
+                ;db $04,$00,$05,$00,$06,$00,$07,$00   ;02E132|        |000000;  
+                ;db $08,$00,$09,$00,$0A,$00,$0B,$00   ;02E13A|        |      ;  
+                ;db $0C,$00,$0D,$00,$0E,$00,$0F,$00   ;02E142|        |000D00;  
+                ;db $10,$00,$11,$00,$12,$00,$13,$00   ;02E14A|        |02E14C;  
+                ;db $14,$00,$15,$00,$16,$00,$17,$00   ;02E152|        |000000;  
+                ;db $18,$00,$19,$00,$1A,$00,$1B,$00   ;02E15A|        |      ;  
+                ;db $1C,$00,$1D,$00,$1E,$00,$1F,$00   ;02E162|        |001D00;  
+                ;db $20,$00,$21,$00,$22,$00,$23,$00   ;02E16A|        |022100;  
+                ;db $24,$00,$25,$00,$26,$00,$27,$00   ;02E172|        |000000;  
+                ;db $28,$00,$29,$00,$2A,$00,$2B,$00   ;02E17A|        |      ;  
+                ;db $2C,$00,$2D,$00,$2E,$00,$2F,$00   ;02E182|        |002D00;  
+                ;db $30,$00,$31,$00,$32,$00,$33,$00   ;02E18A|        |02E18C;  
+                ;db $34,$00,$35,$00,$36,$00,$37,$00   ;02E192|        |000000;  
+                ;db $38,$00,$39,$00,$3A,$00,$3B,$00   ;02E19A|        |      ;  
+                ;db $3C,$00,$3D,$00,$3E,$00,$3F,$00   ;02E1A2|        |003D00;  
+                ;db $40,$00                           ;02E1AA|        |      ;  
+
+; Probably can't relocate this since it is used for sword power calculations.
+assert pc() == $90E1AC
+SwordPowerTable:
+    .NoSword: db $00
+    .LifeSword: db $01
+    .PsychoSword: db $02
+    .CriticalSword: db $03
+    .LuckyBlade:  db $04
+    .ZantetsuSword: db $06
+    .SpiritSword: db $08
+    .RecoverySword: db $0A
+    .SoulBlade: db $0C
+
+    ;Unsure what (if anything) this is used for.
+    db $00,$00,$00,$00,$00,$00,$00,$00
+    db $00,$00,$00,$00,$00,$00,$00,$00
                                                      ;      |        |      ;  
-UNREACH_02E1AC: db $00,$01,$02,$03,$04,$06,$08,$0A   ;02E1AC|        |      ;  
-                db $0C,$00,$00,$00,$00,$00,$00,$00   ;02E1B4|        |000000;  
-                db $00                               ;02E1BC|        |      ;  
+;UNREACH_02E1AC: db $00,$01,$02,$03,$04,$06,$08,$0A   ;02E1AC|        |      ;  
+;                db $0C,$00,$00,$00,$00,$00,$00,$00   ;02E1B4|        |000000;  
+;                db $00                               ;02E1BC|        |      ;  
                                                      ;      |        |      ;  
-UNREACH_02E1BD: db $00,$00,$00,$00,$00,$00,$00,$00   ;02E1BD|        |      ;  
-                db $00,$01,$02,$03,$04,$06,$08,$0A   ;02E1C5|        |      ;  
-                db $0C                               ;02E1CD|        |000001;  
+;UNREACH_02E1BD: db $00,$00,$00,$00,$00,$00,$00,$00   ;02E1BD|        |      ;  
+
+assert pc() == $90E1C5
+ArmorDefenseTable:
+    .NoArmor: db $00
+    .IronArmor: db $01
+    .IceArmor: db $02
+    .BubbleArmor: db $03
+    .MagicArmor:  db $04
+    .MysticArmor: db $06
+    .LightArmor: db $08
+    .ElementalArmor: db $0A
+    .SoulArmor: db $0C
+
+                ;db $00,$01,$02,$03,$04,$06,$08,$0A   ;02E1C5|        |      ;  
+                ;db $0C                               ;02E1CD|        |000001;  
                                                      ;      |        |      ;  
-UNREACH_02E1CE: db $01,$00,$05,$00,$11,$00,$15,$00   ;02E1CE|        |000000;  
-                db $16,$00,$19,$00,$22,$00,$24,$00   ;02E1D6|        |000000;  
+assert pc() == $90E1CE
+;Sword required levels are stored as 16-bit BCD.
+SwordRequiredLevelTable:
+    .LifeSword: dw $01
+    .PsychoSword: dw $05
+    .CriticalSword: dw $11
+    .LuckyBlade:  dw $15
+    .ZantetsuSword: dw $16
+    .SpiritSword: dw $19
+    .RecoverySword: dw $22
+    .SoulBlade: dw $24
+
+;UNREACH_02E1CE: db $01,$00,$05,$00,$11,$00,$15,$00   ;02E1CE|        |000000;  
+;                db $16,$00,$19,$00,$22,$00,$24,$00   ;02E1D6|        |000000;  
+
+assert pc() == $90E1DE
+;Soul Revival and treasure chest text.
                 db $10,$03,$24,$05,$E6,$D2,$C8,$03   ;02E1DE|        |02E1E3;  
                 db $03,$20,$0D,$63,$61,$6E,$6E,$6F   ;02E1E6|        |000020;  
                 db $74,$20,$A1,$72,$65,$63,$61,$6C   ;02E1EE|        |000020;  
@@ -2010,6 +2146,7 @@ UNREACH_02E1CE: db $01,$00,$05,$00,$11,$00,$15,$00   ;02E1CE|        |000000;
                 db $6E,$64,$0D,$03,$24,$06,$03,$C8   ;02E24E|        |000D64;  
                 db $03,$20,$47,$45,$4D,$73,$2E,$03   ;02E256|        |000020;  
                 db $20,$12,$08,$08,$04,$0C,$14,$03   ;02E25E|        |020812;  
+;Credits text starts around here?
                 db $54,$68,$65,$20,$73,$74,$61,$66   ;02E266|        |      ;  
                 db $66,$20,$6F,$66,$20,$53,$6F,$75   ;02E26E|        |000020;  
                 db $6C,$20,$42,$6C,$61,$7A,$65,$72   ;02E276|        |004220;  
@@ -2211,6 +2348,9 @@ UNREACH_02E1CE: db $01,$00,$05,$00,$11,$00,$15,$00   ;02E1CE|        |000000;
                 db $20,$3B,$3C,$3D,$3E,$3F,$0D,$0D   ;02E896|        |023C3B;  
                 db $0D,$0D,$00                       ;02E89E|        |00000D;  
                                                      ;      |        |      ;  
+assert pc() == $90E8A1
+; 90E8A1 to  90E9A0 = *** UNKNOWN - Map related, pointers to following data ***
+; TODO: No need to include if this has nothing to do with the text printing engine.
 UNREACH_02E8A1: db $A1                               ;02E8A1|        |0000E9;  
                                                      ;      |        |      ;  
 UNREACH_02E8A2: db $E9                               ;02E8A2|        |      ;  
@@ -2257,6 +2397,7 @@ UNREACH_02E8AC: db $E9,$E9,$E9,$F5,$E9,$01,$EA,$0D   ;02E8AC|        |      ;
                 db $ED,$CD,$ED,$D9,$ED,$00,$00,$00   ;02E984|        |00EDCD;  
                 db $00,$00,$00,$00,$00,$E5,$ED,$F1   ;02E98C|        |      ;  
                 db $ED,$FD,$ED,$09,$EE,$15,$EE,$21   ;02E994|        |00EDFD;  
+;
                 db $EE,$00,$00,$00,$00,$17,$00,$80   ;02E99C|        |000000;  
                 db $00,$E4,$0F,$09,$11,$11,$11,$11   ;02E9A4|        |      ;  
                 db $20,$17,$12,$82,$43,$24,$8F,$09   ;02E9AC|        |021217;  
@@ -2727,9 +2868,12 @@ UNREACH_02F62D: db $01,$01,$01,$01,$02,$01,$03,$01   ;02F62D|        |000001;
                 db $00,$00,$00,$00,$00,$00,$00,$00   ;02F715|        |      ;  
                 db $07,$14,$01,$14,$02,$14,$03,$15   ;02F71D|        |000014;  
                 db $01,$15,$02,$00,$00,$00,$00,$00   ;02F725|        |000015;  
+;Free space?
                 db $00,$00,$00,$00,$00,$00,$00,$00   ;02F72D|        |      ;  
                 db $00,$00,$00,$00,$00,$00,$00,$00   ;02F735|        |      ;  
-                db $00,$00,$00,$FF,$FF,$FF,$FF,$FF   ;02F73D|        |      ;  
+                db $00,$00,$00
+;Free Space
+                            db $FF,$FF,$FF,$FF,$FF   ;02F73D|        |      ;  
                 db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;02F745|        |FFFFFF;  
                 db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;02F74D|        |FFFFFF;  
                 db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;02F755|        |FFFFFF;  
