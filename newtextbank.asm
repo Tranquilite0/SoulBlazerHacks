@@ -12,22 +12,20 @@ ORG $90BB27
 ;TODO: remove these strings if they are not needed?
 ; Title Screen Text
 TitleScreenText:
-    db !Text_ToggleSmallUiFont
-    db !Text_RepositionCursor
-    dw $04D6
+    %TextToggleSmallUiFont()
+    %TextRepositionCursor($04D6)
     db "PUSH START",!Text_WaitAndBreak
-    db !Text_ToggleSmallUiFont
-    db !Text_RepositionCursor
-    dw $05C0
-    db !Text_PrintSpace,$06
+    %TextToggleSmallUiFont()
+    %TextRepositionCursor($05C0)
+    %TextPrintSpace($06)
     db "ALL RIGHTS RESERVED",!Text_CR
     db "  COPYRIGHT 1992 QUINTET/ENIX",!Text_CR
-    db !Text_PrintSpace,$09
-    db "LICENSED BY NINTENDO",!Text_WaitAndBreak
+    %TextPrintSpace($09)
+    db "LICENSED BY NINTENDO"
+    %TextWaitAndBreak()
 PrologueText:
     ; Prologue Text
-    db !Text_RepositionCursor
-    dw $0280
+    %TextRepositionCursor($0280)
     ;Wise men tell a tale late...
     db $20,$20,$57,$69,$73,$65,$20
     db $6D,$65,$6E,$20,$E7,$97,$74,$61   ;02BB8F|        |006E65;  
@@ -500,7 +498,7 @@ GrassValley:
 ChildsSecretPassage:
     db "Child`",!Dict_s,"secret passage",$00
 TreasureRoom:
-    db !Text_PrintSpace,$06,"Treasure room",$00
+    %TextPrintSpace($06) : db "Treasure room",$00
 ChiefsRoom:
     db !Dict_the,!Dict_village,"Chief`",!Dict_s,"room",$00
 UndergroundCastleWest:
@@ -508,21 +506,21 @@ UndergroundCastleWest:
 UndergroundCastleEast:
     db "Underground Castle, east",$00
 LeosPaintings1:
-    db !Text_PrintSpace,$05,"Leo`",!Dict_s,"Paintings",$00
+    %TextPrintSpace($05) : db "Leo`",!Dict_s,"Paintings",$00
 LeosPaintings2:
-    db !Text_PrintSpace,$05,"Leo`",!Dict_s,"Paintings",$00
+    %TextPrintSpace($05) : db "Leo`",!Dict_s,"Paintings",$00
 LeosPaintings3:
-    db !Text_PrintSpace,$05,"Leo`",!Dict_s,"Paintings",$00
+    %TextPrintSpace($05) : db "Leo`",!Dict_s,"Paintings",$00
 TulipsDream:
-    db !Text_PrintSpace,$06,"Tulip`",!Dict_s,"Dream",$00
+    %TextPrintSpace($06) : db "Tulip`",!Dict_s,"Dream",$00
 LeosPaintings4:
-    db !Text_PrintSpace,$05,"Leo`",!Dict_s,"Paintings",$00
+    %TextPrintSpace($05) : db "Leo`",!Dict_s,"Paintings",$00
 MonsterInThePaintings:
     db "Monster ",!Dict_in,!Dict_the,"paintings",$00
 TrialRoom:
-    db !Text_PrintSpace,$07,"Trial room",$00
+    %TextPrintSpace($07) : db "Trial room",$00
 LisasDream:
-    db !Text_PrintSpace,$06,"Lisa`",!Dict_s,"dream",$00
+    %TextPrintSpace($06) : db "Lisa`",!Dict_s,"dream",$00
 Unknown01:
     db $00
 Unknown02:
@@ -534,39 +532,39 @@ Unknown04:
 Unknown05:
     db $00
 GreenwoodShrine:
-    db !Text_PrintSpace,$04,"GreenWood Shrine",$00
+    %TextPrintSpace($04) : db "GreenWood Shrine",$00
 Greenwood:
-    db !Text_PrintSpace,$03,"Woods ",!Dict_of,"GreenWood",$00
+    %TextPrintSpace($03) : db "Woods ",!Dict_of,"GreenWood",$00
 MoleHole:
-    db !Text_PrintSpace,$06,!Dict_A,"mole`",!Dict_s,"hole",$00
+    %TextPrintSpace($06) : db !Dict_A,"mole`",!Dict_s,"hole",$00
 SquirrelsHouse:
-    db !Text_PrintSpace,$03,!Dict_A,"squirrel`",!Dict_s,"house",$00
+    %TextPrintSpace($03) : db !Dict_A,"squirrel`",!Dict_s,"house",$00
 SquirrelExchange:
     db " Squirrel, ",!Dict_the,"Exchanger",$00
 LostsideMarsh:
-    db !Text_PrintSpace,$03,"Lostside, ",!Dict_a,"marsh",$00
+    %TextPrintSpace($03) : db "Lostside, ",!Dict_a,"marsh",$00
 WaterShrine1:
-    db !Text_PrintSpace,$06,"Water Shrine",$00
+    %TextPrintSpace($06) : db "Water Shrine",$00
 WaterShrine2:
-    db !Text_PrintSpace,$06,"Water Shrine",$00
+    %TextPrintSpace($06) : db "Water Shrine",$00
 WaterShrine3:
-    db !Text_PrintSpace,$06,"Water Shrine",$00
+    %TextPrintSpace($06) : db "Water Shrine",$00
 FireShrine1:
-    db !Text_PrintSpace,$07,"Fire Shrine",$00
+    %TextPrintSpace($07) : db "Fire Shrine",$00
 FireShrine2:
-    db !Text_PrintSpace,$07,"Fire Shrine",$00
+    %TextPrintSpace($07) : db "Fire Shrine",$00
 FireShrine3:
-    db !Text_PrintSpace,$07,"Fire Shrine",$00
+    %TextPrintSpace($07) : db "Fire Shrine",$00
 LightShrine1:
-    db !Text_PrintSpace,$06,"Light Shrine",$00
+    %TextPrintSpace($06) : db "Light Shrine",$00
 LightShrine2:
-    db !Text_PrintSpace,$06,"Light Shrine",$00
+    %TextPrintSpace($06) : db "Light Shrine",$00
 TombStatue:
     db " Tomb ",!Dict_of,!Dict_a,"stone statue",$00
 BirdsDream:
-    db !Text_PrintSpace,$06,"Bird`",!Dict_s,"Dream",$00
+    %TextPrintSpace($06) : db "Bird`",!Dict_s,"Dream",$00
 StumpsDream:
-    db !Text_PrintSpace,$05,"Stump`",!Dict_s,"Dream",$00
+    %TextPrintSpace($05) : db "Stump`",!Dict_s,"Dream",$00
 Unknown06:
     db $00
 Unknown07:
@@ -574,29 +572,29 @@ Unknown07:
 Unknown08:
     db $00
 StEllesShrine:
-    db !Text_PrintSpace,$04,"St. Elles Shrine",$00
+    %TextPrintSpace($04) : db "St. Elles Shrine",$00
 SeabedSanc:
     db "  ",!Dict_The,"Seabed Sanctuary",$00
 Seabed1:
     db " ",!Dict_The,"Seabed ",!Dict_of,"St. Elles",$00
 SecretCave1:
-    db !Text_PrintSpace,$04,!Dict_The,"Secret Cave",$00
+    %TextPrintSpace($04) : db !Dict_The,"Secret Cave",$00
 SecretCave2:
-    db !Text_PrintSpace,$04,!Dict_The,"Secret Cave",$00
+    %TextPrintSpace($04) : db !Dict_The,"Secret Cave",$00
 DolphinsDream:
-    db !Text_PrintSpace,$03,!Dict_A,"dolphin`",!Dict_s,"dream",$00
+    %TextPrintSpace($03) : db !Dict_A,"dolphin`",!Dict_s,"dream",$00
 Southerta:
-    db !Text_PrintSpace,$08,"Southerta",$00
+    %TextPrintSpace($08) : db "Southerta",$00
 Rockbird:
     db " Shore reef ",!Dict_of,"Rockbird",$00
 Durean:
-    db !Text_PrintSpace,$08,"Durean",$00
+    %TextPrintSpace($08) : db "Durean",$00
 Blester:
-    db !Text_PrintSpace,$08,"Blester",$00
+    %TextPrintSpace($08) : db "Blester",$00
 GhostShip:
-    db !Text_PrintSpace,$06,!Dict_A,"ghost ship",$00
+    %TextPrintSpace($06) : db !Dict_A,"ghost ship",$00
 ServasDream:
-    db !Text_PrintSpace,$06,"Servas` dream",$00
+    %TextPrintSpace($06) : db "Servas` dream",$00
 Seabed2:
     db " ",!Dict_The,"Seabed ",!Dict_of,"St. Elles",$00
 Unknown09:
@@ -620,21 +618,21 @@ SoulMountainHouse:
 NorthSlope:
     db "  Mountain, North-slope",$00
 AuroraRidge:
-    db !Text_PrintSpace,$05,"Aurora`",!Dict_s,"Ridge",$00
+    %TextPrintSpace($05) : db "Aurora`",!Dict_s,"Ridge",$00
 OldMansDream:
-    db !Text_PrintSpace,$03,"An old man`",!Dict_s,"dream",$00
+    %TextPrintSpace($03) : db "An old man`",!Dict_s,"dream",$00
 LunePassage:
-    db !Text_PrintSpace,$04,!Dict_A,"passage ",!Dict_to,"Lune",$00
+    %TextPrintSpace($04) : db !Dict_A,"passage ",!Dict_to,"Lune",$00
 LakeLune:
     db "  Underground lake,Lune",$00
 MushroomsDream:
-    db !Text_PrintSpace,$03,!Dict_A,"mushroom`",!Dict_s,"dream",$00
+    %TextPrintSpace($03) : db !Dict_A,"mushroom`",!Dict_s,"dream",$00
 Poseidon:
-    db !Text_PrintSpace,$08,"Poseidon",$00
+    %TextPrintSpace($08) : db "Poseidon",$00
 MountainTop:
     db !Dict_The,"top "!Dict_of,"Snow Mountain"
 IceHill:
-    db !Text_PrintSpace,$07,"An ice hill",$00
+    %TextPrintSpace($07) : db "An ice hill",$00
 Laynole:
     db "  Ice field ",!Dict_of,"Laynole"
 Unknown16:
@@ -656,29 +654,29 @@ Unknown23:
 LaboratoryShrine:
     db "  ",!Dict_The,"Laboratory Shrine"
 LeosLab1:
-    db !Text_PrintSpace,$04,"Leo`",!Dict_s,"Laboratory",$00
+    %TextPrintSpace($04) : db "Leo`",!Dict_s,"Laboratory",$00
 LeosLab2:
-    db !Text_PrintSpace,$04,"Leo`",!Dict_s,"Laboratory",$00
+    %TextPrintSpace($04) : db "Leo`",!Dict_s,"Laboratory",$00
 Attic:
-    db !Text_PrintSpace,$08,"An attic",$00
+    %TextPrintSpace($08) : db "An attic",$00
 MiceNest:
-    db !Text_PrintSpace,$07,!Dict_A,"mice nest",$00
+    %TextPrintSpace($07) : db !Dict_A,"mice nest",$00
 CatsDream:
-    db !Text_PrintSpace,$06,!Dict_A,"cat`",!Dict_s,"dream",$00
+    %TextPrintSpace($06) : db !Dict_A,"cat`",!Dict_s,"dream",$00
 LabBasement1:
     " Basement ",!Dict_of,"Laboratory",$00
 LabBasement2:
     " Basement ",!Dict_of,"Laboratory",$00
 PowerPlant:
-    db !Text_PrintSpace,$07,"power plant",$00
+    %TextPrintSpace($07) : db "power plant",$00
 TinDoll:
-    db !Text_PrintSpace,$08,"Tin Doll",$00
+    %TextPrintSpace($08) : db "Tin Doll",$00
 ADream11:
-    db !Text_PrintSpace,$08,!Dict_A,"dream 1",$00
+    %TextPrintSpace($08) : db !Dict_A,"dream 1",$00
 ModelTown1:
-    db !Text_PrintSpace,$05,"Model ",!Dict_of,!Dict_a,"town",$00
+    %TextPrintSpace($05) : db "Model ",!Dict_of,!Dict_a,"town",$00
 ModelTown2:
-    db !Text_PrintSpace,$05,"Model ",!Dict_of,!Dict_a,"town",$00
+    %TextPrintSpace($05) : db "Model ",!Dict_of,!Dict_a,"town",$00
 Unknown24:
     db $00
 Unknown25:
@@ -698,25 +696,25 @@ MagriddCastleShrine:
 MagriddCastle:
     db " Castle ",!Dict_of,!Dict_King,"Magridd",$00
 TortureChamber:
-    db !Text_PrintSpace,$03,!Dict_The,"torture chamber",$00
+    %TextPrintSpace($03) : db !Dict_The,"torture chamber",$00
 CastleBasement1:
     db " Basement ",!Dict_of,!Dict_the,"castle",$00
 CastleBasement2:
     db " Basement ",!Dict_of,!Dict_the,"castle",$00
 ADream12:
-    db !Text_PrintSpace,$08,!Dict_A,"dream 1",$00
+    %TextPrintSpace($08) : db !Dict_A,"dream 1",$00
 LeftTower1:
-    db !Text_PrintSpace,$05,!Dict_The,"left tower",$00
+    %TextPrintSpace($05) : db !Dict_The,"left tower",$00
 LeftTower2:
-    db !Text_PrintSpace,$05,!Dict_The,"left tower",$00
+    %TextPrintSpace($05) : db !Dict_The,"left tower",$00
 Prison:
-    db !Text_PrintSpace,$08,!Dict_A,"prison",$00
+    %TextPrintSpace($08) : db !Dict_A,"prison",$00
 RightTower1:
-    db !Text_PrintSpace,$05,!Dict_The,"right tower",$00
+    %TextPrintSpace($05) : db !Dict_The,"right tower",$00
 RightTower2:
-    db !Text_PrintSpace,$05,!Dict_The,"right tower",$00
+    %TextPrintSpace($05) : db !Dict_The,"right tower",$00
 RightTower3:
-    db !Text_PrintSpace,$05,!Dict_The,"right tower",$00
+    %TextPrintSpace($05) : db !Dict_The,"right tower",$00
 CorridorDock:
     db " ",!Dict_A,"corridor ",!Dict_to,!Dict_the,"dock",$00
 AirshipDock:
@@ -724,7 +722,7 @@ AirshipDock:
 AirshipDeck:
     db " ",!Dict_The,"deck ",!Dict_for,!Dict_an,"airship",$00
 SoldiersDream:
-    db !Text_PrintSpace,$04,!Dict_A,"soldier`",!Dict_s,"dream",$00
+    %TextPrintSpace($04) : db !Dict_A,"soldier`",!Dict_s,"dream",$00
 Unknown31:
     db $00
 Unknown32:
@@ -736,13 +734,13 @@ Unknown34:
 EvilWorldShrine:
     db "  ",!Dict_The,"Evil World Shrine",$00
 WorldOfEvil1:
-    db !Text_PrintSpace,$06,"World ",!Dict_of,"Evil",$00
+    %TextPrintSpace($06) : db "World ",!Dict_of,"Evil",$00
 WorldOfEvil2:
-    db !Text_PrintSpace,$06,"World ",!Dict_of,"Evil",$00
+    %TextPrintSpace($06) : db "World ",!Dict_of,"Evil",$00
 DazzlingSpace:
-    db !Text_PrintSpace,$05,"Dazzling Space",$00
+    %TextPrintSpace($05) : db "Dazzling Space",$00
 DeathtollsShrine:
-    db !Text_PrintSpace,$03,"Deathtoll`",!Dict_s,"Shrine",$00
+    %TextPrintSpace($03) : db "Deathtoll`",!Dict_s,"Shrine",$00
 BattleWithDeathtoll:
     db "  Battle ",!Dict_with,"Deathtoll",$00
 Unknown35:
@@ -754,50 +752,40 @@ assert pc() == $90CF02
 
 ;Menu Options
 YesNoPrompt:
-    db !Text_RepositionCursor
-    dw $0288
-    db !Text_DrawTextBox,$04,$04
+    %TextRepositionCursor($0288)
+    %TextDrawTextBox($04,$04)
     db " Yes",!Text_CR,!Text_CR
     db " No"
-    db !Text_RepositionCursor
-    dw $030A
-    db !Text_WaitAndBreak
+    %TextRepositionCursor($030A)
+    %TextWaitAndBreak()
 OnlyYesPrompt:
-    db !Text_RepositionCursor
-    dw $0308
-    db !Text_DrawTextBox,$04,$02
+    %TextRepositionCursor($0308)
+    %TextDrawTextBox($04,$02)
     db " Yes"
-    db !Text_RepositionCursor
-    dw $038A
-    db !Text_WaitAndBreak
+    %TextRepositionCursor($038A)
+    %TextWaitAndBreak()
 RecordMoveQuitPrompt:
-    db !Text_RepositionCursor
-    dw $0208
-    db !Text_DrawTextBox,$07,$06
+    %TextRepositionCursor($0208)
+    %TextDrawTextBox($07,$06)
     db " Record",!Text_CR,!Text_CR
     db " Move ",!Text_CR,!Text_CR
     db " Quit"
-    db !Text_RepositionCursor
-    dw $028A
-    db !Text_WaitAndBreak
+    %TextRepositionCursor($028A)
+    %TextWaitAndBreak()
 RecordQuitPrompt:
-    db !Text_RepositionCursor
-    dw $0288
-    db !Text_DrawTextBox,$07,$04
+    %TextRepositionCursor($0288)
+    %TextDrawTextBox($07,$04)
     db " Record",!Text_CR,!Text_CR
     db " Quit"
-    db !Text_RepositionCursor
-    dw $030A
-    db !Text_WaitAndBreak
+    %TextRepositionCursor($030A)
+    %TextWaitAndBreak()
 StayGoBackPrompt:
-    db !Text_RepositionCursor
-    dw $0288
-    db !Text_DrawTextBox,$08,$04
+    %TextRepositionCursor($0288)
+    %TextDrawTextBox($08,$04)
     db " Stay",!Text_CR,!Text_CR
     db " Go back"
-    db !Text_RepositionCursor
-    dw $030A
-    db !Text_WaitAndBreak
+    %TextRepositionCursor($030A)
+    %TextWaitAndBreak()
 
 assert pc() == $90CF74
 InventoryPointers:
@@ -1099,31 +1087,25 @@ Queen: ;TODO: rename to Queen Magridd
 ; Status Screen Text
 assert pc() == $90D53E
 PrintSwordStatsBox:
-    db !Text_RepositionCursor
-    dw $0408
-    db !Text_DrawTextBox,$16,$08
-    db !Text_RepositionCursor
-    dw $04AA
+    %TextRepositionCursor($0408)
+    %TextDrawTextBox($16,$08)
+    db %TextRepositionCursor($04AA)
     db "Lev:"
-    db !Text_RepositionCursor
-    dw $050A
+    %TextRepositionCursor($050A)
     db "Strength:"
-    db !Text_WaitAndBreak
+    %TextWaitAndBreak()
 
 PrintArmorStatsBox:
-    db !Text_RepositionCursor
-    dw $0408
-    db !Text_DrawTextBox,$16,$08
-    db !Text_RepositionCursor
-    dw $050A
+    %TextRepositionCursor($0408)
+    %TextDrawTextBox($16,$08)
+    %TextRepositionCursor($050A)
     db "Defence :"
-    db !Text_WaitAndBreak
+    %TextWaitAndBreak()
 
 PrintEmptyStatsBox: ;Probably used for magic and item descriptions
-    db !Text_RepositionCursor
-    dw $0408
-    db !Text_DrawTextBox,$16,$08
-    db !Text_WaitAndBreak
+    %TextRepositionCursor($0408)
+    %TextDrawTextBox($16,$08)
+    %TextWaitAndBreak()
 
 
 ;Status Screen Description Pointers:
@@ -1173,812 +1155,563 @@ ItemStatusPointers:
     ;db $CF,$E0, $DA,$E0, $E5,$E0, $F0,$E0
 
 NullItemStatsText:
-    db !Text_RepositionCursor
-    dw $0408
-    db !Text_DrawTextBox,$16,$08
-    db !Text_WaitAndBreak
+    %TextRepositionCursor($0408)
+    %TextDrawTextBox($16,$08)
+    %TextWaitAndBreak()
 
 ; Weapon Stats Text
 SwordOfLifeStatsText:
-    db !Text_RepositionCursor
-    dw $048A
-    !Text_TableLookup
-    dw InventoryPointers, InventoryPointerIndexes_LifeSword ;$E12C
-    db !Text_RepositionCursor
-    dw $04B2
-    db !Text_PrintDecimal
-    db $02
-    dw SwordRequiredLevelTable_LifeSword ;$E1CE
-    db !Text_RepositionCursor
-    dw $051E
-    db !Text_UnknownCmd, $26
-    dw SwordPowerTable_LifeSword ;$E1AD
-    db !Text_RepositionCursor
-    dw $058A
+    %TextRepositionCursor($048A)
+    %TextTableLookup(InventoryPointers, InventoryPointerIndexes_LifeSword)
+    %TextRepositionCursor($04B2)
+    %TextPrintDecimal($02, SwordRequiredLevelTable_LifeSword)
+    %TextRepositionCursor($051E)
+    %TextRepeatChar($26, SwordPowerTable_LifeSword)
+    %TextRepositionCursor($058A)
     db !Dict_A,"sword ",!Dict_from,!Dict_the,!Text_CR,!Text_CR
     db "Master. "
-    db !Text_WaitAndBreak
+    %TextWaitAndBreak()
 
 PsychoSwordStatsText:
-    db !Text_RepositionCursor
-    dw $048A
-    !Text_TableLookup
-    dw InventoryPointers, InventoryPointerIndexes_PsychoSword ; $E12E
-    db !Text_RepositionCursor
-    dw $04B2
-    db !Text_PrintDecimal
-    db $02
-    dw SwordRequiredLevelTable_PsychoSword ;$E1D0
-    db !Text_RepositionCursor
-    dw $051E
-    db !Text_UnknownCmd, $26
-    dw SwordPowerTable_PsychoSword ;$E1AE
-    db !Text_RepositionCursor
-    dw $058A
+    %TextRepositionCursor($048A)
+    %TextTableLookup(InventoryPointers, InventoryPointerIndexes_PsychoSword)
+    %TextRepositionCursor($04B2)
+    %TextPrintDecimal($02, SwordRequiredLevelTable_PsychoSword)
+    %TextRepositionCursor($051E)
+    %TextRepeatChar($26, SwordPowerTable_PsychoSword)
+    %TextRepositionCursor($058A)
     db "Invincible ",!Dict_monsters,!Text_CR,!Text_CR
     db "temporarily paralyzed."
-    db !Text_WaitAndBreak
+    %TextWaitAndBreak()
 
 CriticalSwordStatsText:
-    db !Text_RepositionCursor
-    dw $048A
-    !Text_TableLookup
-    dw InventoryPointers, InventoryPointerIndexes_CriticalSword ;$E130
-    db !Text_RepositionCursor
-    dw $04B2
-    db !Text_PrintDecimal
-    db $02
-    dw SwordRequiredLevelTable_CriticalSword ;$E1D2
-    db !Text_RepositionCursor
-    dw $051E
-    db !Text_UnknownCmd, $26
-    dw SwordPowerTable_CriticalSword ;$E1AF
-    db !Text_RepositionCursor
-    dw $058A
+    %TextRepositionCursor($048A)
+    %TextTableLookup(InventoryPointers, InventoryPointerIndexes_CriticalSword)
+    %TextRepositionCursor($04B2)
+    %TextPrintDecimal($02, SwordRequiredLevelTable_CriticalSword)
+    %TextRepositionCursor($051E)
+    %TextRepeatChar($26, SwordPowerTable_CriticalSword)
+    %TextRepositionCursor($058A)
     db "Defeats ",!Dict_monsters,!Text_CR,!Text_CR
     db "at once. "
-    db !Text_WaitAndBreak
+    %TextWaitAndBreak()
 
 LuckyBladeStatsText:
-    db !Text_RepositionCursor
-    dw $048A
-    !Text_TableLookup
-    dw InventoryPointers, InventoryPointerIndexes_LuckyBlade ;$E132
-    db !Text_RepositionCursor
-    dw $04B2
-    db !Text_PrintDecimal
-    db $02
-    dw SwordRequiredLevelTable_LuckyBlade ;$E1D4
-    db !Text_RepositionCursor
-    dw $051E
-    db !Text_UnknownCmd, $26
-    dw SwordPowerTable_LuckyBlade ;$E1B0
-    db !Text_RepositionCursor
-    dw $058A
+    %TextRepositionCursor($048A)
+    %TextTableLookup(InventoryPointers, InventoryPointerIndexes_LuckyBlade)
+    %TextRepositionCursor($04B2)
+    %TextPrintDecimal($02, SwordRequiredLevelTable_LuckyBlade)
+    %TextRepositionCursor($051E)
+    %TextRepeatChar($26, SwordPowerTable_LuckyBlade)
+    %TextRepositionCursor($058A)
     db !Dict_The,"change ",!Dict_of,"getting ",!Text_CR,!Text_CR
     db "larger GEMs increases."
-    db !Text_WaitAndBreak
+    %TextWaitAndBreak()
 
 ZantetsuSwordStatsText:
-    db !Text_RepositionCursor
-    dw $048A
-    !Text_TableLookup
-    dw InventoryPointers, InventoryPointerIndexes_ZantetsuSword ; $E134
-    db !Text_RepositionCursor
-    dw $04B2
-    db !Text_PrintDecimal
-    db $02
-    dw SwordRequiredLevelTable_ZantetsuSword ;$E1D6
-    db !Text_RepositionCursor
-    dw $051E
-    db !Text_UnknownCmd, $26
-    dw SwordPowerTable_ZantetsuSword ;$E1B1
-    db !Text_RepositionCursor
-    dw $058A
+    %TextRepositionCursor($048A)
+    %TextTableLookup(InventoryPointers, InventoryPointerIndexes_ZantetsuSword)
+    %TextRepositionCursor($04B2)
+    %TextPrintDecimal($02, SwordRequiredLevelTable_ZantetsuSword)
+    %TextRepositionCursor($051E)
+    %TextRepeatChar($26, SwordPowerTable_ZantetsuSword)
+    %TextRepositionCursor($058A)
     db "Defeats ",!Dict_monsters,!Dict_with,!Text_CR,!Text_CR
     db "special armor. "
-    db !Text_WaitAndBreak
+    %TextWaitAndBreak()
 
 SpiritSwordStatsText:
-    db !Text_RepositionCursor
-    dw $048A
-    !Text_TableLookup
-    dw InventoryPointers, InventoryPointerIndexes_SpiritSword ;$E136
-    db !Text_RepositionCursor
-    dw $04B2
-    db !Text_PrintDecimal
-    db $02
-    dw SwordRequiredLevelTable_SpiritSword ;$E1D8
-    db !Text_RepositionCursor
-    dw $051E
-    db !Text_UnknownCmd, $26
-    dw SwordPowerTable_SpiritSword ;$E1B2
-    db !Text_RepositionCursor
-    dw $058A
+    %TextRepositionCursor($048A)
+    %TextTableLookup(InventoryPointers, InventoryPointerIndexes_SpiritSword)
+    %TextRepositionCursor($04B2)
+    %TextPrintDecimal($02, SwordRequiredLevelTable_SpiritSword)
+    %TextRepositionCursor($051E)
+    %TextRepeatChar($26, SwordPowerTable_SpiritSword)
+    %TextRepositionCursor($058A)
     db "Defeats ",!Dict_the,"<spirit> ",!Text_CR,!Text_CR
     db "type monsters. "
-    db !Text_WaitAndBreak
+    %TextWaitAndBreak()
 
 RecoverySwordStatsText:
-    db !Text_RepositionCursor
-    dw $048A
-    !Text_TableLookup
-    dw InventoryPointers, InventoryPointerIndexes_RecoverySword ;$E138
-    db !Text_RepositionCursor
-    dw $04B2
-    db !Text_PrintDecimal
-    db $02
-    dw SwordRequiredLevelTable_RecoverySword ;$E1DA 
-    db !Text_RepositionCursor
-    dw $051E
-    db !Text_UnknownCmd, $26
-    dw SwordPowerTable_RecoverySword ;$E1B3
-    db !Text_RepositionCursor
-    dw $058A
+    %TextRepositionCursor($048A)
+    %TextTableLookup(InventoryPointers, InventoryPointerIndexes_RecoverySword)
+    %TextRepositionCursor($04B2)
+    %TextPrintDecimal($02, SwordRequiredLevelTable_RecoverySword)
+    %TextRepositionCursor($051E)
+    %TextRepeatChar($26, SwordPowerTable_RecoverySword)
+    %TextRepositionCursor($058A)
     db "HP ",!Dict_will,!Dict_be,"filled when",!Text_CR,!Text_CR
     db "monster ",!Dict_is,"defeated. "
-    db !Text_WaitAndBreak
+    %TextWaitAndBreak()
 
 TheSoulBladeStatsText:
-    db !Text_RepositionCursor
-    dw $048A
-    !Text_TableLookup
-    dw InventoryPointers, InventoryPointerIndexes_SoulBlade ;$E13A
-    db !Text_RepositionCursor
-    dw $04B2
-    db !Text_PrintDecimal
-    db $02
-    dw SwordRequiredLevelTable_SoulBlade ;$E1DC
-    db !Text_RepositionCursor
-    dw $051E
-    db !Text_UnknownCmd, $26
-    dw SwordPowerTable_SoulBlade ;$E1B4
-    db !Text_RepositionCursor
-    dw $058A
+    %TextRepositionCursor($048A)
+    %TextTableLookup(InventoryPointers, InventoryPointerIndexes_SoulBlade)
+    %TextRepositionCursor($04B2)
+    %TextPrintDecimal($02, SwordRequiredLevelTable_SoulBlade)
+    %TextRepositionCursor($051E)
+    %TextRepeatChar($26, SwordPowerTable_SoulBlade)
+    %TextRepositionCursor($058A)
     db !Dict_The,"strongest sword ",!Text_CR,!Text_CR
     db !Dict_you,"may use. "
-    db !Text_WaitAndBreak
+    %TextWaitAndBreak()
 
 ; Armot Stats Text
 IronArmorStatsText:
-    db !Text_RepositionCursor
-    dw $048A
-    db !Text_TableLookup
-    dw InventoryPointers, InventoryPointerIndexes_IronArmor ;$E13C
-    db !Text_RepositionCursor
-    dw $051E
-    db !Text_UnknownCmd, $27
-    dw ArmorDefenseTable_IronArmor ;$E1C6
-    db !Text_RepositionCursor
-    dw $058A
+    %TextRepositionCursor($048A)
+    %TextTableLookup(InventoryPointers, InventoryPointerIndexes_IronArmor)
+    %TextRepositionCursor($051E)
+    %TextRepeatChar($27, ArmorDefenseTable_IronArmor)
+    %TextRepositionCursor($058A)
     db "Your defense power ",!Text_CR,!Text_CR
     db "becomes stronger. "
-    db !Text_WaitAndBreak
+    %TextWaitAndBreak()
 
 IceArmorStatsText:
-    db !Text_RepositionCursor
-    dw $048A
-    db !Text_TableLookup
-    dw InventoryPointers, InventoryPointerIndexes_IceArmor ;$E13E
-    db !Text_RepositionCursor
-    dw $051E
-    db !Text_UnknownCmd, $27
-    dw ArmorDefenseTable_IceArmor ;$E1C7
-    db !Text_RepositionCursor
-    dw $058A
+    %TextRepositionCursor($048A)
+    %TextTableLookup(InventoryPointers, InventoryPointerIndexes_IceArmor)
+    %TextRepositionCursor($051E)
+    %TextRepeatChar($27, ArmorDefenseTable_IceArmor)
+    %TextRepositionCursor($058A)
     db !Dict_you,!Dict_can,"cross ",!Text_CR,!Text_CR
     db "fire without damage. "
-    db !Text_WaitAndBreak
+    %TextWaitAndBreak()
 
 BubbleArmorStatsText:
-    db !Text_RepositionCursor
-    dw $048A
-    db !Text_TableLookup
-    dw InventoryPointers, InventoryPointerIndexes_BubbleArmor ;$E140
-    db !Text_RepositionCursor
-    dw $051E
-    db !Text_UnknownCmd, $27
-    dw ArmorDefenseTable_BubbleArmor ;$E1C8
-    db !Text_RepositionCursor
-    dw $058A
+    %TextRepositionCursor($048A)
+    %TextTableLookup(InventoryPointers, InventoryPointerIndexes_BubbleArmor)
+    %TextRepositionCursor($051E)
+    %TextRepeatChar($27, ArmorDefenseTable_BubbleArmor)
+    %TextRepositionCursor($058A)
     db "Enables ",!Dict_you,!Dict_to,!Dict_walk,!Text_CR,!Text_CR
     db "under ",!Dict_the,"sea. "
-    db !Text_WaitAndBreak
+    %TextWaitAndBreak()
 
 MagicArmorStatsText:
-    db !Text_RepositionCursor
-    dw $048A
-    db !Text_TableLookup
-    dw InventoryPointers, InventoryPointerIndexes_MagicArmor ;$E142
-    db !Text_RepositionCursor
-    dw $051E
-    db !Text_UnknownCmd, $27
-    dw ArmorDefenseTable_MagicArmor ;$E1C9
-    db !Text_RepositionCursor
-    dw $058A
+    %TextRepositionCursor($048A)
+    %TextTableLookup(InventoryPointers, InventoryPointerIndexes_MagicArmor)
+    %TextRepositionCursor($051E)
+    %TextRepeatChar($27, ArmorDefenseTable_MagicArmor)
+    %TextRepositionCursor($058A)
     db "Cuts ",!Dict_the,"necessary ",!Text_CR,!Text_CR
     db "GEMs ",!Dict_in,"half. "
-    db !Text_WaitAndBreak
+    %TextWaitAndBreak()
 
 MysticArmorStatsText:
-    db !Text_RepositionCursor
-    dw $048A
-    db !Text_TableLookup
-    dw InventoryPointers, InventoryPointerIndexes_MysticArmor ;$E144
-    db !Text_RepositionCursor
-    dw $051E
-    db !Text_UnknownCmd, $27
-    dw ArmorDefenseTable_MysticArmor ;$E1CA
-    db !Text_RepositionCursor
-    dw $058A
+    %TextRepositionCursor($048A)
+    %TextTableLookup(InventoryPointers, InventoryPointerIndexes_MysticArmor)
+    %TextRepositionCursor($051E)
+    %TextRepeatChar($27, ArmorDefenseTable_MysticArmor)
+    %TextRepositionCursor($058A)
     db "Invincible ",!Dict_for,"longer ",!Text_CR,!Text_CR
     db "period ",!Dict_of,"time. "
-    db !Text_WaitAndBreak
+    %TextWaitAndBreak()
 
 LightArmorStatsText:
-    db !Text_RepositionCursor
-    dw $048A
-    db !Text_TableLookup
-    dw InventoryPointers, InventoryPointerIndexes_LightArmor ;$E146
-    db !Text_RepositionCursor
-    dw $051E
-    db !Text_UnknownCmd, $27
-    dw ArmorDefenseTable_LightArmor ;$E1CB
-    db !Text_RepositionCursor
-    dw $058A
+    %TextRepositionCursor($048A)
+    %TextTableLookup(InventoryPointers, InventoryPointerIndexes_LightArmor)
+    %TextRepositionCursor($051E)
+    %TextRepeatChar($27, ArmorDefenseTable_LightArmor)
+    %TextRepositionCursor($058A)
     db "Receive no damage from",!Text_CR,!Text_CR
     db "weaker monsters. "
-    db !Text_WaitAndBreak
+    %TextWaitAndBreak()
 
 ElementalMailStatsText:
-    db !Text_RepositionCursor
-    dw $048A
-    db !Text_TableLookup
-    dw InventoryPointers, InventoryPointerIndexes_ElementalArmor ;$E148
-    db !Text_RepositionCursor
-    dw $051E
-    db !Text_UnknownCmd, $27
-    dw ArmorDefenseTable_ElementalArmor ;$E1CC
-    db !Text_RepositionCursor
-    dw $058A
+    %TextRepositionCursor($048A)
+    %TextTableLookup(InventoryPointers, InventoryPointerIndexes_ElementalArmor)
+    %TextRepositionCursor($051E)
+    %TextRepeatChar($27, ArmorDefenseTable_ElementalArmor)
+    %TextRepositionCursor($058A)
     db "Protects ",!Text_HeroName,!Text_CR,!Text_CR
     db !Dict_from,!Dict_the,"damage zones."
-    db !Text_WaitAndBreak
+    %TextWaitAndBreak()
 
 SoulArmorStatsText:
-    db !Text_RepositionCursor
-    dw $048A
-    db !Text_TableLookup
-    dw InventoryPointers, InventoryPointerIndexes_SoulArmor ;$E14A
-    db !Text_RepositionCursor
-    dw $051E
-    db !Text_UnknownCmd, $27
-    dw ArmorDefenseTable_SoulArmor ;$E1CD
-    db !Text_RepositionCursor
-    dw $058A
+    %TextRepositionCursor($048A)
+    %TextTableLookup(InventoryPointers, InventoryPointerIndexes_SoulArmor)
+    %TextRepositionCursor($051E)
+    %TextRepeatChar($27, ArmorDefenseTable_SoulArmor)
+    %TextRepositionCursor($058A)
     db "Enables ",!Dict_you,!Dict_to,!Dict_walk,"in",!Text_CR,!Text_CR
     db "space. "
-    db !Text_WaitAndBreak
+    %TextWaitAndBreak()
 
 ; Magic Stats Text
 FlameBallStatsText:
-    db !Text_RepositionCursor
-    dw $048A
-    db !Text_TableLookup
-    dw InventoryPointers, InventoryPointerIndexes_FlameBall ;$E14C
-    db !Text_RepositionCursor
-    dw $050A
+    %TextRepositionCursor($048A)
+    %TextTableLookup(InventoryPointers, InventoryPointerIndexes_FlameBall)
+    %TextRepositionCursor($050A)
     db !Dict_Necessary,"GEM : 4",!Text_CR,!Text_CR
     db "Shoots ",!Dict_a,"fireball ",!Dict_in,!Text_CR,!Text_CR
     db !Dict_one,"direction. "
-    db !Text_WaitAndBreak
+    %TextWaitAndBreak()
 
 LightArrowStatsText:
-    db !Text_RepositionCursor
-    dw $048A
-    db !Text_TableLookup
-    dw InventoryPointers, InventoryPointerIndexes_LightArrow ;$E14E
-    db !Text_RepositionCursor
-    dw $050A
+    %TextRepositionCursor($048A)
+    %TextTableLookup(InventoryPointers, InventoryPointerIndexes_LightArrow)
+    %TextRepositionCursor($050A)
     db !Dict_Necessary,"GEM : 8",!Text_CR,!Text_CR
     db "Shoots <light> arrows ",!Text_CR,!Text_CR
     db !Dict_in,!Dict_all,"directions. "
-    db !Text_WaitAndBreak
+    %TextWaitAndBreak()
 
 MagicFlareStatsText:
-    db !Text_RepositionCursor
-    dw $048A
-    db !Text_TableLookup
-    dw InventoryPointers, InventoryPointerIndexes_MagicFlare ;$E150
-    db !Text_RepositionCursor
-    dw $050A
+    %TextRepositionCursor($048A)
+    %TextTableLookup(InventoryPointers, InventoryPointerIndexes_MagicFlare)
+    %TextRepositionCursor($050A)
     db !Dict_Necessary,"GEM : 8",!Text_CR,!Text_CR
     db "Power ",!Dict_is,"collected ",!Text_CR,!Text_CR
     db "while button pressed. "
-    db !Text_WaitAndBreak
+    %TextWaitAndBreak()
 
 RotatorStatsText:
-    db !Text_RepositionCursor
-    dw $048A
-    db !Text_TableLookup
-    dw InventoryPointers, InventoryPointerIndexes_Rotator ;$E152
-    db !Text_RepositionCursor
-    dw $050A
+    %TextRepositionCursor($048A)
+    %TextTableLookup(InventoryPointers, InventoryPointerIndexes_Rotator)
+    %TextRepositionCursor($050A)
     db !Dict_Necessary,"GEM : 1",!Text_CR,!Text_CR
     db !Dict_A,"light ring ",!Dict_will,!Text_CR,!Text_CR
     db "rotate ",!Dict_around,"you. "
-    db !Text_WaitAndBreak
+    %TextWaitAndBreak()
 
 SparkBombStatsText:
-    db !Text_RepositionCursor
-    dw $048A
-    db !Text_TableLookup
-    dw InventoryPointers, InventoryPointerIndexes_SparkBomb ;$E154
-    db !Text_RepositionCursor
-    dw $050A
+    %TextRepositionCursor($048A)
+    %TextTableLookup(InventoryPointers, InventoryPointerIndexes_SparkBomb)
+    %TextRepositionCursor($050A)
     db !Dict_Necessary,"GEM : 8",!Text_CR,!Text_CR
     db "Mines ",!Dict_are,"laid, ",!Dict_will,!Text_CR,!Text_CR
     db "explode soon after. "
-    db !Text_WaitAndBreak
+    %TextWaitAndBreak()
 
 FlamePillarStatsText:
-    db !Text_RepositionCursor
-    dw $048A
-    db !Text_TableLookup
-    dw InventoryPointers, InventoryPointerIndexes_FlamePillar ;$E156
-    db !Text_RepositionCursor
-    dw $050A
+    %TextRepositionCursor($048A)
+    %TextTableLookup(InventoryPointers, InventoryPointerIndexes_FlamePillar)
+    %TextRepositionCursor($050A)
     db !Dict_Necessary,"GEM : 20",!Text_CR,!Text_CR
     db "Pillars ",!Dict_of,"fire ",!Dict_will,!Text_CR,!Text_CR
     db "rise ",!Dict_around,"you. "
-    db !Text_WaitAndBreak
+    %TextWaitAndBreak()
 
 TornadoStatsText:
-    db !Text_RepositionCursor
-    dw $048A
-    db !Text_TableLookup
-    dw InventoryPointers, InventoryPointerIndexes_Tornado ;$E158
-    db !Text_RepositionCursor
-    dw $050A
+    %TextRepositionCursor($048A)
+    %TextTableLookup(InventoryPointers, InventoryPointerIndexes_Tornado)
+    %TextRepositionCursor($050A)
     db !Dict_Necessary,"GEM : 8",!Text_CR,!Text_CR
     db "Magical Tornado ",!Dict_will,!Text_CR,!Text_CR
     db "come. "
-    db !Text_WaitAndBreak
+    %TextWaitAndBreak()
 
 PhoenixStatsText:
-    db !Text_RepositionCursor
-    dw $048A
-    db !Text_TableLookup
-    dw InventoryPointers, InventoryPointerIndexes_Phoenix ;$E15A
-    db !Text_RepositionCursor
-    dw $050A
+    %TextRepositionCursor($048A)
+    %TextTableLookup(InventoryPointers, InventoryPointerIndexes_Phoenix)
+    %TextRepositionCursor($050A)
     db !Dict_Necessary,"GEM : 2",!Text_CR,!Text_CR
     db "Phoenix ",!Dict_will,"join ",!Text_CR,!Text_CR
     db !Text_HeroName,"."
-    db !Text_WaitAndBreak
+    %TextWaitAndBreak()
 
 ; Item Stats Text
 GoatsFoodStatsText:
-    db !Text_RepositionCursor
-    dw $048A
-    db !Text_TableLookup
-    dw InventoryPointers, InventoryPointerIndexes_GoatsFood ;$E15C
-    db !Text_RepositionCursor
-    dw $050A
+    %TextRepositionCursor($048A)
+    %TextTableLookup(InventoryPointers, InventoryPointerIndexes_GoatsFood)
+    %TextRepositionCursor($050A)
     db "Goat`"!Dict_s,"food ",!Dict_from,!Dict_the,!Text_CR,!Text_CR
     db "tool shop. "
-    db !Text_WaitAndBreak
+    %TextWaitAndBreak()
 
 HarpStringStatsText:
-    db !Text_RepositionCursor
-    dw $048A
-    db !Text_TableLookup
-    dw InventoryPointers, InventoryPointerIndexes_HarpString ;$E15E
-    db !Text_RepositionCursor
-    dw $050A
+    %TextRepositionCursor($048A)
+    %TextTableLookup(InventoryPointers, InventoryPointerIndexes_HarpString)
+    %TextRepositionCursor($050A)
     db "Harp String"!Dict_of,"singer."
-    db !Text_WaitAndBreak
+    %TextWaitAndBreak()
 
 APassStatsText:
-    db !Text_RepositionCursor
-    dw $048A
-    db !Text_TableLookup
-    dw InventoryPointers, InventoryPointerIndexes_APass ;$E160
-    db !Text_RepositionCursor
-    dw $050A
+    %TextRepositionCursor($048A)
+    %TextTableLookup(InventoryPointers, InventoryPointerIndexes_APass)
+    %TextRepositionCursor($050A)
     db !Dict_A,"pass "!Dict_made,"by ",!Dict_the,!Text_CR,!Text_CR
     db "children ",!Dict_of,"Grass ",!Text_CR,!Text_CR
     db "Valley. "
-    db !Text_WaitAndBreak
+    %TextWaitAndBreak()
 
 DreamRodStatsText:
-    db !Text_RepositionCursor
-    dw $048A
-    db !Text_TableLookup
-    dw InventoryPointers, InventoryPointerIndexes_DreamRod ;$E162
-    db !Text_RepositionCursor
-    dw $050A
+    %TextRepositionCursor($048A)
+    %TextTableLookup(InventoryPointers, InventoryPointerIndexes_DreamRod)
+    %TextRepositionCursor($050A)
     db !Dict_A,!Dict_strange,"stick ",!Dict_that,!Text_CR,!Text_CR
     db "enables ",!Dict_you,!Dict_to,"look ",!Text_CR,!Text_CR
     db "into ",!Dict_a,"dream. "
-    db !Text_WaitAndBreak
+    %TextWaitAndBreak()
 
 LeosBrushStatsText:
-    db !Text_RepositionCursor
-    dw $048A
-    db !Text_TableLookup
-    dw InventoryPointers, InventoryPointerIndexes_LeosBrush ;$E164
-    db !Text_RepositionCursor
-    dw $050A
+    %TextRepositionCursor($048A)
+    %TextTableLookup(InventoryPointers, InventoryPointerIndexes_LeosBrush)
+    %TextRepositionCursor($050A)
     db !Dict_The,"paintbrush ",!Dict_used,"to",!Text_CR,!Text_CR
     db "paint ",!Dict_the,"picture: ",!Text_CR,!Text_CR
     db "<",!Dict_The,"World ",!Dict_of,"Evil>. "
-    db !Text_WaitAndBreak
+    %TextWaitAndBreak()
 
 TurbosLeavesStatsText:
-    db !Text_RepositionCursor
-    dw $048A
-    db !Text_TableLookup
-    dw InventoryPointers, InventoryPointerIndexes_TurbosLeaves ;$E166
-    db !Text_RepositionCursor
-    dw $050A
+    %TextRepositionCursor($048A)
+    %TextTableLookup(InventoryPointers, InventoryPointerIndexes_TurbosLeaves)
+    %TextRepositionCursor($050A)
     db "Turbo`",!Dict_s,"symbol. Anyone",!Text_CR,!Text_CR
     db !Dict_with,!Dict_this,!Dict_is,"accepted ",!Text_CR,!Text_CR
     db "as Turbo`",!Dict_s,"messenger."
-    db !Text_WaitAndBreak
+    %TextWaitAndBreak()
 
 MolesRibbonStatsText:
-    db !Text_RepositionCursor
-    dw $048A
-    db !Text_TableLookup
-    dw InventoryPointers, InventoryPointerIndexes_MolesRibbon ;$E168
-    db !Text_RepositionCursor
-    dw $050A
+    %TextRepositionCursor($048A)
+    %TextTableLookup(InventoryPointers, InventoryPointerIndexes_MolesRibbon)
+    %TextRepositionCursor($050A)
     db !Dict_A,"ribbon ",!Dict_that,"Monmo, a",!Text_CR,!Text_CR
     db "mole, ",!Dict_used,!Dict_to,!Dict_be,"fond ",!Text_CR,!Text_CR
     db !Dict_of,!Dict_when,"she ",!Dict_was,"alive."
-    db !Text_WaitAndBreak
+    %TextWaitAndBreak()
 
 BigPearlStatsText:
-    db !Text_RepositionCursor
-    dw $048A
-    db !Text_TableLookup
-    dw InventoryPointers, InventoryPointerIndexes_BigPearl ;$E16A
-    db !Text_RepositionCursor
-    dw $050A
+    %TextRepositionCursor($048A)
+    %TextTableLookup(InventoryPointers, InventoryPointerIndexes_BigPearl)
+    %TextRepositionCursor($050A)
     db !Dict_A,"beautiful pearl ",!Text_CR,!Text_CR
     db !Dict_that,!Dict_can,!Dict_be,!Dict_found,!Dict_in,!Text_CR,!Text_CR
     db "coral reef. "
-    db !Text_WaitAndBreak
+    %TextWaitAndBreak()
 
 MermaidsTearsStatsText:
-    db !Text_RepositionCursor
-    dw $048A
-    db !Text_TableLookup
-    dw InventoryPointers, InventoryPointerIndexes_MermaidsTears ;$E16C
-    db !Text_RepositionCursor
-    dw $050A
+    %TextRepositionCursor($048A)
+    %TextTableLookup(InventoryPointers, InventoryPointerIndexes_MermaidsTears)
+    %TextRepositionCursor($050A)
     db !Dict_will,"turn magma into ",!Text_CR,!Text_CR
     db "stone. "
-    db !Text_WaitAndBreak
+    %TextWaitAndBreak()
 
 MushroomShoesStatsText:
-    db !Text_RepositionCursor
-    dw $048A
-    db !Text_TableLookup
-    dw InventoryPointers, InventoryPointerIndexes_MushroomShoes ;$E16E
-    db !Text_RepositionCursor
-    dw $050A
+    %TextRepositionCursor($048A)
+    %TextTableLookup(InventoryPointers, InventoryPointerIndexes_MushroomShoes)
+    %TextRepositionCursor($050A)
     db !Dict_The,!Dict_snail,"goo enables ",!Text_CR,!Text_CR
     db !Dict_you,!Dict_to,!Dict_walk,!Dict_on,"ice ",!Text_CR,!Text_CR
     db "without slipping. "
-    db !Text_WaitAndBreak
+    %TextWaitAndBreak()
 
 AirshipKeyStatsText:
-    db !Text_RepositionCursor
-    dw $048A
-    db !Text_TableLookup
-    dw InventoryPointers, InventoryPointerIndexes_AirshipKey ;$E170
-    db !Text_RepositionCursor
-    dw $050A
+    %TextRepositionCursor($048A)
+    %TextTableLookup(InventoryPointers, InventoryPointerIndexes_AirshipKey)
+    %TextRepositionCursor($050A)
     db "Key ",!Dict_to,"Airship. Plug  ",!Text_CR,!Text_CR
     db "into ",!Dict_a,"keyhole located",!Text_CR,!Text_CR
     db !Dict_somewhere,!Dict_on,!Dict_the,"ship."
-    db !Text_WaitAndBreak
+    %TextWaitAndBreak()
 
 ThunderRingStatsText:
-    db !Text_RepositionCursor
-    dw $048A
-    db !Text_TableLookup
-    dw InventoryPointers, InventoryPointerIndexes_ThunderRing ;$E172
-    db !Text_RepositionCursor
-    dw $050A
+    %TextRepositionCursor($048A)
+    %TextTableLookup(InventoryPointers, InventoryPointerIndexes_ThunderRing)
+    %TextRepositionCursor($050A)
     db !Dict_If,!Dict_you,"touch ",!Dict_a,!Text_CR,!Text_CR
     db "lightning pyramid, ",!Text_CR,!Text_CR
     db "lightning ",!!Dict_will,"strike."
-    db !Text_WaitAndBreak
+    %TextWaitAndBreak()
 
 DeliciousSeedsStatsText:
-    db !Text_RepositionCursor
-    dw $048A
-    db !Text_TableLookup
-    dw InventoryPointers, InventoryPointerIndexes_DeliciousSeeds ;$E174
-    db !Text_RepositionCursor
-    dw $050A
+    %TextRepositionCursor($048A)
+    %TextTableLookup(InventoryPointers, InventoryPointerIndexes_DeliciousSeeds)
+    %TextRepositionCursor($050A)
     db "Favorite Seeds, ",!Text_CR,!Text_CR
     db "exchange ",!Dict_for,"item ",!Text_CR,!Text_CR
     db !Dict_with,!Dict_the,"exchanger. "
-    db !Text_WaitAndBreak
+    %TextWaitAndBreak()
 
 ActinidiaLeavesStatsText:
-    db !Text_RepositionCursor
-    dw $048A
-    db !Text_TableLookup
-    dw InventoryPointers, InventoryPointerIndexes_ActinidiaLeaves ;$E176
-    db !Text_RepositionCursor
-    dw $050A
+    %TextRepositionCursor($048A)
+    %TextTableLookup(InventoryPointers, InventoryPointerIndexes_ActinidiaLeaves)
+    %TextRepositionCursor($050A)
     db "Emits ",!Dict_a,"peculiar scent",!Text_CR,!Text_CR
     db !Dict_that,"attracts cats.  "
-    db !Text_WaitAndBreak
+    %TextWaitAndBreak()
 
 DoorKeyStatsText:
-    db !Text_RepositionCursor
-    dw $048A
-    db !Text_TableLookup
-    dw InventoryPointers, InventoryPointerIndexes_DoorKey ;$E178
-    db !Text_RepositionCursor
-    dw $050A
+    %TextRepositionCursor($048A)
+    %TextTableLookup(InventoryPointers, InventoryPointerIndexes_DoorKey)
+    %TextRepositionCursor($050A)
     db !Dict_This,"key ",!Dict_will,"open the",!Text_CR,!Text_CR
     db "door "!Dict_to,!Dict_the,!Text_CR,!Text_CR
     db "laboratory. "
-    db !Text_WaitAndBreak
+    %TextWaitAndBreak()
 
 PlatinumCardStatsText:
-    db !Text_RepositionCursor
-    dw $048A
-    db !Text_TableLookup
-    dw InventoryPointers, InventoryPointerIndexes_PlatinumCard ;$E17A
-    db !Text_RepositionCursor
-    dw $050A
+    %TextRepositionCursor($048A)
+    %TextTableLookup(InventoryPointers, InventoryPointerIndexes_PlatinumCard)
+    %TextRepositionCursor($050A)
     db !Dict_You,"may enter ",!Dict_the,"left",!Text_CR,!Text_CR
     db "tower ",!Dict_in,!Dict_the,!Dict_Magridd,!Text_CR,!Text_CR
     db "Castle. "
-    db !Text_WaitAndBreak
+    %TextWaitAndBreak()
 
 VipCardStatsText:
-    db !Text_RepositionCursor
-    dw $048A
-    db !Text_TableLookup
-    dw InventoryPointers, InventoryPointerIndexes_VipCard ;$E17C
-    db !Text_RepositionCursor
-    dw $050A
+    %TextRepositionCursor($048A)
+    %TextTableLookup(InventoryPointers, InventoryPointerIndexes_VipCard)
+    %TextRepositionCursor($050A)
     db !Dict_You,"may ",!Dict_go,"wherever ",!Text_CR,!Text_CR
     db !Dict_You,"wish within ",!Dict_the,!Text_CR,!Text_CR
     db !Dict_Magridd,"Castle. "
-    db !Text_WaitAndBreak
+    %TextWaitAndBreak()
 
 EmblemAStatsText:
-    db !Text_RepositionCursor
-    dw $048A
-    db !Text_TableLookup
-    dw InventoryPointers, InventoryPointerIndexes_EmblemA ;$E17E
+    %TextRepositionCursor($048A)
+    %TextTableLookup(InventoryPointers, InventoryPointerIndexes_EmblemA)
 SharedEmblemText:
-    db !Text_RepositionCursor
-    dw $050A
+    %TextRepositionCursor($050A)
     db !Dict_If,!Dict_you,"collect 8 ",!Dict_of,!Text_CR,!Text_CR
     db "these, ",!Dict_you,!Dict_will,"become",!Text_CR,!Text_CR
     db !Dict_an,"expert at magic. "
-    db !Text_WaitAndBreak
+    %TextWaitAndBreak()
 
 EmblemBStatsText:
-    db !Text_RepositionCursor
-    dw $048A
-    db !Text_TableLookup
-    dw InventoryPointers, InventoryPointerIndexes_EmblemB ;$E180
-    db !Text_ChangeStreamPtr
-    dw SharedEmblemText
+    %TextRepositionCursor($048A)
+    %TextTableLookup(InventoryPointers, InventoryPointerIndexes_EmblemB)
+    %TextChangeStreamPtr(SharedEmblemText)
 
 EmblemCStatsText:
-    db !Text_RepositionCursor
-    dw $048A
-    db !Text_TableLookup
-    dw InventoryPointers, InventoryPointerIndexes_EmblemC ;$E182
-    db !Text_ChangeStreamPtr
-    dw SharedEmblemText
+    %TextRepositionCursor($048A)
+    %TextTableLookup(InventoryPointers, InventoryPointerIndexes_EmblemC)
+    %TextChangeStreamPtr(SharedEmblemText)
 
 EmblemDStatsText:
-    db !Text_RepositionCursor
-    dw $048A
-    db !Text_TableLookup
-    dw InventoryPointers, InventoryPointerIndexes_EmblemD ;$E184
-    db !Text_ChangeStreamPtr
-    dw SharedEmblemText
+    %TextRepositionCursor($048A)
+    %TextTableLookup(InventoryPointers, InventoryPointerIndexes_EmblemD)
+    %TextChangeStreamPtr(SharedEmblemText)
 
 EmblemEStatsText:
-    db !Text_RepositionCursor
-    dw $048A
-    db !Text_TableLookup
-    dw InventoryPointers, InventoryPointerIndexes_EmblemE ;$E186
-    db !Text_ChangeStreamPtr
-    dw SharedEmblemText
+    %TextRepositionCursor($048A)
+    %TextTableLookup(InventoryPointers, InventoryPointerIndexes_EmblemE)
+    %TextChangeStreamPtr(SharedEmblemText)
 
 EmblemFStatsText:
-    db !Text_RepositionCursor
-    dw $048A
-    db !Text_TableLookup
-    dw InventoryPointers, InventoryPointerIndexes_EmblemF ;$E188
-    db !Text_ChangeStreamPtr
-    dw SharedEmblemText
+    %TextRepositionCursor($048A)
+    %TextTableLookup(InventoryPointers, InventoryPointerIndexes_EmblemF)
+    %TextChangeStreamPtr(SharedEmblemText)
 
 EmblemGStatsText:
-    db !Text_RepositionCursor
-    dw $048A
-    db !Text_TableLookup
-    dw InventoryPointers, InventoryPointerIndexes_EmblemG ;$E18A
-    db !Text_ChangeStreamPtr
-    dw SharedEmblemText
+    %TextRepositionCursor($048A)
+    %TextTableLookup(InventoryPointers, InventoryPointerIndexes_EmblemG)
+    %TextChangeStreamPtr(SharedEmblemText)
 
 EmblemHStatsText:
-    db !Text_RepositionCursor
-    dw $048A
-    db !Text_TableLookup
-    dw InventoryPointers, InventoryPointerIndexes_EmblemH ;$E18C
-    db !Text_ChangeStreamPtr
-    dw SharedEmblemText
+    %TextRepositionCursor($048A)
+    %TextTableLookup(InventoryPointers, InventoryPointerIndexes_EmblemH)
+    %TextChangeStreamPtr(SharedEmblemText)
 
 RedHotMirrorStatsText:
-    db !Text_RepositionCursor
-    dw $048A
-    db !Text_TableLookup
-    dw InventoryPointers, InventoryPointerIndexes_RedHotMirror ;$E18E
+    %TextRepositionCursor($048A)
+    %TextTableLookup(InventoryPointers, InventoryPointerIndexes_RedHotMirror)
 SharedRedHotText:
-    db !Text_RepositionCursor
-    dw $050A
+    %TextRepositionCursor($050A)
     db !Dict_If,!Dict_you,"obtain ",!Dict_all,!Text_CR,!Text_CR
     db "three symbols, ",!Dict_the,!Text_CR,!Text_CR
     db "Phoenix ",!Dict_will,"join you."
-    db !Text_WaitAndBreak
+    %TextWaitAndBreak()
 
 RedHotBallStatsText:
-    db !Text_RepositionCursor
-    dw $048A
-    db !Text_TableLookup
-    dw InventoryPointers, InventoryPointerIndexes_RedHotBall ;$E190
-    db !Text_ChangeStreamPtr
-    dw SharedRedHotText
+    %TextRepositionCursor($048A)
+    %TextTableLookup(InventoryPointers, InventoryPointerIndexes_RedHotBall)
+    %TextChangeStreamPtr(SharedRedHotText)
 
 RedHotStickStatsText:
-    db !Text_RepositionCursor
-    dw $048A
-    db !Text_TableLookup
-    dw InventoryPointers, InventoryPointerIndexes_RedHotStick ;$E192
-    db !Text_ChangeStreamPtr
-    dw SharedRedHotText
+    %TextRepositionCursor($048A)
+    %TextTableLookup(InventoryPointers, InventoryPointerIndexes_RedHotStick)
+    %TextChangeStreamPtr(SharedRedHotText)
 
 PowerBraceletStatsText:
-    db !Text_RepositionCursor
-    dw $048A
-    db !Text_TableLookup
-    dw InventoryPointers, InventoryPointerIndexes_PowerBracelet ;$E194
-    db !Text_RepositionCursor
-    dw $050A
+    %TextRepositionCursor($048A)
+    %TextTableLookup(InventoryPointers, InventoryPointerIndexes_PowerBracelet)
+    %TextRepositionCursor($050A)
     db !Dict_If,!Dict_you,"equip ",!Dict_this,!Text_CR,!Text_CR
     db "item, ",!Dict_your,"attack ",!Text_CR,!Text_CR
     db "power ",!Dict_will,"double. "
-    db !Text_WaitAndBreak
+    %TextWaitAndBreak()
 
 ShieldBraceletStatsText:
-    db !Text_RepositionCursor
-    dw $048A
-    db !Text_TableLookup
-    dw InventoryPointers, InventoryPointerIndexes_ShieldBracelet ;$E196
-    db !Text_RepositionCursor
-    dw $050A
+    %TextRepositionCursor($048A)
+    %TextTableLookup(InventoryPointers, InventoryPointerIndexes_ShieldBracelet)
+    %TextRepositionCursor($050A)
     db "Will reduce ",!Dict_the,"amount",!Text_CR,!Text_CR
     db !Dict_of,"damage ",!Dict_received,!Text_CR,!Text_CR
     db !Dict_from,"enemies by 1/2. "
-    db !Text_WaitAndBreak
+    %TextWaitAndBreak()
 
 SuperBraceletStatsText:
-    db !Text_RepositionCursor
-    dw $048A
-    db !Text_TableLookup
-    dw InventoryPointers, InventoryPointerIndexes_SuperBracelet ;$E198
-    db !Text_RepositionCursor
-    dw $050A
+    %TextRepositionCursor($048A)
+    %TextTableLookup(InventoryPointers, InventoryPointerIndexes_SuperBracelet)
+    %TextRepositionCursor($050A)
     db "Your sword ",!Dict_and,"armor ",!Text_CR,!Text_CR
     db !Dict_will,"increase ",!Dict_in,!Text_CR,!Text_CR
     db "strength by 2. "
-    db !Text_WaitAndBreak
+    %TextWaitAndBreak()
 
 MedicalHerbStatsText:
-    db !Text_RepositionCursor
-    dw $048A
-    db !Text_TableLookup
-    dw InventoryPointers, InventoryPointerIndexes_MedicalHerb ;$E19A
-    db !Text_RepositionCursor
-    dw $050A
+    %TextRepositionCursor($048A)
+    %TextTableLookup(InventoryPointers, InventoryPointerIndexes_MedicalHerb)
+    %TextRepositionCursor($050A)
     db "Your HP ",!Dict_will,!Dict_be,!Text_CR,!Text_CR
     db "refilled if ",!Dict_your,"life ",!Text_CR,!Text_CR
     db "meter reaches 0. "
-    db !Text_WaitAndBreak
+    %TextWaitAndBreak()
 
 StrangeBottleStatsText:
-    db !Text_RepositionCursor
-    dw $048A
-    db !Text_TableLookup
-    dw InventoryPointers, InventoryPointerIndexes_StrangeBottle ;$E19C
-    db !Text_RepositionCursor
-    dw $050A
+    %TextRepositionCursor($048A)
+    %TextTableLookup(InventoryPointers, InventoryPointerIndexes_StrangeBottle)
+    %TextRepositionCursor($050A)
     db !Dict_You,!Dict_will,!Dict_not,"lose any ",!Text_CR,!Text_CR
     db "GEMs ",!Dict_should,!Dict_your,"life ",!Text_CR,!Text_CR
     db "meter reach " ;TODO: fix this to put "0. " in too.
-    db !Text_WaitAndBreak
+    %TextWaitAndBreak()
 
 BrownStoneStatsText:
-    db !Text_RepositionCursor
-    dw $048A
-    db !Text_TableLookup
-    dw InventoryPointers, InventoryPointerIndexes_BrownStone ;$E19E
+    %TextRepositionCursor($048A)
+    %TextTableLookup(InventoryPointers, InventoryPointerIndexes_BrownStone)
 SharedStonesText:
-    db !Text_RepositionCursor
-    dw $050A
+    %TextRepositionCursor($050A)
     db "World ",!Dict_of,"Evil",!Dict_will,!Text_CR,!Text_CR
     db "appear once ",!Dict_you,!Dict_have,!Text_CR,!Text_CR
     db "collected 6 ",!Dict_of,"these. "
-    db !Text_WaitAndBreak
+    %TextWaitAndBreak()
 
 GreenStoneStatsText:
-    db !Text_RepositionCursor
-    dw $048A
-    db !Text_TableLookup
-    dw InventoryPointers, InventoryPointerIndexes_GreenStone ;$E1A0
-    db !Text_ChangeStreamPtr
-    dw SharedStonesText
+    %TextRepositionCursor($048A)
+    %TextTableLookup(InventoryPointers, InventoryPointerIndexes_GreenStone)
+    %TextChangeStreamPtr(SharedStonesText)
 
 BlueStoneStatsText:
-    db !Text_RepositionCursor
-    dw $048A
-    db !Text_TableLookup
-    dw InventoryPointers, InventoryPointerIndexes_BlueStone ;$E1A2
-    db !Text_ChangeStreamPtr
-    dw SharedStonesText
+    %TextRepositionCursor($048A)
+    %TextTableLookup(InventoryPointers, InventoryPointerIndexes_BlueStone)
+    %TextChangeStreamPtr(SharedStonesText)
 
 SilverStoneStatsText:
-    db !Text_RepositionCursor
-    dw $048A
-    db !Text_TableLookup
-    dw InventoryPointers, InventoryPointerIndexes_SilverStone ;$E1A4
-    db !Text_ChangeStreamPtr
-    dw SharedStonesText
+    %TextRepositionCursor($048A)
+    %TextTableLookup(InventoryPointers, InventoryPointerIndexes_SilverStone)
+    %TextChangeStreamPtr(SharedStonesText)
 
 PurpleStoneStatsText:
-    db !Text_RepositionCursor
-    dw $048A
-    db !Text_TableLookup
-    dw InventoryPointers, InventoryPointerIndexes_PurpleStone ;$E1A6
-    db !Text_ChangeStreamPtr
-    dw SharedStonesText
+    %TextRepositionCursor($048A)
+    %TextTableLookup(InventoryPointers, InventoryPointerIndexes_PurpleStone)
+    %TextChangeStreamPtr(SharedStonesText)
 
 BlackStoneStatsText:
-    db !Text_RepositionCursor
-    dw $048A
-    db !Text_TableLookup
-    dw InventoryPointers, InventoryPointerIndexes_BlackStone ;$E1A8
-    db !Text_ChangeStreamPtr
-    dw SharedStonesText
+    %TextRepositionCursor($048A)
+    %TextTableLookup(InventoryPointers, InventoryPointerIndexes_BlackStone)
+    %TextChangeStreamPtr(SharedStonesText)
 
 MagicBellStatsText:
-    db !Text_RepositionCursor
-    dw $048A
-    db !Text_TableLookup
-    dw InventoryPointers, InventoryPointerIndexes_MagicBell ;$E1AA
-    db !Text_RepositionCursor
-    dw $050A
+    %TextRepositionCursor($048A)
+    %TextTableLookup(InventoryPointers, InventoryPointerIndexes_MagicBell)
+    %TextRepositionCursor($050A)
     db !Dict_You,!Dict_will,!Dict_be,"able ",!Dict_to,!Text_CR,!Text_CR
     db "cast magic without ",!Text_CR,!Text_CR
     db "using any GEMs. "
-    db !Text_WaitAndBreak
+    %TextWaitAndBreak()
 
 assert pc() == $90E12C ;TODO: remove assert once tables below made relocatable.
 ; Used as indexes into the inventory pointers table.

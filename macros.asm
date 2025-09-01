@@ -144,3 +144,88 @@ macro CopSetScriptAddrAndId(scriptAddress24, scriptId)
     dl <scriptAddress24>
     dw <scriptId>
 endmacro
+
+; Macros for Text engine commands
+macro TextWaitAndBreak()
+    db !Text_WaitAndBreak
+endmacro
+
+macro TextRepositionCursor(cursorPos)
+    db !Text_RepositionCursor : dw <cursorPos>
+endmacro
+
+macro TextQuickPrint(param)
+    db !Text_QuickPrint, <param>
+endmacro
+
+macro TextTextStyle(param)
+    db !Text_TextStyle : dw <param>
+endmacro
+
+macro TextPrintHealthBar(ptrCurrentHealth, ptrMaxHealth)
+    db !Text_PrintHealthBar : dw <ptrCurrentHealth>, <ptrMaxHealth>
+endmacro
+
+macro TextTableLookup(ptrTable, ptrIndex)
+    db !Text_TableLookup : dw <ptrTable>, <ptrIndex>
+endmacro
+
+macro TextPrintDecimal(numDigits, ptrBcdValue)
+    db !Text_PrintDecimal, <numDigits> : dw <ptrBcdValue>
+endmacro
+
+macro TextDrawTextBox(param1, param2)
+    db !Text_DrawTextBox, <param1>, <param2>
+endmacro
+
+macro TextUndrawTextBox(param)
+    db !Text_UndrawTextBox : dw <param>
+endmacro
+
+macro TextToggleSmallUiFont()
+    db !Text_ToggleSmallUiFont
+endmacro
+
+macro TextToggleSmallFont()
+    db !Text_ToggleSmallFont
+endmacro
+
+macro TextRepeatChar(char, ptrNumTimes)
+    db !Text_RepeatChar, <char> : dw <ptrNumTimes>
+endmacro
+
+macro TextBreak()
+    db !Text_Break
+endmacro
+
+macro TextCR()
+    db !Text_CR
+endmacro
+
+macro TextDelayAndContinue(numFrames)
+    db !Text_DelayAndContinue, <numFrames>
+endmacro
+
+macro TextToggleUnknown()
+    db !Text_ToggleUnknown
+endmacro
+
+macro TextStart()
+    db !Text_Start
+endmacro
+
+macro TextWaitBlinkCursor()
+    db !Text_WaitBlinkCursor
+endmacro
+
+macro TextWait()
+    db !Text_Wait
+endmacro
+
+macro TextChangeStreamPtr(newPos)
+    db !Text_ChangeStreamPtr : dw <newPos>
+endmacro
+
+macro TextPrintSpace(numSpace)
+    db !Text_PrintSpace, <numSpace>
+endmacro
