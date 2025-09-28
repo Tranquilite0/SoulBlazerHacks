@@ -159,7 +159,7 @@ macro TextQuickPrint(param)
 endmacro
 
 macro TextTextStyle(param)
-    db !Text_TextStyle : dw <param>
+    db !Text_TextStyle, <param>
 endmacro
 
 macro TextPrintHealthBar(ptrCurrentHealth, ptrMaxHealth)

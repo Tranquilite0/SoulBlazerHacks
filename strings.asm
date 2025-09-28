@@ -4,6 +4,7 @@
 ; Things in the table would be:
 ; AP icon regular, AP icon special, Nothing, Victory, ...?
 ;TODO: move all non-table lookup strings out of bank2?
+;TODO: move all strings into new bank.
 
 ; Labels for existing strings
 SoulOfMagician = $82C639

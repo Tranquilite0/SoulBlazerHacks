@@ -53,6 +53,8 @@ org !Bank1FFreeSpaceStart
     incsrc "npcscripts.bank1f.asm"
 assert pc() <= !Bank1FFreespaceEnd
 
+incsrc "newtextbank.asm"
+
 ; Standalone hacks
 incsrc "textspeed.asm"
 
