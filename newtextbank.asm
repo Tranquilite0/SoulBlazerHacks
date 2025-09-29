@@ -153,11 +153,12 @@ padbyte $FF
 pad $A0BB27
 ;TODO: Remove assert if possible
 assert pc() == $A0BB27
+;TODO: find pointers to these strings to allow easy relocation.
+;TODO: alternatively: insert TextChangeStreamPointer to relocate to other places.
 TitleScreenText:
     %TextToggleSmallUiFont()
     %TextRepositionCursor($04D6)
-    ;db "PUSH START",!Text_WaitAndBreak
-    db "TEST START",!Text_WaitAndBreak
+    db "PUSH START",!Text_WaitAndBreak
     %TextToggleSmallUiFont()
     %TextRepositionCursor($05C0)
     %TextPrintSpace($06)
@@ -166,454 +167,177 @@ TitleScreenText:
     %TextPrintSpace($09)
     db "LICENSED BY NINTENDO"
     %TextWaitAndBreak()
+
 PrologueText:
     ; Prologue Text ;TODO: clean up
     %TextRepositionCursor($0280)
-    ;db "  Wise men "
-    db "  TESTTEST "
-    db !Dict_tell
-    db !Dict_a
-    db "tale late "
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    db "  at night "
-    db !Dict_of
-    db !Dict_a
-    db "great "
-    db !Dict_King
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    db "  destroyed by "
-    db !Dict_the
-    db "temptation "
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    db "  "
-    db !Dict_of
-    db "evil. "
+    db "  Wise men ", !Dict_tell, !Dict_a, "tale late "
+    %TextCR() : %TextCR() : %TextCR()
+    db "  at night ", !Dict_of, !Dict_a, "great ", !Dict_King
+    %TextCR() : %TextCR() : %TextCR()
+    db "  destroyed by ", !Dict_the, "temptation "
+    %TextCR() : %TextCR() : %TextCR()
+    db "  ", !Dict_of, "evil. "
     %TextWaitAndBreak()
+
     %TextRepositionCursor($0280)
-    db "  "
-    db !Dict_The
-    db "Freil Empire, as it "
-    db !Dict_was
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    db "  "
-    db !Dict_called
-    db !Dict_in
-    db "those days, "
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    db "  "
-    db !Dict_was
-    db "ruled by "
-    db !Dict_a
-    db "powerful man, "
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    db "  "
-    db !Dict_King
-    db "Magridd. "
+    db "  ", !Dict_The, "Freil Empire, as it ", !Dict_was
+    %TextCR() : %TextCR() : %TextCR()
+    db "  ", !Dict_called, !Dict_in, "those days, "
+    %TextCR() : %TextCR() : %TextCR()
+    db "  ", !Dict_was, "ruled by ", !Dict_a, "powerful man, "
+    %TextCR() : %TextCR() : %TextCR()
+    db "  ", !Dict_King, "Magridd. "
     %TextWaitAndBreak()
+
     %TextRepositionCursor($0240)
-    db "  It seems most "
-    db !Dict_people
-    db "thought "
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    db "  "
-    db !Dict_the
-    db !Dict_King
-    db !Dict_was
-    db !Dict_a
-    db "fair "
-    db !Dict_and
-    db "kind "
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    db "  ruler. "
-    db !Dict_There
-    db !Dict_were
-    db "some, "
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    db "  however, "
-    db !Dict_who
-    db "felt "
-    db !Dict_the
-    db !Dict_King
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    db "  himself "
-    db !Dict_was
-    db "ruled by greed. "
+    db "  It seems most ", !Dict_people, "thought "
+    %TextCR() : %TextCR() : %TextCR()
+    db "  ", !Dict_the, !Dict_King, !Dict_was, !Dict_a, "fair ", !Dict_and, "kind "
+    %TextCR() : %TextCR() : %TextCR()
+    db "  ruler. ", !Dict_There, !Dict_were, "some, "
+    %TextCR() : %TextCR() : %TextCR()
+    db "  however, ", !Dict_who, "felt ", !Dict_the, !Dict_King
+    %TextCR() : %TextCR() : %TextCR()
+    db "  himself ", !Dict_was, "ruled by greed. "
     %TextWaitAndBreak()
+
     %TextRepositionCursor($0240)
-    db "  One day "
-    db !Dict_the
-    db !Dict_King
-    db "happened "
-    db !Dict_to
-    %TextCR()
-    %TextCR()
-    %TextCR()
+    db "  One day ", !Dict_the, !Dict_King, "happened ", !Dict_to
+    %TextCR() : %TextCR() : %TextCR()
     db "  overhear two guards talking "
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    db "  "
-    db !Dict_about
-    db !Dict_a
-    db "man named Dr.Leo. "
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    db "  Now Dr."
-    db !Dict_Leo
-    db !Dict_was
-    db "considered "
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    db "  by "
-    db !Dict_all
-    db !Dict_to
-    db !Dict_be
-    db !Dict_a
-    db "great inventor "
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    db "  "
-    db !Dict_and
-    db !Dict_a
-    db "genius. "
+    %TextCR() : %TextCR() : %TextCR()
+    db "  ", !Dict_about, !Dict_a, "man named Dr.Leo. "
+    %TextCR() : %TextCR() : %TextCR()
+    db "  Now Dr.", !Dict_Leo, !Dict_was, "considered "
+    %TextCR() : %TextCR() : %TextCR()
+    db "  by ", !Dict_all, !Dict_to, !Dict_be, !Dict_a, "great inventor "
+    %TextCR() : %TextCR() : %TextCR()
+    db "  ", !Dict_and, !Dict_a, "genius. "
     %TextWaitAndBreak()
+
     %TextRepositionCursor($0240)
     %TextPrintSpace($03)
-    db !Dict_The
-    db !Dict_King
-    db "stayed up "
-    db !Dict_many
-    %TextCR()
-    %TextCR()
-    %TextCR()
+    db !Dict_The, !Dict_King, "stayed up ", !Dict_many
+    %TextCR() : %TextCR() : %TextCR()
     %TextPrintSpace($03)
     db "nights wondering how he "
-    %TextCR()
-    %TextCR()
-    %TextCR()
+    %TextCR() : %TextCR() : %TextCR()
     %TextPrintSpace($03)
-    db !Dict_could
-    db !Dict_use
-    db !Dict_this
-    db "great "
-    %TextCR()
-    %TextCR()
-    %TextCR()
+    db !Dict_could, !Dict_use, !Dict_this, "great "
+    %TextCR() : %TextCR() : %TextCR()
     %TextPrintSpace($03)
-    db "inventor "
-    db !Dict_to
-    db "make him even "
-    %TextCR()
-    %TextCR()
-    %TextCR()
+    db "inventor ", !Dict_to, "make him even "
+    %TextCR() : %TextCR() : %TextCR()
     %TextPrintSpace($03)
     db "more wealthy."
     %TextWaitAndBreak()
+
     %TextRepositionCursor($0240)
-    db "  "
-    db !Dict_All
-    db !Dict_of
-    db !Dict_the
-    db "sudden "
-    db !Dict_the
-    db !Dict_King
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    db "  had "
-    db !Dict_an
-    db "idea. "
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    db "  He ordered his guards "
-    db !Dict_to
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    db "  capture Dr."
-    db !Dict_Leo
-    db !Dict_and
-    db "bring him "
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    db "  "
-    db !Dict_to
-    db !Dict_the
-    db "castle at once!"
+    db "  ", !Dict_All, !Dict_of, !Dict_the, "sudden ", !Dict_the, !Dict_King
+    %TextCR() : %TextCR() : %TextCR()
+    db "  had ", !Dict_an, "idea. "
+    %TextCR() : %TextCR() : %TextCR()
+    db "  He ordered his guards ", !Dict_to
+    %TextCR() : %TextCR() : %TextCR()
+    db "  capture Dr.", !Dict_Leo, !Dict_and, "bring him "
+    %TextCR() : %TextCR() : %TextCR()
+    db "  ", !Dict_to, !Dict_the, "castle at once!"
     %TextWaitAndBreak()
+
     %TextRepositionCursor($0300)
-    db "  Soon Dr."
-    db !Dict_Leo
-    db !Dict_was
-    db "brought "
-    db !Dict_to
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    db "  "
-    db !Dict_the
-    db "castle. "
+    db "  Soon Dr.", !Dict_Leo, !Dict_was, "brought ", !Dict_to
+    %TextCR() : %TextCR() : %TextCR()
+    db "  ", !Dict_the, "castle. "
     %TextWaitAndBreak()
+
     %TextRepositionCursor($0240)
-    db "  "
-    db !Dict_The
-    db !Dict_King
-    db "confined him "
-    db !Dict_in
-    db !Dict_a
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    db "  small room "
-    db !Dict_and
-    db "ordered him "
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    db "  "
-    db !Dict_to
-    db "invent "
-    db !Dict_a
-    db !Dict_machine
-    db !Dict_that
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    db "  would summon "
-    db !Dict_the
-    db !Dict_King
-    db !Dict_of
-    %TextCR()
-    %TextCR()
-    %TextCR()
+    db "  ", !Dict_The, !Dict_King, "confined him ", !Dict_in, !Dict_a
+    %TextCR() : %TextCR() : %TextCR()
+    db "  small room ", !Dict_and, "ordered him "
+    %TextCR() : %TextCR() : %TextCR()
+    db "  ", !Dict_to, "invent ", !Dict_a, !Dict_machine, !Dict_that
+    %TextCR() : %TextCR() : %TextCR()
+    db "  would summon ", !Dict_the, !Dict_King, !Dict_of
+    %TextCR() : %TextCR() : %TextCR()
     db "  evil, Deathtoll."
     %TextWaitAndBreak()
+
     %TextRepositionCursor($0240)
-    db "  Dr."
-    db !Dict_Leo
-    db "finally completed "
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    db "  "
-    db !Dict_the
-    db "machine. "
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    db "  "
-    db !Dict_The
-    db !Dict_King
-    db "instantly "
-    db !Dict_called
-    %TextCR()
-    %TextCR()
-    %TextCR()
+    db "  Dr.", !Dict_Leo, "finally completed "
+    %TextCR() : %TextCR() : %TextCR()
+    db "  ", !Dict_the, "machine. "
+    %TextCR() : %TextCR() : %TextCR()
+    db "  ", !Dict_The, !Dict_King, "instantly ", !Dict_called
+    %TextCR() : %TextCR() : %TextCR()
     db "  upon Deathtoll, hoping they "
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    db "  might strike "
-    db !Dict_a
-    db "deal."
+    %TextCR() : %TextCR() : %TextCR()
+    db "  might strike ", !Dict_a, "deal."
     %TextWaitAndBreak()
+
     %TextRepositionCursor($0240)
-    db "  After "
-    db !Dict_many
-    db "days "
-    db !Dict_the
-    db "deal "
-    db !Dict_was
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    db "  complete. "
-    db !Dict_The
-    db !Dict_King
-    db "would "
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    db "  bring Deathtoll "
-    db !Dict_all
-    db "living "
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    db "  creatures, "
-    db !Dict_and
-    db !Dict_in
-    db "return, "
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    db "  Deathtoll would "
-    db !Dict_give
-    db "him "
-    db !Dict_a
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    db "  gold piece "
-    db !Dict_for
-    db "each."
+    db "  After ", !Dict_many, "days ", !Dict_the, "deal ", !Dict_was
+    %TextCR() : %TextCR() : %TextCR()
+    db "  complete. ", !Dict_The, !Dict_King, "would "
+    %TextCR() : %TextCR() : %TextCR()
+    db "  bring Deathtoll ", !Dict_all, "living "
+    %TextCR() : %TextCR() : %TextCR()
+    db "  creatures, ", !Dict_and, !Dict_in, "return, "
+    %TextCR() : %TextCR() : %TextCR()
+    db "  Deathtoll would ", !Dict_give, "him ", !Dict_a
+    %TextCR() : %TextCR() : %TextCR()
+    db "  gold piece ", !Dict_for, "each."
     %TextWaitAndBreak()
+
     %TextRepositionCursor($0280)
-    db "  One by one, "
-    db !Dict_all
-    db "living "
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    db "  "
-    db !Dict_creatures
-    db "began "
-    db !Dict_to
-    db "disappear. "
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    db "  Soon "
-    db !Dict_the
-    db !Dict_world
-    db !Dict_was
-    db "completely "
-    %TextCR()
-    %TextCR()
-    %TextCR()
+    db "  One by one, ", !Dict_all, "living "
+    %TextCR() : %TextCR() : %TextCR()
+    db "  ", !Dict_creatures, "began ", !Dict_to, "disappear. "
+    %TextCR() : %TextCR() : %TextCR()
+    db "  Soon ", !Dict_the, !Dict_world, !Dict_was, "completely "
+    %TextCR() : %TextCR() : %TextCR()
     db "  empty. "
     %TextWaitAndBreak()
+
     %TextRepositionCursor($0280)
     %TextPrintSpace($03)
-    db "Two "
-    db !Dict_people
-    db !Dict_were
-    db !Dict_watching
-    %TextCR()
-    %TextCR()
-    %TextCR()
+    db "Two ", !Dict_people, !Dict_were, !Dict_watching
+    %TextCR() : %TextCR() : %TextCR()
     %TextPrintSpace($03)
-    db !Dict_this
-    db "catastrophe, "
-    %TextCR()
-    %TextCR()
-    %TextCR()
+    db !Dict_this, "catastrophe, "
+    %TextCR() : %TextCR() : %TextCR()
     %TextPrintSpace($03)
-    db !Dict_the
-    db "Master, "
-    db !Dict_and
-    db "you, "
-    %TextCR()
-    %TextCR()
-    %TextCR()
+    db !Dict_the, "Master, "
+    db !Dict_and, "you, "
+    %TextCR() : %TextCR() : %TextCR()
     %TextPrintSpace($03)
     db "his follower. "
     %TextWaitAndBreak()
+
     %TextRepositionCursor($0240)
-    db "  <"
-    db !Dict_The
-    db !Dict_King
-    db !Dict_was
-    db !Dict_very
-    db "foolish "
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    db "  "
-    db !Dict_to
-    db !Dict_be
-    db "tempted by evil, "
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    db "  however "
-    db !Dict_I
-    db !Dict_will
-    db !Dict_give
-    db "him "
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    db "  another chance. "
-    db !Dict_You
-    db "must "
-    db !Dict_go
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    db "  down "
-    db !Dict_to
-    db "Earth "
-    db !Dict_and
-    db "revive "
-    db !Dict_the
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    db "  World!> "
-    db !Dict_the
-    db "Master said. "
+    db "  <", !Dict_The, !Dict_King,!Dict_was, !Dict_very, "foolish "
+    %TextCR() : %TextCR() : %TextCR()
+    db "  ", !Dict_to, !Dict_be, "tempted by evil, "
+    %TextCR() : %TextCR() : %TextCR()
+    db "  however ", !Dict_I, !Dict_will, !Dict_give, "him "
+    %TextCR() : %TextCR() : %TextCR()
+    db "  another chance. ", !Dict_You, "must ", !Dict_go
+    %TextCR() : %TextCR() : %TextCR()
+    db "  down ", !Dict_to, "Earth ", !Dict_and, "revive ", !Dict_the
+    %TextCR() : %TextCR() : %TextCR()
+    db "  World!> ", !Dict_the, "Master said. "
     %TextWaitAndBreak()
+
     %TextRepositionCursor($0240)
-    db "  On "
-    db !Dict_a
-    db "ray "
-    db !Dict_of
-    db "light "
-    db !Dict_you
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    db "  descended "
-    db !Dict_to
-    db "Earth..... "
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    db "  .."
-    db !Dict_A
-    db "warrior sent "
-    db !Dict_to
-    db "revive "
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    db "  "
-    db !Dict_the
-    db "living "
-    db !Dict_and
-    db "punish evil. "
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    db "  "
-    db !Dict_A
-    db "SOUL BLAZER!!"
+    db "  On ", !Dict_a, "ray ", !Dict_of, "light ", !Dict_you
+    %TextCR() : %TextCR() : %TextCR()
+    db "  descended ", !Dict_to, "Earth..... "
+    %TextCR() : %TextCR() : %TextCR()
+    db "  ..", !Dict_A, "warrior sent ", !Dict_to, "revive "
+    %TextCR() : %TextCR() : %TextCR()
+    db "  ", !Dict_the, "living ", !Dict_and, "punish evil. "
+    %TextCR() : %TextCR() : %TextCR()
+    db "  ", !Dict_A, "SOUL BLAZER!!"
     %TextWaitAndBreak()
 
 EpilogueText:
@@ -630,154 +354,106 @@ EpilogueText:
     %TextRepositionCursor($03DC)
     %TextQuickPrint($08)
     %TextWaitAndBreak()
+
     %TextRepositionCursor($0240)
     db "  Grass Valley at sunset::: "
     %TextCR()
     %TextCR()
     %TextCR()
-    db "  "
-    db !Dict_The
-    db "glistening ocean::::::: "
+    db "  ", !Dict_The, "glistening ocean::::::: "
     %TextCR()
     %TextCR()
     %TextCR()
-    db "  "
-    db !Dict_The
-    db "restored "
-    db !Dict_world
-    db !Dict_was
+    db "  ", !Dict_The, "restored ", !Dict_world, !Dict_was
     %TextCR()
     %TextCR()
     %TextCR()
     db "  beautiful: "
     %TextWaitAndBreak()
+
     %TextRepositionCursor($02C0)
     %TextPrintSpace($03)
-    db !Dict_All
-    db !Dict_the
-    db !Dict_creatures
-    db "stopped "
+    db !Dict_All, !Dict_the, !Dict_creatures, "stopped "
     %TextCR()
     %TextCR()
     %TextCR()
     %TextPrintSpace($03)
-    db !Dict_and
-    db "looked at "
-    db !Dict_the
-    db "beauty "
+    db !Dict_and, "looked at ", !Dict_the, "beauty "
     %TextCR()
     %TextCR()
     %TextCR()
     %TextPrintSpace($03)
-    db !Dict_of
-    db !Dict_the
-    db "sunset:"
+    db !Dict_of, !Dict_the, "sunset:"
     %TextWaitAndBreak()
+
     %TextRepositionCursor($0240)
-    db "  One "
-    db !Dict_was
-    db !Dict_with
-    db "his child{ "
+    db "  One ", !Dict_was, !Dict_with, "his child{ "
     %TextCR()
     %TextCR()
     %TextCR()
-    db "  "
-    db !Dict_and
-    db !Dict_one
-    db !Dict_was
-    db !Dict_with
-    db "his friend{ "
+    db "  ", !Dict_and, !Dict_one, !Dict_was, !Dict_with, "his friend{ "
     %TextCR()
     %TextCR()
     %TextCR()
-    db "  "
-    db !Dict_creatures
-    db !Dict_were
-    db !Dict_in
-    db "awe "
-    db !Dict_of
+    db "  ", !Dict_creatures, !Dict_were, !Dict_in, "awe ", !Dict_of
     %TextCR()
     %TextCR()
     %TextCR()
-    db "  "
-    db !Dict_the
-    db "scenery:"
+    db "  ", !Dict_the, "scenery:"
     %TextWaitAndBreak()
+
     %TextRepositionCursor($02C0)
-    db "  Suddenly{ "
-    db !Dict_a
-    db "light ray shot "
+    db "  Suddenly{ ", !Dict_a, "light ray shot "
     %TextCR()
     %TextCR()
     %TextCR()
-    db "  into "
-    db !Dict_the
-    db "sky:"
+    db "  into ", !Dict_the, "sky:"
     %TextCR()
     %TextCR()
     %TextCR()
-    db "  However{ no "
-    db !Dict_one
-    db "noticed it:"
+    db "  However{ no ", !Dict_one, "noticed it:"
     %TextWaitAndBreak()
+
     %TextRepositionCursor($02C0)
     %TextPrintSpace($03)
-    db "Lisa "
-    db !Dict_was
-    db "standing "
-    db !Dict_all
-    db "by "
+    db "Lisa ", !Dict_was, "standing ", !Dict_all, "by "
     %TextCR()
     %TextCR()
     %TextCR()
     %TextPrintSpace($03)
     db "herself:"
     %TextWaitAndBreak()
+
     %TextRepositionCursor($0240)
     %TextPrintSpace($03)
-    db "She "
-    db !Dict_used
-    db !Dict_to
-    db "feel lonely "
+    db "She ", !Dict_used, !Dict_to, "feel lonely "
     %TextCR()
     %TextCR()
     %TextCR()
     %TextPrintSpace($03)
-    db !Dict_when
-    db "she saw "
-    db !Dict_the
-    db "sunset{ "
+    db !Dict_when, "she saw ", !Dict_the, "sunset{ "
     %TextCR()
     %TextCR()
     %TextCR()
     %TextPrintSpace($03)
-    db !Dict_but
-    db "now{ she thinks "
+    db !Dict_but, "now{ she thinks "
     %TextCR()
     %TextCR()
     %TextCR()
     %TextPrintSpace($03)
-    db "it "
-    db !Dict_is
-    db "beautiful:"
+    db "it ", !Dict_is, "beautiful:"
     %TextWaitAndBreak()
+
     %TextRepositionCursor($0240)
-    db "  Just "
-    db !Dict_like
-    db "her father changed "
+    db "  Just ", !Dict_like, "her father changed "
     %TextCR()
     %TextCR()
     %TextCR()
-    db "  impossible "
-    db !Dict_to
-    db "possible{ "
+    db "  impossible ", !Dict_to, "possible{ "
     %TextCR()
     %TextCR()
     %TextCR()
-    db "  Lisa feels she "
-    db !Dict_will
-    db !Dict_be
-    db "happy "
+    db "  Lisa feels she ", !Dict_will, !Dict_be, "happy "
     %TextCR()
     %TextCR()
     %TextCR()
@@ -794,10 +470,7 @@ MenuText:
     %TextRepositionCursor($0088)
     %TextDrawTextBox($16, $16)
     %TextRepositionCursor($014A)
-    db !Dict_Please
-    db "choose "
-    db !Dict_a
-    db "record"
+    db !Dict_Please, "choose ", !Dict_a, "record"
     %TextRepositionCursor($0218)
     db "Name"
     %TextRepositionCursor($0226)
@@ -874,27 +547,19 @@ MenuText:
     %TextRepositionCursor($0358)
     db "--------"
     %TextWaitAndBreak()
+
     %TextRepositionCursor($03C6)
-    db " "
-    db !Dict_A
-    db "B C D E F G H "
-    db !Dict_I
-    db "J K L M"
+    db " ", !Dict_A, "B C D E F G H ", !Dict_I, "J K L M"
     %TextCR()
     %TextCR()
     db " N O P Q R S T U V W X Y Z"
     %TextCR()
     %TextCR()
     %TextCR()
-    db " "
-    db !Dict_a
-    db "b c d e f g h i j k l m"
+    db " ", !Dict_a, "b c d e f g h i j k l m"
     %TextCR()
     %TextCR()
-    db " n o p q r "
-    db !Dict_s
-    db !Dict_t
-    db "u v w x y z"
+    db " n o p q r ", !Dict_s, !Dict_t, "u v w x y z"
     %TextCR()
     %TextCR()
     %TextCR()
@@ -902,23 +567,28 @@ MenuText:
     %TextCR()
     %TextCR()
     %TextWaitAndBreak()
+
     %TextUndrawTextBox($0184)
     %TextWaitAndBreak()
+
     %TextToggleSmallUiFont()
     %TextTextStyle($24)
     %TextRepositionCursor($0216)
     db "LEVEL UP !"
     %TextWaitAndBreak()
+
     %TextToggleSmallUiFont()
     %TextRepositionCursor($0216)
     db "@@@@@@@@@@"
     %TextWaitAndBreak()
+
     %TextRepositionCursor($0216)
     %TextPrintSpace($0A)
     %TextRepositionCursor($0186)
     %TextDrawTextBox($18, $02)
     %TextTableLookup($C7C2, $1C6A)
     %TextWaitAndBreak()
+
     %TextRepositionCursor($051E)
     %TextDrawTextBox($0C, $04)
     db "Monster Lair"
@@ -927,9 +597,11 @@ MenuText:
     db "Remaining "
     %TextPrintDecimal($02, $1B80)
     %TextWaitAndBreak()
+
     %TextUndrawTextBox($0186)
     %TextUndrawTextBox($051E)
     %TextWaitAndBreak()
+
     %TextRepositionCursor($0216)
     %TextPrintSpace($0A)
     %TextRepositionCursor($0186)
@@ -973,36 +645,44 @@ MenuText:
     db "Item  : "
     %TextTableLookup($CF74, $1B64)
     %TextWaitAndBreak()
+
     %TextUndrawTextBox($0186)
     %TextRepositionCursor($018A)
     %TextDrawTextBox($12, $13)
     %TextRepositionCursor($0258)
     db "Souls"
     %TextWaitAndBreak()
+
     %TextRepositionCursor($030E)
-    ;db "Soul@of@Magician@"
 SoulOfMagician:
+    ;db "Soul@of@Magician@"
     db "Soul@of@Magician",$00
     %TextWaitAndBreak()
+
     %TextRepositionCursor($03CE)
-    ;db "Soul@of@Light@@@@"
+
 SoulOfLight:
+    ;db "Soul@of@Light@@@@"
     db "Soul@of@Light",$00,$00,$00,$00
     %TextWaitAndBreak()
+
     %TextRepositionCursor($048E)
-    ;db "Soul@of@Shield@@@"
 SoulOfShield:
+    ;db "Soul@of@Shield@@@"
     db "Soul@of@Shield",$00,$00,$00
     %TextWaitAndBreak()
+
     %TextRepositionCursor($054E)
 SoulOfDetection:
     db "Soul@of@Detection"
     %TextWaitAndBreak()
+
     %TextRepositionCursor($060E)
-    ;db "Soul@of@Reality@@"
 SoulOfReality:
+    ;db "Soul@of@Reality@@"
     db "Soul@of@Reality",$00,$00
     %TextWaitAndBreak()
+
     %TextRepositionCursor($0088)
     %TextDrawTextBox($06, $0C)
     db "Weapon"
@@ -1030,6 +710,7 @@ SoulOfReality:
     db " Item: "
     %TextTableLookup($CF74, $1B64)
     %TextWaitAndBreak()
+
     %TextRepositionCursor($0088)
     %TextDrawTextBox($16, $0C)
     db "Item"
@@ -1056,30 +737,36 @@ HudText:
     %TextTextStyle($28)
     %TextRepeatChar($20, RepeatCount19)
     %TextWaitAndBreak()
+
     %TextToggleSmallUiFont()
     %TextRepositionCursor($0058)
     %TextTextStyle($20)
     %TextPrintDecimal($08, $1B78)
     %TextWaitAndBreak()
+
     %TextToggleSmallUiFont()
     %TextRepositionCursor($00CC)
     %TextTextStyle($2C)
     %TextPrintHealthBar($1B88, $1B8A)
     %TextWaitAndBreak()
+
     %TextToggleSmallUiFont()
     %TextRepositionCursor($004A)
     %TextTextStyle($20)
     %TextPrintDecimal($02, $1B6A)
     %TextWaitAndBreak()
+
     %TextToggleSmallUiFont()
     %TextRepositionCursor($0072)
     %TextTextStyle($20)
     %TextPrintDecimal($06, $1B66)
     %TextWaitAndBreak()
+
     %TextToggleSmallUiFont()
     %TextRepositionCursor($0140)
     %TextRepeatChar($20, RepeatCount20)
     %TextWaitAndBreak()
+
     %TextToggleSmallUiFont()
     %TextRepositionCursor($0140)
     %TextTextStyle($24)
