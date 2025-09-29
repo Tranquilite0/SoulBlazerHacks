@@ -26,7 +26,7 @@ assert pc() <= !Bank01FreespaceEnd
 ; TODO: we are out of space in Bank2 and Bank2 space is at a premium for text table lookups.
 org !Bank02FreeSpaceStart
     incsrc "npcrewardtable.asm" ; Keep at start of bank's freespace to prevent address from moving.
-    incsrc "strings.asm" ; This needs to stay in Bank 2
+    ;incsrc "strings.asm" ; This needs to stay in Bank 2
 assert pc() <= !Bank02FreespaceEnd
 
 org !Bank03FreeSpaceStart
@@ -60,4 +60,5 @@ incsrc "textspeed.asm"
 
 if defined("buildall")
     incsrc "semiprogressive.asm"
+    incsrc "semiprogressive.newtextbank.asm"
 endif

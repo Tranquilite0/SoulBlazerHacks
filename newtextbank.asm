@@ -1,10 +1,152 @@
+pushpc
+
+;Text engine patches to use bank 20 instead of bank 2.
+
+;TODO: This 1 may need to stay as it is depending on what the function actually does.
+org $82A6D3
+    LDA.B #$A0
+
+;Patch PrintOsdStringFromBank2
+org $82A76D
+    LDA.B #$A0
+
+;Patch PrintOsdStringFromBankX
+org $82AC31
+    LDA.B #$A0
+
+;TODO: These 2 may need to stay as they are depending on what the functions actually do.
+
+org $82AE95
+    LDA.B #$A0
+
+org $02AEEF
+    LDA.B #$A0
+
+pullpc
+
+
 ; String printing routines are hardcoded to print table text lookups from bank 2
 ; Patch routine to load strings from bank $A0
 ; Move contents of Bank $82 to Bank $A0
 ; Remove all code.
 ; Now we have more space for text as long as we keep the string pointer arrays in the same places.
 ORG $A08000
-;TODO: use this space
+
+;New strings (previously in strings.asm)
+PrintItemNameShort:
+    db !Text_YellowStyle,!Text_TableLookup
+    dw ItemNameTable,TableLookupIndex
+    db !Text_EndStyle,!Text_Break
+
+PrintRevivableNpcNameShort:
+    db !Text_YellowStyle,!Text_TableLookup
+    dw NpcNamePointerTable,TableLookupIndex
+    db !Text_EndStyle,!Text_Break
+
+ExpReceived:
+    db !Text_Start,!Text_HeroName," ",!Dict_received,!Text_CR
+    db !Text_YellowStyle,!Text_PrintDecimal4," EXP.",!Text_EndStyle,!Text_EndText12
+
+PrintExpShort:
+    db !Text_YellowStyle,!Text_PrintDecimal4," EXP",!Text_EndStyle,!Text_Break
+
+PrintGemsShort:
+    db !Text_YellowStyle,!Text_PrintDecimal4," GEMs",!Text_EndStyle,!Text_Break
+
+NothingReceived:
+    db !Text_Start,!Text_HeroName," ",!Dict_received,!Text_CR
+    db !Text_YellowStyle,"Nothing.",!Text_EndStyle,!Text_CR,!Text_EndText12
+
+PrintNothingShort:
+    db !Text_YellowStyle,"Nothing",!Text_EndStyle,!Text_Break
+
+AlreadyHave:
+    db !Text_Start,!Dict_You,"already ",!Dict_have,!Dict_my,!Text_CR
+    db "reward. ",!Text_EndText12
+
+RemoteItemShort:
+    db !Text_YellowStyle,"Archipelago Item ",!Text_TableLookup
+    dw ArchipelagoIcons,TableLookupIndex
+    db " ",!Text_EndStyle,!Text_Break
+
+ArchipelagoIconRegular:
+    db !Text_APIcon,$00
+ArchipelagoIconUpArrow:
+    db !Text_APIconUpArrow,$00
+
+; Send/RecieveStrings
+
+; String Address Table Required by the text engine to do table lookups.
+ReceiveSender: dw ReceiveStruct.Sender
+SendItemName: dw SendStruct.ItemName
+SendAddressee: dw SendStruct.Addressee
+ArchipelagoIcons: dw ArchipelagoIconRegular, ArchipelagoIconUpArrow
+; Souls trings exist, but there doesnt appear to be an existing lookup table for them.
+SoulsNameTable: dw SoulOfMagician, SoulOfLight, SoulOfShield, SoulOfDetection, SoulOfReality
+; Each string needs a hardcoded address which contains the index into a table.
+; These "Tables" only have one entry where the pointer is to ram so we need another address containing a "zero" index
+NullIndex: dw $0000
+
+SendString:
+    db !Text_Start,!Text_HeroName," sent",!Text_CR,!Text_YellowStyle,!Text_TableLookup
+    dw SendItemName, NullIndex
+    db !Text_EndStyle, !Text_CR, !Dict_to, !Text_YellowStyle,!Text_TableLookup
+    dw SendAddressee, NullIndex
+    db !Text_EndStyle, ".",!Text_EndText12
+
+ReceivedItemFrom:
+    db !Text_Start,!Text_HeroName," ",!Dict_received,!Text_CR,!Text_YellowStyle,!Text_TableLookup
+    dw ItemNameTable,TableLookupIndex
+    db !Text_EndStyle
+ReceivedFrom:
+    db !Text_CR,!Dict_from,!Text_YellowStyle,!Text_TableLookup
+    dw ReceiveSender, NullIndex
+    db !Text_EndStyle, ".",!Text_EndText12
+
+ReceivedRevivableNpcFrom:
+    db !Text_Start,!Text_HeroName," ",!Dict_received,!Text_CR,!Text_YellowStyle,!Text_TableLookup
+    dw NpcNamePointerTable,TableLookupIndex
+    db !Text_EndStyle,!Text_ChangeStreamPtr : dw ReceivedFrom
+
+ReceivedExpFrom:
+    db !Text_Start,!Text_HeroName," ",!Dict_received,!Text_CR,!Text_YellowStyle,!Text_PrintDecimal4," EXP",!Text_EndStyle
+    db !Text_ChangeStreamPtr : dw ReceivedFrom
+
+ReceivedGemsFrom:
+    db !Text_Start,!Text_HeroName," ",!Dict_received,!Text_CR,!Text_YellowStyle,!Text_PrintDecimal4," GEMs",!Text_EndStyle
+    db !Text_ChangeStreamPtr : dw ReceivedFrom
+
+ReceivedNothingFrom:
+    db !Text_Start,!Text_HeroName," ",!Dict_received,!Text_CR,!Text_YellowStyle," Nothing",!Text_EndStyle
+    db !Text_ChangeStreamPtr : dw ReceivedFrom
+
+
+ReceivedSoul:
+    db !Text_Start,!Text_HeroName," ",!Dict_received,!Text_CR,!Text_YellowStyle,!Text_TableLookup
+    dw SoulsNameTable,TableLookupIndex
+    db !Text_EndStyle,".",!Text_EndText12
+
+PrintSoulNameShort:
+    db !Text_YellowStyle,!Text_TableLookup
+    dw SoulsNameTable,TableLookupIndex
+    db !Text_EndStyle,!Text_Break
+
+ReceivedSoulFrom:
+    db !Text_Start,!Text_HeroName," ",!Dict_received,!Text_CR,!Text_YellowStyle,!Text_TableLookup
+    dw SoulsNameTable,TableLookupIndex
+    db !Text_EndStyle,!Text_ChangeStreamPtr : dw ReceivedFrom
+
+PrintVictoryShort:
+    db !Text_YellowStyle,"Victory",!Text_EndStyle,!Text_Break
+
+; Don't think this string will ever be used, but you never know...
+ReceivedVictoryFrom:
+    db !Text_Start,!Text_HeroName," ",!Dict_received,!Text_CR,!Text_YellowStyle," Victory",!Text_EndStyle
+    db !Text_ChangeStreamPtr : dw ReceivedFrom
+
+
+;Pad space until we get to the original start of text.
+; Any changes to rom layout past this point need to be scrutinized carefully since I havent hunted down all the pointers.
 
 assert pc() <= $A0BB27
 padbyte $FF
@@ -14,7 +156,8 @@ assert pc() == $A0BB27
 TitleScreenText:
     %TextToggleSmallUiFont()
     %TextRepositionCursor($04D6)
-    db "PUSH START",!Text_WaitAndBreak
+    ;db "PUSH START",!Text_WaitAndBreak
+    db "TEST START",!Text_WaitAndBreak
     %TextToggleSmallUiFont()
     %TextRepositionCursor($05C0)
     %TextPrintSpace($06)
@@ -24,9 +167,10 @@ TitleScreenText:
     db "LICENSED BY NINTENDO"
     %TextWaitAndBreak()
 PrologueText:
-    ; Prologue Text
+    ; Prologue Text ;TODO: clean up
     %TextRepositionCursor($0280)
-    db "  Wise men "
+    ;db "  Wise men "
+    db "  TESTTEST "
     db !Dict_tell
     db !Dict_a
     db "tale late "
@@ -837,21 +981,26 @@ MenuText:
     %TextWaitAndBreak()
     %TextRepositionCursor($030E)
     ;db "Soul@of@Magician@"
+SoulOfMagician:
     db "Soul@of@Magician",$00
     %TextWaitAndBreak()
     %TextRepositionCursor($03CE)
     ;db "Soul@of@Light@@@@"
+SoulOfLight:
     db "Soul@of@Light",$00,$00,$00,$00
     %TextWaitAndBreak()
     %TextRepositionCursor($048E)
     ;db "Soul@of@Shield@@@"
+SoulOfShield:
     db "Soul@of@Shield",$00,$00,$00
     %TextWaitAndBreak()
     %TextRepositionCursor($054E)
+SoulOfDetection:
     db "Soul@of@Detection"
     %TextWaitAndBreak()
     %TextRepositionCursor($060E)
     ;db "Soul@of@Reality@@"
+SoulOfReality:
     db "Soul@of@Reality",$00,$00
     %TextWaitAndBreak()
     %TextRepositionCursor($0088)
@@ -1634,7 +1783,7 @@ PrintArmorStatsBox:
     db "Defence :"
     %TextWaitAndBreak()
 
-PrintEmptyStatsBox: ;Probably used for magic and item descriptions
+PrintEmptyStatsBox:
     %TextRepositionCursor($0408)
     %TextDrawTextBox($16,$08)
     %TextWaitAndBreak()
@@ -1649,20 +1798,14 @@ NullItemStatusPointer:
 SwordStatusPointers:
     dw SwordOfLifeStatsText, PsychoSwordStatsText, CriticalSwordStatsText, LuckyBladeStatsText
     dw ZantetsuSwordStatsText, SpiritSwordStatsText, RecoverySwordStatsText, TheSoulBladeStatsText
-    ;db $FB,$D5, $28,$D6, $66,$D6, $94,$D6
-    ;db $D7,$D6, $0C,$D7, $49,$D7, $88,$D7
 
 ArmorStatusPointers:
     dw IronArmorStatsText, IceArmorStatsText, BubbleArmorStatsText, MagicArmorStatsText
     dw MysticArmorStatsText, LightArmorStatsText, ElementalMailStatsText, SoulArmorStatsText
-    ;db $BF,$D7, $F9,$D7, $2B,$D8, $57,$D8
-    ;db $88,$D8, $BD,$D8, $F9,$D8, $28,$D9
 
 MagicStatusPointers:
     dw FlameBallStatsText, LightArrowStatsText, MagicFlareStatsText, RotatorStatsText
     dw SparkBombStatsText, FlamePillarStatsText, TornadoStatsText, PhoenixStatsText
-    ;db $51,$D9, $87,$D9, $C3,$D9, $02,$DA
-    ;db $34,$DA, $6E,$DA, $A1,$DA, $D0,$DA
 
 ItemStatusPointers:
     dw GoatsFoodStatsText, HarpStringStatsText, APassStatsText, DreamRodStatsText
@@ -1676,17 +1819,7 @@ ItemStatusPointers:
     dw StrangeBottleStatsText, BrownStoneStatsText, GreenStoneStatsText, BlueStoneStatsText
     dw SilverStoneStatsText, PurpleStoneStatsText, BlackStoneStatsText, MagicBellStatsText
 
-    ;db $F9,$DA, $1F,$DB, $3F,$DB, $72,$DB
-    ;db $A7,$DB, $E6,$DB, $2B,$DC, $67,$DC
-    ;db $99,$DC, $BF,$DC, $F7,$DC, $38,$DD
-    ;db $76,$DD, $B2,$DD, $E5,$DD, $16,$DE
-    ;db $47,$DE, $7D,$DE, $BB,$DE, $C6,$DE
-    ;db $D1,$DE, $DC,$DE, $E7,$DE, $F2,$DE
-    ;db $FD,$DE, $08,$DF, $44,$DF, $4F,$DF
-    ;db $5A,$DF, $90,$DF, $CD,$DF, $09,$E0
-    ;db $46,$E0, $7A,$E0, $B9,$E0, $C4,$E0
-    ;db $CF,$E0, $DA,$E0, $E5,$E0, $F0,$E0
-
+assert pc() == $A0D5F4
 NullItemStatsText:
     %TextRepositionCursor($0408)
     %TextDrawTextBox($16,$08)
@@ -1699,6 +1832,7 @@ SwordOfLifeStatsText:
     %TextRepositionCursor($04B2)
     %TextPrintDecimal($02, SwordRequiredLevelTable_LifeSword)
     %TextRepositionCursor($051E)
+    .PowerChars:
     %TextRepeatChar($26, SwordPowerTable_LifeSword)
     %TextRepositionCursor($058A)
     db !Dict_A,"sword ",!Dict_from,!Dict_the,!Text_CR,!Text_CR
@@ -1711,6 +1845,7 @@ PsychoSwordStatsText:
     %TextRepositionCursor($04B2)
     %TextPrintDecimal($02, SwordRequiredLevelTable_PsychoSword)
     %TextRepositionCursor($051E)
+    .PowerChars:
     %TextRepeatChar($26, SwordPowerTable_PsychoSword)
     %TextRepositionCursor($058A)
     db "Invincible ",!Dict_monsters,!Text_CR,!Text_CR
@@ -1723,6 +1858,7 @@ CriticalSwordStatsText:
     %TextRepositionCursor($04B2)
     %TextPrintDecimal($02, SwordRequiredLevelTable_CriticalSword)
     %TextRepositionCursor($051E)
+    .PowerChars:
     %TextRepeatChar($26, SwordPowerTable_CriticalSword)
     %TextRepositionCursor($058A)
     db "Defeats ",!Dict_monsters,!Text_CR,!Text_CR
@@ -1735,6 +1871,7 @@ LuckyBladeStatsText:
     %TextRepositionCursor($04B2)
     %TextPrintDecimal($02, SwordRequiredLevelTable_LuckyBlade)
     %TextRepositionCursor($051E)
+    .PowerChars:
     %TextRepeatChar($26, SwordPowerTable_LuckyBlade)
     %TextRepositionCursor($058A)
     db !Dict_The,"change ",!Dict_of,"getting ",!Text_CR,!Text_CR
@@ -1747,6 +1884,7 @@ ZantetsuSwordStatsText:
     %TextRepositionCursor($04B2)
     %TextPrintDecimal($02, SwordRequiredLevelTable_ZantetsuSword)
     %TextRepositionCursor($051E)
+    .PowerChars:
     %TextRepeatChar($26, SwordPowerTable_ZantetsuSword)
     %TextRepositionCursor($058A)
     db "Defeats ",!Dict_monsters,!Dict_with,!Text_CR,!Text_CR
@@ -1759,6 +1897,7 @@ SpiritSwordStatsText:
     %TextRepositionCursor($04B2)
     %TextPrintDecimal($02, SwordRequiredLevelTable_SpiritSword)
     %TextRepositionCursor($051E)
+    .PowerChars:
     %TextRepeatChar($26, SwordPowerTable_SpiritSword)
     %TextRepositionCursor($058A)
     db "Defeats ",!Dict_the,"<spirit> ",!Text_CR,!Text_CR
@@ -1771,6 +1910,7 @@ RecoverySwordStatsText:
     %TextRepositionCursor($04B2)
     %TextPrintDecimal($02, SwordRequiredLevelTable_RecoverySword)
     %TextRepositionCursor($051E)
+    .PowerChars:
     %TextRepeatChar($26, SwordPowerTable_RecoverySword)
     %TextRepositionCursor($058A)
     db "HP ",!Dict_will,!Dict_be,"filled when",!Text_CR,!Text_CR
@@ -1783,17 +1923,19 @@ TheSoulBladeStatsText:
     %TextRepositionCursor($04B2)
     %TextPrintDecimal($02, SwordRequiredLevelTable_SoulBlade)
     %TextRepositionCursor($051E)
+    .PowerChars:
     %TextRepeatChar($26, SwordPowerTable_SoulBlade)
     %TextRepositionCursor($058A)
     db !Dict_The,"strongest sword ",!Text_CR,!Text_CR
     db !Dict_you,"may use. "
     %TextWaitAndBreak()
 
-; Armot Stats Text
+; Armor Stats Text
 IronArmorStatsText:
     %TextRepositionCursor($048A)
     %TextTableLookup(InventoryPointers, InventoryPointerIndexes_IronArmor)
     %TextRepositionCursor($051E)
+    .PowerChars:
     %TextRepeatChar($27, ArmorDefenseTable_IronArmor)
     %TextRepositionCursor($058A)
     db "Your defense power ",!Text_CR,!Text_CR
@@ -1804,6 +1946,7 @@ IceArmorStatsText:
     %TextRepositionCursor($048A)
     %TextTableLookup(InventoryPointers, InventoryPointerIndexes_IceArmor)
     %TextRepositionCursor($051E)
+    .PowerChars:
     %TextRepeatChar($27, ArmorDefenseTable_IceArmor)
     %TextRepositionCursor($058A)
     db !Dict_you,!Dict_can,"cross ",!Text_CR,!Text_CR
@@ -1814,6 +1957,7 @@ BubbleArmorStatsText:
     %TextRepositionCursor($048A)
     %TextTableLookup(InventoryPointers, InventoryPointerIndexes_BubbleArmor)
     %TextRepositionCursor($051E)
+    .PowerChars:
     %TextRepeatChar($27, ArmorDefenseTable_BubbleArmor)
     %TextRepositionCursor($058A)
     db "Enables ",!Dict_you,!Dict_to,!Dict_walk,!Text_CR,!Text_CR
@@ -1824,6 +1968,7 @@ MagicArmorStatsText:
     %TextRepositionCursor($048A)
     %TextTableLookup(InventoryPointers, InventoryPointerIndexes_MagicArmor)
     %TextRepositionCursor($051E)
+    .PowerChars:
     %TextRepeatChar($27, ArmorDefenseTable_MagicArmor)
     %TextRepositionCursor($058A)
     db "Cuts ",!Dict_the,"necessary ",!Text_CR,!Text_CR
@@ -1834,9 +1979,10 @@ MysticArmorStatsText:
     %TextRepositionCursor($048A)
     %TextTableLookup(InventoryPointers, InventoryPointerIndexes_MysticArmor)
     %TextRepositionCursor($051E)
+    .PowerChars:
     %TextRepeatChar($27, ArmorDefenseTable_MysticArmor)
     %TextRepositionCursor($058A)
-    db "Invincible ",!Dict_for,"longer ",!Text_CR,!Text_CR
+    db "Invincible ",!Dict_for,"longer",!Text_CR,!Text_CR
     db "period ",!Dict_of,"time. "
     %TextWaitAndBreak()
 
@@ -1844,6 +1990,7 @@ LightArmorStatsText:
     %TextRepositionCursor($048A)
     %TextTableLookup(InventoryPointers, InventoryPointerIndexes_LightArmor)
     %TextRepositionCursor($051E)
+    .PowerChars:
     %TextRepeatChar($27, ArmorDefenseTable_LightArmor)
     %TextRepositionCursor($058A)
     db "Receive no damage from",!Text_CR,!Text_CR
@@ -1854,21 +2001,28 @@ ElementalMailStatsText:
     %TextRepositionCursor($048A)
     %TextTableLookup(InventoryPointers, InventoryPointerIndexes_ElementalArmor)
     %TextRepositionCursor($051E)
+    .PowerChars:
     %TextRepeatChar($27, ArmorDefenseTable_ElementalArmor)
     %TextRepositionCursor($058A)
-    db "Protects ",!Text_HeroName,!Text_CR,!Text_CR
-    db !Dict_from,!Dict_the,"damage zones."
+    db "Protects "
+    %TextQuickPrint(!QP_HeroName)
+    %TextCR()
+    %TextCR()
+    db !Dict_from, !Dict_the, "damage zones."
     %TextWaitAndBreak()
 
 SoulArmorStatsText:
     %TextRepositionCursor($048A)
     %TextTableLookup(InventoryPointers, InventoryPointerIndexes_SoulArmor)
     %TextRepositionCursor($051E)
+    .PowerChars:
     %TextRepeatChar($27, ArmorDefenseTable_SoulArmor)
     %TextRepositionCursor($058A)
     db "Enables ",!Dict_you,!Dict_to,!Dict_walk,"in",!Text_CR,!Text_CR
     db "space. "
     %TextWaitAndBreak()
+
+assert pc() == $A0D951
 
 ; Magic Stats Text
 FlameBallStatsText:
@@ -1943,6 +2097,8 @@ PhoenixStatsText:
     db !Text_HeroName,"."
     %TextWaitAndBreak()
 
+assert pc() == $A0DAF9
+
 ; Item Stats Text
 GoatsFoodStatsText:
     %TextRepositionCursor($048A)
@@ -1956,7 +2112,7 @@ HarpStringStatsText:
     %TextRepositionCursor($048A)
     %TextTableLookup(InventoryPointers, InventoryPointerIndexes_HarpString)
     %TextRepositionCursor($050A)
-    db "Harp String",!Dict_of,"singer."
+    db "Harp String ",!Dict_of,"singer."
     %TextWaitAndBreak()
 
 APassStatsText:
@@ -2062,7 +2218,7 @@ ActinidiaLeavesStatsText:
     %TextTableLookup(InventoryPointers, InventoryPointerIndexes_ActinidiaLeaves)
     %TextRepositionCursor($050A)
     db "Emits ",!Dict_a,"peculiar scent",!Text_CR,!Text_CR
-    db !Dict_that,"attracts cats.  "
+    db !Dict_that,"attracts cats. "
     %TextWaitAndBreak()
 
 DoorKeyStatsText:
@@ -2207,7 +2363,7 @@ BrownStoneStatsText:
     %TextTableLookup(InventoryPointers, InventoryPointerIndexes_BrownStone)
 SharedStonesText:
     %TextRepositionCursor($050A)
-    db "World ",!Dict_of,"Evil",!Dict_will,!Text_CR,!Text_CR
+    db "World ",!Dict_of,"Evil ",!Dict_will,!Text_CR,!Text_CR
     db "appear once ",!Dict_you,!Dict_have,!Text_CR,!Text_CR
     db "collected 6 ",!Dict_of,"these. "
     %TextWaitAndBreak()
@@ -2390,6 +2546,7 @@ StringNpcReleased:
     db "."
     %TextChangeStreamPtr(TextEndStandardBank20)
 
+ItemReceived:
 StringHeroRecieved:
     %TextStart()
     db " "
@@ -2408,6 +2565,7 @@ StringNothingInside:
     db " Nothing inside."
     %TextChangeStreamPtr(TextEndStandardBank20)
 
+GemsReceived:
 StringFoundGems:
     %TextStart()
     db " "

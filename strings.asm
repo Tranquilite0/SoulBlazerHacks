@@ -7,14 +7,13 @@
 ;TODO: move all strings into new bank.
 
 ; Labels for existing strings
-SoulOfMagician = $82C639
-SoulOfLight = $82C64E
-SoulOfShield = $82C663
-SoulOfDetection = $82C678
-SoulOfReality = $82C68D
+;SoulOfMagician = $82C639
+;SoulOfLight = $82C64E
+;SoulOfShield = $82C663
+;SoulOfDetection = $82C678
+;SoulOfReality = $82C68D
 
-NpcReleased = $82E203
-ItemReceived = $82E216
+;ItemReceived = $82E216
 
 PrintItemNameShort:
 db !Text_YellowStyle,!Text_TableLookup
@@ -32,7 +31,7 @@ db !Text_Start,!Text_HeroName," ",!Dict_received,!Text_CR,!Text_YellowStyle,!Tex
 PrintExpShort:
 db !Text_YellowStyle,!Text_PrintDecimal4," EXP",!Text_EndStyle,!Text_Break
 
-GemsReceived = $82E246
+;GemsReceived = $82E246
 
 PrintGemsShort:
 db !Text_YellowStyle,!Text_PrintDecimal4," GEMs",!Text_EndStyle,!Text_Break

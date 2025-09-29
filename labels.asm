@@ -239,7 +239,8 @@ MapChanged = $84F781
 !Text_PrintDecimal4   = $06,$04,$C8,$03 ; Print 4 decimal digits from the usual location.
 !Text_PrintDecimal1   = $06,$01,$C8,$03
 
-
+;Text_QuickPrint parameters
+!QP_HeroName = $02
 
 ; Text dictionary terms. All of these also end with a space character, so using punctuation means you can't use the dictionary.
 !Dict_All        = $80
