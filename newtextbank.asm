@@ -19,8 +19,115 @@ org $82AC31
 org $82AE95
     LDA.B #$A0
 
-org $02AEEF
+org $82AEEF
     LDA.B #$A0
+
+;String pointer patches to redirect strings
+org $80E775
+    LDY.W #TitleScreenText ;$BB36
+;Press Start
+org $80E7B3
+    LDY.W #NewPushStartText ;PushStartText ;$BB27
+
+;Prologue string pointers
+org $80E7F2
+    LDY.W #PrologueText1
+
+org $80E808
+    LDY.W #PrologueText2
+
+org $80E82E
+    LDY.W #PrologueText3
+
+org $80E854
+    LDY.W #PrologueText4
+
+org $80E87A
+    LDY.W #PrologueText5
+
+org $80E8A0
+    LDY.W #PrologueText6
+
+org $80E8C6
+    LDY.W #PrologueText7
+
+org $80E8EC
+    LDY.W #PrologueText8
+
+org $80E912
+    LDY.W #PrologueText9
+
+org $80E938
+    LDY.W #PrologueText10
+
+org $80E95E
+    LDY.W #PrologueText11
+
+org $80E984
+    LDY.W #PrologueText12
+
+org $80E9AA
+    LDY.W #PrologueText13
+
+org $80E9D0
+    LDY.W #PrologueText14
+
+;TODO: figure out what this string is
+org $80EA65
+    ;LDY.W #$EA86
+
+;TODO: figure out what this string is
+org $80EA71
+    ;LDY.W #$EA8B
+
+;Epilogue String pointers
+org $80E6D0
+    LDY.W #EpilogueText1
+
+org $80F308
+    LDY.W #EpilogueText2
+
+org $80F327
+    LDY.W #EpilogueText3
+
+org $80F346
+    LDY.W #EpilogueText4
+
+org $80F365
+    LDY.W #EpilogueText5
+
+org $80F3B5
+    LDY.W #EpilogueText6
+
+org $80F3D4
+    LDY.W #EpilogueText7
+
+org $80F3F3
+    LDY.W #EpilogueText8
+
+;The End text
+org $83B51A
+    LDY.W #TheEndText
+
+;File Select Menu Text
+org $80ED4E
+    LDY.W #FileSelectTextMain
+org $80ED5B
+    LDY.W #FileSelectText1
+; org $80??
+;     LDY.W #FileSelectText2
+; org $80??
+;     LDY.W #FileSelectText3
+; org $80??
+;     LDY.W #FileSelectText4
+
+org $82A50B
+    LDY.W #EnterYourNameText1
+
+org $82A512
+    LDY.W #EnterYourNameText2
+
+;TODO: continue tracing string pointers to bank 2 strings.
 
 pullpc
 
@@ -73,6 +180,23 @@ ArchipelagoIconRegular:
     db !Text_APIcon,$00
 ArchipelagoIconUpArrow:
     db !Text_APIconUpArrow,$00
+
+NewPushStartText:
+    %TextToggleSmallUiFont()
+    %TextRepositionCursor($0440)
+    db "0440"
+    %TextRepositionCursor($0480)
+    db "0480"
+    %TextRepositionCursor($0490)
+    db "0490"
+    %TextRepositionCursor($04A0)
+    db "04A0"
+    %TextRepositionCursor($04B0)
+    db "04B0"
+    %TextRepositionCursor($04C0)
+    db "04C0"
+    %TextWaitAndBreak()
+    
 
 ; Send/RecieveStrings
 
@@ -151,14 +275,21 @@ ReceivedVictoryFrom:
 assert pc() <= $A0BB27
 padbyte $FF
 pad $A0BB27
+
+
 ;TODO: Remove assert if possible
 assert pc() == $A0BB27
 ;TODO: find pointers to these strings to allow easy relocation.
 ;TODO: alternatively: insert TextChangeStreamPointer to relocate to other places.
-TitleScreenText:
+;Print "PushStartText: ",pc
+PushStartText:
     %TextToggleSmallUiFont()
     %TextRepositionCursor($04D6)
-    db "PUSH START",!Text_WaitAndBreak
+    db "PUSH START"
+    %TextWaitAndBreak()
+
+;Print "TitleScreenText: ",pc
+TitleScreenText:
     %TextToggleSmallUiFont()
     %TextRepositionCursor($05C0)
     %TextPrintSpace($06)
@@ -168,7 +299,8 @@ TitleScreenText:
     db "LICENSED BY NINTENDO"
     %TextWaitAndBreak()
 
-PrologueText:
+;Print "PrologueText1: ",pc
+PrologueText1:
     ; Prologue Text ;TODO: clean up
     %TextRepositionCursor($0280)
     db "  Wise men ", !Dict_tell, !Dict_a, "tale late "
@@ -180,6 +312,8 @@ PrologueText:
     db "  ", !Dict_of, "evil. "
     %TextWaitAndBreak()
 
+;Print "PrologueText2: ",pc
+PrologueText2:
     %TextRepositionCursor($0280)
     db "  ", !Dict_The, "Freil Empire, as it ", !Dict_was
     %TextCR() : %TextCR() : %TextCR()
@@ -190,6 +324,8 @@ PrologueText:
     db "  ", !Dict_King, "Magridd. "
     %TextWaitAndBreak()
 
+;Print "PrologueText3: ",pc
+PrologueText3:
     %TextRepositionCursor($0240)
     db "  It seems most ", !Dict_people, "thought "
     %TextCR() : %TextCR() : %TextCR()
@@ -202,6 +338,8 @@ PrologueText:
     db "  himself ", !Dict_was, "ruled by greed. "
     %TextWaitAndBreak()
 
+;Print "PrologueText4: ",pc
+PrologueText4:
     %TextRepositionCursor($0240)
     db "  One day ", !Dict_the, !Dict_King, "happened ", !Dict_to
     %TextCR() : %TextCR() : %TextCR()
@@ -216,6 +354,8 @@ PrologueText:
     db "  ", !Dict_and, !Dict_a, "genius. "
     %TextWaitAndBreak()
 
+;Print "PrologueText5: ",pc
+PrologueText5:
     %TextRepositionCursor($0240)
     %TextPrintSpace($03)
     db !Dict_The, !Dict_King, "stayed up ", !Dict_many
@@ -233,6 +373,8 @@ PrologueText:
     db "more wealthy."
     %TextWaitAndBreak()
 
+;Print "PrologueText6: ",pc
+PrologueText6:
     %TextRepositionCursor($0240)
     db "  ", !Dict_All, !Dict_of, !Dict_the, "sudden ", !Dict_the, !Dict_King
     %TextCR() : %TextCR() : %TextCR()
@@ -245,12 +387,16 @@ PrologueText:
     db "  ", !Dict_to, !Dict_the, "castle at once!"
     %TextWaitAndBreak()
 
+;Print "PrologueText7: ",pc
+PrologueText7:
     %TextRepositionCursor($0300)
     db "  Soon Dr.", !Dict_Leo, !Dict_was, "brought ", !Dict_to
     %TextCR() : %TextCR() : %TextCR()
     db "  ", !Dict_the, "castle. "
     %TextWaitAndBreak()
 
+;Print "PrologueText8: ",pc
+PrologueText8:
     %TextRepositionCursor($0240)
     db "  ", !Dict_The, !Dict_King, "confined him ", !Dict_in, !Dict_a
     %TextCR() : %TextCR() : %TextCR()
@@ -263,6 +409,8 @@ PrologueText:
     db "  evil, Deathtoll."
     %TextWaitAndBreak()
 
+;Print "PrologueText9: ",pc
+PrologueText9:
     %TextRepositionCursor($0240)
     db "  Dr.", !Dict_Leo, "finally completed "
     %TextCR() : %TextCR() : %TextCR()
@@ -275,6 +423,8 @@ PrologueText:
     db "  might strike ", !Dict_a, "deal."
     %TextWaitAndBreak()
 
+;Print "PrologueText10: ",pc
+PrologueText10:
     %TextRepositionCursor($0240)
     db "  After ", !Dict_many, "days ", !Dict_the, "deal ", !Dict_was
     %TextCR() : %TextCR() : %TextCR()
@@ -289,6 +439,8 @@ PrologueText:
     db "  gold piece ", !Dict_for, "each."
     %TextWaitAndBreak()
 
+;Print "PrologueText11: ",pc
+PrologueText11:
     %TextRepositionCursor($0280)
     db "  One by one, ", !Dict_all, "living "
     %TextCR() : %TextCR() : %TextCR()
@@ -299,6 +451,8 @@ PrologueText:
     db "  empty. "
     %TextWaitAndBreak()
 
+;Print "PrologueText12: ",pc
+PrologueText12:
     %TextRepositionCursor($0280)
     %TextPrintSpace($03)
     db "Two ", !Dict_people, !Dict_were, !Dict_watching
@@ -314,6 +468,8 @@ PrologueText:
     db "his follower. "
     %TextWaitAndBreak()
 
+;Print "PrologueText13: ",pc
+PrologueText13:
     %TextRepositionCursor($0240)
     db "  <", !Dict_The, !Dict_King,!Dict_was, !Dict_very, "foolish "
     %TextCR() : %TextCR() : %TextCR()
@@ -328,6 +484,8 @@ PrologueText:
     db "  World!> ", !Dict_the, "Master said. "
     %TextWaitAndBreak()
 
+;Print "PrologueText14: ",pc
+PrologueText14:
     %TextRepositionCursor($0240)
     db "  On ", !Dict_a, "ray ", !Dict_of, "light ", !Dict_you
     %TextCR() : %TextCR() : %TextCR()
@@ -340,7 +498,8 @@ PrologueText:
     db "  ", !Dict_A, "SOUL BLAZER!!"
     %TextWaitAndBreak()
 
-EpilogueText:
+;Print "EpilogueText1: ",pc
+EpilogueText1:
     %TextToggleSmallUiFont()
     %TextToggleSmallFont()
     %TextRepositionCursor($02DC)
@@ -355,6 +514,8 @@ EpilogueText:
     %TextQuickPrint($08)
     %TextWaitAndBreak()
 
+;Print "EpilogueText2: ",pc
+EpilogueText2:
     %TextRepositionCursor($0240)
     db "  Grass Valley at sunset::: "
     %TextCR()
@@ -371,6 +532,8 @@ EpilogueText:
     db "  beautiful: "
     %TextWaitAndBreak()
 
+;Print "EpilogueText3: ",pc
+EpilogueText3:
     %TextRepositionCursor($02C0)
     %TextPrintSpace($03)
     db !Dict_All, !Dict_the, !Dict_creatures, "stopped "
@@ -386,6 +549,8 @@ EpilogueText:
     db !Dict_of, !Dict_the, "sunset:"
     %TextWaitAndBreak()
 
+;Print "EpilogueText4: ",pc
+EpilogueText4:
     %TextRepositionCursor($0240)
     db "  One ", !Dict_was, !Dict_with, "his child{ "
     %TextCR()
@@ -402,6 +567,8 @@ EpilogueText:
     db "  ", !Dict_the, "scenery:"
     %TextWaitAndBreak()
 
+;Print "EpilogueText5: ",pc
+EpilogueText5:
     %TextRepositionCursor($02C0)
     db "  Suddenly{ ", !Dict_a, "light ray shot "
     %TextCR()
@@ -414,6 +581,8 @@ EpilogueText:
     db "  However{ no ", !Dict_one, "noticed it:"
     %TextWaitAndBreak()
 
+;Print "EpilogueText6: ",pc
+EpilogueText6:
     %TextRepositionCursor($02C0)
     %TextPrintSpace($03)
     db "Lisa ", !Dict_was, "standing ", !Dict_all, "by "
@@ -424,6 +593,8 @@ EpilogueText:
     db "herself:"
     %TextWaitAndBreak()
 
+;Print "EpilogueText7: ",pc
+EpilogueText7:
     %TextRepositionCursor($0240)
     %TextPrintSpace($03)
     db "She ", !Dict_used, !Dict_to, "feel lonely "
@@ -444,6 +615,8 @@ EpilogueText:
     db "it ", !Dict_is, "beautiful:"
     %TextWaitAndBreak()
 
+;Print "EpilogueText8: ",pc
+EpilogueText8:
     %TextRepositionCursor($0240)
     db "  Just ", !Dict_like, "her father changed "
     %TextCR()
@@ -460,13 +633,15 @@ EpilogueText:
     db "  if she believes:"
     %TextWaitAndBreak()
 
+;Print "TheEndText: ",pc
 TheEndText:
     %TextToggleSmallUiFont()
     %TextRepositionCursor($0358)
     db "THE END"
     %TextWaitAndBreak()
 
-MenuText:
+;Print "FileSelectTextMain: ",pc
+FileSelectTextMain:
     %TextRepositionCursor($0088)
     %TextDrawTextBox($16, $16)
     %TextRepositionCursor($014A)
@@ -497,6 +672,8 @@ MenuText:
     db " Erase record"
     %TextWaitAndBreak()
 
+;Print "FileSelectText1: ",pc
+FileSelectText1:
     ;TODO: determine what this string is
     %TextRepositionCursor($02D4)
     %TextQuickPrint($03)
@@ -506,6 +683,8 @@ MenuText:
     %TextPrintDecimal($01, $0452)
     %TextWaitAndBreak()
 
+;Print "FileSelectText2: ",pc
+FileSelectText2:
     ;TODO: determine what this string is
     %TextRepositionCursor($0394)
     %TextQuickPrint($03)
@@ -515,6 +694,8 @@ MenuText:
     %TextPrintDecimal($01, $0452)
     %TextWaitAndBreak()
 
+;Print "FileSelectText3: ",pc
+FileSelectText3:
     ;TODO: determine what this string is
     %TextRepositionCursor($0454)
     %TextQuickPrint($03)
@@ -524,6 +705,8 @@ MenuText:
     %TextPrintDecimal($01, $0452)
     %TextWaitAndBreak()
 
+;Print "FileSelectText4: ",pc
+FileSelectText4:
     ;TODO: determine what this string is
     %TextRepositionCursor($0514)
     %TextQuickPrint($03)
@@ -533,7 +716,8 @@ MenuText:
     %TextPrintDecimal($01, $0452)
     %TextWaitAndBreak()
 
-    ;TODO: determine what this string is
+;Print "EnterYourNameText1: ",pc
+EnterYourNameText1:
     %TextRepositionCursor($0184)
     %TextDrawTextBox($1A, $13)
     %TextRepositionCursor($024A)
@@ -548,6 +732,8 @@ MenuText:
     db "--------"
     %TextWaitAndBreak()
 
+;Print "EnterYourNameText2: ",pc
+EnterYourNameText2:
     %TextRepositionCursor($03C6)
     db " ", !Dict_A, "B C D E F G H ", !Dict_I, "J K L M"
     %TextCR()
@@ -568,20 +754,28 @@ MenuText:
     %TextCR()
     %TextWaitAndBreak()
 
+Print "UndrawTextBoxText1: ",pc
+UndrawTextBoxText1:
     %TextUndrawTextBox($0184)
     %TextWaitAndBreak()
 
+Print "LevelUpText: ",pc
+LevelUpText:
     %TextToggleSmallUiFont()
     %TextTextStyle($24)
     %TextRepositionCursor($0216)
     db "LEVEL UP !"
     %TextWaitAndBreak()
 
+Print "MiscMenuText1: ",pc
+MiscMenuText1:
     %TextToggleSmallUiFont()
     %TextRepositionCursor($0216)
     db "@@@@@@@@@@"
     %TextWaitAndBreak()
 
+Print "MiscMenuText2: ",pc
+MiscMenuText2:
     %TextRepositionCursor($0216)
     %TextPrintSpace($0A)
     %TextRepositionCursor($0186)
@@ -589,6 +783,8 @@ MenuText:
     %TextTableLookup($C7C2, $1C6A)
     %TextWaitAndBreak()
 
+Print "MonsterLairRemainingText: ",pc
+MonsterLairRemainingText:
     %TextRepositionCursor($051E)
     %TextDrawTextBox($0C, $04)
     db "Monster Lair"
@@ -598,10 +794,14 @@ MenuText:
     %TextPrintDecimal($02, $1B80)
     %TextWaitAndBreak()
 
+Print "UndrawTextBoxText2: ",pc
+UndrawTextBoxText2:
     %TextUndrawTextBox($0186)
     %TextUndrawTextBox($051E)
     %TextWaitAndBreak()
 
+Print "CharacterStatusMenuText: ",pc
+CharacterStatusMenuText:
     %TextRepositionCursor($0216)
     %TextPrintSpace($0A)
     %TextRepositionCursor($0186)
@@ -646,6 +846,8 @@ MenuText:
     %TextTableLookup($CF74, $1B64)
     %TextWaitAndBreak()
 
+Print "ObtainedSoulsMenuText: ",pc
+ObtainedSoulsMenuText:
     %TextUndrawTextBox($0186)
     %TextRepositionCursor($018A)
     %TextDrawTextBox($12, $13)
@@ -653,36 +855,47 @@ MenuText:
     db "Souls"
     %TextWaitAndBreak()
 
+Print "SoulOfMagicianMenuText: ",pc
+SoulOfMagicianMenuText:
     %TextRepositionCursor($030E)
 SoulOfMagician:
     ;db "Soul@of@Magician@"
     db "Soul@of@Magician",$00
     %TextWaitAndBreak()
 
+Print "SoulOfLightMenuText: ",pc
+SoulOfLightMenuText:
     %TextRepositionCursor($03CE)
-
 SoulOfLight:
     ;db "Soul@of@Light@@@@"
     db "Soul@of@Light",$00,$00,$00,$00
     %TextWaitAndBreak()
 
+Print "SoulOfShieldMenuText: ",pc
+SoulOfShieldMenuText:
     %TextRepositionCursor($048E)
 SoulOfShield:
     ;db "Soul@of@Shield@@@"
     db "Soul@of@Shield",$00,$00,$00
     %TextWaitAndBreak()
 
+Print "SoulOfDetectionMenuText: ",pc
+SoulOfDetectionMenuText:
     %TextRepositionCursor($054E)
 SoulOfDetection:
     db "Soul@of@Detection"
     %TextWaitAndBreak()
 
+Print "SoulOfRealityMenuText: ",pc
+SoulOfRealityMenuText:
     %TextRepositionCursor($060E)
 SoulOfReality:
     ;db "Soul@of@Reality@@"
     db "Soul@of@Reality",$00,$00
     %TextWaitAndBreak()
 
+Print "InventoryMenuText: ",pc
+InventoryMenuText:
     %TextRepositionCursor($0088)
     %TextDrawTextBox($06, $0C)
     db "Weapon"
@@ -711,6 +924,8 @@ SoulOfReality:
     %TextTableLookup($CF74, $1B64)
     %TextWaitAndBreak()
 
+Print "ItemMenuText: ",pc
+ItemMenuText:
     %TextRepositionCursor($0088)
     %TextDrawTextBox($16, $0C)
     db "Item"
@@ -720,6 +935,8 @@ RepeatCount20:
     db $20
 RepeatCount19:
     db $19
+
+Print "HudText: ",pc
 HudText:
     %TextToggleSmallUiFont()
     %TextTextStyle($24)
@@ -779,30 +996,30 @@ HudText:
     %TextWaitAndBreak()
 
 MiscStringPointers: ; Various String Pointers, is this what "Quick Print" indexes from? If so we could add some RAM addresses for client stuff such as player name or world.
-    dw Misc1,Misc2,PlayerName,$0447 ; Some address in ram, also hero name?
-    dw Misc3,Misc4,Misc5,Misc6
-    dw Misc7
+    dw Misc0,Misc1,PlayerName,$0447 ; Some address in ram, also hero name?
+    dw Misc4,Misc5,Misc6,Misc7
+    dw Misc8
 
-;Various strings? Might be unused placeholders.
-Misc1:
+;Various strings? Might be unused placeholders, or possibly used in character name screen for the symbols?
+Misc0:
     db $0A,$0B,$0C,$0D,$0E,$0F,$00
 
-Misc2:
+Misc1:
     db $10,$11,$12,$13,$14,$15,$00
 
-Misc3:
+Misc4:
     db $0C,$0D,$0E,$0F,$00
 
-Misc4:
+Misc5:
     db $1C,$1D,$1E,$1F,$00
 
-Misc5:
+Misc6:
     db $2C,$2D,$2E,$2F,$00
 
-Misc6:
+Misc7:
     db $3C,$3D,$3E,$3F,$00
 
-Misc7:
+Misc8:
     db $4C,$4D,$4E,$4F,$00
 
 ;TODO: remove asserts for non-fixed things.
