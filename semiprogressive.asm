@@ -1,5 +1,6 @@
 ; Semiprogressive Swords/Armor
 ; Str/Def scales off of the number of Swords/Armors Obtained while unique effects are still tied to their respective item.
+; TODO: relcate references to bank $02 ($82) to bank $20 ($A0)?
 
 if not(defined("initialized"))
     arch 65816
@@ -26,6 +27,7 @@ org StartAddress
 
 ; Hook Into the drawing Function that draws Swords/Shields (and lots of other stuff too)
 ; Address to load is in A
+;TODO store sword/armor power in ram somewhere and patch the repeatchar commands instead of this slightly jank hook.
 DrawHook:
     CMP #$0000
     BEQ .weapon
@@ -81,7 +83,7 @@ CalcStrength:
     LDY #$1B1E ; Address of Swords Inventory
     JSL CountSwordArmor
     TAX
-    LDA $82E1C5,X ; User the number of obtained swords as the index into the sword power table
+    LDA $82E1C5,X ; Use the number of obtained swords as the index into the sword power table
 .end:
     PLY
     PLX
@@ -98,7 +100,7 @@ CalcSwords:
     LDY #$1B1E ; Address of Swords Inventory
     JSL CountSwordArmor
     TAX
-    LDA $82E1C5,X ; User the number of obtained swords as the index into the sword power table
+    LDA $82E1C5,X ; Use the number of obtained swords as the index into the sword power table
     PLY
     PLX
     PLP

@@ -147,8 +147,8 @@ PassableMap = $7F8000
 
 ; Rom Locations
 
-ItemNameTable = $82CF74
-NpcNamePointerTable = $82D2E6
+;ItemNameTable = $82CF74 ; TODO: move to bank2 address
+;NpcNamePointerTable = $82D2E6 ; TODO: move to bank2 address
 
 ; Pointers to places containing the standard Text End Command ($12,$08,$08,$04,$0C)
 TextEndStandardBank2 = $82E25F

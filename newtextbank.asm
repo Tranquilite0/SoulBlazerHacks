@@ -127,6 +127,85 @@ org $82A50B
 org $82A512
     LDY.W #EnterYourNameText2
 
+org $82A64B
+    LDY.W #UndrawTextBoxText1
+
+org $80AFE0
+    LDY.W #LevelUpText
+
+org $80AFEF
+    LDY.W #MiscMenuText1
+
+org $84F58F
+    LDY.W #MiscMenuText2
+org $84F5A5
+    LDY.W #MonsterLairRemainingText
+org $84F5BB
+    LDY.W #UndrawTextBoxText2
+
+org $829947
+    LDY.W #CharacterStatusMenuText
+
+org $82996F
+    LDY.W #ObtainedSoulsMenuText
+
+org $8299BA
+    LDY.W #SoulOfMagicianMenuText
+
+org $8299D2
+    CPY.W #InventoryMenuText ;Unsure if this one is the string pointer or something in bank2?
+    ;CPY.W #$C69F                         ;0299D2|C09FC6  |      ;
+org $829C7E
+    LDY.W #InventoryMenuText
+    ;LDY.W #$C69F                         ;029C7E|A09FC6  |      ;
+org $829D4B
+    LDY.W #InventoryMenuText
+    ;LDY.W #$C69F                         ;029D4B|A09FC6  |      ;
+org $829D78
+    LDY.W #ItemMenuText
+    ;LDY.W #$C701                         ;029D78|A001C7  |      ;  
+org $82A694
+    LDY.W #HudText
+    ;LDY.W #$C70E                         ;02A694|A00EC7  |      ;  
+org $82A6A0
+    LDY.W #HudText2
+    ;LDY.W #$C739                         ;02A6A0|A039C7  |      ;
+org $82A6AC
+    LDY.W #HudText3
+    ;LDY.W #$C744                         ;02A6AC|A044C7  |      ;
+org $82A6B8
+    LDY.W #HudText4
+    ;LDY.W #$C750                         ;02A6B8|A050C7  |      ;
+org $82A6C4
+    LDY.W #HudText5
+    ;LDY.W #$C75B                         ;02A6C4|A05BC7  |      ;
+org $82A675
+    LDY.W #HudText6
+    ;LDY.W #$C766                         ;02A675|A066C7  |      ;
+org $82A670
+    LDY.W #HudText7
+    ;LDY.W #$C76F                         ;02A670|A06FC7  |      ;
+
+org $82A999
+    LDA.W MiscStringPointers,Y
+    ;LDA.W UNREACH_02C789,Y               ;02A999|B989C7  |02C789;
+
+org $829DD8
+    LDY.W #PrintSwordStatsBox
+    ;LDY.W #$D53E                         ;029DD8|A03ED5  |      ;
+org $829DE0
+    LDY.W #PrintArmorStatsBox
+    ;LDY.W #$D558                         ;029DE0|A058D5  |      ;
+org $829DE8
+    LDY.W #PrintEmptyStatsBox
+    ;LDY.W #$D56B                         ;029DE8|A06BD5  |      ;
+
+org $829DF2
+    LDA.L StatsTextPointers,X
+    ;LDA.L UNREACH_02D572,X               ;029DF2|BF72D502|02D572;
+org $82A031
+    LDA.L StatsTextPointers,X
+    ;LDA.L UNREACH_02D572,X               ;02A031|BF72D502|02D572;
 ;TODO: continue tracing string pointers to bank 2 strings.
 
 pullpc
@@ -754,12 +833,12 @@ EnterYourNameText2:
     %TextCR()
     %TextWaitAndBreak()
 
-Print "UndrawTextBoxText1: ",pc
+;Print "UndrawTextBoxText1: ",pc
 UndrawTextBoxText1:
     %TextUndrawTextBox($0184)
     %TextWaitAndBreak()
 
-Print "LevelUpText: ",pc
+;Print "LevelUpText: ",pc
 LevelUpText:
     %TextToggleSmallUiFont()
     %TextTextStyle($24)
@@ -767,23 +846,23 @@ LevelUpText:
     db "LEVEL UP !"
     %TextWaitAndBreak()
 
-Print "MiscMenuText1: ",pc
+;Print "MiscMenuText1: ",pc
 MiscMenuText1:
     %TextToggleSmallUiFont()
     %TextRepositionCursor($0216)
     db "@@@@@@@@@@"
     %TextWaitAndBreak()
 
-Print "MiscMenuText2: ",pc
+;Print "MiscMenuText2: ",pc
 MiscMenuText2:
     %TextRepositionCursor($0216)
     %TextPrintSpace($0A)
     %TextRepositionCursor($0186)
     %TextDrawTextBox($18, $02)
-    %TextTableLookup($C7C2, $1C6A)
+    %TextTableLookup(LocationNamePointers, CurrentMapID)
     %TextWaitAndBreak()
 
-Print "MonsterLairRemainingText: ",pc
+;Print "MonsterLairRemainingText: ",pc
 MonsterLairRemainingText:
     %TextRepositionCursor($051E)
     %TextDrawTextBox($0C, $04)
@@ -794,13 +873,13 @@ MonsterLairRemainingText:
     %TextPrintDecimal($02, $1B80)
     %TextWaitAndBreak()
 
-Print "UndrawTextBoxText2: ",pc
+;Print "UndrawTextBoxText2: ",pc
 UndrawTextBoxText2:
     %TextUndrawTextBox($0186)
     %TextUndrawTextBox($051E)
     %TextWaitAndBreak()
 
-Print "CharacterStatusMenuText: ",pc
+;Print "CharacterStatusMenuText: ",pc
 CharacterStatusMenuText:
     %TextRepositionCursor($0216)
     %TextPrintSpace($0A)
@@ -834,19 +913,19 @@ CharacterStatusMenuText:
     db "Defence  :"
     %TextRepositionCursor($04C8)
     db "Weapon: "
-    %TextTableLookup($CF74, $1B5E)
+    %TextTableLookup(InventoryPointers, $1B5E)
     %TextRepositionCursor($0548)
     db "Armor : "
-    %TextTableLookup($CF74, $1B60)
+    %TextTableLookup(InventoryPointers, $1B60)
     %TextRepositionCursor($05C8)
     db "Magic : "
-    %TextTableLookup($CF74, $1B62)
+    %TextTableLookup(InventoryPointers, $1B62)
     %TextRepositionCursor($0648)
     db "Item  : "
-    %TextTableLookup($CF74, $1B64)
+    %TextTableLookup(InventoryPointers, $1B64)
     %TextWaitAndBreak()
 
-Print "ObtainedSoulsMenuText: ",pc
+;Print "ObtainedSoulsMenuText: ",pc
 ObtainedSoulsMenuText:
     %TextUndrawTextBox($0186)
     %TextRepositionCursor($018A)
@@ -855,7 +934,7 @@ ObtainedSoulsMenuText:
     db "Souls"
     %TextWaitAndBreak()
 
-Print "SoulOfMagicianMenuText: ",pc
+;Print "SoulOfMagicianMenuText: ",pc
 SoulOfMagicianMenuText:
     %TextRepositionCursor($030E)
 SoulOfMagician:
@@ -863,7 +942,7 @@ SoulOfMagician:
     db "Soul@of@Magician",$00
     %TextWaitAndBreak()
 
-Print "SoulOfLightMenuText: ",pc
+;Print "SoulOfLightMenuText: ",pc
 SoulOfLightMenuText:
     %TextRepositionCursor($03CE)
 SoulOfLight:
@@ -871,7 +950,7 @@ SoulOfLight:
     db "Soul@of@Light",$00,$00,$00,$00
     %TextWaitAndBreak()
 
-Print "SoulOfShieldMenuText: ",pc
+;Print "SoulOfShieldMenuText: ",pc
 SoulOfShieldMenuText:
     %TextRepositionCursor($048E)
 SoulOfShield:
@@ -879,14 +958,14 @@ SoulOfShield:
     db "Soul@of@Shield",$00,$00,$00
     %TextWaitAndBreak()
 
-Print "SoulOfDetectionMenuText: ",pc
+;Print "SoulOfDetectionMenuText: ",pc
 SoulOfDetectionMenuText:
     %TextRepositionCursor($054E)
 SoulOfDetection:
     db "Soul@of@Detection"
     %TextWaitAndBreak()
 
-Print "SoulOfRealityMenuText: ",pc
+;Print "SoulOfRealityMenuText: ",pc
 SoulOfRealityMenuText:
     %TextRepositionCursor($060E)
 SoulOfReality:
@@ -894,7 +973,7 @@ SoulOfReality:
     db "Soul@of@Reality",$00,$00
     %TextWaitAndBreak()
 
-Print "InventoryMenuText: ",pc
+;Print "InventoryMenuText: ",pc
 InventoryMenuText:
     %TextRepositionCursor($0088)
     %TextDrawTextBox($06, $0C)
@@ -909,22 +988,22 @@ InventoryMenuText:
     %TextDrawTextBox($16, $08)
     %TextRepositionCursor($048A)
     db " Wep.: "
-    %TextTableLookup($CF74, $1B5E)
+    %TextTableLookup(InventoryPointers, $1B5E)
     %TextCR()
     %TextCR()
     db " Arm.: "
-    %TextTableLookup($CF74, $1B60)
+    %TextTableLookup(InventoryPointers, $1B60)
     %TextCR()
     %TextCR()
     db " Mag.: "
-    %TextTableLookup($CF74, $1B62)
+    %TextTableLookup(InventoryPointers, $1B62)
     %TextCR()
     %TextCR()
     db " Item: "
-    %TextTableLookup($CF74, $1B64)
+    %TextTableLookup(InventoryPointers, $1B64)
     %TextWaitAndBreak()
 
-Print "ItemMenuText: ",pc
+;Print "ItemMenuText: ",pc
 ItemMenuText:
     %TextRepositionCursor($0088)
     %TextDrawTextBox($16, $0C)
@@ -936,7 +1015,7 @@ RepeatCount20:
 RepeatCount19:
     db $19
 
-Print "HudText: ",pc
+;Print "HudText: ",pc
 HudText:
     %TextToggleSmallUiFont()
     %TextTextStyle($24)
@@ -955,35 +1034,47 @@ HudText:
     %TextRepeatChar($20, RepeatCount19)
     %TextWaitAndBreak()
 
+;Print "HudText2: ",pc
+HudText2:
     %TextToggleSmallUiFont()
     %TextRepositionCursor($0058)
     %TextTextStyle($20)
     %TextPrintDecimal($08, $1B78)
     %TextWaitAndBreak()
 
+;Print "HudText3: ",pc
+HudText3:
     %TextToggleSmallUiFont()
     %TextRepositionCursor($00CC)
     %TextTextStyle($2C)
     %TextPrintHealthBar($1B88, $1B8A)
     %TextWaitAndBreak()
 
+;Print "HudText4: ",pc
+HudText4:
     %TextToggleSmallUiFont()
     %TextRepositionCursor($004A)
     %TextTextStyle($20)
     %TextPrintDecimal($02, $1B6A)
     %TextWaitAndBreak()
 
+;Print "HudText5: ",pc
+HudText5:
     %TextToggleSmallUiFont()
     %TextRepositionCursor($0072)
     %TextTextStyle($20)
     %TextPrintDecimal($06, $1B66)
     %TextWaitAndBreak()
 
+;Print "HudText6: ",pc
+HudText6:
     %TextToggleSmallUiFont()
     %TextRepositionCursor($0140)
     %TextRepeatChar($20, RepeatCount20)
     %TextWaitAndBreak()
 
+;Print "HudText7: ",pc
+HudText7:
     %TextToggleSmallUiFont()
     %TextRepositionCursor($0140)
     %TextTextStyle($24)
@@ -995,6 +1086,7 @@ HudText:
     %TextPrintHealthBar($0336, $0338)
     %TextWaitAndBreak()
 
+;Print "MiscStringPointers: ",pc
 MiscStringPointers: ; Various String Pointers, is this what "Quick Print" indexes from? If so we could add some RAM addresses for client stuff such as player name or world.
     dw Misc0,Misc1,PlayerName,$0447 ; Some address in ram, also hero name?
     dw Misc4,Misc5,Misc6,Misc7
@@ -1025,6 +1117,7 @@ Misc8:
 ;TODO: remove asserts for non-fixed things.
 assert pc() == $A0C7C2 ;
 
+;Print "LocationNamePointers: ",pc
 LocationNamePointers:
     ; Act 1
     dw GrassValleyShrine, GrassValley, ChildsSecretPassage, TreasureRoom
@@ -1068,7 +1161,7 @@ LocationNamePointers:
 
 ;TODO: remove asserts for non-fixed things.
 assert pc() == $A0C8C2
-
+;Print "GrassValleyShrine: ",pc
 GrassValleyShrine:
     db "  Grass Valley Shrine " : %TextWaitAndBreak()
 GrassValley:
@@ -1331,6 +1424,9 @@ Unknown36:
 assert pc() == $A0CF02
 
 ;Menu Options
+;TODO: some of these show up all over the place and need to be searched for in depth.
+;TODO: search for instances of COP #$1A and $02,$1A
+Print "YesNoPrompt: ",pc
 YesNoPrompt:
     %TextRepositionCursor($0288)
     %TextDrawTextBox($04,$04)
@@ -1338,12 +1434,14 @@ YesNoPrompt:
     db " No"
     %TextRepositionCursor($030A)
     %TextWaitAndBreak()
+Print "OnlyYesPrompt: ",pc
 OnlyYesPrompt:
     %TextRepositionCursor($0308)
     %TextDrawTextBox($04,$02)
     db " Yes"
     %TextRepositionCursor($038A)
     %TextWaitAndBreak()
+Print "RecordMoveQuitPrompt: ",pc
 RecordMoveQuitPrompt:
     %TextRepositionCursor($0208)
     %TextDrawTextBox($07,$06)
@@ -1352,6 +1450,7 @@ RecordMoveQuitPrompt:
     db " Quit"
     %TextRepositionCursor($028A)
     %TextWaitAndBreak()
+Print "RecordQuitPrompt: ",pc
 RecordQuitPrompt:
     %TextRepositionCursor($0288)
     %TextDrawTextBox($07,$04)
@@ -1359,6 +1458,7 @@ RecordQuitPrompt:
     db " Quit"
     %TextRepositionCursor($030A)
     %TextWaitAndBreak()
+Print "StayGoBackPrompt: ",pc
 StayGoBackPrompt:
     %TextRepositionCursor($0288)
     %TextDrawTextBox($08,$04)
@@ -1369,21 +1469,24 @@ StayGoBackPrompt:
 
 ;TODO: remove asserts for non-fixed things.
 assert pc() == $A0CF74
+;Print "InventoryPointers: ",pc
+ItemNameTable:
 InventoryPointers:
 NullItemPointer:
     dw NotEquipped
+;Print "SwordNamePointers: ",pc
 SwordNamePointers:
     dw SwordOfLife, PsychoSword, CriticalSword, LuckyBlade
     dw ZantetsuSword, SpiritSword, RecoverySword, TheSoulBlade
-
+;Print "ArmorNamePointers: ",pc
 ArmorNamePointers:
     dw IronArmor, IceArmor, BubbleArmor, MagicArmor
     dw MysticArmor, LightArmor, ElementalMail, SoulArmor
-
+;Print "MagicNamePointers: ",pc
 MagicNamePointers:
     dw FlameBall, LightArrow, MagicFlare, Rotator
     dw SparkBomb, FlamePillar, Tornado, Phoenix
-
+;Print "ItemNamePointers: ",pc
 ItemNamePointers:
     dw GoatsFood, HarpString, APass, DreamRod
     dw LeosBrush, GLeaf, MolesRibbon, TheBigPearl
@@ -1535,6 +1638,7 @@ MagicBell:
 
 ;TODO: remove asserts for non-fixed things.
 assert pc() == $A0D2E6
+NpcNamePointerTable: ;TODO: use just one name for this label.
 NpcNamePointers:
     dw AnOldMan, AnOldWoman, ABoy, Lisa
     dw TheVillageChief, TheBridgeGuard, AnArchitect, ToolShopOwnersSon
@@ -1671,6 +1775,7 @@ Queen: ;TODO: rename to Queen Magridd
 ; Status Screen Text
 ;TODO: remove asserts for non-fixed things.
 assert pc() == $A0D53E
+Print "PrintSwordStatsBox: ",pc
 PrintSwordStatsBox:
     %TextRepositionCursor($0408)
     %TextDrawTextBox($16,$08)
@@ -1680,6 +1785,7 @@ PrintSwordStatsBox:
     db "Strength:"
     %TextWaitAndBreak()
 
+Print "PrintArmorStatsBox: ",pc
 PrintArmorStatsBox:
     %TextRepositionCursor($0408)
     %TextDrawTextBox($16,$08)
@@ -1687,6 +1793,7 @@ PrintArmorStatsBox:
     db "Defence :"
     %TextWaitAndBreak()
 
+Print "PrintEmptyStatsBox: ",pc
 PrintEmptyStatsBox:
     %TextRepositionCursor($0408)
     %TextDrawTextBox($16,$08)
@@ -1696,6 +1803,8 @@ PrintEmptyStatsBox:
 ;Status Screen Description Pointers:
 ;TODO: remove asserts for non-fixed things.
 assert pc() == $A0D572
+Print "StatsTextPointers: ",pc
+StatsTextPointers:
 NullItemStatusPointer:
     dw NullItemStatsText
 
@@ -2310,6 +2419,7 @@ MagicBellStatsText:
 assert pc() == $A0E12C ;TODO: remove assert once tables below made relocatable.
 ; Used as indexes into the inventory pointers table.
 ; See items.asm
+;Print "InventoryPointerIndexes: ",pc
 InventoryPointerIndexes:
     ;Swords
     .LifeSword: dw !LifeSword
@@ -2385,7 +2495,9 @@ InventoryPointerIndexes:
 
 ; Probably can't relocate this since it is used for sword power calculations.
 ;TODO: remove asserts for non-fixed things.
+;TODO: keep this table in bank $02 ($82)?
 assert pc() == $A0E1AC
+Print "SwordPowerTable: ",pc
 SwordPowerTable:
     .NoSword: db $00
     .LifeSword: db $01
@@ -2398,11 +2510,17 @@ SwordPowerTable:
     .SoulBlade: db $0C
 
     ;Unsure what (if anything) this is used for.
+    ;I think this is the no sword equiped power table?
+Print "UnknownTable1: ",pc
+UnknownTable1:
     db $00,$00,$00,$00,$00,$00,$00,$00
+Print "UnknownTable2: ",pc
+UnknownTable2:
     db $00,$00,$00,$00,$00,$00,$00,$00
 
 ;TODO: remove asserts for non-fixed things.
 assert pc() == $A0E1C5
+Print "ArmorDefenseTable: ",pc
 ArmorDefenseTable:
     .NoArmor: db $00
     .IronArmor: db $01
@@ -2417,6 +2535,8 @@ ArmorDefenseTable:
 ;TODO: remove asserts for non-fixed things.
 assert pc() == $A0E1CE
 ;Sword required levels are stored as 16-bit BCD.
+;TODO: this cant remain in bank 2 since it is printed
+Print "SwordRequiredLevelTable: ",pc
 SwordRequiredLevelTable:
     .LifeSword: dw $01
     .PsychoSword: dw $05
@@ -2429,15 +2549,17 @@ SwordRequiredLevelTable:
 
 ;TODO: remove asserts for non-fixed things.
 assert pc() == $A0E1DE
+Print "StringNpcCannotBeRecalled: ",pc
 StringNpcCannotBeRecalled:
     %TextStart()
     %TextTextStyle($24)
-    %TextTableLookup($D2E6, $03C8)
+    %TextTableLookup(NpcNamePointers, TableLookupIndex)
     %TextTextStyle($20)
     %TextCR()
     db "cannot ",!Dict_be, "recalled ", !Text_CR, "yet! "
     %TextChangeStreamPtr(TextEndStandardBank20)
 
+Print "StringNpcReleased: ",pc
 StringNpcReleased:
     %TextStart()
     %TextQuickPrint($02)
@@ -2445,11 +2567,12 @@ StringNpcReleased:
     db !Dict_released
     %TextCR()
     %TextTextStyle($24)
-    %TextTableLookup($D2E6, $03C8)
+    %TextTableLookup(NpcNamePointers, TableLookupIndex)
     %TextTextStyle($20)
     db "."
     %TextChangeStreamPtr(TextEndStandardBank20)
 
+Print "ItemReceived: ",pc
 ItemReceived:
 StringHeroRecieved:
     %TextStart()
@@ -2459,16 +2582,18 @@ StringHeroRecieved:
     %TextCR()
     db " "
     %TextTextStyle($24)
-    %TextTableLookup($CF74, $03C8)
+    %TextTableLookup(InventoryPointers, TableLookupIndex)
     %TextTextStyle($20)
     db "."
     %TextChangeStreamPtr(TextEndStandardBank20)
 
+Print "StringNothingInside: ",pc
 StringNothingInside:
     %TextStart()
     db " Nothing inside."
     %TextChangeStreamPtr(TextEndStandardBank20)
 
+Print "GemsReceived: ",pc
 GemsReceived:
 StringFoundGems:
     %TextStart()
@@ -2477,16 +2602,18 @@ StringFoundGems:
     db " found"
     %TextCR()
     %TextTextStyle($24)
-    %TextPrintDecimal($04, $03C8) ;Patched to be 4 digits.
+    %TextPrintDecimal($04, TableLookupIndex) ;Patched to be 4 digits.
     db " GEMs."
     %TextTextStyle($20)
 
+Print "TextEndStandardBank20: ",pc
 TextEndStandardBank20:
     %TextWait()
     %TextUndrawTextBox($0408)
     %TextBreak()
 
 ;TODO: Add randomizer credits.
+Print "StringEndCredits: ",pc
 StringEndCredits:
     %TextPrintSpace($03)
     db "The staff of Soul Blazer"
