@@ -291,7 +291,7 @@ HerbPlantLeosLabScript:
     RTL
 .doYouWantOne
     %CopPrintNpcReward(!NPC_HerbPlantInLeosLab, .textWantOne)
-    %CopShowChoices($CF02, $02, .dontWant)
+    %CopShowChoices(YesNoPrompt, $02, .dontWant)
     LDA $8003D0 ; Read menu choice
     BNE .dontWant
     %CopGiveNpcReward(!NPC_HerbPlantInLeosLab)
@@ -518,7 +518,7 @@ ChestOfDrawersHerbScript:
     RTL
 .doYouWantOne
     %CopPrintNpcReward(!NPC_ChestOfDrawersHerb, .textWantOne)
-    %CopShowChoices($CF02, $02, .dontWant)
+    %CopShowChoices(YesNoPrompt, $02, .dontWant)
     LDA $8003D0 ; Read menu choice
     BNE .dontWant
     %CopGiveNpcReward(!NPC_ChestOfDrawersHerb)
@@ -1221,7 +1221,7 @@ MaidHerbScript:
     BRA .endScript
 .doYouWantOne:
     %CopPrintNpcReward(!NPC_MaidHerb, .textWantOne)
-    %CopShowChoices($CF02, $02, .dontWant)
+    %CopShowChoices(YesNoPrompt, $02, .dontWant)
     LDA $8003D0 ; Read menu choice
     BNE .dontWant
     %CopShowText(.textGive)

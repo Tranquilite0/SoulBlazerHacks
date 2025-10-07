@@ -53,7 +53,7 @@ NorthEasternMermaidHerbScript:
     RTL
 .doYouWantOne
     %CopPrintNpcReward(!NPC_NorthEasternMermaidHerb, .textWantOne)
-    %CopShowChoices($CF02, $02, .dontWant)
+    %CopShowChoices(YesNoPrompt, $02, .dontWant)
     LDA $8003D0 ; Read menu choice
     BNE .dontWant
     %CopGiveNpcReward(!NPC_NorthEasternMermaidHerb)

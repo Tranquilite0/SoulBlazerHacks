@@ -119,7 +119,7 @@ org $83922C
     skip 5
     %CopPrintNpcReward(!NPC_ToolShopOwnersSonTeddy, $9255)
     ; This choice doesnt matter (But thou must!)
-    %CopShowChoices($CF02,$02,+)
+    %CopShowChoices(YesNoPrompt,$02,+)
 +
     %CopSetEntityScriptAddr($05, $8480)
     %CopShowText($92D9)

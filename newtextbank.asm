@@ -23,6 +23,8 @@ org $82AEEF
     LDA.B #$A0
 
 ;String pointer patches to redirect strings
+;TODO: move these to their own file and assemble before other hooks and patches?
+;TODO: Weapon and Armor power table pointers
 org $80E775
     LDY.W #TitleScreenText ;$BB36
 ;Press Start
@@ -206,6 +208,167 @@ org $829DF2
 org $82A031
     LDA.L StatsTextPointers,X
     ;LDA.L UNREACH_02D572,X               ;02A031|BF72D502|02D572;
+
+org $828EE2
+    LDY.W #StringNpcCannotBeRecalled
+    ;LDY.W #$E1DE                         ;028EE2|A0DEE1  |      ;
+org $828DF4
+    LDY.W #StringNpcReleased
+    ;LDY.W #$E203                         ;028DF4|A003E2  |      ;
+org $828ABF
+    LDY.W #ItemReceived
+    ;LDY.W #$E216                         ;028ABF|A016E2  |      ;
+
+org $828ACA
+    LDY.W #StringNothingInside
+    ;LDY.W #$E232                         ;028ACA|A032E2  |      ;
+
+org $828AE7
+    LDY.W #GemsReceived
+    ;LDY.W #$E246                         ;028AE7|A046E2  |      ;
+
+org $80F639
+    LDY.W #StringEndCredits
+    ;LDY.W #$E264                         ;00F639|A064E2  |      ;
+
+;CopShowChoices update choice string pointers.
+org $00F689
+    %CopShowChoices(RecordQuitPrompt, $02, $F754)
+;COP #$1A                             ;00F689|021A    |      ;  
+;db $43,$CF,$02,$54,$F7               ;00F68B|        |0000CF;
+
+org $00F69C
+    %CopShowChoices(RecordMoveQuitPrompt, $03, $F754)
+;COP #$1A                             ;00F69C|021A    |      ;  
+;db $23,$CF,$03,$54,$F7               ;00F69E|        |0000CF;  
+
+org $00F6F3
+    %CopShowChoices(YesNoPrompt, $02, $F754)
+;COP #$1A                             ;00F6F3|021A    |      ;  
+;db $02,$CF,$02,$54,$F7               ;00F6F5|        |      ;
+
+org $00F71E
+    %CopShowChoices(YesNoPrompt, $02, $F754)
+;COP #$1A                             ;00F71E|021A    |      ;  
+;db $02,$CF,$02,$54,$F7               ;00F720|        |      ;
+
+org $038135
+    %CopShowChoices(YesNoPrompt, $02, $814D)
+;COP #$1A                             ;038135|021A    |      ;  
+;db $02,$CF,$02,$4D,$81               ;038137|        |      ;
+
+org $03870D
+    %CopShowChoices(YesNoPrompt, $02, $8732)
+;COP #$1A                             ;03870D|021A    |      ;  
+;db $02,$CF,$02,$32,$87               ;03870F|        |      ;
+
+org $03923A
+    %CopShowChoices(YesNoPrompt, $02, $9241)
+;COP #$1A                             ;03923A|021A    |      ;  
+;db $02,$CF,$02,$41,$92               ;03923C|        |      ;
+
+org $039D44
+    %CopShowChoices(YesNoPrompt, $02, $9D51)
+;COP #$1A                             ;039D44|021A    |      ;  
+;db $02,$CF,$02,$51,$9D               ;039D46|        |      ;
+
+org $03A4AA
+    %CopShowChoices(OnlyYesPrompt, $01, $A4B1)
+;COP #$1A                             ;03A4AA|021A    |      ;  
+;db $15,$CF,$01,$B1,$A4               ;03A4AC|        |0000CF;
+
+org $03AD1F
+    %CopShowChoices(StayGoBackPrompt, $02, $AD3D)
+;COP #$1A                             ;03AD1F|021A    |      ;  
+;db $5B,$CF,$02,$3D,$AD               ;03AD21|        |      ;
+
+org $03B41F
+    %CopShowChoices(YesNoPrompt, $02, $B438)
+;COP #$1A                             ;03B41F|021A    |      ;  
+;db $02,$CF,$02,$38,$B4               ;03B421|        |      ;
+
+org $03BA2C
+    %CopShowChoices(YesNoPrompt, $02, $BA64)
+;COP #$1A                             ;03BA2C|021A    |      ;  
+;db $02,$CF,$02,$64,$BA               ;03BA2E|        |      ;
+
+org $03C60E
+    %CopShowChoices(YesNoPrompt, $02, $C627)
+;COP #$1A                             ;03C60E|021A    |      ;  
+;db $02,$CF,$02,$27,$C6               ;03C610|        |      ;
+
+org $03CCA5
+    %CopShowChoices(YesNoPrompt, $02, $CCC4)
+;COP #$1A                             ;03CCA5|021A    |      ;  
+;db $02,$CF,$02,$C4,$CC               ;03CCA7|        |      ;
+
+org $03E4ED
+    %CopShowChoices(StayGoBackPrompt, $02, $E50B)
+;COP #$1A                             ;03E4ED|021A    |      ;  
+;db $5B,$CF,$02,$0B,$E5               ;03E4EF|        |      ;
+
+
+org $049EFF
+    %CopShowChoices(StayGoBackPrompt, $02, $9F1D)
+;COP #$1A                             ;049EFF|021A    |      ;  
+;db $5B,$CF,$02,$1D,$9F               ;049F01|        |      ;
+
+org $04ABA2
+    %CopShowChoices(YesNoPrompt, $02, $ABC3)
+;COP #$1A                             ;04ABA2|021A    |      ;  
+;db $02,$CF,$02,$C3,$AB               ;04ABA4|        |      ;
+
+org $04B2DC
+    %CopShowChoices(YesNoPrompt, $02, $B2F5)
+;COP #$1A                             ;04B2DC|021A    |      ;  
+;db $02,$CF,$02,$F5,$B2               ;04B2DE|        |      ;
+
+org $04BE04
+    %CopShowChoices(StayGoBackPrompt, $02, $BE22)
+;COP #$1A                             ;04BE04|021A    |      ;  
+;db $5B,$CF,$02,$22,$BE               ;04BE06|        |      ;
+
+org $04C5DA
+    %CopShowChoices(YesNoPrompt, $02, $C5FA)
+;COP #$1A                             ;04C5DA|021A    |      ;  
+;db $02,$CF,$02,$FA,$C5               ;04C5DC|        |      ;
+
+org $04C9AD
+    %CopShowChoices(YesNoPrompt, $02, $C9C8)
+;COP #$1A                             ;04C9AD|021A    |      ;  
+;db $02,$CF,$02,$C8,$C9               ;04C9AF|        |      ;
+
+org $04CE74
+    %CopShowChoices(YesNoPrompt, $02, $CE97)
+;COP #$1A                             ;04CE74|021A    |      ;  
+;db $02,$CF,$02,$97,$CE               ;04CE76|        |      ;
+
+org $04E73F
+    %CopShowChoices(YesNoPrompt, $02, $E746)
+;COP #$1A                             ;04E73F|021A    |      ;  
+;db $02,$CF,$02,$46,$E7               ;04E741|        |      ;
+
+org $04EE7D
+    %CopShowChoices(StayGoBackPrompt, $02, $EE98)
+;COP #$1A                             ;04EE7D|021A    |      ;  
+;db $5B,$CF,$02,$98,$EE               ;04EE7F|        |      ;
+
+
+org $1F82F6
+    %CopShowChoices(YesNoPrompt, $02, $8317)
+;COP #$1A                             ;1F82F6|021A    |      ;  
+;db $02,$CF,$02,$17,$83               ;1F82F8|        |      ;
+
+org $1F99A6
+    %CopShowChoices(YesNoPrompt, $02, $99B6)
+;COP #$1A                             ;1F99A6|021A    |      ;  
+;db $02,$CF,$02,$B6,$99               ;1F99A8|        |      ;
+
+org $1FA471
+    %CopShowChoices(StayGoBackPrompt, $02, $A48F)
+;COP #$1A                             ;1FA471|021A    |      ;  
+;db $5B,$CF,$02,$8F,$A4               ;1FA473|        |      ;
+
 ;TODO: continue tracing string pointers to bank 2 strings.
 
 pullpc
@@ -753,7 +916,6 @@ FileSelectTextMain:
 
 ;Print "FileSelectText1: ",pc
 FileSelectText1:
-    ;TODO: determine what this string is
     %TextRepositionCursor($02D4)
     %TextQuickPrint($03)
     %TextRepositionCursor($02E8)
@@ -764,7 +926,6 @@ FileSelectText1:
 
 ;Print "FileSelectText2: ",pc
 FileSelectText2:
-    ;TODO: determine what this string is
     %TextRepositionCursor($0394)
     %TextQuickPrint($03)
     %TextRepositionCursor($03A8)
@@ -775,7 +936,6 @@ FileSelectText2:
 
 ;Print "FileSelectText3: ",pc
 FileSelectText3:
-    ;TODO: determine what this string is
     %TextRepositionCursor($0454)
     %TextQuickPrint($03)
     %TextRepositionCursor($0468)
@@ -786,7 +946,6 @@ FileSelectText3:
 
 ;Print "FileSelectText4: ",pc
 FileSelectText4:
-    ;TODO: determine what this string is
     %TextRepositionCursor($0514)
     %TextQuickPrint($03)
     %TextRepositionCursor($0528)
@@ -1424,9 +1583,7 @@ Unknown36:
 assert pc() == $A0CF02
 
 ;Menu Options
-;TODO: some of these show up all over the place and need to be searched for in depth.
-;TODO: search for instances of COP #$1A and $02,$1A
-Print "YesNoPrompt: ",pc
+;Print "YesNoPrompt: ",pc
 YesNoPrompt:
     %TextRepositionCursor($0288)
     %TextDrawTextBox($04,$04)
@@ -1434,14 +1591,14 @@ YesNoPrompt:
     db " No"
     %TextRepositionCursor($030A)
     %TextWaitAndBreak()
-Print "OnlyYesPrompt: ",pc
+;Print "OnlyYesPrompt: ",pc
 OnlyYesPrompt:
     %TextRepositionCursor($0308)
     %TextDrawTextBox($04,$02)
     db " Yes"
     %TextRepositionCursor($038A)
     %TextWaitAndBreak()
-Print "RecordMoveQuitPrompt: ",pc
+;Print "RecordMoveQuitPrompt: ",pc
 RecordMoveQuitPrompt:
     %TextRepositionCursor($0208)
     %TextDrawTextBox($07,$06)
@@ -1450,7 +1607,7 @@ RecordMoveQuitPrompt:
     db " Quit"
     %TextRepositionCursor($028A)
     %TextWaitAndBreak()
-Print "RecordQuitPrompt: ",pc
+;Print "RecordQuitPrompt: ",pc
 RecordQuitPrompt:
     %TextRepositionCursor($0288)
     %TextDrawTextBox($07,$04)
@@ -1458,7 +1615,7 @@ RecordQuitPrompt:
     db " Quit"
     %TextRepositionCursor($030A)
     %TextWaitAndBreak()
-Print "StayGoBackPrompt: ",pc
+;Print "StayGoBackPrompt: ",pc
 StayGoBackPrompt:
     %TextRepositionCursor($0288)
     %TextDrawTextBox($08,$04)
