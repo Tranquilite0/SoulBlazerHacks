@@ -12,6 +12,8 @@ incsrc "macros.asm"
 incsrc "freespace.asm"
 incsrc "items.asm"
 
+;New Text Bank
+incsrc "newtextbank.asm"
 
 org !Bank00FreeSpaceStart
     incsrc "copextensions.asm"
@@ -53,7 +55,6 @@ org !Bank1FFreeSpaceStart
     incsrc "npcscripts.bank1f.asm"
 assert pc() <= !Bank1FFreespaceEnd
 
-incsrc "newtextbank.asm"
 
 ; Standalone hacks
 incsrc "textspeed.asm"

@@ -74,14 +74,6 @@ org $80E9AA
 org $80E9D0
     LDY.W #PrologueText14
 
-;TODO: figure out what this string is
-org $80EA65
-    ;LDY.W #$EA86
-
-;TODO: figure out what this string is
-org $80EA71
-    ;LDY.W #$EA8B
-
 ;Epilogue String pointers
 org $80E6D0
     LDY.W #EpilogueText1
@@ -155,7 +147,7 @@ org $8299BA
     LDY.W #SoulOfMagicianMenuText
 
 org $8299D2
-    CPY.W #InventoryMenuText ;Unsure if this one is the string pointer or something in bank2?
+    CPY.W #InventoryMenuText
     ;CPY.W #$C69F                         ;0299D2|C09FC6  |      ;
 org $829C7E
     LDY.W #InventoryMenuText
@@ -459,6 +451,7 @@ NewPushStartText:
 ; Send/RecieveStrings
 
 ; String Address Table Required by the text engine to do table lookups.
+;TODO: Update quickprint lookup table to include some of these?
 ReceiveSender: dw ReceiveStruct.Sender
 SendItemName: dw SendStruct.ItemName
 SendAddressee: dw SendStruct.Addressee
@@ -530,6 +523,8 @@ ReceivedVictoryFrom:
 ;Pad space until we get to the original start of text.
 ; Any changes to rom layout past this point need to be scrutinized carefully since I havent hunted down all the pointers.
 
+;TODO: shift all data back by $100 bytes and see what breaks.
+;TODO: if nothing breaks then we succesfully found all the string pointers and can relocate anywhere in the bank.
 assert pc() <= $A0BB27
 padbyte $FF
 pad $A0BB27
