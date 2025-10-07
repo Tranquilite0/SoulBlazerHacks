@@ -163,6 +163,18 @@ org $829C7E
 org $829D4B
     LDY.W #InventoryMenuText
     ;LDY.W #$C69F                         ;029D4B|A09FC6  |      ;
+org $829CD3
+    LDY.W #InventoryMenuText2
+    ;LDY.W #$C6C1                         ;029CD3|A0C1C6  |      ;
+org $829CF4
+    LDY.W #InventoryMenuText2
+    ;LDY.W #$C6C1                         ;029CF4|A0C1C6  |      ;
+org $829D12
+    LDY.W #InventoryMenuText2
+    ;LDY.W #$C6C1                         ;029D12|A0C1C6  |      ;
+org $829D30
+    LDY.W #InventoryMenuText2
+    ;LDY.W #$C6C1                         ;029D30|A0C1C6  |      ;
 org $829D78
     LDY.W #ItemMenuText
     ;LDY.W #$C701                         ;029D78|A001C7  |      ;  
@@ -201,6 +213,9 @@ org $829DE0
 org $829DE8
     LDY.W #PrintEmptyStatsBox
     ;LDY.W #$D56B                         ;029DE8|A06BD5  |      ;
+org $82A027
+    LDY.W #PrintEmptyStatsBox
+    ;LDY.W #$D56B                         ;02A027|A06BD5  |      ;
 
 org $829DF2
     LDA.L StatsTextPointers,X
@@ -232,139 +247,140 @@ org $80F639
     ;LDY.W #$E264                         ;00F639|A064E2  |      ;
 
 ;CopShowChoices update choice string pointers.
-org $00F689
+org $80F689
     %CopShowChoices(RecordQuitPrompt, $02, $F754)
 ;COP #$1A                             ;00F689|021A    |      ;  
 ;db $43,$CF,$02,$54,$F7               ;00F68B|        |0000CF;
 
-org $00F69C
+org $80F69C
     %CopShowChoices(RecordMoveQuitPrompt, $03, $F754)
 ;COP #$1A                             ;00F69C|021A    |      ;  
 ;db $23,$CF,$03,$54,$F7               ;00F69E|        |0000CF;  
 
-org $00F6F3
+org $80F6F3
     %CopShowChoices(YesNoPrompt, $02, $F754)
 ;COP #$1A                             ;00F6F3|021A    |      ;  
 ;db $02,$CF,$02,$54,$F7               ;00F6F5|        |      ;
 
-org $00F71E
+org $80F71E
     %CopShowChoices(YesNoPrompt, $02, $F754)
 ;COP #$1A                             ;00F71E|021A    |      ;  
 ;db $02,$CF,$02,$54,$F7               ;00F720|        |      ;
 
-org $038135
+
+org $838135
     %CopShowChoices(YesNoPrompt, $02, $814D)
 ;COP #$1A                             ;038135|021A    |      ;  
 ;db $02,$CF,$02,$4D,$81               ;038137|        |      ;
 
-org $03870D
+org $83870D
     %CopShowChoices(YesNoPrompt, $02, $8732)
 ;COP #$1A                             ;03870D|021A    |      ;  
 ;db $02,$CF,$02,$32,$87               ;03870F|        |      ;
 
-org $03923A
+org $83923A
     %CopShowChoices(YesNoPrompt, $02, $9241)
 ;COP #$1A                             ;03923A|021A    |      ;  
 ;db $02,$CF,$02,$41,$92               ;03923C|        |      ;
 
-org $039D44
+org $839D44
     %CopShowChoices(YesNoPrompt, $02, $9D51)
 ;COP #$1A                             ;039D44|021A    |      ;  
 ;db $02,$CF,$02,$51,$9D               ;039D46|        |      ;
 
-org $03A4AA
+org $83A4AA
     %CopShowChoices(OnlyYesPrompt, $01, $A4B1)
 ;COP #$1A                             ;03A4AA|021A    |      ;  
 ;db $15,$CF,$01,$B1,$A4               ;03A4AC|        |0000CF;
 
-org $03AD1F
+org $83AD1F
     %CopShowChoices(StayGoBackPrompt, $02, $AD3D)
 ;COP #$1A                             ;03AD1F|021A    |      ;  
 ;db $5B,$CF,$02,$3D,$AD               ;03AD21|        |      ;
 
-org $03B41F
+org $83B41F
     %CopShowChoices(YesNoPrompt, $02, $B438)
 ;COP #$1A                             ;03B41F|021A    |      ;  
 ;db $02,$CF,$02,$38,$B4               ;03B421|        |      ;
 
-org $03BA2C
+org $83BA2C
     %CopShowChoices(YesNoPrompt, $02, $BA64)
 ;COP #$1A                             ;03BA2C|021A    |      ;  
 ;db $02,$CF,$02,$64,$BA               ;03BA2E|        |      ;
 
-org $03C60E
+org $83C60E
     %CopShowChoices(YesNoPrompt, $02, $C627)
 ;COP #$1A                             ;03C60E|021A    |      ;  
 ;db $02,$CF,$02,$27,$C6               ;03C610|        |      ;
 
-org $03CCA5
+org $83CCA5
     %CopShowChoices(YesNoPrompt, $02, $CCC4)
 ;COP #$1A                             ;03CCA5|021A    |      ;  
 ;db $02,$CF,$02,$C4,$CC               ;03CCA7|        |      ;
 
-org $03E4ED
+org $83E4ED
     %CopShowChoices(StayGoBackPrompt, $02, $E50B)
 ;COP #$1A                             ;03E4ED|021A    |      ;  
 ;db $5B,$CF,$02,$0B,$E5               ;03E4EF|        |      ;
 
 
-org $049EFF
+org $849EFF
     %CopShowChoices(StayGoBackPrompt, $02, $9F1D)
 ;COP #$1A                             ;049EFF|021A    |      ;  
 ;db $5B,$CF,$02,$1D,$9F               ;049F01|        |      ;
 
-org $04ABA2
+org $84ABA2
     %CopShowChoices(YesNoPrompt, $02, $ABC3)
 ;COP #$1A                             ;04ABA2|021A    |      ;  
 ;db $02,$CF,$02,$C3,$AB               ;04ABA4|        |      ;
 
-org $04B2DC
+org $84B2DC
     %CopShowChoices(YesNoPrompt, $02, $B2F5)
 ;COP #$1A                             ;04B2DC|021A    |      ;  
 ;db $02,$CF,$02,$F5,$B2               ;04B2DE|        |      ;
 
-org $04BE04
+org $84BE04
     %CopShowChoices(StayGoBackPrompt, $02, $BE22)
 ;COP #$1A                             ;04BE04|021A    |      ;  
 ;db $5B,$CF,$02,$22,$BE               ;04BE06|        |      ;
 
-org $04C5DA
+org $84C5DA
     %CopShowChoices(YesNoPrompt, $02, $C5FA)
 ;COP #$1A                             ;04C5DA|021A    |      ;  
 ;db $02,$CF,$02,$FA,$C5               ;04C5DC|        |      ;
 
-org $04C9AD
+org $84C9AD
     %CopShowChoices(YesNoPrompt, $02, $C9C8)
 ;COP #$1A                             ;04C9AD|021A    |      ;  
 ;db $02,$CF,$02,$C8,$C9               ;04C9AF|        |      ;
 
-org $04CE74
+org $84CE74
     %CopShowChoices(YesNoPrompt, $02, $CE97)
 ;COP #$1A                             ;04CE74|021A    |      ;  
 ;db $02,$CF,$02,$97,$CE               ;04CE76|        |      ;
 
-org $04E73F
+org $84E73F
     %CopShowChoices(YesNoPrompt, $02, $E746)
 ;COP #$1A                             ;04E73F|021A    |      ;  
 ;db $02,$CF,$02,$46,$E7               ;04E741|        |      ;
 
-org $04EE7D
+org $84EE7D
     %CopShowChoices(StayGoBackPrompt, $02, $EE98)
 ;COP #$1A                             ;04EE7D|021A    |      ;  
 ;db $5B,$CF,$02,$98,$EE               ;04EE7F|        |      ;
 
 
-org $1F82F6
+org $9F82F6
     %CopShowChoices(YesNoPrompt, $02, $8317)
 ;COP #$1A                             ;1F82F6|021A    |      ;  
 ;db $02,$CF,$02,$17,$83               ;1F82F8|        |      ;
 
-org $1F99A6
+org $9F99A6
     %CopShowChoices(YesNoPrompt, $02, $99B6)
 ;COP #$1A                             ;1F99A6|021A    |      ;  
 ;db $02,$CF,$02,$B6,$99               ;1F99A8|        |      ;
 
-org $1FA471
+org $9FA471
     %CopShowChoices(StayGoBackPrompt, $02, $A48F)
 ;COP #$1A                             ;1FA471|021A    |      ;  
 ;db $5B,$CF,$02,$8F,$A4               ;1FA473|        |      ;
@@ -1143,6 +1159,8 @@ InventoryMenuText:
     %TextRepositionCursor($00A8)
     %TextDrawTextBox($06, $0C)
     db "Magic"
+;Print "InventoryMenuText2: ",pc
+InventoryMenuText2:
     %TextRepositionCursor($0408)
     %TextDrawTextBox($16, $08)
     %TextRepositionCursor($048A)
