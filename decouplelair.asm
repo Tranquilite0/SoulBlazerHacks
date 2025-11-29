@@ -86,7 +86,11 @@ DecoupleLairReward:
 .lair:
     LDA RandoSettings.SkipRelease
     BEQ ReleaseLairNpc
-    LDA #!LairRelease
+    REP #$20
+    LDA.W $BA0D+$0E,X ; lair fields $0E-$0F are both zero when there would be an NPC Release cutscene.
+    BNE ReleaseLairNpc
+    LDA.W #!LairRelease
+    SEP #$20
     BRA -
 
 

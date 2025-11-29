@@ -12,6 +12,7 @@ SoulOfShield = $82C663
 SoulOfDetection = $82C678
 SoulOfReality = $82C68D
 
+NpcReleased = $82E203
 ItemReceived = $82E216
 
 PrintItemNameShort:

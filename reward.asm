@@ -34,6 +34,7 @@ GiveReward:
     BEQ +
     ;Release without cutscene
     REP #$20
+    TYA
     LDY #LairReleaseTable
     JSL SetBit
     LDY #LairReleaseTableShadow
@@ -105,6 +106,22 @@ PrintReward:
     STY TableLookupIndex
     LDY #ExpReceived
     LDA.B #bank(ExpReceived)
+    BRA .printAndEnd
++   CMP #!LairRelease
+    BNE +
+    ; Lair Release NPC
+    LDA.L RandoSettings.SkipRelease
+    BEQ .end
+    REP #$20
+    TYA ; Lair ID in Y (and A)
+    ASL #5
+    TAX ; Lair index in X
+    SEP #$20
+    LDA.L $81BA16,X ; Load NPC Name index from lair data field 09
+    STA TableLookupIndex ; Used by the print routine to load npc name
+    STZ TableLookupIndex+1 ; Second byte unused
+    LDY #NpcReleased
+    LDA.B #bank(NpcReleased)
     BRA .printAndEnd
 +   CMP #!Soul
     BNE +
