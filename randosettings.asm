@@ -3,6 +3,7 @@ struct RandoSettings $82F730
     .StonesRequired: skip 1
     .ActProgression: skip 1
     .OpenDeathtoll: skip 1
+    .SkipRelease: skip 1
 endstruct
 
 ; Initialize settings defaults
@@ -12,6 +13,7 @@ org RandoSettings
     db $06 ; .StonesRequired
     db $00 ; .ActProgression
     db $00 ; .OpenDeathtoll
+    db $00 ; .SkipRelease
 
 
 ; Hook start of game to apply settings

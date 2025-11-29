@@ -28,12 +28,24 @@ GiveReward:
     PLP
     RTL
 +   CMP #!LairRelease
-    BNE +
+    BNE ++
     ; Lair Release
-    JSL ReleaseLairNpc
+    LDA.L RandoSettings.SkipRelease
+    BEQ +
+    ;Release without cutscene
+    REP #$20
+    LDY #LairReleaseTable
+    JSL SetBit
+    LDY #LairReleaseTableShadow
+    JSL SetBit
+    BRK #$1C ; Play NPC Released sound.
+    PLP
+    SEC
+    RTL
++   JSL ReleaseLairNpc
     PLP
     RTL
-+   CMP #!Soul
+++  CMP #!Soul
     BNE +
     ; Soul
     ; Tight loop to compute 1 << Y

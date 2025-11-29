@@ -77,21 +77,17 @@ DecoupleLairReward:
     ; Lairs with vanilla lair rewards are complicated enough to need their own code path.
     CMP #!LairRelease
     BEQ .lair
-    JSL PrintReward
+-   JSL PrintReward
     JSL GiveReward
     BCS +
     BRK #$94 ; Play lair closed sound if no other item get sound played
 +   JSL CheckBossLair
     JML $828D03 ; Finish by animating the lair closing
 .lair:
-    REP #$20
-    LDA.W $BA26,X ; Load NPC ID from lair field $18-$19
-    TAY ; NPC ID in Y
-    ASL #5
-    TAX ; Lair Index in X
-    SEP #$20
-    JSL CheckForRoof
-    JML $828C75 ; Jump back and continue releasing lair with updated target lair
+    LDA RandoSettings.SkipRelease
+    BEQ ReleaseLairNpc
+    LDA #!LairRelease
+    BRA -
 
 
 ; Checks to see if your current position is in a building (where the roof is removed.)
