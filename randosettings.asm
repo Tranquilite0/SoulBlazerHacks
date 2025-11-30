@@ -13,7 +13,11 @@ org RandoSettings
     db $06 ; .StonesRequired
     db $00 ; .ActProgression
     db $00 ; .OpenDeathtoll
+if defined("debug")
     db $01 ; .SkipRelease
+else
+    db $00 ; .SkipRelease
+endif
 
 
 ; Hook start of game to apply settings

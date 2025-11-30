@@ -39,6 +39,8 @@ GiveReward:
     JSL SetBit
     LDY #LairReleaseTableShadow
     JSL SetBit
+    TAY
+    JSL HealFromRelease
     BRK #$1C ; Play NPC Released sound.
     PLP
     SEC
@@ -297,5 +299,48 @@ PrintRewardFrom:
     PLY
     PLA
     PLB
+    PLP
+    RTL
+
+; Heals depending on which NPC is being released
+; Pass Lair ID in Y
+HealFromRelease:
+    CPY.W #$0009 ; Village Chief
+    BNE +
+    JML HealFull
++   CPY.W #$0050 ; Greenwood's Gaurdian
+    BNE +
+    JML HealFull
++   CPY.W #$00B6 ; Mermaid Queen
+    BNE +
+    JML HealFull
++   CPY.W #$0103 ; Mountain King
+    BNE +
+    JML HealFull
++   CPY.W #$012F ; Marie
+    BNE +
+    JML HealFull
++   CPY.W #$0195 ; King Magridd
+    BNE HealPartial
+    JML HealFull
+
+HealPartial:
+    PHP
+    SEP #$20
+    LDA.W PlayerHealthMax
+    LSR #3 ; Div by 8
+    CLC
+    ADC.W PlayerHealthRestore
+    STA.W PlayerHealthRestore
+    PLP
+    RTL
+
+HealFull:
+    PHP
+    SEP #$20
+    LDA.W PlayerHealthMax
+    SEC
+    SBC.W PlayerHealthCurrent
+    STA.W PlayerHealthRestore
     PLP
     RTL

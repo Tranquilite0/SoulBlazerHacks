@@ -66,6 +66,9 @@ endstruct
 ; Selectively stops some buttons from being read out.
 ButtonMask = $7E0326
 
+; Writing to this restores health to the player.
+PlayerHealthRestore = $7E043B
+
 ; BCD. Writing to this gives EXP to the player.
 ExpToGive = $7E043D
 
@@ -88,6 +91,9 @@ SoulFlags = $7E1B82
 
 ; Text Speed ram location
 TextSpeedRam = $7E1B84
+
+PlayerHealthCurrent = $7E1B88
+PlayerHealthMax = $7E1B8A
 
 ; US release supports names that are 8 char + 1 null terminator. Names longer than this will occasionally cause textbox overflow.
 PlayerName = $7E1B92
