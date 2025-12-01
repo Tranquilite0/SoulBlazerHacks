@@ -273,15 +273,15 @@ CheckBossLair:
 ; If we release a cutscene NPC on the same map that it gets unlocked on then things will break
 ; This check bypasses that when there is a cutscene NPC (any of the bits in resurrection sequence X/Y coord set)
 SameMapCheckBypass:
-    LDA $BA0D+$02,X
-    ORA $BA0D+$03,X
+    LDA.W LairData.ReleaseX,X
+    ORA.W LairData.ReleaseY,X
     BEQ .originalCode
-    LDA $BA0D,X ; Load Teleport map
+    LDA.W LairData.ReleaseMap,X ; Load Teleport map
     REP #$02 ; Ensure Zero Flag is clear
     RTL
 .originalCode ; The original code that was replaced
-    LDA $BA0D,X ; Load Teleport map
-    CMP $1C6A ; Compare with current map
+    LDA.W LairData.ReleaseMap,X ; Load Teleport map
+    CMP.W CurrentMapID ; Compare with current map
 .end
     RTL
 
@@ -434,11 +434,11 @@ org $84FA7C
 
 ; Patches Lair Data to add decoupled rewards
 ; Sets lair reward to vanilla values
-org $81BA0D+$18       ; Set PC to first instance of Lair Table Field
+org LairData.LairRewardId ; Set PC to first instance of Lair Table Field
 for i = $0..$1A4
-    db !LairRelease     ; "Item ID" for lair reward
-    dw !i               ; Same reward as lair being released
-    skip $20-$3         ; Move PC to next entry
+    db !LairRelease       ; "Item ID" for lair reward
+    dw !i                 ; Same reward as lair being released
+    skip $20-$3           ; Move PC to next entry
     !i #= !i+1
 endfor
 

@@ -147,6 +147,37 @@ PassableMap = $7F8000
 
 ; Rom Locations
 
+struct LairData $81BA0D
+    .ReleaseMap: skip 1          ;$00
+    .ReleaseLair: skip 1         ;$01
+    .ReleaseX: skip 1            ;$02
+    .ReleaseY: skip 1            ;$03
+    .ReleaseArrangementX: skip 1 ;$04
+    .ReleaseArrangementY: skip 1 ;$05
+    .ReleaseWidth: skip 1        ;$06
+    .ReleaseHeight: skip 1       ;$07
+    .Flags: skip 1               ;$08
+    .NpcNameIndex: skip 1        ;$09
+    .ActId: skip 1               ;$0A
+    .LairMap: skip 1             ;$0B
+    .LairX: skip 1               ;$0C
+    .LairY: skip 1               ;$0D
+    .Field_0E: skip 1            ;$0E
+    .Field_0F: skip 1            ;$0F
+    .LairBehaviorPointer: skip 3 ;$10,$11,$12
+    .EnemyCount: skip 1          ;$13
+    .SpawnRate: skip 1           ;$14
+    .EntityId: skip 1            ;$15
+    .Field_16: skip 1            ;$16
+    .Orientation: skip 1         ;$17
+    .LairRewardId: skip 1        ;$18
+    .LairRewardOperand: skip 2   ;$19,$1A
+    .Field_1B: skip 1            ;$1B
+    .Field_1C: skip 1            ;$1C
+    .Field_1D: skip 1            ;$1D
+    .LairDependency: skip 2      ;$1E,$1F
+endstruct
+
 ;ItemNameTable = $82CF74 ; TODO: move to bank2 address
 ;NpcNamePointerTable = $82D2E6 ; TODO: move to bank2 address
 

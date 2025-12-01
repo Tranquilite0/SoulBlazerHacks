@@ -11,6 +11,7 @@ incsrc "labels.asm"
 incsrc "macros.asm"
 incsrc "freespace.asm"
 incsrc "items.asm"
+incsrc "lairids.asm"
 
 ;New Text Bank
 incsrc "newtextbank.asm"
