@@ -1,6 +1,7 @@
 ; Keeping this as a reference for original Bank 02 text
 ; Not completely original since it contains minor fixes for the randomizer (G.Leaf, A.Leaf, Magic Flare)
 
+namespace Bank02Text
 pushpc
 ;Text engine patches to relocate all text in this bank if desired.
 
@@ -373,13 +374,36 @@ org $9FA471
 ;COP #$1A                             ;1FA471|021A    |      ;  
 ;db $5B,$CF,$02,$8F,$A4               ;1FA473|        |      ;
 
+;SwordPowerTable pointers
+org $829EF0
+    LDA.L SwordPowerTable,X
+;LDA.L UNREACH_02E1AC,X               ;029EF0|BFACE102|02E1AC;
+org $829F01
+    LDA.L SwordPowerTable,X
+;LDA.L UNREACH_02E1AC,X               ;029F01|BFACE102|02E1AC;
+
+;NullPowerTable pointers
+org $829EF7
+    LDA.L NullPowerTable,X
+;LDA.L UNREACH_02E1BD,X               ;029EF7|BFBDE102|02E1BD;
+org $829F0C
+    LDA.L NullPowerTable,X
+;LDA.L UNREACH_02E1BD,X               ;029F0C|BFBDE102|02E1BD;
+
+;SwordRequiredLevelTable pointers
+org $809536
+    LDA.L SwordRequiredLevelTable,X
+;LDA.L UNREACH_02E1CE,X               ;009536|BFCEE102|02E1CE;
+
 ;TODO: Any other string pointers that werent caught?
-;TODO: Weapon and Armor power table pointers?
+;TODO: Any other pointer tables that werent caught?
+
+;TODO: Zero out all text and pointers in bank 2 to and test to ensure relocation is happening everywhere?
+;TODO: Alternatively do test playthrough with breakpoint on reads of the bank02 text area.
 
 pullpc
 
 org $82BB27
-namespace Bank02Text
 
 assert pc() == $82BB27
 ;Print "PushStartText: ",pc
@@ -1105,7 +1129,7 @@ HudText7:
     %TextPrintHealthBar($0336, $0338)
     %TextWaitAndBreak()
 
-Print "MiscStringPointers: ",pc
+;Print "MiscStringPointers: ",pc
 MiscStringPointers: ; Various String Pointers, is this what "Quick Print" indexes from? If so we could add some RAM addresses for client stuff such as player name or world.
     dw Misc0,Misc1,PlayerName,$0447 ; Some address in ram, also hero name?
     dw Misc4,Misc5,Misc6,Misc7
@@ -1487,19 +1511,19 @@ ItemNameTable:
 InventoryPointers:
 NullItemPointer:
     dw NotEquipped
-;Print "SwordNamePointers: ",pc
+Print "SwordNamePointers: ",pc
 SwordNamePointers:
     dw SwordOfLife, PsychoSword, CriticalSword, LuckyBlade
     dw ZantetsuSword, SpiritSword, RecoverySword, TheSoulBlade
-;Print "ArmorNamePointers: ",pc
+Print "ArmorNamePointers: ",pc
 ArmorNamePointers:
     dw IronArmor, IceArmor, BubbleArmor, MagicArmor
     dw MysticArmor, LightArmor, ElementalMail, SoulArmor
-;Print "MagicNamePointers: ",pc
+Print "MagicNamePointers: ",pc
 MagicNamePointers:
     dw FlameBall, LightArrow, MagicFlare, Rotator
     dw SparkBomb, FlamePillar, Tornado, Phoenix
-;Print "ItemNamePointers: ",pc
+Print "ItemNamePointers: ",pc
 ItemNamePointers:
     dw GoatsFood, HarpString, APass, DreamRod
     dw LeosBrush, GLeaf, MolesRibbon, TheBigPearl
@@ -1649,6 +1673,7 @@ MagicBell:
     db "Magic Bell" : %TextWaitAndBreak()
 
 assert pc() == $82D2E6
+Print "NpcNamePointers: ",pc
 NpcNamePointerTable: ;TODO: use just one name for this label.
 NpcNamePointers:
     dw AnOldMan, AnOldWoman, ABoy, Lisa
@@ -1784,7 +1809,7 @@ Queen:
 
 ; Status Screen Text
 assert pc() == $82D53E
-Print "PrintSwordStatsBox: ",pc
+;Print "PrintSwordStatsBox: ",pc
 PrintSwordStatsBox:
     %TextRepositionCursor($0408)
     %TextDrawTextBox($16,$08)
@@ -1794,7 +1819,7 @@ PrintSwordStatsBox:
     db "Strength:"
     %TextWaitAndBreak()
 
-Print "PrintArmorStatsBox: ",pc
+;Print "PrintArmorStatsBox: ",pc
 PrintArmorStatsBox:
     %TextRepositionCursor($0408)
     %TextDrawTextBox($16,$08)
@@ -1802,7 +1827,7 @@ PrintArmorStatsBox:
     db "Defence :"
     %TextWaitAndBreak()
 
-Print "PrintEmptyStatsBox: ",pc
+;Print "PrintEmptyStatsBox: ",pc
 PrintEmptyStatsBox:
     %TextRepositionCursor($0408)
     %TextDrawTextBox($16,$08)
@@ -1816,18 +1841,22 @@ StatsTextPointers:
 NullItemStatusPointer:
     dw NullItemStatsText
 
+Print "SwordStatusPointers: ",pc
 SwordStatusPointers:
     dw SwordOfLifeStatsText, PsychoSwordStatsText, CriticalSwordStatsText, LuckyBladeStatsText
     dw ZantetsuSwordStatsText, SpiritSwordStatsText, RecoverySwordStatsText, TheSoulBladeStatsText
 
+Print "ArmorStatusPointers: ",pc
 ArmorStatusPointers:
     dw IronArmorStatsText, IceArmorStatsText, BubbleArmorStatsText, MagicArmorStatsText
     dw MysticArmorStatsText, LightArmorStatsText, ElementalMailStatsText, SoulArmorStatsText
 
+Print "MagicStatusPointers: ",pc
 MagicStatusPointers:
     dw FlameBallStatsText, LightArrowStatsText, MagicFlareStatsText, RotatorStatsText
     dw SparkBombStatsText, FlamePillarStatsText, TornadoStatsText, PhoenixStatsText
 
+Print "ItemStatusPointers: ",pc
 ItemStatusPointers:
     dw GoatsFoodStatsText, HarpStringStatsText, APassStatsText, DreamRodStatsText
     dw LeosBrushStatsText, TurbosLeavesStatsText, MolesRibbonStatsText, BigPearlStatsText
@@ -2500,7 +2529,7 @@ InventoryPointerIndexes:
     .BlackStone: dw !BlackStone
     .MagicBell: dw !MagicBell
 
-; Probably can't relocate this since it is used for sword power calculations.
+; Probably can't relocate this since it is used for sword power calculations?
 assert pc() == $82E1AC
 Print "SwordPowerTable: ",pc
 SwordPowerTable:
@@ -2519,8 +2548,8 @@ SwordPowerTable:
 Print "UnknownTable1: ",pc
 UnknownTable1:
     db $00,$00,$00,$00,$00,$00,$00,$00
-Print "UnknownTable2: ",pc
-UnknownTable2:
+Print "NullPowerTable: ",pc
+NullPowerTable:
     db $00,$00,$00,$00,$00,$00,$00,$00
 
 assert pc() == $82E1C5
@@ -2550,7 +2579,7 @@ SwordRequiredLevelTable:
     .SoulBlade: dw $24
 
 assert pc() == $82E1DE
-Print "StringNpcCannotBeRecalled: ",pc
+;Print "StringNpcCannotBeRecalled: ",pc
 StringNpcCannotBeRecalled:
     %TextStart()
     %TextTextStyle($24)
@@ -2560,7 +2589,7 @@ StringNpcCannotBeRecalled:
     db "cannot ",!Dict_be, "recalled ", !Text_CR, "yet! "
     %TextChangeStreamPtr(TextEndStandardBank20)
 
-Print "StringNpcReleased: ",pc
+;Print "StringNpcReleased: ",pc
 StringNpcReleased:
     %TextStart()
     %TextQuickPrint($02)
@@ -2573,7 +2602,7 @@ StringNpcReleased:
     db "."
     %TextChangeStreamPtr(TextEndStandardBank20)
 
-Print "ItemReceived: ",pc
+;Print "ItemReceived: ",pc
 ItemReceived:
 StringHeroRecieved:
     %TextStart()
@@ -2588,13 +2617,13 @@ StringHeroRecieved:
     db "."
     %TextChangeStreamPtr(TextEndStandardBank20)
 
-Print "StringNothingInside: ",pc
+;Print "StringNothingInside: ",pc
 StringNothingInside:
     %TextStart()
     db " Nothing inside."
     %TextChangeStreamPtr(TextEndStandardBank20)
 
-Print "GemsReceived: ",pc
+;Print "GemsReceived: ",pc
 GemsReceived:
 StringFoundGems:
     %TextStart()
@@ -2607,13 +2636,13 @@ StringFoundGems:
     db " GEMs."
     %TextTextStyle($20)
 
-Print "TextEndStandardBank20: ",pc
+;Print "TextEndStandardBank20: ",pc
 TextEndStandardBank20:
     %TextWait()
     %TextUndrawTextBox($0408)
     %TextBreak()
 
-Print "StringEndCredits: ",pc
+;Print "StringEndCredits: ",pc
 StringEndCredits:
     %TextPrintSpace($03)
     db "The staff of Soul Blazer"

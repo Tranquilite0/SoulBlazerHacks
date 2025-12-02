@@ -4,7 +4,6 @@ incsrc "npcname.asm"
 
 ;Text engine patches to use bank 20 instead of bank 2.
 
-;TODO: This 1 may need to stay as it is depending on what the function actually does.
 org $82A6D3
     LDA.B #$A0
 
@@ -16,7 +15,6 @@ org $82A76D
 org $82AC31
     LDA.B #$A0
 
-;TODO: These 2 may need to stay as they are depending on what the functions actually do.
 
 org $82AE95
     LDA.B #$A0
@@ -26,7 +24,6 @@ org $82AEEF
 
 ;String pointer patches to redirect strings
 ;TODO: move these to their own file and assemble before other hooks and patches?
-;TODO: Weapon and Armor power table pointers
 org $80E775
     LDY.W #TitleScreenText ;$BB36
 ;Press Start
@@ -110,12 +107,6 @@ org $80ED4E
     LDY.W #FileSelectTextMain
 org $80ED5B
     LDY.W #FileSelectText1
-; org $80??
-;     LDY.W #FileSelectText2
-; org $80??
-;     LDY.W #FileSelectText3
-; org $80??
-;     LDY.W #FileSelectText4
 
 org $82A50B
     LDY.W #EnterYourNameText1
@@ -383,7 +374,32 @@ org $9FA471
 ;COP #$1A                             ;1FA471|021A    |      ;  
 ;db $5B,$CF,$02,$8F,$A4               ;1FA473|        |      ;
 
+;SwordPowerTable pointers
+org $829EF0
+    LDA.L SwordPowerTable,X
+;LDA.L UNREACH_02E1AC,X               ;029EF0|BFACE102|02E1AC;
+org $829F01
+    LDA.L SwordPowerTable,X
+;LDA.L UNREACH_02E1AC,X               ;029F01|BFACE102|02E1AC;
+
+;NullPowerTable pointers
+org $829EF7
+    LDA.L NullPowerTable,X
+;LDA.L UNREACH_02E1BD,X               ;029EF7|BFBDE102|02E1BD;
+org $829F0C
+    LDA.L NullPowerTable,X
+;LDA.L UNREACH_02E1BD,X               ;029F0C|BFBDE102|02E1BD;
+
+;SwordRequiredLevelTable pointers
+org $809536
+    LDA.L SwordRequiredLevelTable,X
+;LDA.L UNREACH_02E1CE,X               ;009536|BFCEE102|02E1CE;
+
 ;TODO: Any other string pointers that werent caught?
+;TODO: Any other pointer tables that werent caught?
+
+;TODO: Zero out all text and pointers in bank 2 to and test to ensure relocation is happening everywhere?
+;TODO: Alternatively do test playthrough with breakpoint on reads of the bank02 text area.
 
 pullpc
 
@@ -1264,7 +1280,7 @@ HudText7:
     %TextPrintHealthBar($0336, $0338)
     %TextWaitAndBreak()
 
-Print "MiscStringPointers: ",pc
+;Print "MiscStringPointers: ",pc
 MiscStringPointers: ; Various String Pointers, is this what "Quick Print" indexes from? If so we could add some RAM addresses for client stuff such as player name or world.
     dw Misc0,Misc1,PlayerName,$0447 ; Some address in ram, also hero name?
     dw Misc4,Misc5,Misc6,Misc7
@@ -1814,6 +1830,7 @@ MagicBell:
 
 ;TODO: remove asserts for non-fixed things.
 assert pc() == $A0D2E6
+;Print "NpcNamePointerTable: ",pc
 NpcNamePointerTable: ;TODO: use just one name for this label.
 NpcNamePointers:
     dw AnOldMan, AnOldWoman, ABoy, Lisa
@@ -1951,7 +1968,7 @@ Queen: ;TODO: rename to Queen Magridd
 ; Status Screen Text
 ;TODO: remove asserts for non-fixed things.
 assert pc() == $A0D53E
-Print "PrintSwordStatsBox: ",pc
+;Print "PrintSwordStatsBox: ",pc
 PrintSwordStatsBox:
     %TextRepositionCursor($0408)
     %TextDrawTextBox($16,$08)
@@ -1961,7 +1978,7 @@ PrintSwordStatsBox:
     db "Strength:"
     %TextWaitAndBreak()
 
-Print "PrintArmorStatsBox: ",pc
+;Print "PrintArmorStatsBox: ",pc
 PrintArmorStatsBox:
     %TextRepositionCursor($0408)
     %TextDrawTextBox($16,$08)
@@ -1969,7 +1986,7 @@ PrintArmorStatsBox:
     db "Defence :"
     %TextWaitAndBreak()
 
-Print "PrintEmptyStatsBox: ",pc
+;Print "PrintEmptyStatsBox: ",pc
 PrintEmptyStatsBox:
     %TextRepositionCursor($0408)
     %TextDrawTextBox($16,$08)
@@ -1979,23 +1996,27 @@ PrintEmptyStatsBox:
 ;Status Screen Description Pointers:
 ;TODO: remove asserts for non-fixed things.
 assert pc() == $A0D572
-Print "StatsTextPointers: ",pc
+;Print "StatsTextPointers: ",pc
 StatsTextPointers:
 NullItemStatusPointer:
     dw NullItemStatsText
 
+;Print "SwordStatusPointers: ",pc
 SwordStatusPointers:
     dw SwordOfLifeStatsText, PsychoSwordStatsText, CriticalSwordStatsText, LuckyBladeStatsText
     dw ZantetsuSwordStatsText, SpiritSwordStatsText, RecoverySwordStatsText, TheSoulBladeStatsText
 
+;Print "ArmorStatusPointers: ",pc
 ArmorStatusPointers:
     dw IronArmorStatsText, IceArmorStatsText, BubbleArmorStatsText, MagicArmorStatsText
     dw MysticArmorStatsText, LightArmorStatsText, ElementalMailStatsText, SoulArmorStatsText
 
+;Print "MagicStatusPointers: ",pc
 MagicStatusPointers:
     dw FlameBallStatsText, LightArrowStatsText, MagicFlareStatsText, RotatorStatsText
     dw SparkBombStatsText, FlamePillarStatsText, TornadoStatsText, PhoenixStatsText
 
+;Print "ItemStatusPointers: ",pc
 ItemStatusPointers:
     dw GoatsFoodStatsText, HarpStringStatsText, APassStatsText, DreamRodStatsText
     dw LeosBrushStatsText, TurbosLeavesStatsText, MolesRibbonStatsText, BigPearlStatsText
@@ -2690,8 +2711,8 @@ SwordPowerTable:
 Print "UnknownTable1: ",pc
 UnknownTable1:
     db $00,$00,$00,$00,$00,$00,$00,$00
-Print "UnknownTable2: ",pc
-UnknownTable2:
+Print "NullPowerTable: ",pc
+NullPowerTable:
     db $00,$00,$00,$00,$00,$00,$00,$00
 
 ;TODO: remove asserts for non-fixed things.
@@ -2725,7 +2746,7 @@ SwordRequiredLevelTable:
 
 ;TODO: remove asserts for non-fixed things.
 assert pc() == $A0E1DE
-Print "StringNpcCannotBeRecalled: ",pc
+;Print "StringNpcCannotBeRecalled: ",pc
 StringNpcCannotBeRecalled:
     %TextStart()
     %TextTextStyle($24)
@@ -2735,7 +2756,7 @@ StringNpcCannotBeRecalled:
     db "cannot ",!Dict_be, "recalled ", !Text_CR, "yet! "
     %TextChangeStreamPtr(TextEndStandardBank20)
 
-Print "StringNpcReleased: ",pc
+;Print "StringNpcReleased: ",pc
 StringNpcReleased:
     %TextStart()
     %TextQuickPrint($02)
@@ -2748,7 +2769,7 @@ StringNpcReleased:
     db "."
     %TextChangeStreamPtr(TextEndStandardBank20)
 
-Print "ItemReceived: ",pc
+;Print "ItemReceived: ",pc
 ItemReceived:
 StringHeroRecieved:
     %TextStart()
@@ -2763,13 +2784,13 @@ StringHeroRecieved:
     db "."
     %TextChangeStreamPtr(TextEndStandardBank20)
 
-Print "StringNothingInside: ",pc
+;Print "StringNothingInside: ",pc
 StringNothingInside:
     %TextStart()
     db " Nothing inside."
     %TextChangeStreamPtr(TextEndStandardBank20)
 
-Print "GemsReceived: ",pc
+;Print "GemsReceived: ",pc
 GemsReceived:
 StringFoundGems:
     %TextStart()
@@ -2782,14 +2803,14 @@ StringFoundGems:
     db " GEMs."
     %TextTextStyle($20)
 
-Print "TextEndStandardBank20: ",pc
+;Print "TextEndStandardBank20: ",pc
 TextEndStandardBank20:
     %TextWait()
     %TextUndrawTextBox($0408)
     %TextBreak()
 
 ;TODO: Add randomizer credits.
-Print "StringEndCredits: ",pc
+;Print "StringEndCredits: ",pc
 StringEndCredits:
     %TextPrintSpace($03)
     db "The staff of Soul Blazer"

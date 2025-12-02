@@ -1,6 +1,6 @@
 ; Semiprogressive Swords/Armor
 ; Str/Def scales off of the number of Swords/Armors Obtained while unique effects are still tied to their respective item.
-; TODO: relcate references to bank $02 ($82) to bank $20 ($A0)?
+; TODO: relocate references to bank $02 ($82) to bank $20 ($A0)?
 
 if not(defined("initialized"))
     arch 65816
@@ -55,10 +55,10 @@ GiveItemHook:
     LDX $1B5E
     JSL CalcStrength
     STA $1B70
-    LDA.L $82E1BD,X
+    LDA.L $82E1BD,X ;NullPowerTable
     STA $1B74
     LDX $1B60
-    LDA.L $82E1AC,X
+    LDA.L $82E1AC,X ;SwordPowerTable
     CLC
     ADC $1B70
     STA $1B70
@@ -83,7 +83,7 @@ CalcStrength:
     LDY #$1B1E ; Address of Swords Inventory
     JSL CountSwordArmor
     TAX
-    LDA $82E1C5,X ; Use the number of obtained swords as the index into the sword power table
+    LDA.L $82E1C5,X ; Use the number of obtained swords as the index into the sword power table ;ArmorDefenseTable
 .end:
     PLY
     PLX
@@ -100,7 +100,7 @@ CalcSwords:
     LDY #$1B1E ; Address of Swords Inventory
     JSL CountSwordArmor
     TAX
-    LDA $82E1C5,X ; Use the number of obtained swords as the index into the sword power table
+    LDA.L $82E1C5,X ; Use the number of obtained swords as the index into the sword power table ;ArmorDefenseTable
     PLY
     PLX
     PLP
@@ -118,7 +118,7 @@ CalcDefense:
     LDY #$1B26 ; Address of Armor Inventory
     JSL CountSwordArmor
     TAX
-    LDA $82E1AC,X ; User the number of obtained armors as the index into the armor defense table
+    LDA.L $82E1AC,X ; Use the number of obtained armors as the index into the armor defense table ;SwordPowerTable
 .end:
     PLY
     PLX
@@ -135,7 +135,7 @@ CalcShields:
     LDY #$1B26 ; Address of Armor Inventory
     JSL CountSwordArmor
     TAX
-    LDA $82E1AC,X ; User the number of obtained armors as the index into the armor defense table
+    LDA.L $82E1AC,X ; Use the number of obtained armors as the index into the armor defense table ;SwordPowerTable
     PLY
     PLX
     PLP
