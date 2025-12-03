@@ -11,6 +11,33 @@ if not(defined("initialized"))
     !initialized = 1
 endif
 
+SwordPowerTableOrig = $82E1AC
+ArmorDefenseTableOrig = $82E1C5
+NullPowerTableOrig = $82E1BD
+
+
+if not(defined("buildall"))
+    !SwordPowerTableUsed = SwordPowerTableOrig
+    !ArmorDefenseTableUsed = ArmorDefenseTableOrig
+    !NullPowerTableUsed = NullPowerTableOrig
+else
+    !SwordPowerTableUsed = SwordPowerTable
+    !ArmorDefenseTableUsed = ArmorDefenseTable
+    !NullPowerTableUsed = NullPowerTable
+endif
+
+;if not(defined("ArmorDefenseTable"))
+;    !ArmorDefenseTableUsed = ArmorDefenseTableOrig
+;else
+;    !ArmorDefenseTableUsed = ArmorDefenseTable
+;endif
+;
+;if not(defined("NullPowerTable"))
+;    !NullPowerTableUsed = NullPowerTableOrig
+;else
+;    !NullPowerTableUsed = NullPowerTable
+;endif
+
 namespace SemiProgressive
 
 ; There is some space starting in $1FFC90 So lets put our hack there.
@@ -55,10 +82,10 @@ GiveItemHook:
     LDX $1B5E
     JSL CalcStrength
     STA $1B70
-    LDA.L $82E1BD,X ;NullPowerTable
+    LDA.L !NullPowerTableUsed,X
     STA $1B74
     LDX $1B60
-    LDA.L $82E1AC,X ;SwordPowerTable
+    LDA.L !SwordPowerTableUsed,X
     CLC
     ADC $1B70
     STA $1B70
@@ -83,7 +110,7 @@ CalcStrength:
     LDY #$1B1E ; Address of Swords Inventory
     JSL CountSwordArmor
     TAX
-    LDA.L $82E1C5,X ; Use the number of obtained swords as the index into the sword power table ;ArmorDefenseTable
+    LDA.L !SwordPowerTableUsed,X ; Use the number of obtained swords as the index into the sword power table
 .end:
     PLY
     PLX
@@ -100,7 +127,7 @@ CalcSwords:
     LDY #$1B1E ; Address of Swords Inventory
     JSL CountSwordArmor
     TAX
-    LDA.L $82E1C5,X ; Use the number of obtained swords as the index into the sword power table ;ArmorDefenseTable
+    LDA.L !SwordPowerTableUsed,X ; Use the number of obtained swords as the index into the sword power table
     PLY
     PLX
     PLP
@@ -118,7 +145,7 @@ CalcDefense:
     LDY #$1B26 ; Address of Armor Inventory
     JSL CountSwordArmor
     TAX
-    LDA.L $82E1AC,X ; Use the number of obtained armors as the index into the armor defense table ;SwordPowerTable
+    LDA.L !ArmorDefenseTableUsed,X ; Use the number of obtained armors as the index into the armor defense table
 .end:
     PLY
     PLX
@@ -135,7 +162,7 @@ CalcShields:
     LDY #$1B26 ; Address of Armor Inventory
     JSL CountSwordArmor
     TAX
-    LDA.L $82E1AC,X ; Use the number of obtained armors as the index into the armor defense table ;SwordPowerTable
+    LDA.L !ArmorDefenseTableUsed,X ; Use the number of obtained armors as the index into the armor defense table
     PLY
     PLX
     PLP

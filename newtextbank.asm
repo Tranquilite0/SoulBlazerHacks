@@ -1,6 +1,7 @@
 pushpc
 
-incsrc "npcname.asm"
+;Lair data patches for new npc name indexes.
+;incsrc "npcname.asm"
 
 ;Text engine patches to use bank 20 instead of bank 2.
 
@@ -398,8 +399,11 @@ org $809536
 ;TODO: Any other string pointers that werent caught?
 ;TODO: Any other pointer tables that werent caught?
 
-;TODO: Zero out all text and pointers in bank 2 to and test to ensure relocation is happening everywhere?
-;TODO: Alternatively do test playthrough with breakpoint on reads of the bank02 text area.
+; Zero out all text and pointers in bank 2 to and test to ensure relocation is happening everywhere.
+; Looks like it actually works.
+org $82BB27
+padbyte $00
+pad $82E8A0
 
 pullpc
 
