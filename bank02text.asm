@@ -186,11 +186,11 @@ org $82A670
     ;LDY.W #$C76F                         ;02A670|A06FC7  |      ;
 
 org $82A999
-    LDA.W MiscStringPointers,Y
+    LDA.W QuickPrintPointers,Y
     ;LDA.W UNREACH_02C789,Y               ;02A999|B989C7  |02C789;
 
 org $82AEF5
-    LDA.W MiscStringPointers,Y
+    LDA.W QuickPrintPointers,Y
     ;LDA.W UNREACH_02C789,Y               ;02AEF5|B989C7  |02C789;
 
 org $829DD8
@@ -1129,8 +1129,8 @@ HudText7:
     %TextPrintHealthBar($0336, $0338)
     %TextWaitAndBreak()
 
-;Print "MiscStringPointers: ",pc
-MiscStringPointers: ; Various String Pointers, is this what "Quick Print" indexes from? If so we could add some RAM addresses for client stuff such as player name or world.
+;Print "QuickPrintPointers: ",pc
+QuickPrintPointers: ; Various String Pointers, is this what "Quick Print" indexes from? If so we could add some RAM addresses for client stuff such as player name or world.
     dw Misc0,Misc1,PlayerName,$0447 ; Some address in ram, also hero name?
     dw Misc4,Misc5,Misc6,Misc7
     dw Misc8

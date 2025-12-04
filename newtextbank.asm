@@ -1,7 +1,7 @@
 pushpc
 
 ;Lair data patches for new npc name indexes.
-;incsrc "npcname.asm"
+incsrc "npcname.asm"
 
 ;Text engine patches to use bank 20 instead of bank 2.
 
@@ -187,11 +187,11 @@ org $82A670
     ;LDY.W #$C76F                         ;02A670|A06FC7  |      ;
 
 org $82A999
-    LDA.W MiscStringPointers,Y
+    LDA.W QuickPrintPointers,Y
     ;LDA.W UNREACH_02C789,Y               ;02A999|B989C7  |02C789;
 
 org $82AEF5
-    LDA.W MiscStringPointers,Y
+    LDA.W QuickPrintPointers,Y
     ;LDA.W UNREACH_02C789,Y               ;02AEF5|B989C7  |02C789;
 
 org $829DD8
@@ -551,13 +551,13 @@ ReceivedVictoryFrom:
 
 ;TODO: shift all data back by $100 bytes and see what breaks.
 ;TODO: if nothing breaks then we succesfully found all the string pointers and can relocate anywhere in the bank.
-assert pc() <= $A0BB27
-padbyte $FF
-pad $A0BB27
+;assert pc() <= $A0BB27
+;padbyte $FF
+;pad $A0BB27
 
 
 ;TODO: Remove assert if possible
-assert pc() == $A0BB27
+;assert pc() == $A0BB27
 ;TODO: find pointers to these strings to allow easy relocation.
 ;TODO: alternatively: insert TextChangeStreamPointer to relocate to other places.
 ;Print "PushStartText: ",pc
@@ -1284,8 +1284,8 @@ HudText7:
     %TextPrintHealthBar($0336, $0338)
     %TextWaitAndBreak()
 
-;Print "MiscStringPointers: ",pc
-MiscStringPointers: ; Various String Pointers, is this what "Quick Print" indexes from? If so we could add some RAM addresses for client stuff such as player name or world.
+;Print "QuickPrintPointers: ",pc
+QuickPrintPointers: ; Various String Pointers, is this what "Quick Print" indexes from? If so we could add some RAM addresses for client stuff such as player name or world.
     dw Misc0,Misc1,PlayerName,$0447 ; Some address in ram, also hero name?
     dw Misc4,Misc5,Misc6,Misc7
     dw Misc8
@@ -1313,7 +1313,7 @@ Misc8:
     db $4C,$4D,$4E,$4F,$00
 
 ;TODO: remove asserts for non-fixed things.
-assert pc() == $A0C7C2
+;assert pc() == $A0C7C2
 
 ;Print "LocationNamePointers: ",pc
 LocationNamePointers:
@@ -1358,7 +1358,8 @@ LocationNamePointers:
     dw DeathtollsShrine, BattleWithDeathtoll, Unknown35, Unknown36
 
 ;TODO: remove asserts for non-fixed things.
-assert pc() == $A0C8C2
+;TODO: Improve Map names.
+;assert pc() == $A0C8C2
 ;Print "GrassValleyShrine: ",pc
 GrassValleyShrine:
     db "  Grass Valley Shrine " : %TextWaitAndBreak()
@@ -1619,7 +1620,7 @@ Unknown36:
     %TextWaitAndBreak()
 
 ;TODO: remove asserts for non-fixed things.
-assert pc() == $A0CF02
+;assert pc() == $A0CF02
 
 ;Menu Options
 ;Print "YesNoPrompt: ",pc
@@ -1664,7 +1665,7 @@ StayGoBackPrompt:
     %TextWaitAndBreak()
 
 ;TODO: remove asserts for non-fixed things.
-assert pc() == $A0CF74
+;assert pc() == $A0CF74
 ;Print "InventoryPointers: ",pc
 ItemNameTable:
 InventoryPointers:
@@ -1696,7 +1697,7 @@ ItemNamePointers:
     dw SilverStone, PurpleStone, BlackStone, MagicBell
 
 ;TODO: remove asserts for non-fixed things.
-assert pc() == $A0CFF6
+;assert pc() == $A0CFF6
 
 NotEquipped:
     db !Dict_not, "equipped" : %TextWaitAndBreak()
@@ -1756,13 +1757,13 @@ GoatsFood:
 HarpString:
     db "Harp String" : %TextWaitAndBreak()
 APass:
-    db !Dict_a,"pass" : %TextWaitAndBreak()
+    db "Hideout Pass" : %TextWaitAndBreak()
 DreamRod:
     db !Dict_Dream,"Rod" : %TextWaitAndBreak()
 LeosBrush:
-    db "Leo`",!Dict_s,"brush" : %TextWaitAndBreak()
+    db "Leo`",!Dict_s,"Brush" : %TextWaitAndBreak()
 GLeaf:
-    db "G.Leaf" : %TextWaitAndBreak() ;TODO: expand name
+    db "Greenwood Leaf" : %TextWaitAndBreak()
 MolesRibbon:
     db "Mole`",!Dict_s,"Ribbon" : %TextWaitAndBreak()
 TheBigPearl:
@@ -1772,19 +1773,19 @@ MermaidsTears:
 MushroomShoes:
     db "Mushroom Shoes" : %TextWaitAndBreak()
 AMobileKey:
-    db !Dict_a, "mobile key" : %TextWaitAndBreak() ;TODO Better name
+    db "Airship Key" : %TextWaitAndBreak()
 ThunderRing:
     db "Thunder Ring" : %TextWaitAndBreak()
 DeliciousSeeds:
     db "Delicious Seeds" : %TextWaitAndBreak()
 ALeaf:
-    db "A.Leaf" : %TextWaitAndBreak() ;TODO: expand name
+    db "Actinidia Leaf" : %TextWaitAndBreak()
 ADoorKey:
-    db !Dict_a,"door key" : %TextWaitAndBreak()
+    db "Lab Door Key" : %TextWaitAndBreak()
 PlatinumCard:
     db "Platinum Card" : %TextWaitAndBreak()
 TheVipCard:
-    db !Dict_The,"VIP Card" : %TextWaitAndBreak()
+    db "VIP Card" : %TextWaitAndBreak()
 EmblemA:
     db "Emblem A" : %TextWaitAndBreak()
 EmblemB:
@@ -1833,145 +1834,405 @@ MagicBell:
     db "Magic Bell" : %TextWaitAndBreak()
 
 ;TODO: remove asserts for non-fixed things.
-assert pc() == $A0D2E6
+;assert pc() == $A0D2E6
 ;Print "NpcNamePointerTable: ",pc
 NpcNamePointerTable: ;TODO: use just one name for this label.
 NpcNamePointers:
-    dw AnOldMan, AnOldWoman, ABoy, Lisa
-    dw TheVillageChief, TheBridgeGuard, AnArchitect, ToolShopOwnersSon
-    dw ToolShopOwner, AGoat, ALonelyGoat, Tulip
-    dw Ivy, TheWaterMillKeeper
-    
-    dw ASquirrel, ADeer, ACrocodile, TheDogTurbo
-    dw WoodsGuardian, AMole, None, TheVillageChief2
-    dw ABird, ADog
+    dw Unknown, VillageChiefsHouse, ToolShopOwner, TulipChiefsHouse
+    dw BridgeGuard, VillageChief, IvyToTreasureRoom, WaterMillKeeper
+    dw GoatPen, Lisa, TulipAboveDungeon, Architect
+    dw IvyToSouthEast, GourmetGoat, ToolShopOwnersSon, TulipByLeosHouse
+    dw LeosHouse, LonelyGoat, SleepingTulip, BoyInHut
+    dw BoyGuardingHideout, LonelyOldMan, CrabWalkingOldMan, IvyAboveDungeon
+    dw IvyToSecretTile, IvyToHideoutCrystal, TulipSouthOfGoatPen, GoatWife
 
-    dw AMermaid, ADolphin, AnAngelFish, TheQueen
-    dw TheDolphinLue, AMermaidStatue
+    dw ShyBirdWithGift, BirdByMarsh, WalkableDog, SniffingDog
+    dw WoodstinDog, MoleWithGift, NotHungrySquirrel, HungrySquirrel
+    dw SouthEastBird, MoleWithSoul, WoodstinDeer, CenterCrocodile
+    dw SquirrelInWestTree, GreenwoodsGuardian, CenterMole, DogWaiter
+    dw SleepingStump, CafeSquirrel, GraveyardGuardDog, GraveyardCrocodile
+    dw PeekabooMole, WoodstinSquirrel, SleepingBird, HoleForOutsideMole
+    dw MasterCrystalDeer, NorthEastBird, WestCrocodile, MonmoTheMole
 
-    dw ABoy2, AGirl, Grandpa, Grandma
-    dw ASnail, TheKing, AMushroom, TheSnailNome
+    dw DolphinNorthWestHouse, CuriousAngelfish, NorthEastMermaid, JumpingAngelfish
+    dw WestMermaidGuard, MermaidDancerNanna, PrisonBreakDolphin, StatueToBlester
+    dw BigHouseUpperMermaid, LueTheDolphin, MermaidAttendantLeft, MermaidNorthWestHouse
+    dw MermaidTroupeLeader, DolphinNorthEastPlatform, StatueToRockbird, BigHouseAndMermaid
+    dw EastMermaidGuard, MermaidDancerKanna, BigHouseEastMermaid, StatueToDurean
+    dw AnglefishSouthOfCenter, AngelfishWithSoul, BigHouseWestMermaid, MermaidQueen
+    dw StatueToGhostShip, SleepingDolphin, MermaidAttendantRight, AngelfishEastOfCenter
+    dw SwimmingMermaid, DolphinToWestChest, MermaidDancerAnna
     
-    dw Steps, AGreatDoor, ACat, APlant
-    dw AMouse, AChestOfDrawers, ADoll, TheDollMarie
-    dw AModelOfTown
-    
-    dw ASoldier, AMaid, ASinger, KingMagridd
-    dw DrLeo, Queen
+    dw NorthWestGrandpa, GirlNearEntrance, MushroomNorthEastLake, BoyForWesternTunnel
+    dw GrandpaHusband, SnailJockeyLegend, NomeTheSnail, BoyInJail
+    dw SleepingMushroom, DancingGrandmaRight, DancingGrandmaLeft, SnailInSecretRoom
+    dw BoyWithGift, TeleportingGrandma, GazingGirl, MushroomForSouthernTunnel
+    dw SnailJockeyFlash, SnailJockeyUnknown, GirlForEasternTunnel, SolitaryMushroom
+    dw SnailWithBoy, GrandpaForSouthWestTunnel, SnailWithGrandpa, GrandpaForSouthEastLake
+    dw GrandpaGuardingLune, GrandpaGuardingJail, MountainKing
+
+    dw MouseholePlant, WestLabPlant, DrawersLockedRoom, StalkingCat1
+    dw GreatDoorToLab, StalkingCat2, LockedDoorToSouthwestRoom, CatInLockedRoom
+    dw ModelTownLeft, GreatDoorToModels, StepsTo2ndFloor, SleepingCat
+    dw MouseOutsideHole, MarieTheDoll, DollInChapel, ExcercisingDrawers
+    dw PlantInLockedRoom, CirclingMouse1, MouseWithGift, BedroomMouse
+    dw GreatDoorWithSoul, ModelTownRight, DevoutMouse, StepsToTheAttic
+    dw DrawersInAttic, ActinidiaPlant, CirclingMouse2, CatInAttic
+    dw StepsToPowerPlant, SoldierNearBasement, SoldierArchitect, SoldierWhoKnows
+    dw SleepingSoldier, PatrollingSoldier, RightMoatGuardSoldier, ConcertHallSinger
+    dw ConcertHallSoldier, BashfulMaid, SoldierForLeftTower, SoldierWithLeoDok
+    dw SoldierItemUnderfoot, SingerOutside, SoldierWithSoul, ConcertHallMaid
+    dw QueenMagridd, SoldierWithLeoOct, SoldierForRightTower, DrLeo
+    dw BashfulSoldier, ObservantSoldier, MaidAtTheBar, SoldierWithCastle
+    dw SoldierInNorthEastBuilding, SoldierAtTheBar, UnobservantSoldier, KingMagridd
 
 ;TODO Expand Table, Relocate early names
 
 ;NPC Name Strings
-AnOldMan:
-    db !Dict_an,"old man" : %TextWaitAndBreak()
-AnOldWoman:
-    db !Dict_an,"old woman" : %TextWaitAndBreak()
-ABoy:
-    db !Dict_a,"boy" : %TextWaitAndBreak()
+Unknown:
+    db "Nobody" : %TextWaitAndBreak()
+VillageChiefsHouse:
+    db "Village Chief`",!Dict_s,"House" : %TextWaitAndBreak()
+ToolShopOwner:
+    db "Tool Shop Owner" : %TextWaitAndBreak()
+TulipChiefsHouse:
+    db "Tulip by Chief`",!Dict_s,"House"
+BridgeGuard:
+    db "Bridge Guard" : %TextWaitAndBreak()
+VillageChief:
+    db "Village Chief" : %TextWaitAndBreak()
+IvyToTreasureRoom:
+    db "Ivy to Treasure Room" : %TextWaitAndBreak()
+WaterMillKeeper:
+    db "Watermill Keeper" : %TextWaitAndBreak()
+GoatPen:
+    db "Goat Pen" : %TextWaitAndBreak()
 Lisa:
     db "Lisa" : %TextWaitAndBreak()
-TheVillageChief:
-    db !Dict_The,!Dict_village,"Chief" : %TextWaitAndBreak()
-TheBridgeGuard:
-    db !Dict_The,"bridge guard" : %TextWaitAndBreak()
-AnArchitect:
-    db !Dict_an,"architect" : %TextWaitAndBreak()
+TulipAboveDungeon:
+    db "Tulip Above Dungeon" : %TextWaitAndBreak()
+Architect:
+    db "Architect" : %TextWaitAndBreak()
+IvyToSouthEast:
+    db "Ivy to _ Grass Valley" : %TextWaitAndBreak()
+GourmetGoat:
+    db "Gourmet Goat" : %TextWaitAndBreak()
 ToolShopOwnersSon:
-    db "tool shop owner`",!Dict_s,"son" : %TextWaitAndBreak()
-ToolShopOwner:
-    db "tool shop owner" : %TextWaitAndBreak()
-AGoat:
-    db !Dict_a,"goat" : %TextWaitAndBreak()
-ALonelyGoat:
-    db !Dict_a,"lonely goat" : %TextWaitAndBreak()
-Tulip:
-    db "tulip" : %TextWaitAndBreak()
-Ivy:
-    db "ivy" : %TextWaitAndBreak()
-TheWaterMillKeeper:
-    db !Dict_The,"water mill keeper" : %TextWaitAndBreak()
-ASquirrel:
-    db !Dict_a,"squirrel" : %TextWaitAndBreak()
-ADeer:
-    db !Dict_a,"deer" : %TextWaitAndBreak()
-ACrocodile:
-    db !Dict_a,"crocodile" : %TextWaitAndBreak()
-TheDogTurbo:
-    db !Dict_The,"dog, <Turbo>" : %TextWaitAndBreak()
-WoodsGuardian:
-    db "Wood`",!Dict_s,"guardian" : %TextWaitAndBreak()
-AMole:
-    db !Dict_a,"mole" : %TextWaitAndBreak()
-None:
-    db "none" : %TextWaitAndBreak()
-TheVillageChief2: ; Wonder why this is here again?
-    db !Dict_The,!Dict_village,"Chief" : %TextWaitAndBreak()
-ABird:
-    db !Dict_a,"bird" : %TextWaitAndBreak()
-ADog:
-    db !Dict_a,"dog" : %TextWaitAndBreak()
-AMermaid:
-    db !Dict_a,"mermaid" : %TextWaitAndBreak()
-ADolphin:
-    db !Dict_a,"dolphin" : %TextWaitAndBreak()
-AnAngelFish:
-    db !Dict_an,"angelfish" : %TextWaitAndBreak()
-TheQueen: ; TODO: rename to Mermaid Queen/Queen Magridd?
-    db !Dict_the,"Queen" : %TextWaitAndBreak()
-TheDolphinLue:
-    db !Dict_the,"dolphin, Lue" : %TextWaitAndBreak()
-AMermaidStatue:
-    db !Dict_a,"mermaid`",!Dict_s,"statue" : %TextWaitAndBreak()
-ABoy2:
-    db !Dict_a,"boy" : %TextWaitAndBreak()
-AGirl:
-    db !Dict_a,"girl" : %TextWaitAndBreak()
-Grandpa:
-    db "Grandpa" : %TextWaitAndBreak()
-Grandma:
-    db "Grandma" : %TextWaitAndBreak()
-ASnail:
-    db !Dict_a,"snail" : %TextWaitAndBreak()
-TheKing: ;TODO: rename to Mountain King
-    db !Dict_the,"King" : %TextWaitAndBreak()
-AMushroom:
-    db !Dict_a,"mushroom" : %TextWaitAndBreak()
-TheSnailNome:
-    db !Dict_the,"snail, Nome" : %TextWaitAndBreak()
-Steps:
-    db "steps" : %TextWaitAndBreak()
-AGreatDoor:
-    db !Dict_a,"great door" : %TextWaitAndBreak()
-ACat:
-    db !Dict_a,"cat" : %TextWaitAndBreak()
-APlant:
-    db !Dict_a,"plant" : %TextWaitAndBreak()
-AMouse:
-    db !Dict_a,"mouse" : %TextWaitAndBreak()
-AChestOfDrawers:
-    db !Dict_a,"chest ",!Dict_of,"drawers" : %TextWaitAndBreak()
-ADoll:
-    db !Dict_a,"doll" : %TextWaitAndBreak()
-TheDollMarie:
-    db !Dict_the,"doll, Marie" : %TextWaitAndBreak()
-AModelOfTown:
-    db !Dict_a,"model ",!Dict_of,"town" : %TextWaitAndBreak()
-ASoldier:
-    db !Dict_a,"soldier" : %TextWaitAndBreak()
-AMaid:
-    db !Dict_a,"maid" : %TextWaitAndBreak()
-ASinger:
-    db !Dict_a,"singer" : %TextWaitAndBreak()
-KingMagridd:
-    db !Dict_King,"Magridd" : %TextWaitAndBreak()
+    db "Tool Shop Owner`",!Dict_s,"Son" : %TextWaitAndBreak()
+TulipByLeosHouse:
+    db "Tulip by "
+LeosHouse:
+    db "Leo`",!Dict_s,"House" : %TextWaitAndBreak()
+LonelyGoat:
+    db "Lonely Goat" : %TextWaitAndBreak()
+SleepingTulip:
+    db "Sleeping Tulip" : %TextWaitAndBreak()
+BoyInHut:
+    db "Boy ",!Dict_in,"Hut" : %TextWaitAndBreak()
+BoyGuardingHideout:
+    db "Boy Guarding Hideout" : %TextWaitAndBreak()
+LonelyOldMan:
+    db "Lonely Old Man" : %TextWaitAndBreak()
+CrabWalkingOldMan:
+    db "Crab-Walking Old Man" : %TextWaitAndBreak()
+IvyAboveDungeon:
+    db "Ivy Above Dungeon" : %TextWaitAndBreak()
+IvyToSecretTile:
+    db "Ivy ",!Dict_to,"Secret Tile" : %TextWaitAndBreak()
+IvyToHideoutCrystal:
+    db "Ivy ",!Dict_to,"Hideout Gem" : %TextWaitAndBreak()
+TulipSouthOfGoatPen:
+    db "Tulip | ",!Dict_of,"Goat Pen" : %TextWaitAndBreak()
+GoatWife:
+    db "Goat Wife" : %TextWaitAndBreak()
+ShyBirdWithGift:
+    db "Shy Bird ",!Dict_with,"Gift" : %TextWaitAndBreak()
+BirdByMarsh:
+    db "Bird by Marsh" : %TextWaitAndBreak()
+WalkableDog:
+    db "Walkable Dog" : %TextWaitAndBreak()
+SniffingDog:
+    db "Sniffing Dog" : %TextWaitAndBreak()
+WoodstinDog:
+    db "Woodstin Dog" : %TextWaitAndBreak()
+MoleWithGift:
+    db "Mole ",!Dict_with,"Gift" : %TextWaitAndBreak()
+NotHungrySquirrel:
+    db "Not-Hungry Squirrel" : %TextWaitAndBreak()
+HungrySquirrel:
+    db "Hungry Squirrel" : %TextWaitAndBreak()
+SouthEastBird:
+    db "_ Bird" : %TextWaitAndBreak()
+MoleWithSoul:
+    db "Mole ",!Dict_with,"Soul" : %TextWaitAndBreak()
+WoodstinDeer:
+    db "Woodstin Deer" : %TextWaitAndBreak()
+CenterCrocodile:
+    db "Center Crocodile" : %TextWaitAndBreak()
+SquirrelInWestTree:
+    db "Squirrel ",!Dict_in,"~ Tree" : %TextWaitAndBreak()
+GreenwoodsGuardian:
+    db "Greenwood`",!Dict_s,"Guardian" : %TextWaitAndBreak()
+CenterMole:
+    db "Center Mole ",!Dict_to,"}" : %TextWaitAndBreak()
+DogWaiter:
+    db "Dog Waiter" : %TextWaitAndBreak()
+SleepingStump:
+    db "Sleeping Stump" : %TextWaitAndBreak()
+CafeSquirrel:
+    db "Cafe Squirrel" : %TextWaitAndBreak()
+GraveyardGuardDog:
+    db "Graveyard Guard Dog" : %TextWaitAndBreak()
+GraveyardCrocodile:
+    db "Graveyard Crocodile" : %TextWaitAndBreak()
+PeekabooMole:
+    db "Peekaboo Mole" : %TextWaitAndBreak()
+WoodstinSquirrel:
+    db "Woodstin Squirrel" : %TextWaitAndBreak()
+SleepingBird:
+    db "Sleeping Bird" : %TextWaitAndBreak()
+HoleForOutsideMole:
+    db "Hole ",!Dict_for,"Outside Mole" : %TextWaitAndBreak()
+MasterCrystalDeer:
+    db "Master Crystal Deer" : %TextWaitAndBreak()
+NorthEastBird:
+    db "] Bird" : %TextWaitAndBreak()
+WestCrocodile:
+    db "~ Crocodile" : %TextWaitAndBreak()
+MonmoTheMole:
+    db "Monmo ",!Dict_the,"Mole" : %TextWaitAndBreak()
+DolphinNorthWestHouse:
+    db "Dolphin ",!Dict_in,$7F," House" :  %TextWaitAndBreak()
+CuriousAngelfish:
+    db "Curious Angelfish" : %TextWaitAndBreak()
+NorthEastMermaid:
+    db "] Mermaid ",!Dict_with,"Gift" : %TextWaitAndBreak()
+JumpingAngelfish:
+    db "Jumping Angelfish" : %TextWaitAndBreak()
+WestMermaidGuard:
+    db "~ Mermaid Guard" : %TextWaitAndBreak()
+MermaidDancerNanna:
+    db "Mermaid Dancer Nanna" : %TextWaitAndBreak()
+PrisonBreakDolphin:
+    db "Prison-Break Dolphin" : %TextWaitAndBreak()
+StatueToBlester:
+    db "Statue ",!Dict_to,"Blester" : %TextWaitAndBreak()
+BigHouseUpperMermaid:
+    db "Big House \ Mermaid" : %TextWaitAndBreak()
+LueTheDolphin:
+    db "Lue ",!Dict_the,"Dolphin" : %TextWaitAndBreak()
+MermaidAttendantLeft:
+    db "Mermaid Attendant ~" : %TextWaitAndBreak()
+MermaidNorthWestHouse:
+    db "Mermaid ",!Dict_in,$7F," House" : %TextWaitAndBreak()
+MermaidTroupeLeader:
+    db "Mermaid Troupe Leader" : %TextWaitAndBreak()
+DolphinNorthEastPlatform:
+    db "Dolphin ",!Dict_to,"] Platform" : %TextWaitAndBreak()
+StatueToRockbird:
+    db "Statue ",!Dict_to,"Rockbird" : %TextWaitAndBreak()
+BigHouseAndMermaid:
+    db "Big House ",!Dict_and,"Mermaid" : %TextWaitAndBreak()
+EastMermaidGuard:
+    db "^ Mermaid Guard" : %TextWaitAndBreak()
+MermaidDancerKanna:
+    db "Mermaid Dancer Kanna" : %TextWaitAndBreak()
+BigHouseEastMermaid:
+    db "Big House ^ Rm Mermaid" : %TextWaitAndBreak()
+StatueToDurean:
+    db "Statue ",!Dict_to,"Durean" : %TextWaitAndBreak()
+AnglefishSouthOfCenter:
+    db "Angelfish | ",!Dict_of,"Center" : %TextWaitAndBreak()
+AngelfishWithSoul:
+    db "Angelfish ",!Dict_with,"Soul" : %TextWaitAndBreak()
+BigHouseWestMermaid:
+    db "Big House ~ Mermaid" : %TextWaitAndBreak()
+MermaidQueen:
+    db "Mermaid Queen" : %TextWaitAndBreak()
+StatueToGhostShip:
+    db "Statue ",!Dict_to,"Ghost Ship" : %TextWaitAndBreak()
+SleepingDolphin:
+    db "Sleeping Dolphin" : %TextWaitAndBreak()
+MermaidAttendantRight:
+    db "Mermaid Attendant ^" : %TextWaitAndBreak()
+AngelfishEastOfCenter:
+    db "Angelfish ^ ",!Dict_of,"Center" : %TextWaitAndBreak()
+SwimmingMermaid:
+    db "Swimming Mermaid" : %TextWaitAndBreak()
+DolphinToWestChest:
+    db "Dolphin ",!Dict_to,"~ Chest" : %TextWaitAndBreak()
+MermaidDancerAnna:
+    db "Mermaid Dancer Anna" : %TextWaitAndBreak()
+NorthWestGrandpa:
+    db $7F," Grandpa" : %TextWaitAndBreak()
+GirlNearEntrance:
+    db "Girl Near Entrance" : %TextWaitAndBreak()
+MushroomNorthEastLake:
+    db "Mushroom at ] Lake" : %TextWaitAndBreak()
+BoyForWesternTunnel:
+    db "Boy ",!Dict_for, "~ Tunnel" : %TextWaitAndBreak()
+GrandpaHusband:
+    db "Grandpa Husband" : %TextWaitAndBreak()
+SnailJockeyLegend:
+    db "Snail Jockey (Legend)" : %TextWaitAndBreak()
+NomeTheSnail:
+    db "Nome ",!Dict_the,"Snail" : %TextWaitAndBreak()
+BoyInJail:
+    db "Boy ",!Dict_in,"Jail" : %TextWaitAndBreak()
+SleepingMushroom:
+    db "Sleeping Mushroom" : %TextWaitAndBreak()
+DancingGrandmaRight:
+    db "Dancing Grandma ]" : %TextWaitAndBreak()
+DancingGrandmaLeft:
+    db "Daning Grandma ~" : %TextWaitAndBreak()
+SnailInSecretRoom:
+    db "Snail ",!Dict_in,"Secret Room" : %TextWaitAndBreak()
+BoyWithGift:
+    db "Boy ",!Dict_with,"Gift" : %TextWaitAndBreak()
+TeleportingGrandma:
+    db "Teleporting Grandma" : %TextWaitAndBreak()
+GazingGirl:
+    db "Gazing Girl" : %TextWaitAndBreak()
+MushroomForSouthernTunnel:
+    db "Mushroom ",!Dict_for,"| Tunnel" : %TextWaitAndBreak()
+SnailJockeyFlash:
+    db "Snail Jockey (Flash)" : %TextWaitAndBreak()
+SnailJockeyUnknown:
+    db "Snail Jockey (???)" : %TextWaitAndBreak()
+GirlForEasternTunnel:
+    db "Girl ",!Dict_for,"] Tunnel" : %TextWaitAndBreak()
+SolitaryMushroom:
+    db "Solitary Mushroom" : %TextWaitAndBreak()
+SnailWithBoy:
+    db "Snail ",!Dict_with,"Boy" : %TextWaitAndBreak()
+GrandpaForSouthWestTunnel:
+    db "Grandpa ",!Dict_for,"} Tunnel" : %TextWaitAndBreak()
+SnailWithGrandpa:
+    db "Snail ",!Dict_with,"Grandpa" : %TextWaitAndBreak()
+GrandpaForSouthEastLake:
+    db "Grandpa ",!Dict_for,"_ Lake" : %TextWaitAndBreak()
+GrandpaGuardingLune:
+    db "Grandpa Guarding Lune" : %TextWaitAndBreak()
+GrandpaGuardingJail:
+    db "Grandpa Guarding Jail" : %TextWaitAndBreak()
+MountainKing:
+    db "Mountain King" : %TextWaitAndBreak()
+MouseholePlant:
+    db "Mousehole Plant" : %TextWaitAndBreak()
+WestLabPlant:
+    db "~ Lab Plant" : %TextWaitAndBreak()
+DrawersLockedRoom:
+    db "Locked Room Drawers" : %TextWaitAndBreak()
+StalkingCat1:
+    db "Stalking Cat 1" : %TextWaitAndBreak()
+GreatDoorToLab:
+    db "Great Door ",!Dict_to,"Lab" : %TextWaitAndBreak()
+StalkingCat2:
+    db "Stalking Cat 2" : %TextWaitAndBreak()
+LockedDoorToSouthwestRoom:
+    db "Locked Door ",!Dict_to,"} Room" : %TextWaitAndBreak()
+CatInLockedRoom:
+    db "Cat ",!Dict_in,"Locked Room" : %TextWaitAndBreak()
+ModelTownLeft:
+    db "Model Town ~" : %TextWaitAndBreak()
+GreatDoorToModels:
+    db "Great Door",!Dict_to,"Models" : %TextWaitAndBreak()
+StepsTo2ndFloor:
+    db "Steps ",!Dict_to,"2nd Floor" : %TextWaitAndBreak()
+SleepingCat:
+    db "Sleeping Cat" : %TextWaitAndBreak()
+MouseOutsideHole:
+    db "Mouse Outside Hole" : %TextWaitAndBreak()
+MarieTheDoll:
+    db "Marie ",!Dict_the,"Doll" : %TextWaitAndBreak()
+DollInChapel:
+    db "Doll ",!Dict_in,"Chapel" : %TextWaitAndBreak()
+ExcercisingDrawers:
+    db "Excercising Drawers" : %TextWaitAndBreak()
+PlantInLockedRoom:
+    db "Plant ",!Dict_in,"Locked Room" : %TextWaitAndBreak()
+CirclingMouse1:
+    db "Circling Mouse 1" : %TextWaitAndBreak()
+MouseWithGift:
+    db "Mouse ",!Dict_with,"Gift" : %TextWaitAndBreak()
+BedroomMouse:
+    db "Bedroom Mouse" : %TextWaitAndBreak()
+GreatDoorWithSoul:
+    db "Great Door ",!Dict_with,"Soul" : %TextWaitAndBreak()
+ModelTownRight:
+    db "Model Town ^" : %TextWaitAndBreak()
+DevoutMouse:
+    db "Devout Mouse" : %TextWaitAndBreak()
+StepsToTheAttic:
+    db "Steps ",!Dict_to,!Dict_the,"Attic" : %TextWaitAndBreak()
+DrawersInAttic:
+    db "Drawers ",!Dict_in,"Attic" : %TextWaitAndBreak()
+ActinidiaPlant:
+    db "Actinidia Plant" : %TextWaitAndBreak()
+CirclingMouse2:
+    db "Circling Mouse 2" : %TextWaitAndBreak()
+CatInAttic:
+    db "Cat ",!Dict_in,"Attic" : %TextWaitAndBreak()
+StepsToPowerPlant:
+    db "Steps ",!Dict_to,"Power Plant" : %TextWaitAndBreak()
+SoldierNearBasement:
+    db "Soldier Near Basement" : %TextWaitAndBreak()
+SoldierArchitect:
+    db "Soldier Architect" : %TextWaitAndBreak()
+SoldierWhoKnows:
+    db "Soldier ",!Dict_who,"Knows Guy" : %TextWaitAndBreak()
+SleepingSoldier:
+    db "Sleeping Soldier" : %TextWaitAndBreak()
+PatrollingSoldier:
+    db "Patrolling Soldier" : %TextWaitAndBreak()
+RightMoatGuardSoldier:
+    db "^ Moat Guard Soldier" : %TextWaitAndBreak()
+ConcertHallSinger:
+    db "Concert Hall Singer" : %TextWaitAndBreak()
+ConcertHallSoldier:
+    db "Concert Hall Soldier" : %TextWaitAndBreak()
+BashfulMaid:
+    db "Bashful Maid" : %TextWaitAndBreak()
+SoldierForLeftTower:
+    db "Soldier ",!Dict_for,"~ Tower" : %TextWaitAndBreak()
+SoldierWithLeoDok:
+    db "Soldier ",!Dict_with,"Leo, Dok" : %TextWaitAndBreak()
+SoldierItemUnderfoot:
+    db "Soldier ",!Dict_on,"Item" : %TextWaitAndBreak()
+SingerOutside:
+    db "Singer Outside" : %TextWaitAndBreak()
+SoldierWithSoul:
+    db "Soldier ",!Dict_with,"Soul" : %TextWaitAndBreak()
+ConcertHallMaid:
+    db "Concert Hall Maid" : %TextWaitAndBreak()
+QueenMagridd:
+    db "Queen Magridd" : %TextWaitAndBreak()
+SoldierWithLeoOct:
+    db "Soldier ",!Dict_with,"Leo, Oct"
+SoldierForRightTower:
+    db "Soldier ",!Dict_for,"^ Tower" : %TextWaitAndBreak()
 DrLeo:
     db "Dr.Leo" : %TextWaitAndBreak()
-Queen: ;TODO: rename to Queen Magridd
-    db "Queen" : %TextWaitAndBreak()
+BashfulSoldier:
+    db "Bashful Soldier" : %TextWaitAndBreak()
+ObservantSoldier:
+    db "Observant Soldier" : %TextWaitAndBreak()
+MaidAtTheBar:
+    db "Maid at",!Dict_the,"Bar" : %TextWaitAndBreak()
+SoldierWithCastle:
+    db "Soldier ",!Dict_with,"Castle" : %TextWaitAndBreak()
+SoldierInNorthEastBuilding:
+    db "Soldier ",!Dict_in,"] Building"
+SoldierAtTheBar:
+    db "Soldier at ",!Dict_the,"Bar" : %TextWaitAndBreak()
+UnobservantSoldier:
+    db "Unobservant Soldier" : %TextWaitAndBreak()
+KingMagridd:
+    db !Dict_King,"Magridd" : %TextWaitAndBreak()
 
 ; Status Screen Text
 ;TODO: remove asserts for non-fixed things.
-assert pc() == $A0D53E
+;assert pc() == $A0D53E
 ;Print "PrintSwordStatsBox: ",pc
 PrintSwordStatsBox:
     %TextRepositionCursor($0408)
@@ -1999,7 +2260,7 @@ PrintEmptyStatsBox:
 
 ;Status Screen Description Pointers:
 ;TODO: remove asserts for non-fixed things.
-assert pc() == $A0D572
+;assert pc() == $A0D572
 ;Print "StatsTextPointers: ",pc
 StatsTextPointers:
 NullItemStatusPointer:
@@ -2033,7 +2294,7 @@ ItemStatusPointers:
     dw StrangeBottleStatsText, BrownStoneStatsText, GreenStoneStatsText, BlueStoneStatsText
     dw SilverStoneStatsText, PurpleStoneStatsText, BlackStoneStatsText, MagicBellStatsText
 
-assert pc() == $A0D5F4
+;assert pc() == $A0D5F4
 NullItemStatsText:
     %TextRepositionCursor($0408)
     %TextDrawTextBox($16,$08)
@@ -2236,7 +2497,7 @@ SoulArmorStatsText:
     db "space. "
     %TextWaitAndBreak()
 
-assert pc() == $A0D951
+;assert pc() == $A0D951
 
 ; Magic Stats Text
 FlameBallStatsText:
@@ -2311,7 +2572,7 @@ PhoenixStatsText:
     db !Text_HeroName,"."
     %TextWaitAndBreak()
 
-assert pc() == $A0DAF9
+;assert pc() == $A0DAF9
 
 ; Item Stats Text
 GoatsFoodStatsText:
@@ -2617,7 +2878,7 @@ MagicBellStatsText:
     %TextWaitAndBreak()
 
 ;TODO: remove asserts for non-fixed things.
-assert pc() == $A0E12C ;TODO: remove assert once tables below made relocatable.
+;assert pc() == $A0E12C ;TODO: remove assert once tables below made relocatable.
 ; Used as indexes into the inventory pointers table.
 ; See items.asm
 ;Print "InventoryPointerIndexes: ",pc
@@ -2697,7 +2958,7 @@ InventoryPointerIndexes:
 ; Probably can't relocate this since it is used for sword power calculations.
 ;TODO: remove asserts for non-fixed things.
 ;TODO: keep this table in bank $02 ($82)?
-assert pc() == $A0E1AC
+;assert pc() == $A0E1AC
 Print "SwordPowerTable: ",pc
 SwordPowerTable:
     .NoSword: db $00
@@ -2720,7 +2981,7 @@ NullPowerTable:
     db $00,$00,$00,$00,$00,$00,$00,$00
 
 ;TODO: remove asserts for non-fixed things.
-assert pc() == $A0E1C5
+;assert pc() == $A0E1C5
 Print "ArmorDefenseTable: ",pc
 ArmorDefenseTable:
     .NoArmor: db $00
@@ -2734,7 +2995,7 @@ ArmorDefenseTable:
     .SoulArmor: db $0C
 
 ;TODO: remove asserts for non-fixed things.
-assert pc() == $A0E1CE
+;assert pc() == $A0E1CE
 ;Sword required levels are stored as 16-bit BCD.
 ;TODO: this cant remain in bank 2 since it is printed
 Print "SwordRequiredLevelTable: ",pc
@@ -2749,7 +3010,7 @@ SwordRequiredLevelTable:
     .SoulBlade: dw $24
 
 ;TODO: remove asserts for non-fixed things.
-assert pc() == $A0E1DE
+;assert pc() == $A0E1DE
 ;Print "StringNpcCannotBeRecalled: ",pc
 StringNpcCannotBeRecalled:
     %TextStart()
@@ -3195,7 +3456,7 @@ StringEndCredits:
     %TextWaitAndBreak()
 
 ;TODO: remove asserts for non-fixed things.
-assert pc() == $A0E8A1
+;assert pc() == $A0E8A1
 ; A0E8A1 to  A0E9A0 = *** UNKNOWN - Map related, pointers to following data ***
 ; TODO: No need to include if this has nothing to do with the text printing engine?
 ;UNREACH_02E8A1: db $A1                               ;02E8A1|        |0000E9;  
