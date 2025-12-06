@@ -42,6 +42,12 @@ GiveReward:
     TAY
     JSL HealFromRelease
     BRK #$1C ; Play NPC Released sound.
+    ; Jailbreak dolphin also needs to set Event flag, byte index 6, bit index 1 ($02)
+    CPY.W #$008C ; TODO: use define for this and all NPC flags.
+    BNE .nope
+    LDA.W #$0002
+    TSB EventFlags+$06
+.nope:
     PLP
     SEC
     RTL
