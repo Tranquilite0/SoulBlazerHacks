@@ -36,8 +36,4 @@ org $828AAC
     RTL
     NOP #10 ; Nop out remaining unused code.
 
-;Patch the default GEMs recieved message to allow up to 4 digit values
-org $82E254
-db $04
-
 pullpc

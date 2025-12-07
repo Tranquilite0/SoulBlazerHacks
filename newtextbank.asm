@@ -396,9 +396,6 @@ org $809536
     LDA.L SwordRequiredLevelTable,X
 ;LDA.L UNREACH_02E1CE,X               ;009536|BFCEE102|02E1CE;
 
-;TODO: Any other string pointers that werent caught?
-;TODO: Any other pointer tables that werent caught?
-
 ; Zero out all text and pointers in bank 2 to and test to ensure relocation is happening everywhere.
 ; Looks like it actually works.
 org $82BB27
@@ -3036,11 +3033,11 @@ StringNpcReleased:
 
 ;Print "ItemReceived: ",pc
 ItemReceived:
-StringHeroRecieved:
+StringHeroReceived:
     %TextStart()
     db " "
     %TextQuickPrint($02)
-    db " recieved"
+    db " received"
     %TextCR()
     db " "
     %TextTextStyle($24)

@@ -121,33 +121,6 @@ org $80DB99  ;JSL $04F6C9
 org $80D3AA
     JSL EndingHook
 
-;Replace space padding with zero padding in soul strings
-org $82C649
-    db $00
-org $82C65B
-    db $00
-org $82C671
-    db $00
-org $82C69C
-    db $00
-
-; Correct typos and and make Greenwood/Actinidia leaves distinguishable
-; Magic Flair->Magic Flare
-org $82D0EC
-    db "re"
-
-; Leaves->G.Leaf
-org $82D14C
-    db "G.Leaf"
-
-; Leaves->A.Leaf
-org $82D1B2
-    db "A.Leaf"
-
-; Recieved->Received
-org $82E21E
-    db "ei"
-
 ; Make Lisa's dream accessible always/move old woman
 ; Move old woman to different position around Lisa's bed.
 org $838121

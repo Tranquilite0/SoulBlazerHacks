@@ -2604,11 +2604,11 @@ StringNpcReleased:
 
 ;Print "ItemReceived: ",pc
 ItemReceived:
-StringHeroRecieved:
+StringHeroReceived:
     %TextStart()
     db " "
     %TextQuickPrint($02)
-    db " recieved"
+    db " received"
     %TextCR()
     db " "
     %TextTextStyle($24)
