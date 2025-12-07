@@ -13,8 +13,12 @@ incsrc "freespace.asm"
 incsrc "items.asm"
 incsrc "lairids.asm"
 
-;New Text Bank
-incsrc "newtextbank.asm"
+;New Text Bank.
+org $A08000
+    incsrc "npcname.asm" ;Lair data patches for new npc name indexes.
+    incsrc "newtextbank.patches.asm"
+    incsrc "strings.asm"
+    incsrc "newtextbank.asm"
 
 org !Bank00FreeSpaceStart
     incsrc "copextensions.asm"

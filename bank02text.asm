@@ -217,7 +217,7 @@ org $828EE2
     LDY.W #StringNpcCannotBeRecalled
     ;LDY.W #$E1DE                         ;028EE2|A0DEE1  |      ;
 org $828DF4
-    LDY.W #StringNpcReleased
+    LDY.W #NpcReleased
     ;LDY.W #$E203                         ;028DF4|A003E2  |      ;
 org $828ABF
     LDY.W #ItemReceived
@@ -627,15 +627,15 @@ EpilogueText1:
     %TextToggleSmallUiFont()
     %TextToggleSmallFont()
     %TextRepositionCursor($02DC)
-    %TextQuickPrint($04)
+    %TextQuickPrint(!QP_Misc4)
     %TextRepositionCursor($031C)
-    %TextQuickPrint($05)
+    %TextQuickPrint(!QP_Misc5)
     %TextRepositionCursor($035C)
-    %TextQuickPrint($06)
+    %TextQuickPrint(!QP_Misc6)
     %TextRepositionCursor($039C)
-    %TextQuickPrint($07)
+    %TextQuickPrint(!QP_Misc7)
     %TextRepositionCursor($03DC)
-    %TextQuickPrint($08)
+    %TextQuickPrint(!QP_Misc8)
     %TextWaitAndBreak()
 
 ;Print "EpilogueText2: ",pc
@@ -799,7 +799,7 @@ FileSelectTextMain:
 ;Print "FileSelectText1: ",pc
 FileSelectText1:
     %TextRepositionCursor($02D4)
-    %TextQuickPrint($03)
+    %TextQuickPrint(!QP_HeroNameAlt)
     %TextRepositionCursor($02E8)
     %TextPrintDecimal($02, $0450)
     %TextRepositionCursor($02F2)
@@ -809,7 +809,7 @@ FileSelectText1:
 ;Print "FileSelectText2: ",pc
 FileSelectText2:
     %TextRepositionCursor($0394)
-    %TextQuickPrint($03)
+    %TextQuickPrint(!QP_HeroNameAlt)
     %TextRepositionCursor($03A8)
     %TextPrintDecimal($02, $0450)
     %TextRepositionCursor($03B2)
@@ -819,7 +819,7 @@ FileSelectText2:
 ;Print "FileSelectText3: ",pc
 FileSelectText3:
     %TextRepositionCursor($0454)
-    %TextQuickPrint($03)
+    %TextQuickPrint(!QP_HeroNameAlt)
     %TextRepositionCursor($0468)
     %TextPrintDecimal($02, $0450)
     %TextRepositionCursor($0472)
@@ -829,7 +829,7 @@ FileSelectText3:
 ;Print "FileSelectText4: ",pc
 FileSelectText4:
     %TextRepositionCursor($0514)
-    %TextQuickPrint($03)
+    %TextQuickPrint(!QP_HeroNameAlt)
     %TextRepositionCursor($0528)
     %TextPrintDecimal($02, $0450)
     %TextRepositionCursor($0532)
@@ -846,7 +846,7 @@ EnterYourNameText1:
     db !Dict_your
     db "name."
     %TextRepositionCursor($0318)
-    %TextQuickPrint($02)
+    %TextQuickPrint(!QP_HeroName)
     %TextToggleSmallUiFont()
     %TextRepositionCursor($0358)
     db "--------"
@@ -928,7 +928,7 @@ CharacterStatusMenuText:
     %TextDrawTextBox($17, $13)
     %TextTextStyle($20)
     %TextRepositionCursor($020C)
-    %TextQuickPrint($02)
+    %TextQuickPrint(!QP_HeroName)
     %TextRepositionCursor($0222)
     db "HP"
     %TextRepositionCursor($0228)
@@ -1071,7 +1071,7 @@ HudText:
     %TextRepositionCursor($006A)
     db "GEM"
     %TextRepositionCursor($00C0)
-    %TextQuickPrint($00)
+    %TextQuickPrint(!QP_Misc0)
     %TextRepositionCursor($00CC)
     %TextTextStyle($28)
     %TextRepeatChar($20, RepeatCount19)
@@ -1121,7 +1121,7 @@ HudText7:
     %TextToggleSmallUiFont()
     %TextRepositionCursor($0140)
     %TextTextStyle($24)
-    %TextQuickPrint($01)
+    %TextQuickPrint(!QP_Misc1)
     %TextRepositionCursor($014C)
     %TextTextStyle($2C)
     %TextRepeatChar($20, RepeatCount19)
@@ -1131,7 +1131,7 @@ HudText7:
 
 ;Print "QuickPrintPointers: ",pc
 QuickPrintPointers: ; Various String Pointers, is this what "Quick Print" indexes from? If so we could add some RAM addresses for client stuff such as player name or world.
-    dw Misc0,Misc1,PlayerName,$0447 ; Some address in ram, also hero name?
+    dw Misc0,Misc1,PlayerName,PlayerNameAlt ; Some address in ram, also hero name?
     dw Misc4,Misc5,Misc6,Misc7
     dw Misc8
 
@@ -2589,10 +2589,10 @@ StringNpcCannotBeRecalled:
     db "cannot ",!Dict_be, "recalled ", !Text_CR, "yet! "
     %TextChangeStreamPtr(TextEndStandardBank20)
 
-;Print "StringNpcReleased: ",pc
-StringNpcReleased:
+;Print "NpcReleased: ",pc
+NpcReleased:
     %TextStart()
-    %TextQuickPrint($02)
+    %TextQuickPrint(!QP_HeroName)
     db " "
     db !Dict_released
     %TextCR()
@@ -2607,8 +2607,9 @@ ItemReceived:
 StringHeroReceived:
     %TextStart()
     db " "
-    %TextQuickPrint($02)
-    db " received"
+    %TextQuickPrint(!QP_HeroName)
+    db " "
+    db !Dict_received
     %TextCR()
     db " "
     %TextTextStyle($24)
@@ -2628,7 +2629,7 @@ GemsReceived:
 StringFoundGems:
     %TextStart()
     db " "
-    %TextQuickPrint($02)
+    %TextQuickPrint(!QP_HeroName)
     db " found"
     %TextCR()
     %TextTextStyle($24)

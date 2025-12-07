@@ -313,22 +313,22 @@ PrintRewardFrom:
 HealFromRelease:
     CPY.W #$0009 ; Village Chief
     BNE +
-    JML HealFull
+    BRA HealFull
 +   CPY.W #$0050 ; Greenwood's Gaurdian
     BNE +
-    JML HealFull
+    BRA HealFull
 +   CPY.W #$00B6 ; Mermaid Queen
     BNE +
-    JML HealFull
+    BRA HealFull
 +   CPY.W #$0103 ; Mountain King
     BNE +
-    JML HealFull
+    BRA HealFull
 +   CPY.W #$012F ; Marie
     BNE +
-    JML HealFull
+    BRA HealFull
 +   CPY.W #$0195 ; King Magridd
     BNE HealPartial
-    JML HealFull
+    BRA HealFull
 
 HealPartial:
     PHP

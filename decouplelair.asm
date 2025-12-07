@@ -186,8 +186,7 @@ IsAntiStuckNeeded:
     LDY #$0050
     STY TeleportOverride.Y
     BRA .overrideTeleport
-+
-    LDA CurrentMapID
++   LDA CurrentMapID
     CMP #$01 ; grass valley
     BNE +
     LDY #$0140
@@ -195,48 +194,42 @@ IsAntiStuckNeeded:
     LDY #$0270
     STY TeleportOverride.Y
     BRA .overrideTeleport
-+
-    CMP #$15 ; Greenwood
++   CMP #$15 ; Greenwood
     BNE +
     LDY #$0170
     STY TeleportOverride.X
     LDY #$00E0
     STY TeleportOverride.Y
     BRA .overrideTeleport
-+
-    CMP #$29 ; Seabed Sanctuary
++   CMP #$29 ; Seabed Sanctuary
     BNE +
     LDY #$01F8
     STY TeleportOverride.X
     LDY #$0200
     STY TeleportOverride.Y
     BRA .overrideTeleport
-+
-    CMP #$3D ; Mountain Home
++   CMP #$3D ; Mountain Home
     BNE +
     LDY #$0290
     STY TeleportOverride.X
     LDY #$0060
     STY TeleportOverride.Y
     BRA .overrideTeleport
-+
-    CMP #$51 ; Leo's Lab F1
++   CMP #$51 ; Leo's Lab F1
     BNE +
     LDY #$01D0
     STY TeleportOverride.X
     LDY #$01A0
     STY TeleportOverride.Y
     BRA .overrideTeleport
-+
-    CMP #$52 ; Leo's Lab F2
++   CMP #$52 ; Leo's Lab F2
     BNE +
     LDY #$01E0
     STY TeleportOverride.X
     LDY #$0060
     STY TeleportOverride.Y
     BRA .overrideTeleport
-+
-    CMP #$65 ; Magridd Castle Town
++   CMP #$65 ; Magridd Castle Town
     BNE .end
     LDY #$0340
     STY TeleportOverride.X

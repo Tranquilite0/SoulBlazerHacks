@@ -72,6 +72,9 @@ PlayerHealthRestore = $7E043B
 ; BCD. Writing to this gives EXP to the player.
 ExpToGive = $7E043D
 
+;Different Player name location, possibly tied to save file?
+PlayerNameAlt = $7E0447
+
 ; Stops all buttons from being read?
 DisableButtonReadout = $7E0474
 
@@ -270,8 +273,16 @@ MapChanged = $84F781
 !Text_PrintDecimal4   = $06,$04,$C8,$03 ; Print 4 decimal digits from the usual location.
 !Text_PrintDecimal1   = $06,$01,$C8,$03
 
-;Text_QuickPrint parameters
-!QP_HeroName = $02
+;Text_QuickPrint indexes
+!QP_Misc0 = 0
+!QP_Misc1 = 1
+!QP_HeroName = 2
+!QP_HeroNameAlt = 3
+!QP_Misc4 = 4
+!QP_Misc5 = 5
+!QP_Misc6 = 6
+!QP_Misc7 = 7
+!QP_Misc8 = 8
 
 ; Text dictionary terms. All of these also end with a space character, so using punctuation means you can't use the dictionary.
 !Dict_All        = $80

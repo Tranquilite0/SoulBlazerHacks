@@ -1,4 +1,7 @@
 includeonce
+pushpc
+
+
 ; Define new NPC Name index IDs for all NPCs
 
 !i = 1
@@ -341,3 +344,5 @@ org LairData[!SOLDIER_UNOBSERVANT].NpcNameIndex
    db !i : !i #= !i+1
 org LairData[!KING_MAGRIDD].NpcNameIndex
    db !i : !i #= !i+1
+
+pullpc
