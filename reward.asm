@@ -43,7 +43,7 @@ GiveReward:
     JSL HealFromRelease
     BRK #$1C ; Play NPC Released sound.
     ; Jailbreak dolphin also needs to set Event flag, byte index 6, bit index 1 ($02)
-    CPY.W #$008C ; TODO: use define for this and all NPC flags.
+    CPY.W #!DOLPHIN_SAVES_LUE
     BNE .nope
     LDA.W #$0002
     TSB EventFlags+$06
@@ -311,22 +311,22 @@ PrintRewardFrom:
 ; Heals depending on which NPC is being released
 ; Pass Lair ID in Y
 HealFromRelease:
-    CPY.W #$0009 ; Village Chief
+    CPY.W #!VILLAGE_CHIEF ; Village Chief
     BNE +
     BRA HealFull
-+   CPY.W #$0050 ; Greenwood's Gaurdian
++   CPY.W #!GREENWOODS_GUARDIAN ; Greenwood's Gaurdian
     BNE +
     BRA HealFull
-+   CPY.W #$00B6 ; Mermaid Queen
++   CPY.W #!MERMAID_QUEEN ; Mermaid Queen
     BNE +
     BRA HealFull
-+   CPY.W #$0103 ; Mountain King
++   CPY.W #!MOUNTAIN_KING ; Mountain King
     BNE +
     BRA HealFull
-+   CPY.W #$012F ; Marie
++   CPY.W #!MARIE ; Marie
     BNE +
     BRA HealFull
-+   CPY.W #$0195 ; King Magridd
++   CPY.W #!KING_MAGRIDD ; King Magridd
     BNE HealPartial
     BRA HealFull
 

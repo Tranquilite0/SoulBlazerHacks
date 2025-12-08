@@ -814,39 +814,38 @@ LocationNamePointers:
     dw EvilWorldShrine, WorldOfEvil1, WorldOfEvil2, DazzlingSpace
     dw DeathtollsShrine, BattleWithDeathtoll, Unknown35, Unknown36
 
-;TODO: Improve Map names.
 ;assert pc() == $A0C8C2
 ;Print "GrassValleyShrine: ",pc
 GrassValleyShrine:
-    db "  Grass Valley Shrine " : %TextWaitAndBreak()
+    db "  Grass Valley Shrine" : %TextWaitAndBreak()
 GrassValley:
-    db " Grass Valley highlands" : %TextWaitAndBreak()
+    db " Grass Valley Highlands" : %TextWaitAndBreak()
 ChildsSecretPassage:
-    db " Child`", !Dict_s, "secret passage" : %TextWaitAndBreak()
+    db " Child`", !Dict_s, "Secret Passage" : %TextWaitAndBreak()
 TreasureRoom:
-    %TextPrintSpace($06) : db "Treasure room" : %TextWaitAndBreak()
+    %TextPrintSpace($06) : db "Treasure Room" : %TextWaitAndBreak()
 ChiefsRoom:
-    db !Dict_The, !Dict_village, "Chief`", !Dict_s, "room" : %TextWaitAndBreak()
+    db !Dict_The, !Dict_village, "Chief`", !Dict_s, "Room" : %TextWaitAndBreak()
 UndergroundCastleWest:
-    db "Underground Castle, west" : %TextWaitAndBreak()
+    db "Underground Castle West" : %TextWaitAndBreak()
 UndergroundCastleEast:
-    db "Underground Castle, east" : %TextWaitAndBreak()
+    db "Underground Castle East" : %TextWaitAndBreak()
 LeosPaintings1:
-    %TextPrintSpace($05) : db "Leo`", !Dict_s, "Paintings" : %TextWaitAndBreak()
+    db " Leo`", !Dict_s, "Painting Room 1" : %TextWaitAndBreak()
 LeosPaintings2:
-    %TextPrintSpace($05) : db "Leo`", !Dict_s, "Paintings" : %TextWaitAndBreak()
+    db " Leo`", !Dict_s, "Painting Room 2" : %TextWaitAndBreak()
 LeosPaintings3:
-    %TextPrintSpace($05) : db "Leo`", !Dict_s, "Paintings" : %TextWaitAndBreak()
+    db " Leo`", !Dict_s, "Painting Room 3" : %TextWaitAndBreak()
 TulipsDream:
     %TextPrintSpace($06) : db "Tulip`", !Dict_s, "Dream" : %TextWaitAndBreak()
 LeosPaintings4:
-    %TextPrintSpace($05) : db "Leo`", !Dict_s, "Paintings" : %TextWaitAndBreak()
+    db " Leo`", !Dict_s, "Paintings Room 4" : %TextWaitAndBreak()
 MonsterInThePaintings:
-    db "Monster ", !Dict_in, !Dict_the, "paintings" : %TextWaitAndBreak()
+    %TextPrintSpace($08) : db "Solid Arm" : %TextWaitAndBreak()
 TrialRoom:
-    %TextPrintSpace($07) : db "Trial room" : %TextWaitAndBreak()
+    %TextPrintSpace($07) : db "Trial Room" : %TextWaitAndBreak()
 LisasDream:
-    %TextPrintSpace($06) : db "Lisa`", !Dict_s, "dream" : %TextWaitAndBreak()
+    %TextPrintSpace($06) : db "Lisa`", !Dict_s, "Dream" : %TextWaitAndBreak()
 Unknown01:
     %TextWaitAndBreak()
 Unknown02:
@@ -866,25 +865,25 @@ MoleHole:
 SquirrelsHouse:
     %TextPrintSpace($03) : db !Dict_A, "squirrel`", !Dict_s, "house" : %TextWaitAndBreak()
 SquirrelExchange:
-    db " Squirrel, ", !Dict_the, "Exchanger" : %TextWaitAndBreak()
+    %TextPrintSpace($03) : db "Squirrel Exchanger" : %TextWaitAndBreak()
 LostsideMarsh:
-    %TextPrintSpace($03) : db "Lostside, ", !Dict_a, "marsh" : %TextWaitAndBreak()
+    %TextPrintSpace($05) : db "Lostside Marsh" : %TextWaitAndBreak()
 WaterShrine1:
-    %TextPrintSpace($06) : db "Water Shrine" : %TextWaitAndBreak()
+    %TextPrintSpace($05) : db "Water Shrine 1F" : %TextWaitAndBreak()
 WaterShrine2:
-    %TextPrintSpace($06) : db "Water Shrine" : %TextWaitAndBreak()
+    %TextPrintSpace($05) : db "Water Shrine B1" : %TextWaitAndBreak()
 WaterShrine3:
-    %TextPrintSpace($06) : db "Water Shrine" : %TextWaitAndBreak()
+    %TextPrintSpace($05) : db "Water Shrine B2" : %TextWaitAndBreak()
 FireShrine1:
-    %TextPrintSpace($07) : db "Fire Shrine" : %TextWaitAndBreak()
+    %TextPrintSpace($05) : db "Fire Shrine 1F" : %TextWaitAndBreak()
 FireShrine2:
-    %TextPrintSpace($07) : db "Fire Shrine" : %TextWaitAndBreak()
+    %TextPrintSpace($05) : db "Fire Shrine B1" : %TextWaitAndBreak()
 FireShrine3:
-    %TextPrintSpace($07) : db "Fire Shrine" : %TextWaitAndBreak()
+    %TextPrintSpace($05) : db "Fire Shrine B2" : %TextWaitAndBreak()
 LightShrine1:
-    %TextPrintSpace($06) : db "Light Shrine" : %TextWaitAndBreak()
+    %TextPrintSpace($05) : db "Light Shrine 1F" : %TextWaitAndBreak()
 LightShrine2:
-    %TextPrintSpace($06) : db "Light Shrine" : %TextWaitAndBreak()
+    %TextPrintSpace($05) : db "Light Shrine B1" : %TextWaitAndBreak()
 TombStatue:
     db " Tomb ", !Dict_of, !Dict_a, "stone statue" : %TextWaitAndBreak()
 BirdsDream:
@@ -908,21 +907,21 @@ SecretCave1:
 SecretCave2:
     %TextPrintSpace($04) : db !Dict_The, "Secret Cave" : %TextWaitAndBreak()
 DolphinsDream:
-    %TextPrintSpace($03) : db !Dict_A, "dolphin`", !Dict_s, "dream" : %TextWaitAndBreak()
+    %TextPrintSpace($03) : db !Dict_A, "Dolphin`", !Dict_s, "Dream" : %TextWaitAndBreak()
 Southerta:
     %TextPrintSpace($08) : db "Southerta" : %TextWaitAndBreak()
 Rockbird:
-    db " Shore reef ", !Dict_of, "Rockbird" : %TextWaitAndBreak()
+    db "  Shore Reef: Rockbird" : %TextWaitAndBreak()
 Durean:
     %TextPrintSpace($08) : db "Durean" : %TextWaitAndBreak()
 Blester:
     %TextPrintSpace($08) : db "Blester" : %TextWaitAndBreak()
 GhostShip:
-    %TextPrintSpace($06) : db !Dict_A, "ghost ship" : %TextWaitAndBreak()
+    %TextPrintSpace($07) : db "Ghost Ship" : %TextWaitAndBreak()
 ServasDream:
-    %TextPrintSpace($06) : db "Servas` dream" : %TextWaitAndBreak()
+    %TextPrintSpace($06) : db "Servas` Dream" : %TextWaitAndBreak()
 Seabed2:
-    db " ", !Dict_The, "Seabed ", !Dict_of, "St. Elles" : %TextWaitAndBreak()
+    %TextPrintSpace($06) : db "Seabed North" : %TextWaitAndBreak()
 Unknown09:
     %TextWaitAndBreak()
 Unknown10:
@@ -940,27 +939,27 @@ Unknown15:
 SoulSanctuary:
     db "  ", !Dict_The, "Soul`", !Dict_s, "Sanctuary" : %TextWaitAndBreak()
 SoulMountainHouse:
-    db "  Soul ", !Dict_of, "Mountain House" : %TextWaitAndBreak()
+    db "Mountain ", !Dict_of, "Souls: House" : %TextWaitAndBreak()
 NorthSlope:
-    db "  Mountain, North-slope" : %TextWaitAndBreak()
+    db "  Mountain North Slope" : %TextWaitAndBreak()
 AuroraRidge:
     %TextPrintSpace($05) : db "Aurora`", !Dict_s, "Ridge" : %TextWaitAndBreak()
 OldMansDream:
-    %TextPrintSpace($03) : db "An old man`", !Dict_s, "dream" : %TextWaitAndBreak()
+    %TextPrintSpace($03) : db "An Old Man`", !Dict_s, "Dream" : %TextWaitAndBreak()
 LunePassage:
-    %TextPrintSpace($04) : db !Dict_A, "passage ", !Dict_to, "Lune" : %TextWaitAndBreak()
+    %TextPrintSpace($06) : db "Lune Passage" : %TextWaitAndBreak()
 LakeLune:
-    db "  Underground lake,Lune" : %TextWaitAndBreak()
+    db " Underground Lake: Lune" : %TextWaitAndBreak()
 MushroomsDream:
-    %TextPrintSpace($03) : db !Dict_A, "mushroom`", !Dict_s, "dream" : %TextWaitAndBreak()
+    %TextPrintSpace($03) : db !Dict_A, "Mushroom`", !Dict_s, "Dream" : %TextWaitAndBreak()
 Poseidon:
     %TextPrintSpace($08) : db "Poseidon" : %TextWaitAndBreak()
 MountainTop:
-    db !Dict_The, "top ", !Dict_of, "Snow Mountain" : %TextWaitAndBreak()
+    db "  Mountain Summit Cave" : %TextWaitAndBreak()
 IceHill:
-    %TextPrintSpace($07) : db "An ice hill" : %TextWaitAndBreak()
+    %TextPrintSpace($08) : db "Ice Hill" : %TextWaitAndBreak()
 Laynole:
-    db "  Ice field ", !Dict_of, "Laynole" : %TextWaitAndBreak()
+    %TextPrintSpace($04) : db "Laynole Ice Field" : %TextWaitAndBreak()
 Unknown16:
     %TextWaitAndBreak()
 Unknown17:
@@ -980,29 +979,29 @@ Unknown23:
 LaboratoryShrine:
     db "  ", !Dict_The, "Laboratory Shrine" : %TextWaitAndBreak()
 LeosLab1:
-    %TextPrintSpace($04) : db "Leo`", !Dict_s, "Laboratory" : %TextWaitAndBreak()
+    %TextPrintSpace($03) : db "Leo`", !Dict_s, "Laboratory 1F" : %TextWaitAndBreak()
 LeosLab2:
-    %TextPrintSpace($04) : db "Leo`", !Dict_s, "Laboratory" : %TextWaitAndBreak()
+    %TextPrintSpace($03) : db "Leo`", !Dict_s, "Laboratory 2F" : %TextWaitAndBreak()
 Attic:
-    %TextPrintSpace($08) : db "An attic" : %TextWaitAndBreak()
+    db " Leo`", !Dict_s, "Laboratory Attic" : %TextWaitAndBreak()
 MiceNest:
-    %TextPrintSpace($07) : db !Dict_A, "mice nest" : %TextWaitAndBreak()
+    db "  Laboratory Mice Nest" : %TextWaitAndBreak()
 CatsDream:
-    %TextPrintSpace($06) : db !Dict_A, "cat`", !Dict_s, "dream" : %TextWaitAndBreak()
+    %TextPrintSpace($06) : db !Dict_A, "Cat`", !Dict_s, "Dream" : %TextWaitAndBreak()
 LabBasement1:
-    db " Basement ", !Dict_of, "Laboratory" : %TextWaitAndBreak()
+    %TextPrintSpace($03) : db "Leo`", !Dict_s, "Laboratory B1" : %TextWaitAndBreak()
 LabBasement2:
-    db " Basement ", !Dict_of, "Laboratory" : %TextWaitAndBreak()
+    %TextPrintSpace($03) : db "Leo`", !Dict_s, "Laboratory B2" : %TextWaitAndBreak()
 PowerPlant:
-    %TextPrintSpace($07) : db "power plant" : %TextWaitAndBreak()
+    db " Laboratory Power Plant" : %TextWaitAndBreak()
 TinDoll:
     %TextPrintSpace($08) : db "Tin Doll" : %TextWaitAndBreak()
 ADream11:
     %TextPrintSpace($08) : db !Dict_A, "dream 1" : %TextWaitAndBreak()
 ModelTown1:
-    %TextPrintSpace($05) : db "Model ", !Dict_of, !Dict_a, "town" : %TextWaitAndBreak()
+    %TextPrintSpace($04) : db "Model Town: Left" : %TextWaitAndBreak()
 ModelTown2:
-    %TextPrintSpace($05) : db "Model ", !Dict_of, !Dict_a, "town" : %TextWaitAndBreak()
+    %TextPrintSpace($04) : db "Model Town: Right" : %TextWaitAndBreak()
 Unknown24:
     %TextWaitAndBreak()
 Unknown25:
@@ -1022,34 +1021,33 @@ MagriddCastleShrine:
 MagriddCastle:
     db " Castle ", !Dict_of, !Dict_King, "Magridd" : %TextWaitAndBreak()
 TortureChamber:
-    %TextPrintSpace($03) : db !Dict_The, "torture chamber" : %TextWaitAndBreak()
+    %TextPrintSpace($04) : db !Dict_Magridd, "Castle B1" : %TextWaitAndBreak()
 CastleBasement1:
-    db " Basement ", !Dict_of, !Dict_the, "castle" : %TextWaitAndBreak()
+    %TextPrintSpace($04) : db !Dict_Magridd, "Castle B2" : %TextWaitAndBreak()
 CastleBasement2:
-    db " Basement ", !Dict_of, !Dict_the, "castle" : %TextWaitAndBreak()
+    %TextPrintSpace($04) : db !Dict_Magridd, "Castle B3" : %TextWaitAndBreak()
 ADream12:
     %TextPrintSpace($08) : db !Dict_A, "dream 1" : %TextWaitAndBreak()
 LeftTower1:
-    %TextPrintSpace($05) : db !Dict_The, "left tower" : %TextWaitAndBreak()
+    %TextPrintSpace($04) : db !Dict_The, "Left Tower 1F" : %TextWaitAndBreak()
 LeftTower2:
-    %TextPrintSpace($05) : db !Dict_The, "left tower" : %TextWaitAndBreak()
+    %TextPrintSpace($04) : db !Dict_The, "Left Tower 2F" : %TextWaitAndBreak()
 Prison:
-    %TextPrintSpace($08) : db !Dict_A, "prison" : %TextWaitAndBreak()
+    %TextPrintSpace($04) : db !Dict_The, "Left Tower 3F" : %TextWaitAndBreak()
 RightTower1:
-    %TextPrintSpace($05) : db !Dict_The, "right tower" : %TextWaitAndBreak()
+    %TextPrintSpace($03) : db !Dict_The, "Right Tower 1F" : %TextWaitAndBreak()
 RightTower2:
-    %TextPrintSpace($05) : db !Dict_The, "right tower" : %TextWaitAndBreak()
+    %TextPrintSpace($03) : db !Dict_The, "Right Tower 2F" : %TextWaitAndBreak()
 RightTower3:
-    %TextPrintSpace($05) : db !Dict_The, "right tower"
-    %TextWaitAndBreak()
+    %TextPrintSpace($03) : db !Dict_The, "Right Tower 3F" : %TextWaitAndBreak()
 CorridorDock:
-    db " ", !Dict_A, "corridor ", !Dict_to, !Dict_the, "dock" : %TextWaitAndBreak()
+    db "  Airship Dock Corridor" : %TextWaitAndBreak()
 AirshipDock:
-    db " ", !Dict_The, "dock ", !Dict_for, !Dict_an, "airship" : %TextWaitAndBreak()
+    %TextPrintSpace($06) : db "Airship Dock" : %TextWaitAndBreak()
 AirshipDeck:
-    db " ", !Dict_The, "deck ", !Dict_of, !Dict_an, "airship" : %TextWaitAndBreak()
+    %TextPrintSpace($07) : db "Demon Bird" : %TextWaitAndBreak()
 SoldiersDream:
-    %TextPrintSpace($04) : db !Dict_A, "soldier`", !Dict_s, "dream" : %TextWaitAndBreak()
+    %TextPrintSpace($04) : db !Dict_A, "Soldier`", !Dict_s, "Dream" : %TextWaitAndBreak()
 Unknown31:
     %TextWaitAndBreak()
 Unknown32:
@@ -1059,11 +1057,11 @@ Unknown33:
 Unknown34:
     %TextWaitAndBreak()
 EvilWorldShrine:
-    db "  ", !Dict_The, "Evil World Shrine" : %TextWaitAndBreak()
+    db !Dict_The, "World ", !Dict_of, "Evil Shrine" : %TextWaitAndBreak()
 WorldOfEvil1:
-    %TextPrintSpace($06) : db "World ", !Dict_of, "Evil" : %TextWaitAndBreak()
+    db " ", !Dict_The, "World ", !Dict_of, "Evil South" : %TextWaitAndBreak()
 WorldOfEvil2:
-    %TextPrintSpace($06) : db "World ", !Dict_of, "Evil" : %TextWaitAndBreak()
+    db " ", !Dict_The, "World ", !Dict_of, "Evil North" : %TextWaitAndBreak()
 DazzlingSpace:
     %TextPrintSpace($05) : db "Dazzling Space" : %TextWaitAndBreak()
 DeathtollsShrine:

@@ -19,6 +19,9 @@ TeleportMapSubNumber = $7E0318 ; This byte set to zero after teleport
 TeleportMapNumber = $7E0319
 TeleportFadeout = $7E032E ; Setting this to a zero disables fadeout/in when changing maps.
 
+; Selectively stops some buttons from being read out.
+ButtonMask = $7E0326
+
 ; Bit field which can be set to control which HUD elements will be redrawn.
 RedrawHudBits = $7E0332
 
@@ -62,9 +65,6 @@ struct ReturnFromTeleport $7E03FB
     .Y: skip 2
     .LairIdRevealing: skip 2
 endstruct
-
-; Selectively stops some buttons from being read out.
-ButtonMask = $7E0326
 
 ; Writing to this restores health to the player.
 PlayerHealthRestore = $7E043B
