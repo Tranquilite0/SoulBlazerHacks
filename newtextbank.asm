@@ -1344,7 +1344,7 @@ VillageChiefsHouse:
 ToolShopOwner:
     db "Tool Shop Owner" : %TextWaitAndBreak()
 TulipChiefsHouse:
-    db "Tulip by Chief`",!Dict_s,"House"
+    db "Tulip by Chief`",!Dict_s,"House" : %TextWaitAndBreak()
 BridgeGuard:
     db "Bridge Guard" : %TextWaitAndBreak()
 VillageChief:
@@ -1530,9 +1530,9 @@ BoyInJail:
 SleepingMushroom:
     db "Sleeping Mushroom" : %TextWaitAndBreak()
 DancingGrandmaRight:
-    db "Dancing Grandma ]" : %TextWaitAndBreak()
+    db "Dancing Grandma ^" : %TextWaitAndBreak()
 DancingGrandmaLeft:
-    db "Daning Grandma ~" : %TextWaitAndBreak()
+    db "Dancing Grandma ~" : %TextWaitAndBreak()
 SnailInSecretRoom:
     db "Snail ",!Dict_in,"Secret Room" : %TextWaitAndBreak()
 BoyWithGift:
@@ -1584,7 +1584,7 @@ CatInLockedRoom:
 ModelTownLeft:
     db "Model Town ~" : %TextWaitAndBreak()
 GreatDoorToModels:
-    db "Great Door",!Dict_to,"Models" : %TextWaitAndBreak()
+    db "Great Door ",!Dict_to,"Models" : %TextWaitAndBreak()
 StepsTo2ndFloor:
     db "Steps ",!Dict_to,"2nd Floor" : %TextWaitAndBreak()
 SleepingCat:
@@ -1646,7 +1646,7 @@ SoldierForLeftTower:
 SoldierWithLeoDok:
     db "Soldier ",!Dict_with,"Leo, Dok" : %TextWaitAndBreak()
 SoldierItemUnderfoot:
-    db "Soldier ",!Dict_on,"Item" : %TextWaitAndBreak()
+    db "Soldier ",!Dict_on,"Item Tile" : %TextWaitAndBreak()
 SingerOutside:
     db "Singer Outside" : %TextWaitAndBreak()
 SoldierWithSoul:
@@ -1656,7 +1656,7 @@ ConcertHallMaid:
 QueenMagridd:
     db "Queen Magridd" : %TextWaitAndBreak()
 SoldierWithLeoOct:
-    db "Soldier ",!Dict_with,"Leo, Oct"
+    db "Soldier ",!Dict_with,"Leo, Oct"  : %TextWaitAndBreak()
 SoldierForRightTower:
     db "Soldier ",!Dict_for,"^ Tower" : %TextWaitAndBreak()
 DrLeo:
@@ -1666,11 +1666,11 @@ BashfulSoldier:
 ObservantSoldier:
     db "Observant Soldier" : %TextWaitAndBreak()
 MaidAtTheBar:
-    db "Maid at",!Dict_the,"Bar" : %TextWaitAndBreak()
+    db "Maid at ",!Dict_the,"Bar" : %TextWaitAndBreak()
 SoldierWithCastle:
     db "Soldier ",!Dict_with,"Castle" : %TextWaitAndBreak()
 SoldierInNorthEastBuilding:
-    db "Soldier ",!Dict_in,"] Building"
+    db "Soldier ",!Dict_in,"] Building" : %TextWaitAndBreak()
 SoldierAtTheBar:
     db "Soldier at ",!Dict_the,"Bar" : %TextWaitAndBreak()
 UnobservantSoldier:

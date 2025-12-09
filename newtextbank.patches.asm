@@ -22,10 +22,10 @@ org $82AEEF
 ;String pointer patches to redirect strings
 ;TODO: move these to their own file and assemble before other hooks and patches?
 org $80E775
-    LDY.W #TitleScreenText ;$BB36
+    LDY.W #TitleScreenText
 ;Press Start
 org $80E7B3
-    LDY.W #NewPushStartText ;PushStartText ;$BB27
+    LDY.W #PushStartText ;NewPushStartText
 
 ;Prologue string pointers
 org $80E7E2
