@@ -202,45 +202,91 @@ org $82A837
 org $82A105
     JSL GiveItemHook
 
-; Edit the Weapon Table to modify the strength pointers
-org $82D60F
-    dw $0000
-org $82D63C
-    dw $0000
-org $82D67A
-    dw $0000
-org $82D6A8
-    dw $0000
-org $82D6EB
-    dw $0000
-org $82D720
-    dw $0000
-org $82D75D
-    dw $0000
-org $82D79C
-    dw $0000
+if not(defined("buildall"))
+    ; Edit the Weapon Table to modify the strength pointers
+    org $82D60F
+        dw $0000
+    org $82D63C
+        dw $0000
+    org $82D67A
+        dw $0000
+    org $82D6A8
+        dw $0000
+    org $82D6EB
+        dw $0000
+    org $82D720
+        dw $0000
+    org $82D75D
+        dw $0000
+    org $82D79C
+        dw $0000
 
-; Edit the Armor Table to modify the defense pointers
-org $82D7CC
-    dw $0001
-org $82D806
-    dw $0001
-org $82D838
-    dw $0001
-org $82D864
-    dw $0001
-org $82D895
-    dw $0001
-org $82D8CA
-    dw $0001
-org $82D906
-    dw $0001
-org $82D935
-    dw $0001
+    ; Edit the Armor Table to modify the defense pointers
+    org $82D7CC
+        dw $0001
+    org $82D806
+        dw $0001
+    org $82D838
+        dw $0001
+    org $82D864
+        dw $0001
+    org $82D895
+        dw $0001
+    org $82D8CA
+        dw $0001
+    org $82D906
+        dw $0001
+    org $82D935
+        dw $0001
 
-; Edit the Level Requirement Table (word, BCD)
-org $82E1CE
-    dw $0001, $0001, $0001, $0001, $0001, $0001, $0001, $0001
+    ; Edit the Level Requirement Table (word, BCD)
+    org $82E1CE
+        dw $0001, $0001, $0001, $0001, $0001, $0001, $0001, $0001
+
+else
+    ; Edit the Weapon Table to modify the strength pointers
+    org SwordOfLifeStatsText_PowerChars
+        %TextRepeatChar($26, $0000)
+    org PsychoSwordStatsText_PowerChars
+        %TextRepeatChar($26, $0000)
+    org CriticalSwordStatsText_PowerChars
+        %TextRepeatChar($26, $0000)
+    org LuckyBladeStatsText_PowerChars
+        %TextRepeatChar($26, $0000)
+    org ZantetsuSwordStatsText_PowerChars
+        %TextRepeatChar($26, $0000)
+    org SpiritSwordStatsText_PowerChars
+        %TextRepeatChar($26, $0000)
+    org RecoverySwordStatsText_PowerChars
+        %TextRepeatChar($26, $0000)
+    org TheSoulBladeStatsText_PowerChars
+        %TextRepeatChar($26, $0000)
+
+    ; Edit the Armor Table to modify the defense pointers
+    org IronArmorStatsText_PowerChars
+        %TextRepeatChar($26, $0001)
+    org IceArmorStatsText_PowerChars
+        %TextRepeatChar($26, $0001)
+    org BubbleArmorStatsText_PowerChars
+        %TextRepeatChar($26, $0001)
+    org MagicArmorStatsText_PowerChars
+        %TextRepeatChar($26, $0001)
+    org MysticArmorStatsText_PowerChars
+        %TextRepeatChar($26, $0001)
+    org LightArmorStatsText_PowerChars
+        %TextRepeatChar($26, $0001)
+    org ElementalMailStatsText_PowerChars
+        %TextRepeatChar($26, $0001)
+    org SoulArmorStatsText_PowerChars
+        %TextRepeatChar($26, $0001)
+
+    ; Edit the Level Requirement Table (word, BCD)
+    org SwordRequiredLevelTable
+        dw $0001, $0001, $0001, $0001, $0001, $0001, $0001, $0001
+        
+endif
+
+
 
 pullpc
 

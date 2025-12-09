@@ -66,5 +66,4 @@ incsrc "textspeed.asm"
 
 if defined("buildall")
     incsrc "semiprogressive.asm"
-    incsrc "semiprogressive.newtextbank.asm"
 endif
