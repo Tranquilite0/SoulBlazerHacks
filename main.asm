@@ -15,9 +15,9 @@ incsrc "lairids.asm"
 
 ;New Text Bank.
 org $A08000
+    incsrc "strings.asm"
     incsrc "npcname.asm" ;Lair data patches for new npc name indexes.
     incsrc "newtextbank.patches.asm"
-    incsrc "strings.asm"
     incsrc "newtextbank.asm"
 
 org !Bank00FreeSpaceStart
@@ -33,7 +33,6 @@ assert pc() <= !Bank01FreespaceEnd
 ; TODO: we are out of space in Bank2 and Bank2 space is at a premium for text table lookups.
 org !Bank02FreeSpaceStart
     incsrc "npcrewardtable.asm" ; Keep at start of bank's freespace to prevent address from moving.
-    ;incsrc "strings.asm" ; This needs to stay in Bank 2
 assert pc() <= !Bank02FreespaceEnd
 
 org !Bank03FreeSpaceStart

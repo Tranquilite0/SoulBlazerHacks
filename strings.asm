@@ -1,19 +1,15 @@
 ; New strings
 
-;TODO: make a miscelaneous rewards string lookuptable?
-; Things in the table would be:
-; AP icon regular, AP icon special, Nothing, Victory, ...?
-;TODO: move all non-table lookup strings out of bank2?
-;TODO: move all strings into new bank.
+; Fixed strings at the top to hopefully prevent the need to relocate.
+; Each fixed string aligned to 32 ($20) byte boundaries to make it easier to calculate addresses.
+fillbyte $00
 
-; Labels for existing strings
-;SoulOfMagician = $82C639
-;SoulOfLight = $82C64E
-;SoulOfShield = $82C663
-;SoulOfDetection = $82C678
-;SoulOfReality = $82C68D
+; Can be replaced with "Hash:####" by the randomizer.
+RecordSelectFirstLine:
+    db !Dict_Please, "choose ", !Dict_a, "record:" : fill align $20
+    ;db "Hash:0123456789ABCDEFGH", !Text_WaitAndBreak
 
-;ItemReceived = $82E216
+;TODO: Hints
 
 PrintItemNameShort:
 db !Text_YellowStyle,!Text_TableLookup
@@ -30,8 +26,6 @@ db !Text_Start,!Text_HeroName," ",!Dict_received,!Text_CR,!Text_YellowStyle,!Tex
 
 PrintExpShort:
 db !Text_YellowStyle,!Text_PrintDecimal4," EXP",!Text_EndStyle,!Text_Break
-
-;GemsReceived = $82E246
 
 PrintGemsShort:
 db !Text_YellowStyle,!Text_PrintDecimal4," GEMs",!Text_EndStyle,!Text_Break
@@ -58,21 +52,15 @@ db !Text_APIconUpArrow,$00
 ; Send/RecieveStrings
 
 ; String Address Table Required by the text engine to do table lookups.
-ReceiveSender: dw ReceiveStruct.Sender
-SendItemName: dw SendStruct.ItemName
-SendAddressee: dw SendStruct.Addressee
 ArchipelagoIcons: dw ArchipelagoIconRegular, ArchipelagoIconUpArrow
 ; Souls trings exist, but there doesnt appear to be an existing lookup table for them.
 SoulsNameTable: dw SoulOfMagician, SoulOfLight, SoulOfShield, SoulOfDetection, SoulOfReality
-; Each string needs a hardcoded address which contains the index into a table.
-; These "Tables" only have one entry where the pointer is to ram so we need another address containing a "zero" index
-NullIndex: dw $0000
 
 SendString:
-db !Text_Start,!Text_HeroName," sent",!Text_CR,!Text_YellowStyle,!Text_TableLookup
-dw SendItemName, NullIndex
-db !Text_EndStyle, !Text_CR, !Dict_to, !Text_YellowStyle,!Text_TableLookup
-dw SendAddressee, NullIndex
+db !Text_Start,!Text_HeroName," sent",!Text_CR,!Text_YellowStyle
+%TextQuickPrint(!QP_SendItemName)
+db !Text_EndStyle, !Text_CR, !Dict_to, !Text_YellowStyle
+%TextQuickPrint(!QP_SendAddressee)
 db !Text_EndStyle, ".",!Text_EndText12
 
 ReceivedItemFrom:
@@ -80,8 +68,8 @@ db !Text_Start,!Text_HeroName," ",!Dict_received,!Text_CR,!Text_YellowStyle,!Tex
 dw ItemNameTable,TableLookupIndex
 db !Text_EndStyle
 ReceivedFrom:
-db !Text_CR,!Dict_from,!Text_YellowStyle,!Text_TableLookup
-dw ReceiveSender, NullIndex
+db !Text_CR,!Dict_from,!Text_YellowStyle
+%TextQuickPrint(!QP_ReceiveSender)
 db !Text_EndStyle, ".",!Text_EndText12
 
 ReceivedRevivableNpcFrom:

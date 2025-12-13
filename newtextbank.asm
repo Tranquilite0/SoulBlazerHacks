@@ -2,18 +2,22 @@
 ;TODO: remove this
 NewPushStartText:
     %TextToggleSmallUiFont()
-    %TextRepositionCursor($0440)
-    db "0440"
-    %TextRepositionCursor($0480)
-    db "0480"
+    %TextRepositionCursor($0400)
+    db "0123456789ABCDEFGHIJKLMNOPQRSTUV"
+    %TextRepositionCursor($0442)
+    db "0442"
+    %TextRepositionCursor($0484)
+    db "0484"
     %TextRepositionCursor($0490)
     db "0490"
     %TextRepositionCursor($04A0)
     db "04A0"
     %TextRepositionCursor($04B0)
     db "04B0"
-    %TextRepositionCursor($04C0)
-    db "04C0"
+    %TextRepositionCursor($04C6)
+    db "04C6"
+    %TextRepositionCursor($06FE)
+    db "X"
     %TextWaitAndBreak()
 
 ;Print "PushStartText: ",pc
@@ -23,15 +27,18 @@ PushStartText:
     db "PUSH START"
     %TextWaitAndBreak()
 
+!Version ?= "0.0.0"
+
 ;Print "TitleScreenText: ",pc
 TitleScreenText:
     %TextToggleSmallUiFont()
+    ;TODO: make this a fixed string and let APWorld set version?
+    %TextRepositionCursor($0544)
+    db "Randomizer Basepatch v!Version"
     %TextRepositionCursor($05C0)
-    %TextPrintSpace($06)
-    db "ALL RIGHTS RESERVED",!Text_CR
+    %TextPrintSpace($06) : db "ALL RIGHTS RESERVED",!Text_CR
     db "  COPYRIGHT 1992 QUINTET/ENIX",!Text_CR
-    %TextPrintSpace($09)
-    db "LICENSED BY NINTENDO"
+    %TextPrintSpace($09) : db "LICENSED BY NINTENDO"
     %TextWaitAndBreak()
 
 ;Print "PrologueText1: ",pc
@@ -379,9 +386,9 @@ TheEndText:
 ;Print "FileSelectTextMain: ",pc
 FileSelectTextMain:
     %TextRepositionCursor($0088)
-    %TextDrawTextBox($16, $16)
+    %TextDrawTextBox($17, $16)
     %TextRepositionCursor($014A)
-    db !Dict_Please, "choose ", !Dict_a, "record"
+    %TextQuickPrint(!QP_RecordSelectFirstLine)
     %TextRepositionCursor($0218)
     db "Name"
     %TextRepositionCursor($0226)
@@ -746,6 +753,7 @@ QuickPrintPointers:
     dw Misc0, Misc1, PlayerName, PlayerNameAlt
     dw Misc4, Misc5, Misc6, Misc7
     dw Misc8
+    dw RecordSelectFirstLine, ReceiveStruct.Sender, SendStruct.ItemName, SendStruct.Addressee
 ;TODO: Add more Quick Print pointers.
 
 ;Various strings? Might be unused placeholders, or possibly used in character name screen for the symbols?

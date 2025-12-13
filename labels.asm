@@ -237,7 +237,7 @@ MapChanged = $84F781
 !Text_PrintHealthBar    = $04 ; Takes 2 word parameters that are pointers to current and max health.
 !Text_TableLookup       = $05 ; Takes 2 word parameters. 1st: Pointer to start of table in Bank 2. 2nd: Pointer to table index (typically $03C8)
 !Text_PrintDecimal      = $06 ; Takes 1 byte param and 1 word param. 1st: Number of digits to print. 2nd: Pointer to BCD value to print.
-!Text_DrawTextBox       = $07 ; Takes 2 byte parameters. Possibly coordinates to draw textbox?
+!Text_DrawTextBox       = $07 ; Takes 2 byte parameters. Width. Height. Draws textbox at current cursor position.
 !Text_UndrawTextBox     = $08 ; Takes 1 word parameter. Possibly cordinates to textbox origin to undraw.
                               ; Typical value is $08,$04 ($0408) which is an index into $7F7000. If value stored there is not $01 then this command does nothing.
 !Text_ToggleSmallUiFont = $09 ; XOR $03E9 with #$02, which changes the font to the smaller 8x8 font with transparent background used by the hud.
@@ -283,6 +283,10 @@ MapChanged = $84F781
 !QP_Misc6 = 6
 !QP_Misc7 = 7
 !QP_Misc8 = 8
+!QP_RecordSelectFirstLine = 9
+!QP_ReceiveSender = 10
+!QP_SendItemName = 11
+!QP_SendAddressee = 12
 
 ; Text dictionary terms. All of these also end with a space character, so using punctuation means you can't use the dictionary.
 !Dict_All        = $80
