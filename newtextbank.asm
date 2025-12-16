@@ -2521,384 +2521,116 @@ TextEndStandardBank20:
     %TextUndrawTextBox($0408)
     %TextBreak()
 
-;TODO: Add randomizer credits.
 ;Print "StringEndCredits: ",pc
 StringEndCredits:
-    %TextPrintSpace($03)
-    db "The staff of Soul Blazer"
+    %TextPrintSpace($03) : db "The staff of Soul Blazer" : %TextCR()
+
+    %TextPrintSpace($04) : db "Scenario written by" : %TextCR()
+    %TextPrintSpace($09) : db "Tomoyoshi Miyazaki" : %TextCR()
+
+    %TextPrintSpace($04) : db "Programmed by" : %TextCR()
+    %TextPrintSpace($09) : db "Masaya Hashimoto" : %TextCR()
+
+    %TextPrintSpace($04) : db "Graphics designed by" : %TextCR()
+    db "Kouji Yokota{Takeshi Matsumuro" : %TextCR()
+    db "Masahiko Takai{Shintaro Majima" : %TextCR()
+
+    %TextPrintSpace($04) : db "Music composed by" : %TextCR()
+    %TextPrintSpace($09) : db "Yukihide Takekawa" : %TextCR()
+
+    %TextPrintSpace($04) : db "Music arranged by" : %TextCR()
+    %TextPrintSpace($09) : db "KAZZ TOYAMA" : %TextCR()
+
+    %TextPrintSpace($04) : db "Sound created by" : %TextCR()
+    %TextPrintSpace($09) : db "You Himeno" : %TextCR()
+
+    %TextPrintSpace($04) : db "Music coordinated by" : %TextCR()
+    %TextPrintSpace($09) : db "AMENITY Co:" : %TextCR()
+
+    %TextPrintSpace($04) : db "Scenario assistant" : %TextCR()
+    %TextPrintSpace($09) : db "Tatsuo Hashimoto" : %TextCR()
+
+    %TextPrintSpace($04) : db "English Text by" : %TextCR()
+    %TextPrintSpace($09) : db "Robert L:Jerauld" : %TextCR()
+    
+    %TextPrintSpace($04) : db "*+,-./ staff" : %TextCR()
+    %TextPrintSpace($09) : db "Reiko Takebayashi" : %TextCR()
+    %TextPrintSpace($09) : db "Akira Kitanohara" : %TextCR()
+
+    %TextPrintSpace($04) : db ";<=>? staff" : %TextCR()
+    db "Takao Kawaguchi{   Keiji Honda" : %TextCR()
+    db "Teruhiko Hanawa{ Tsuneo Morita" : %TextCR()
+    db "Masahiro Hirasawa{  Keiko Taga" : %TextCR()
+    db "Yasuko Sekiguchi{ Kenjiro Kano" : %TextCR()
+    db "Miwako Matsumoto{ Hajime Kanie" : %TextCR()
+    db "Eiichi Hirasawa{ Shinji Futami" : %TextCR()
+    db "Keizo Mochizuki{   Paul Bowler" : %TextCR()
+    db "Tetsuro Shimoda{Paul Handelman" : %TextCR()
+    %TextPrintSpace($09) : db "Cherie Hasson" : %TextCR()
+
+    %TextPrintSpace($04) : db "Special thanks to" : %TextCR()
+    db "Ryuichi Moriya{  Keiko Hattori" : %TextCR()
+    db "Yoshiaki Ujiie{  Taiki Mochida" : %TextCR()
+    db "Shinichi Kouda{  Masahiro Endo" : %TextCR()
+    db "Hirotomo Morisada{ Azumi Izumi" : %TextCR()
+    db "Nobuyoshi Yoshii{ Naoki Yasuda" : %TextCR()
+    db "Miki Watanabe{    Dai Yamamoto" : %TextCR()
+
+    %TextPrintSpace($04) : db "Assistant producer" : %TextCR()
+    %TextPrintSpace($09) : db "Kazunori Takado" : %TextCR()
+
+    %TextPrintSpace($04) : db "Directed by" : %TextCR()
+    %TextPrintSpace($09) : db "Masaya Hashimoto" : %TextCR()
+
+    %TextPrintSpace($04) : db "Produced by" : %TextCR()
+    %TextPrintSpace($09) : db "Yasuyuki Sone" : %TextCR()
+
+    %TextPrintSpace($04) : db "Published by" : %TextCR()
+    %TextPrintSpace($09) : db "Yasuhiro Fukushima" : %TextCR()
+    %TextCR()
+
+    %TextPrintSpace($09) : db "Soul Blazer" : %TextCR()
+    %TextPrintSpace($06) : db "Copyright [\ 1992" : %TextCR()
+    %TextPrintSpace($03) : db "[\ 1992 ;<=>? COPORATION" : %TextCR()
+    %TextPrintSpace($03) : db "[\ 1992 *+,-./" : %TextCR()
+
+    %TextPrintSpace($04) : db "Music Copyright [\ 1992" : %TextCR()
+    %TextPrintSpace($03) : db "[\ 1992 Yukihide Takekawa" : %TextCR()
+    %TextPrintSpace($03) : db "[\ 1992 KAZZ TOYAMA" : %TextCR()
+    %TextPrintSpace($03) : db "[\ 1992 AMENITY Co:" : %TextCR()
+    %TextPrintSpace($05) : db "Licensed by NINTENDO" : %TextCR()
+    %TextPrintSpace($06) : db "Presented by ;<=>?" : %TextCR()
+    %TextCR()
+    %TextCR()
+    %TextCR()
+
+    %TextPrintSpace($03) : db "Randomizer Credits" : %TextCR()
+
+    %TextPrintSpace($04) : db "Basepatch and AP World" : %TextCR()
+    %TextPrintSpace($09) : db "Tranquilite" : %TextCR()
+
+    %TextPrintSpace($04) : db "Poptracker Pack" : %TextCR()
+    %TextPrintSpace($09) : db "Powerlord" : %TextCR()
+
+    %TextPrintSpace($04) : db "Randoblazer Devs" : %TextCR()
+    %TextPrintSpace($09) : db "LeHulk" : %TextCR()
+    %TextPrintSpace($09) : db "Orphis" : %TextCR()
+    %TextPrintSpace($09) : db "TheAxeMan" : %TextCR()
+
+    %TextPrintSpace($04) : db "Misc Romhacking" : %TextCR()
+    %TextPrintSpace($09) : db "Osteoclave" : %TextCR()
+    %TextPrintSpace($09) : db "Hellow554" : %TextCR()
+    %TextCR()
+    %TextCR()
+    %TextCR()
+    %TextCR()
     %TextCR()
     %TextCR()
+    db "  But wait{ there is more:::"
     %TextCR()
     %TextCR()
     %TextCR()
     %TextCR()
-    %TextCR()
-    %TextPrintSpace($04)
-    db "Scenario written by"
-    %TextCR()
-    %TextPrintSpace($09)
-    db "Tomoyoshi Miyazaki"
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextPrintSpace($04)
-    db "Programmed by"
-    %TextCR()
-    %TextPrintSpace($09)
-    db "Masaya Hashimoto"
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextPrintSpace($04)
-    db "Graphics designed by"
-    %TextCR()
-    %TextPrintSpace($09)
-    db "Kouji Yokota"
-    %TextCR()
-    %TextPrintSpace($09)
-    db "Masahiko Takai"
-    %TextCR()
-    %TextPrintSpace($09)
-    db "Takeshi Matsumuro"
-    %TextCR()
-    %TextPrintSpace($09)
-    db "Shintaro Majima"
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextPrintSpace($04)
-    db "Music composed by"
-    %TextCR()
-    %TextPrintSpace($09)
-    db "Yukihide Takekawa"
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextPrintSpace($04)
-    db "Music arranged by"
-    %TextCR()
-    %TextPrintSpace($09)
-    db "KAZZ TOYAMA"
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextPrintSpace($04)
-    db "Sound created by"
-    %TextCR()
-    %TextPrintSpace($09)
-    db "You Himeno"
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextPrintSpace($04)
-    db "Music coordinated by"
-    %TextCR()
-    %TextPrintSpace($09)
-    db "AMENITY Co:"
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextPrintSpace($04)
-    db "Scenario assistant"
-    %TextCR()
-    %TextPrintSpace($09)
-    db "Tatsuo Hashimoto"
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextPrintSpace($04)
-    db "English Text by"
-    %TextCR()
-    %TextPrintSpace($09)
-    db "Robert L:Jerauld"
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextPrintSpace($04)
-    db "*+,-./ staff"
-    %TextCR()
-    %TextPrintSpace($09)
-    db "Reiko Takebayashi"
-    %TextCR()
-    %TextPrintSpace($09)
-    db "Akira Kitanohara"
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextPrintSpace($04)
-    db ";<=>? staff"
-    %TextCR()
-    %TextPrintSpace($09)
-    db "Takao Kawaguchi"
-    %TextCR()
-    %TextPrintSpace($09)
-    db "Keizo Mochizuki"
-    %TextCR()
-    %TextPrintSpace($09)
-    db "Teruhiko Hanawa"
-    %TextCR()
-    %TextPrintSpace($09)
-    db "Tetsuro Shimoda"
-    %TextCR()
-    %TextPrintSpace($09)
-    db "Masahiro Hirasawa"
-    %TextCR()
-    %TextPrintSpace($09)
-    db "Kenjiro Kano"
-    %TextCR()
-    %TextPrintSpace($09)
-    db "Yasuko Sekiguchi"
-    %TextCR()
-    %TextPrintSpace($09)
-    db "Miwako Matsumoto"
-    %TextCR()
-    %TextPrintSpace($09)
-    db "Keiko Taga"
-    %TextCR()
-    %TextCR()
-    %TextPrintSpace($09)
-    db "Hajime Kanie"
-    %TextCR()
-    %TextPrintSpace($09)
-    db "Eiichi Hirasawa"
-    %TextCR()
-    %TextPrintSpace($09)
-    db "Shinji Futami"
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextPrintSpace($04)
-    db ";<=>? America staff"
-    %TextCR()
-    %TextPrintSpace($09)
-    db "Keiji Honda"
-    %TextCR()
-    %TextPrintSpace($09)
-    db "Tsuneo Morita"
-    %TextCR()
-    %TextPrintSpace($09)
-    db "Paul Bowler"
-    %TextCR()
-    %TextPrintSpace($09)
-    db "Paul Handelman"
-    %TextCR()
-    %TextPrintSpace($09)
-    db "Cherie Hasson"
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextPrintSpace($04)
-    db "Special thanks to"
-    %TextCR()
-    %TextPrintSpace($09)
-    db "Ryuichi Moriya"
-    %TextCR()
-    %TextPrintSpace($09)
-    db "Naoki Yasuda"
-    %TextCR()
-    %TextPrintSpace($09)
-    db "Yoshiaki Ujiie"
-    %TextCR()
-    %TextPrintSpace($09)
-    db "Shinichi Kouda"
-    %TextCR()
-    %TextPrintSpace($09)
-    db "Taiki Mochida"
-    %TextCR()
-    %TextPrintSpace($09)
-    db "Masahiro Endo"
-    %TextCR()
-    %TextPrintSpace($09)
-    db "Azumi Izumi"
-    %TextCR()
-    %TextPrintSpace($09)
-    db "Dai Yamamoto"
-    %TextCR()
-    %TextPrintSpace($09)
-    db "Keiko Hattori"
-    %TextCR()
-    %TextPrintSpace($09)
-    db "Nobuyoshi Yoshii"
-    %TextCR()
-    %TextPrintSpace($09)
-    db "Miki Watanabe"
-    %TextCR()
-    %TextPrintSpace($09)
-    db "Hirotomo Morisada"
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextPrintSpace($04)
-    db "Assistant producer"
-    %TextCR()
-    %TextPrintSpace($09)
-    db "Kazunori Takado"
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextPrintSpace($04)
-    db "Directed by"
-    %TextCR()
-    %TextPrintSpace($09)
-    db "Masaya Hashimoto"
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextPrintSpace($04)
-    db "Produced by"
-    %TextCR()
-    %TextPrintSpace($09)
-    db "Yasuyuki Sone"
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextPrintSpace($04)
-    db "Published by"
-    %TextCR()
-    %TextPrintSpace($09)
-    db "Yasuhiro Fukushima"
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextPrintSpace($09)
-    db "Soul Blazer"
-    %TextCR()
-    %TextPrintSpace($06)
-    db "Copyright [\ 1992"
-    %TextCR()
-    %TextPrintSpace($03)
-    db "[\ 1992 ;<=>? COPORATION"
-    %TextCR()
-    %TextPrintSpace($03)
-    db "[\ 1992 *+,-./"
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextPrintSpace($04)
-    db "Based Upon Soul Blader"
-    %TextCR()
-    %TextPrintSpace($06)
-    db "Copyright [\ 1992"
-    %TextCR()
-    %TextPrintSpace($03)
-    db "[\ 1992 ;<=>? COPORATION"
-    %TextCR()
-    %TextPrintSpace($03)
-    db "[\ 1992 *+,-./"
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextPrintSpace($04)
-    db "Music Copyright [\ 1992"
-    %TextCR()
-    %TextPrintSpace($03)
-    db "[\ 1992 Yukihide Takekawa"
-    %TextCR()
-    %TextPrintSpace($03)
-    db "[\ 1992 KAZZ TOYAMA"
-    %TextCR()
-    %TextPrintSpace($03)
-    db "[\ 1992 AMENITY Co:"
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextPrintSpace($05)
-    db "Licensed by NINTENDO"
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextPrintSpace($06)
-    db "Presented by ;<=>?"
-    %TextCR()
-    %TextCR()
-    %TextCR()
-    %TextCR()
+
     %TextWaitAndBreak()
 
