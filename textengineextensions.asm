@@ -15,7 +15,7 @@ ResumePrintOsdStringFromBankX:
     CMP #$01 ; Safety net to make this work with bank 1 in both fast and slow rom.
     BEQ +
     BRA .skip
-+   LDA #$82 ; TODO: if we expand text and relocate from bank $02/$82 we need to change this.
++   LDA #$A0
     PHA
     PLB
 .skip
@@ -48,7 +48,7 @@ PatchBankCheck:
     CMP.B #$01 ; Safety net to make this work with bank 1 in both fast and slow rom.
     BEQ +
     BRA .skip
-+   LDA.B #$82 ; TODO: if we expand text and relocate from bank $02/$82 we need to change this.
++   LDA.B #$A0
     PHA
     PLB
 .skip
