@@ -13,30 +13,19 @@ endif
 
 SwordPowerTableOrig = $82E1AC
 ArmorDefenseTableOrig = $82E1C5
-NullPowerTableOrig = $82E1BD
+NullStatsTableOrig = $82E1BD
 
 
 if not(defined("buildall"))
     !SwordPowerTableUsed = SwordPowerTableOrig
     !ArmorDefenseTableUsed = ArmorDefenseTableOrig
-    !NullPowerTableUsed = NullPowerTableOrig
+    !NullStatsTableUsed = NullStatsTableOrig
 else
     !SwordPowerTableUsed = SwordPowerTable
     !ArmorDefenseTableUsed = ArmorDefenseTable
-    !NullPowerTableUsed = NullPowerTable
+    !NullStatsTableUsed = NullStatsTable
 endif
 
-;if not(defined("ArmorDefenseTable"))
-;    !ArmorDefenseTableUsed = ArmorDefenseTableOrig
-;else
-;    !ArmorDefenseTableUsed = ArmorDefenseTable
-;endif
-;
-;if not(defined("NullPowerTable"))
-;    !NullPowerTableUsed = NullPowerTableOrig
-;else
-;    !NullPowerTableUsed = NullPowerTable
-;endif
 
 namespace SemiProgressive
 
@@ -82,7 +71,7 @@ GiveItemHook:
     LDX $1B5E
     JSL CalcStrength
     STA $1B70
-    LDA.L !NullPowerTableUsed,X
+    LDA.L !NullStatsTableUsed,X
     STA $1B74
     LDX $1B60
     LDA.L !SwordPowerTableUsed,X

@@ -15,6 +15,7 @@ incsrc "lairids.asm"
 
 ;New Text Bank.
 org $A08000
+    incsrc "equipstats.asm"
     incsrc "strings.asm"
     incsrc "npcname.asm" ;Lair data patches for new npc name indexes.
     incsrc "newtextbank.patches.asm"

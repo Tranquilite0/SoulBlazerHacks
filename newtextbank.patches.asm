@@ -379,12 +379,12 @@ org $829F01
     LDA.L SwordPowerTable,X
 ;LDA.L UNREACH_02E1AC,X               ;029F01|BFACE102|02E1AC;
 
-;NullPowerTable pointers
+;NullStatsTable pointers
 org $829EF7
-    LDA.L NullPowerTable,X
+    LDA.L NullStatsTable,X
 ;LDA.L UNREACH_02E1BD,X               ;029EF7|BFBDE102|02E1BD;
 org $829F0C
-    LDA.L NullPowerTable,X
+    LDA.L NullStatsTable,X
 ;LDA.L UNREACH_02E1BD,X               ;029F0C|BFBDE102|02E1BD;
 
 ;SwordRequiredLevelTable pointers
