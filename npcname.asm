@@ -262,7 +262,7 @@ org LairData[!MARIE].NpcNameIndex
    db !i : !i #= !i+1
 org LairData[!DOLL_CHAPEL].NpcNameIndex
    db !i : !i #= !i+1
-org LairData[!CHEST_OF_DRAWERS_EXCERCISE].NpcNameIndex
+org LairData[!CHEST_OF_DRAWERS_EXERCISE].NpcNameIndex
    db !i : !i #= !i+1
 org LairData[!PLANT_LOCKED_ROOM].NpcNameIndex
    db !i : !i #= !i+1

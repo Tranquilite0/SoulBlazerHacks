@@ -1332,7 +1332,7 @@ NpcNamePointers:
     dw MouseholePlant, WestLabPlant, DrawersLockedRoom, StalkingCat1
     dw GreatDoorToLab, StalkingCat2, LockedDoorToSouthwestRoom, CatInLockedRoom
     dw ModelTownLeft, GreatDoorToModels, StepsTo2ndFloor, SleepingCat
-    dw MouseOutsideHole, MarieTheDoll, DollInChapel, ExcercisingDrawers
+    dw MouseOutsideHole, MarieTheDoll, DollInChapel, ExercisingDrawers
     dw PlantInLockedRoom, CirclingMouse1, MouseWithGift, BedroomMouse
     dw GreatDoorWithSoul, ModelTownRight, DevoutMouse, StepsToTheAttic
     dw DrawersInAttic, ActinidiaPlant, CirclingMouse2, CatInAttic
@@ -1603,8 +1603,8 @@ MarieTheDoll:
     db "Marie ",!Dict_the,"Doll" : %TextWaitAndBreak()
 DollInChapel:
     db "Doll ",!Dict_in,"Chapel" : %TextWaitAndBreak()
-ExcercisingDrawers:
-    db "Excercising Drawers" : %TextWaitAndBreak()
+ExercisingDrawers:
+    db "Exercising Drawers" : %TextWaitAndBreak()
 PlantInLockedRoom:
     db "Plant ",!Dict_in,"Locked Room" : %TextWaitAndBreak()
 CirclingMouse1:
