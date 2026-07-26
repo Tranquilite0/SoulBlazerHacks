@@ -42,6 +42,3 @@ SwordRequiredLevelTable:
     .SpiritSword: dw $19
     .RecoverySword: dw $22
     .SoulBlade: dw $24
-
-;Some extra padding to make the next segment align to a nice round address boundary
-db $00,$00,$00,$00,$00,$00

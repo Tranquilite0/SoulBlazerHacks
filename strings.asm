@@ -3,10 +3,11 @@
 ; Fixed strings at the top to hopefully prevent the need to relocate.
 ; Each fixed string aligned to 32 ($20) byte boundaries to make it easier to calculate addresses.
 fillbyte $00
+fill align $20
 
 ; Can be replaced with "Hash:####" by the randomizer.
 RecordSelectFirstLine:
-    db !Dict_Please, "choose ", !Dict_a, "record:" : fill align $20
+    db !Dict_Please, "choose ", !Dict_a, "record:", !Text_Break : fill align $20
     ;db "Hash:0123456789ABCDEFGH", !Text_WaitAndBreak
 
 ;TODO: Hints
