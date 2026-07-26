@@ -19,7 +19,6 @@ SwordPowerTable:
 NullStatsTable:
     db $00,$00,$00,$00,$00,$00,$00,$00
 
-;assert pc() == $A0E1C5
 ;Print "ArmorDefenseTable: ",pc
 ArmorDefenseTable:
     .NoArmor: db $00
@@ -32,7 +31,6 @@ ArmorDefenseTable:
     .ElementalArmor: db $0A
     .SoulArmor: db $0C
 
-;assert pc() == $A0E1CE
 ;Sword required levels are stored as 16-bit BCD.
 ;Print "SwordRequiredLevelTable: ",pc
 SwordRequiredLevelTable:
@@ -44,3 +42,6 @@ SwordRequiredLevelTable:
     .SpiritSword: dw $19
     .RecoverySword: dw $22
     .SoulBlade: dw $24
+
+;Some extra padding to make the next segment align to a nice round address boundary
+db $00,$00,$00,$00,$00,$00
