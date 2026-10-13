@@ -1,0 +1,7 @@
+# Roms
+*.sfc
+*.smc
+
+# Asar
+/asar/**
+!/asar/*.md

@@ -1,0 +1,1 @@
+Expected ROM name: Soul Blazer (U) [!].sfc
