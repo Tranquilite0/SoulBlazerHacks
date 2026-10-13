@@ -73,6 +73,25 @@ PrintNpcReward:
     PLP
     RTL
 
+; String to print in Y
+; Item ID in A
+; Item Name will be printed in place of the first $0C command that occurs in the string
+; printing will then continue from after the first $0C until the end of the string.
+PrintItemReward:
+    PHP
+    PHB
+    SEP #$20
+    PHA ; Push Item Id
+    JSL PrintOsdStringFromBankX ; Print string in Y
+    PLA ; Restore Item Id
+    PHY ; Store current string position for later
+    JSL PrintRewardShort
+    PLY ; Pull string position from original string.
+    PLB ; Restore bank
+    JSL ResumePrintOsdStringFromBankX ; Finish printing rest of string.
+    PLP
+    RTL
+
 
 ; Some NPCs can softlock you or put you in a wonky position if they have an NPC release.
 NpcAntiStuckChecks:

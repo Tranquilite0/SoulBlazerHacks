@@ -1,5 +1,27 @@
 ; Patch NPC scripts in Bank 04 to use new NPC Reward COP routine.
 
+; New Code Section
+
+; Lets you get the Queen's reward on the superbracelet tile if she is already gone.
+SuperBraceletTileExtension:
+    %CopSetScriptAddrToNextInstruction()
+    %CopJumpIfNpcRewardNotObtained(!NPC_QueenMagriddVIPCard, +)
+    %Cop86()
+    RTL
++
+    ; Have the Queen's item be one tile down to avoid problems on loading back in.
+    %CopJumpIfEntityHasReachedXY($00, $36, $18, +)
+    RTL
++
+    %CopShowText(.butWaitTheresMore)
+    %CopGiveNpcReward(!NPC_QueenMagriddVIPCard)
+    %CopSetScriptAddrToNextInstruction()
+    RTL
+.butWaitTheresMore
+    db !Text_Start,!Dict_There,!Dict_is,!Dict_something,!Text_CR,!Dict_here,"too!",!Text_ChangeStreamPtr : dw TextEndStandardBank4
+
+
+; Hooks and original rom data overwrite section
 pushpc
 
 ;----------------- Mountain King -----------------;
@@ -286,28 +308,40 @@ org $84AA82
 ; Probably easier to just redo this NPC script and text than patch it into shape.
 org $84AB9E
 HerbPlantLeosLabScript:
-    %CopJumpIfNpcRewardNotObtained(!NPC_HerbPlantInLeosLab, .doYouWantOne)
-    %CopShowText(.textThatsAll)
+    %CopJumpIfNpcRewardNotObtained(!NPC_HerbPlantInLeosLab, .doYouWantReward)
+    %CopJumpIfItemNotObtained(!MedicalHerb, .doYouWantHerb)
+    %CopPrintItemReward(!MedicalHerb, .textComeBackHerb)
     RTL
-.doYouWantOne
+.doYouWantReward
     %CopPrintNpcReward(!NPC_HerbPlantInLeosLab, .textWantOne)
     %CopShowChoices(YesNoPrompt, $02, .dontWant)
     LDA $8003D0 ; Read menu choice
     BNE .dontWant
     %CopGiveNpcReward(!NPC_HerbPlantInLeosLab)
     RTL
+.doYouWantHerb
+    %CopPrintItemReward(!MedicalHerb, .textWantOne)
+    %CopShowChoices(YesNoPrompt, $02, .dontWant)
+    LDA $8003D0 ; Read menu choice
+    BNE .dontWant
+    %CopShowText(.takeHerbOuch)
+    %CopPrintAndGiveItem(!MedicalHerb)
+    RTL
 .dontWant
     %CopShowText(.textComeBackAgain)
     RTL
-.textThatsAll
-    ; "That's all I have, sorry."
-    db !Text_Start,"That`",!Dict_s,!Dict_all,!Dict_I,"have,",!Text_CR,"sorry.",!Text_ChangeStreamPtr : dw TextEndStandardBank4
 .textWantOne
     ; "Hello, I have <x>. Would you like one?"
     db !Text_Start,"Hello, ",!Dict_I,!Dict_have,!Text_CR,!Text_Break,".",!Text_CR,"Would ",!Dict_you,!Dict_like,"one?",!Text_Break
 .textComeBackAgain
     ; "Come back if you change your mind."
     db !Text_Start,!Dict_Come,!Dict_back,"if ",!Dict_you,!Text_CR,"change ",!Dict_your,"mind.",!Text_ChangeStreamPtr : dw TextEndStandardBank4
+.textComeBackHerb:
+    ; "Come back if you need a <Medical Herb>."
+    db !Text_Start,!Dict_Come,!Dict_back,"if ",!Dict_you,"need",!Text_CR,"a ",!Text_Break,".",!Text_ChangeStreamPtr : dw TextEndStandardBank4
+.takeHerbOuch:
+    ; "Take any leaves that you want from my body. OUCH!"
+    db !Text_Start,"Take any leaves ",!Dict_that,!Text_CR,!Dict_you,!Dict_want,!Dict_from,!Dict_my,"body.",!Text_WaitBlinkCursor,"OUCH!",!Text_ChangeStreamPtr : dw TextEndStandardBank4
 
 assert pc() <= $84AC7B
 
@@ -513,29 +547,37 @@ org $84B1BD
 ; We'll use the shopkeeper template since I have it on hand.
 org $84B2CD
 ChestOfDrawersHerbScript:
-    %CopJumpIfNpcRewardNotObtained(!NPC_ChestOfDrawersHerb, .doYouWantOne)
-    %CopShowText(.textThatsAll)
+    %CopJumpIfNpcRewardNotObtained(!NPC_ChestOfDrawersHerb, .doYouWantReward)
+    %CopJumpIfItemNotObtained(!MedicalHerb, .doYouWantHerb)
+    %CopPrintItemReward(!MedicalHerb, .textComeBackHerb)
     RTL
-.doYouWantOne
+.doYouWantReward
     %CopPrintNpcReward(!NPC_ChestOfDrawersHerb, .textWantOne)
     %CopShowChoices(YesNoPrompt, $02, .dontWant)
     LDA $8003D0 ; Read menu choice
     BNE .dontWant
     %CopGiveNpcReward(!NPC_ChestOfDrawersHerb)
     RTL
+.doYouWantHerb
+    %CopPrintItemReward(!MedicalHerb, .textWantOne)
+    %CopShowChoices(YesNoPrompt, $02, .dontWant)
+    LDA $8003D0 ; Read menu choice
+    BNE .dontWant
+    %CopPrintAndGiveItem(!MedicalHerb)
+    RTL
 .dontWant
     %CopShowText(.textComeBackAgain)
     RTL
-.textThatsAll
-    ; "That's all I have, sorry."
-    db !Text_Start,"That`",!Dict_s,!Dict_all,!Dict_I,"have,",!Text_CR,"sorry.",!Text_ChangeStreamPtr : dw TextEndStandardBank4
 .textWantOne
     ; "Hello, I have <x>. Would you like one?"
     db !Text_Start,"Hello, ",!Dict_I,!Dict_have,!Text_CR,!Text_Break,".",!Text_CR,"Would ",!Dict_you,!Dict_like,"one?",!Text_Break
 .textComeBackAgain
     ; "Come back if you change your mind."
     db !Text_Start,!Dict_Come,!Dict_back,"if ",!Dict_you,!Text_CR,"change ",!Dict_your,"mind.",!Text_ChangeStreamPtr : dw TextEndStandardBank4
-
+.textComeBackHerb:
+    ; "Come back if you want a <Medical Herb>."
+    db !Text_Start,!Dict_Come,!Dict_back,"if ",!Dict_you,!Dict_want,!Text_CR,"a ",!Text_Break,".",!Text_ChangeStreamPtr : dw TextEndStandardBank4
+    
 assert pc() <= $84B45C
 ;04B2CD  02 07          COP #$07
 ;04B2CF               --------data--------
@@ -1216,10 +1258,11 @@ MaidHerbScript:
 .endScript:
     skip 12
     ; Begin shopkeeper template
-    %CopJumpIfNpcRewardNotObtained(!NPC_MaidHerb, .doYouWantOne)
-    %CopShowText(.textThatsAll)
+    %CopJumpIfNpcRewardNotObtained(!NPC_MaidHerb, .doYouWantReward)
+    %CopJumpIfItemNotObtained(!MedicalHerb, .doYouWantHerb)
+    %CopPrintItemReward(!MedicalHerb, .textComeBackHerb)
     BRA .endScript
-.doYouWantOne:
+.doYouWantReward:
     %CopPrintNpcReward(!NPC_MaidHerb, .textWantOne)
     %CopShowChoices(YesNoPrompt, $02, .dontWant)
     LDA $8003D0 ; Read menu choice
@@ -1227,12 +1270,16 @@ MaidHerbScript:
     %CopShowText(.textGive)
     %CopGiveNpcReward(!NPC_MaidHerb)
     BRA .endScript
+.doYouWantHerb
+    %CopPrintItemReward(!MedicalHerb, .textWantOne)
+    %CopShowChoices(YesNoPrompt, $02, .dontWant)
+    LDA $8003D0 ; Read menu choice
+    BNE .dontWant
+    %CopPrintAndGiveItem(!MedicalHerb)
+    BRA .endScript
 .dontWant:
     %CopShowText(.textComeBackAgain)
     BRA .endScript
-.textThatsAll:
-    ; "That's all I have, sorry."
-    db !Text_Start,"That`",!Dict_s,!Dict_all,!Dict_I,"have,",!Text_CR,"sorry.",!Text_ChangeStreamPtr : dw TextEndStandardBank4
 .textWantOne:
     ; "You want <x> don't you?"
     db !Text_Start,!Dict_You,!Dict_want,!Text_CR,!Text_Break,!Text_CR,"don`t you?",!Text_Break
@@ -1243,24 +1290,9 @@ MaidHerbScript:
 .textComeBackAgain:
     ; "Oh, I guess my ability is not perfect."
     db !Text_Start,"Oh, ",!Dict_I,"guess ",!Dict_my,"ability",!Text_CR,!Dict_is,!Dict_not,"perfect.",!Text_ChangeStreamPtr : dw TextEndStandardBank4
-
-; We have a some more free space here, so lets use it for letting you get the Queen's reward on the superbracelet tile if she is already gone.
-SuperBraceletTileExtension:
-    %CopSetScriptAddrToNextInstruction()
-    %CopJumpIfNpcRewardNotObtained(!NPC_QueenMagriddVIPCard, +)
-    %Cop86()
-    RTL
-+
-    ; Have the Queen's item be one tile down to avoid problems on loading back in.
-    %CopJumpIfEntityHasReachedXY($00, $36, $18, +)
-    RTL
-+
-    %CopShowText(.butWaitTheresMore)
-    %CopGiveNpcReward(!NPC_QueenMagriddVIPCard)
-    %CopSetScriptAddrToNextInstruction()
-    RTL
-.butWaitTheresMore
-    db !Text_Start,!Dict_There,!Dict_is,!Dict_something,!Text_CR,!Dict_here,"too!",!Text_ChangeStreamPtr : dw TextEndStandardBank4
+.textComeBackHerb:
+    ; "Come back if you want a <Medical Herb>."
+    db !Text_Start,!Dict_Come,!Dict_back,"if ",!Dict_you,!Dict_want,!Text_CR,"a ",!Text_Break,".",!Text_ChangeStreamPtr : dw TextEndStandardBank4
 
 assert pc() <= $84CF49
 ;04CE5A  02 91          COP #$91

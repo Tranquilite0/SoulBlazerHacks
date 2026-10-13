@@ -47,6 +47,19 @@ macro CopJumpIfLairRewardObtained(lairId, target)
     dw <target>
 endmacro
 
+; Prints an Item Name by ID. Prints the string pointed to by textPtr.
+; Will replace first instance of $0C in the string with the Item Name.
+macro CopPrintItemReward(itemId, textPtr)
+    COP #!CopPrintItemRewardId
+    db <itemId>
+    dw <textPtr>
+endmacro
+
+; Prints and gives item by ID using the generic reward recieved textbox.
+macro CopPrintAndGiveItem(itemId)
+    COP #!CopPrintAndGiveItemId
+    db <itemId>
+endmacro
 
 ; Original Code Section
 ; 
@@ -162,10 +175,49 @@ CopJumpIfLairRewardObtained:
     PLX
     JMP.W RetInA
 
+
+CopPrintItemReward:
+    TYX
+    LDA.B [CopTemp]
+    INC.B CopTemp
+    AND #$00FF
+    PHA
+    LDA.B [CopTemp]
+    INC.B CopTemp
+    INC.B CopTemp
+    TAY
+    PLA
+    SEP #$20
+    PHX
+    PHB
+    PHA
+    LDA.B CopTemp+2
+    PHA
+    PLB
+    PLA
+    JSL PrintItemReward
+    PLB
+    PLX
+    REP #$20
+    JMP.W RetInTmp
+
+CopPrintAndGiveItem:
+    TYX
+    PHX
+    LDA.B [CopTemp] ; Item ID in A
+    INC.B CopTemp
+    AND #$00FF
+    SEP #$20
+    JSL PrintReward
+    JSL GiveReward
+    REP #$20
+    PLX
+    JMP.W RetInTmp
+
 ; Hooks and original rom data overwrite section
 pushpc
 
-;Insert our new COP routines into slots $3D through $41
+;Insert our new COP routines into slots $3D through $44
 !CopIndex = $3D
 org $80D6B2
     dw CopGiveNpcReward              : !CopGiveNpcRewardId              := !CopIndex : !CopIndex #= !CopIndex+1
@@ -174,6 +226,8 @@ org $80D6B2
     dw CopPrintNPCReward             : !CopPrintNpcRewardId             := !CopIndex : !CopIndex #= !CopIndex+1
     dw CopResumePrint                : !CopResumePrintId                := !CopIndex : !CopIndex #= !CopIndex+1
     dw CopJumpIfLairRewardObtained   : !CopJumpIfLairRewardObtainedId   := !CopIndex : !CopIndex #= !CopIndex+1
+    dw CopPrintItemReward            : !CopPrintItemRewardId            := !CopIndex : !CopIndex #= !CopIndex+1
+    dw CopPrintAndGiveItem           : !CopPrintAndGiveItemId           := !CopIndex : !CopIndex #= !CopIndex+1
 
 ; Labels for reusing existing code for returning from COP Routines
 org $80E4B5

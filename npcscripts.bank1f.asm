@@ -48,28 +48,36 @@ org $9F81D5
 ; Probably easier to just redo this NPC script and text than patch it into shape.
 org $9F82F2
 NorthEasternMermaidHerbScript:
-    %CopJumpIfNpcRewardNotObtained(!NPC_NorthEasternMermaidHerb, .doYouWantOne)
-    %CopShowText(.textThatsAll)
+    %CopJumpIfNpcRewardNotObtained(!NPC_NorthEasternMermaidHerb, .doYouWantReward)
+    %CopJumpIfItemNotObtained(!MedicalHerb, .doYouWantHerb)
+    %CopPrintItemReward(!MedicalHerb, .textComeBackHerb)
     RTL
-.doYouWantOne
+.doYouWantReward
     %CopPrintNpcReward(!NPC_NorthEasternMermaidHerb, .textWantOne)
     %CopShowChoices(YesNoPrompt, $02, .dontWant)
     LDA $8003D0 ; Read menu choice
     BNE .dontWant
     %CopGiveNpcReward(!NPC_NorthEasternMermaidHerb)
     RTL
+.doYouWantHerb
+    %CopPrintItemReward(!MedicalHerb, .textWantOne)
+    %CopShowChoices(YesNoPrompt, $02, .dontWant)
+    LDA $8003D0 ; Read menu choice
+    BNE .dontWant
+    %CopPrintAndGiveItem(!MedicalHerb)
+    RTL
 .dontWant
     %CopShowText(.textComeBackAgain)
     RTL
-.textThatsAll
-    ; "That's all I have, sorry."
-    db !Text_Start,"That`",!Dict_s,!Dict_all,!Dict_I,"have,",!Text_CR,"sorry.",!Text_ChangeStreamPtr : dw TextEndStandardBank1F
 .textWantOne
     ; "Hello, I have <x>. Would you like one?"
     db !Text_Start,"Hello, ",!Dict_I,!Dict_have,!Text_CR,!Text_Break,".",!Text_CR,"Would ",!Dict_you,!Dict_like,"one?",!Text_Break
 .textComeBackAgain
     ; "Come back if you change your mind."
     db !Text_Start,!Dict_Come,!Dict_back,"if ",!Dict_you,!Text_CR,"change ",!Dict_your,"mind.",!Text_ChangeStreamPtr : dw TextEndStandardBank1F
+.textComeBackHerb:
+    ; "Come back if you want a <Medical Herb>."
+    db !Text_Start,!Dict_Come,!Dict_back,"if ",!Dict_you,!Dict_want,!Text_CR,"a ",!Text_Break,".",!Text_ChangeStreamPtr : dw TextEndStandardBank1F
 
 assert pc() <= $9F83AC
 

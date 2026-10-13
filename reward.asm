@@ -220,7 +220,7 @@ PrintRewardShort:
 +   ; Catch-all for remaining non-regular items (ID >$40) which don't need special processing.
     CMP #!MagicBell+1
     BCS .end
-    ; Give regular item
+    ; Print regular item
     STA TableLookupIndex
     STZ TableLookupIndex+1
     LDY #PrintItemNameShort

@@ -9,17 +9,40 @@ pushpc
 
 ;---------------- Tool Shop Owner ----------------;
 
-; Patch shopkeeper message to skip mentioning that she only has medical herbs.
-; Now ends after "Take whatever you need from my store. "
-org $8383ED
-    db !Text_ChangeStreamPtr : dw TextEndStandardBank3
-
-; Patch NPC Script TODO: Revisit and do this like the other shopkeepers.
 org $838399
-    %CopShowText($83AD) ; Display shopkeepers message
+ToolShopOwnerScript:
+    %CopJumpIfNpcRewardNotObtained(!NPC_ToolShopOwner, .doYouWantReward)
+    %CopJumpIfItemNotObtained(!MedicalHerb, .doYouWantHerb)
+    %CopPrintItemReward(!MedicalHerb, .textComeBackHerb)
+    RTL
+.doYouWantReward
+    %CopPrintNpcReward(!NPC_ToolShopOwner, .textWantOne)
+    %CopShowChoices(YesNoPrompt, $02, .dontWant)
+    LDA $8003D0 ; Read menu choice
+    BNE .dontWant
     %CopGiveNpcReward(!NPC_ToolShopOwner)
     RTL
+.doYouWantHerb
+    %CopPrintItemReward(!MedicalHerb, .textWantOne)
+    %CopShowChoices(YesNoPrompt, $02, .dontWant)
+    LDA $8003D0 ; Read menu choice
+    BNE .dontWant
+    %CopPrintAndGiveItem(!MedicalHerb)
+    RTL
+.dontWant
+    %CopShowText(.textComeBackAgain)
+    RTL
+.textWantOne
+    ; "Hello, I have <x>. Would you like one?"
+    db !Text_Start,"Hello, ",!Dict_I,!Dict_have,!Text_CR,!Text_Break,".",!Text_CR,"Would ",!Dict_you,!Dict_like,"one?",!Text_Break
+.textComeBackAgain
+    ; "Come back if you change your mind."
+    db !Text_Start,!Dict_Come,!Dict_back,"if ",!Dict_you,!Text_CR,"change ",!Dict_your,"mind.",!Text_ChangeStreamPtr : dw TextEndStandardBank3
+.textComeBackHerb:
+    ; "Come back if you want a <Medical Herb>."
+    db !Text_Start,!Dict_Come,!Dict_back,"if ",!Dict_you,!Dict_want,!Text_CR,"a ",!Text_Break,".",!Text_ChangeStreamPtr : dw TextEndStandardBank3
 
+assert pc() <= $838480
 
 ;----------------- Emblem A Tile -----------------;
 
@@ -115,8 +138,10 @@ org $839320
 
 ; Patch NPC Script
 org $83922C
-    %CopJumpIfNpcRewardNotObtained(!NPC_ToolShopOwnersSonTeddy, $9236)
-    skip 5
+    %CopJumpIfNpcRewardNotObtained(!NPC_ToolShopOwnersSonTeddy, +)
+    %CopShowText($931F)
+    RTL
++
     %CopPrintNpcReward(!NPC_ToolShopOwnersSonTeddy, $9255)
     ; This choice doesnt matter (But thou must!)
     %CopShowChoices(YesNoPrompt,$02,+)
@@ -500,33 +525,49 @@ org $83C224
 
 ;----------------- Woodstin Trio -----------------;
 
-; Lets add a hint to the initial textbox
-; We dont have quite enough room in the script, for CopPrintNpcReward,
-; but we can save some room in the text and relocate our script there.
+; We add a hint to the initial textbox.
+; Once the rando reward is obtained they go back to giving medical herbs.
+; We use space that was saved from abbreviating text for our script patches.
 org $83D0E3
-    JMP.W +
+WoodstinTrioScript:
+;Modify Script to print reward
+    JMP.W .printPrize
     NOP
--- ; Our return point to resume the NPC script
+.printPrizeReturn ; Our return point to resume the NPC script
+
+; Modify script to give reward
+org $83D11C
+    JMP.W .givePrize
+    NOP #2
+.givePrizeReturn
 
 ;Now patch the text
 org $83D174
--
-    skip 1
-    db "Let`s start the show!",!Text_CR,"The prize is",!Text_CR,!Text_Break,".",!Text_ChangeStreamPtr : dw TextEndStandardBank3
+.startTheShowPrize
+    db !Text_Start,"Let`s start the show!",!Text_CR,"The prize is",!Text_CR,!Text_Break,".",!Text_ChangeStreamPtr : dw TextEndStandardBank3
+; Use extra text space for printing the prize...
+.printPrize
+    %CopJumpIfNpcRewardNotObtained(!NPC_WoodstinTrio, +)
+    %CopPrintItemReward(!MedicalHerb, .startTheShowPrize)
+    JMP.W .printPrizeReturn
 +
-    %CopPrintNpcReward(!NPC_WoodstinTrio, -)
-    JMP.W --
+    %CopPrintNpcReward(!NPC_WoodstinTrio, .startTheShowPrize)
+    JMP.W .printPrizeReturn
+; ...and for giving prize.
+.givePrize
+    %CopJumpIfNpcRewardNotObtained(!NPC_WoodstinTrio, +)
+    %CopPrintAndGiveItem(!MedicalHerb)
+    JMP.W .givePrizeReturn
++
+    %CopGiveNpcReward(!NPC_WoodstinTrio)
+    JMP.W .givePrizeReturn
 
+assert pc() <= $83D1E5
 
 ; Edit The "you guessed correctly" text to end early since
 ; We print the reward a different way.
 org $83D2B7
     db !Text_ChangeStreamPtr : dw TextEndStandardBank3
-
-; Modify script to give NPC Reward
-org $83D11C
-    %CopGiveNpcReward(!NPC_WoodstinTrio)
-    NOP #2
 
 ;-------------------------------------------------;
 
