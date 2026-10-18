@@ -1,27 +1,5 @@
 ; Patch NPC scripts in Bank 04 to use new NPC Reward COP routine.
 
-; New Code Section
-
-; Lets you get the Queen's reward on the superbracelet tile if she is already gone.
-SuperBraceletTileExtension:
-    %CopSetScriptAddrToNextInstruction()
-    %CopJumpIfNpcRewardNotObtained(!NPC_QueenMagriddVIPCard, +)
-    %Cop86()
-    RTL
-+
-    ; Have the Queen's item be one tile down to avoid problems on loading back in.
-    %CopJumpIfEntityHasReachedXY($00, $36, $18, +)
-    RTL
-+
-    %CopShowText(.butWaitTheresMore)
-    %CopGiveNpcReward(!NPC_QueenMagriddVIPCard)
-    %CopSetScriptAddrToNextInstruction()
-    RTL
-.butWaitTheresMore
-    db !Text_Start,!Dict_There,!Dict_is,!Dict_something,!Text_CR,!Dict_here,"too!",!Text_ChangeStreamPtr : dw TextEndStandardBank4
-
-
-; Hooks and original rom data overwrite section
 pushpc
 
 ;----------------- Mountain King -----------------;
@@ -928,8 +906,6 @@ org $84C111
 
 ;-------------- Super Bracelet Tile --------------;
 
-
-
 org $84C981
     %CopJumpIfNpcRewardNotObtained(!NPC_SuperBraceletTile, $C989)
     ; Lets also give the Queen's reward if the player never got it while the queen was alive.
@@ -944,6 +920,28 @@ org $84C997
 ; Patch text to remove reference to vanilla reward
 org $84CAB6
     db !Text_Start,!Dict_There,!Dict_is,!Dict_something,!Text_CR,"where ",!Dict_the,"Queen ",!Dict_was,!Text_CR,"standing.",!Text_ChangeStreamPtr : dw TextEndStandardBank4
+
+pullpc ; Place this new code in the freespace region for the bank.
+
+; Lets you get the Queen's reward on the superbracelet tile if she is already gone.
+SuperBraceletTileExtension:
+    %CopSetScriptAddrToNextInstruction()
+    %CopJumpIfNpcRewardNotObtained(!NPC_QueenMagriddVIPCard, +)
+    %Cop86()
+    RTL
++
+    ; Have the Queen's item be one tile down to avoid problems on loading back in.
+    %CopJumpIfEntityHasReachedXY($00, $36, $18, +)
+    RTL
++
+    %CopShowText(.butWaitTheresMore)
+    %CopGiveNpcReward(!NPC_QueenMagriddVIPCard)
+    %CopSetScriptAddrToNextInstruction()
+    RTL
+.butWaitTheresMore
+    db !Text_Start,!Dict_There,!Dict_is,!Dict_something,!Text_CR,!Dict_here,"too!",!Text_ChangeStreamPtr : dw TextEndStandardBank4
+
+pushpc
 
 ;04C978  BD 16 00       LDA $0016,X
 ;04C97B  09 00 20       ORA #$2000

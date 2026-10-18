@@ -395,11 +395,11 @@ org $83BEB4
 
 ; Change CopJumpIfItemNotObtained to CopJumpIfNpcRewardNotObtained
 org $83C0C4
-    %CopJumpIfNpcRewardNotObtained(!NPC_MagicBellCrystal, $C0CE)
-
+    %CopJumpIfNpcRewardNotObtained(!NPC_MagicBellCrystal, +)
+    skip 5
 ; Change the pointer for when you dont have all 8 emblems since we need an extra byte
-; to use CopPrintNpcReward
-org $83C0CE
+; to use CopPrintNpcReward TODO: rando setting for reduced emblem requirement.
++
     %CopJumpIfItemNotObtained(!EmblemA,+)
     %CopJumpIfItemNotObtained(!EmblemB,+)
     %CopJumpIfItemNotObtained(!EmblemC,+)
