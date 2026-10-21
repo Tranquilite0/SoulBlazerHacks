@@ -236,6 +236,19 @@ org $849F47
 
 ;-------------------------------------------------;
 
+;-------------------- Door Key -------------------;
+;Check if item obtained instead of equipped
+org $84A62F
+COP #$18
+;-------------------------------------------------;
+
+;---------------- Actinidia Leaves ---------------;
+;Check if item obtained instead of equipped
+org $84A7AC
+COP #$18
+org $84A89C
+COP #$18
+;-------------------------------------------------;
 
 ;-------- Emblem G Under Chest of Drawers --------;
 
@@ -898,11 +911,13 @@ org $84C111
 ;04C115  02 86          COP #$86
 ;04C117  6B             RTL
 
-
-
-
 ;-------------------------------------------------;
 
+;------------------ Harp String ------------------;
+;Check if item obtained instead of equipped
+org $84C5D1
+COP #$18
+;-------------------------------------------------;
 
 ;-------------- Super Bracelet Tile --------------;
 
@@ -1048,6 +1063,11 @@ org $84CA80
 
 ;-------------------------------------------------;
 
+;----------------- Platinum Card -----------------;
+;Check if item obtained instead of equipped
+org $84CB2C
+COP #$18
+;-------------------------------------------------;
 
 ;------------- Platinum Card Soldier -------------;
 
@@ -1346,6 +1366,11 @@ assert pc() <= $84CF49
 
 ;-------------------------------------------------;
 
+;-------------------- VIP Card -------------------;
+;Check if item obtained instead of equipped
+org $84D0B8
+COP #$18
+;-------------------------------------------------;
 
 ;------------ Soul of Reality Soldier ------------;
 
@@ -1537,6 +1562,12 @@ org $84EA32
 ;04EA15  6B             RTL
 
 
+;-------------------------------------------------;
+
+;------------------ Airship Key ------------------;
+;Check if item obtained instead of equipped
+org $84EF5D
+COP #$18
 ;-------------------------------------------------;
 
 ; TODO: Add sword hints for cystal in magrid castle basement

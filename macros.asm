@@ -102,6 +102,12 @@ macro CopJumpIfItemNotObtained(itemId, target)
     dw <target>
 endmacro
 
+macro CopJumpIfItemIsNotEquipped(itemId, target)
+    COP #$19
+    db <itemId>
+    dw <target>
+endmacro
+
 macro CopShowChoices(choicesTxtPtr, numberOfChoices, abortPtr)
     COP #$1A
     dw <choicesTxtPtr>

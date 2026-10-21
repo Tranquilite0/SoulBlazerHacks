@@ -44,6 +44,18 @@ ToolShopOwnerScript:
 
 assert pc() <= $838480
 
+;------------------ Leo's Brush ------------------;
+;Check if item obtained instead of equipped
+org $8394CE
+COP #$18
+;-------------------------------------------------;
+
+;-------------------- A Pass ---------------------;
+;Check if item obtained instead of equipped
+org $83991A
+COP #$18
+;-------------------------------------------------;
+
 ;----------------- Emblem A Tile -----------------;
 
 ;TODO: remove tulip autotalk?
@@ -702,6 +714,12 @@ org $83D816
 
 ;-------------------------------------------------;
 
+;----------------- Mole's Ribbon -----------------;
+;Check if item obtained instead of equipped
+org $83D908
+COP #$18
+;-------------------------------------------------;
+
 
 ;-------------- Mole's Ribbon Chest --------------;
 
@@ -750,6 +768,11 @@ org $83DC13
 
 ;-------------------------------------------------;
 
+;---------------- Delicious Seeds ----------------;
+;Check if item obtained instead of equipped
+org $83E029
+COP #$18
+;-------------------------------------------------;
 
 ;------------- Psycho Sword Squirrel -------------;
 
