@@ -6,11 +6,13 @@ GiveReward:
     PHP
     SEP #$20
     CMP #!Nothing
-    BNE +
+    BNE .gems
     PLP
     RTL
-+   CMP #!Gems
-    BNE +
+
+.gems
+    CMP #!Gems
+    BNE .exp
     ; GEMs
     REP #$20
     TYA
@@ -21,17 +23,21 @@ GiveReward:
     PLP
     SEC
     RTL
-+   CMP #!Exp
-    BNE +
+
+.exp
+    CMP #!Exp
+    BNE .lair
     ; EXP
     STY ExpToGive
     PLP
     RTL
-+   CMP #!LairRelease
-    BNE ++
+
+.lair
+    CMP #!LairRelease
+    BNE .soul
     ; Lair Release
     LDA.L RandoSettings.SkipRelease
-    BEQ +
+    BEQ .npcCutscene
     ;Release without cutscene
     REP #$20
     TYA
@@ -44,18 +50,30 @@ GiveReward:
     BRK #$1C ; Play NPC Released sound.
     ; Jailbreak dolphin also needs to set Event flag, byte index 6, bit index 1 ($02)
     CPY.W #!DOLPHIN_SAVES_LUE
-    BNE .nope
+    BNE +
     LDA.W #$0002
     TSB EventFlags+$06
-.nope:
     PLP
     SEC
     RTL
-+   JSL ReleaseLairNpc
+    
+    ; Mountain King also needs to set Event flag, byte index 7, bit index 6 ($40)
++   CPY.W #!MOUNTAIN_KING
+    BNE +
+    LDA.W #$0040
+    TSB EventFlags+$07
++   PLP
+    SEC
+    RTL
+
+.npcCutscene
+    JSL ReleaseLairNpc
     PLP
     RTL
-++  CMP #!Soul
-    BNE +
+
+.soul
+    CMP #!Soul
+    BNE .victory
     ; Soul
     ; Tight loop to compute 1 << Y
     LDA #$01
@@ -68,18 +86,24 @@ GiveReward:
     PLP
     SEC
     RTL
-+   CMP #!Victory
-    BNE +
+
+.victory
+    CMP #!Victory
+    BNE .unknown
     ; Victory
     JSL WinGame
     PLP
     RTL
-+   ; Catch-all for non-regular items (ID >$40) which don't need special processing.
+
+.unknown
+    ; Catch-all for non-regular items (ID >$40) which don't need special processing.
     CMP #!MagicBell+1
-    BCC +
+    BCC .item
     PLP
     RTL
-+   ; Give regular item
+
+.item
+    ; Give regular item
     JSL GiveItem
     BRK #$5E ; Play Item Get sound
     PLP
