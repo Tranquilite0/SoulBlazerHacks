@@ -414,19 +414,20 @@ org $83BEB4
 
 ; Change CopJumpIfItemNotObtained to CopJumpIfNpcRewardNotObtained
 org $83C0C4
+MagicBellCrystalScript:
     %CopJumpIfNpcRewardNotObtained(!NPC_MagicBellCrystal, +)
     skip 5
 ; Change the pointer for when you dont have all 8 emblems since we need an extra byte
 ; to use CopPrintNpcReward TODO: rando setting for reduced emblem requirement.
 +
-    %CopJumpIfItemNotObtained(!EmblemA,+)
-    %CopJumpIfItemNotObtained(!EmblemB,+)
-    %CopJumpIfItemNotObtained(!EmblemC,+)
-    %CopJumpIfItemNotObtained(!EmblemD,+)
-    %CopJumpIfItemNotObtained(!EmblemE,+)
-    %CopJumpIfItemNotObtained(!EmblemF,+)
-    %CopJumpIfItemNotObtained(!EmblemG,+)
-    %CopJumpIfItemNotObtained(!EmblemH,+)
+    %CopJumpIfItemNotObtained(!EmblemA, .dontHave)
+    %CopJumpIfItemNotObtained(!EmblemB, .dontHave)
+    %CopJumpIfItemNotObtained(!EmblemC, .dontHave)
+    %CopJumpIfItemNotObtained(!EmblemD, .dontHave)
+    %CopJumpIfItemNotObtained(!EmblemE, .dontHave)
+    %CopJumpIfItemNotObtained(!EmblemF, .dontHave)
+    %CopJumpIfItemNotObtained(!EmblemG, .dontHave)
+    %CopJumpIfItemNotObtained(!EmblemH, .dontHave)
 
 ;Dont remove emblems from inventory
 org $83C0FA
@@ -445,7 +446,7 @@ org $83C0FA
 org $83C112
     %CopGiveNpcReward(!NPC_MagicBellCrystal)
     RTL
-+
+.dontHave
     %CopPrintNpcReward(!NPC_MagicBellCrystal, $C11D)
     RTL
 
