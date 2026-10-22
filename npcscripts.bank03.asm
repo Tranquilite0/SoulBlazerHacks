@@ -47,13 +47,7 @@ assert pc() <= $838480
 ;------------------ Leo's Brush ------------------;
 ;Check if item obtained instead of equipped
 org $8394CE
-COP #$18
-;-------------------------------------------------;
-
-;-------------------- A Pass ---------------------;
-;Check if item obtained instead of equipped
-org $83991A
-COP #$18
+    COP #$18
 ;-------------------------------------------------;
 
 ;----------------- Emblem A Tile -----------------;
@@ -167,7 +161,7 @@ org $83922C
 ;-------------------------------------------------;
 
 
-;--------------------- A Pass --------------------;
+;------------ A Pass (location check) ------------;
 
 org $839833
     %CopGiveNpcReward(!NPC_APass)
@@ -175,6 +169,14 @@ org $839833
 
 ;-------------------------------------------------;
 
+;-------------------- A Pass ---------------------;
+;Check if item obtained instead of equipped
+org $83991A
+    COP #$18
+;Dont remove the item once it is used
+org $839927
+    NOP #3
+;-------------------------------------------------;
 
 ;---------- Tile in Child's Secret Cave ----------;
 
@@ -184,6 +186,11 @@ org $83990C
 
 ;-------------------------------------------------;
 
+;------------------ Goat's Food ------------------;
+;Dont remove the item once it is used
+org $839D5C
+    NOP #3
+;-------------------------------------------------;
 
 ;----------------- Village Chief -----------------;
 
@@ -420,6 +427,19 @@ org $83C0C4
     %CopJumpIfItemNotObtained(!EmblemF,+)
     %CopJumpIfItemNotObtained(!EmblemG,+)
     %CopJumpIfItemNotObtained(!EmblemH,+)
+
+;Dont remove emblems from inventory
+org $83C0FA
+    BRA +
+    NOP
+    NOP #3
+    NOP #3
+    NOP #3
+    NOP #3
+    NOP #3
+    NOP #3
+    NOP #3
++
 
 ; Give NPC Reward
 org $83C112
@@ -717,9 +737,11 @@ org $83D816
 ;----------------- Mole's Ribbon -----------------;
 ;Check if item obtained instead of equipped
 org $83D908
-COP #$18
+    COP #$18
+;Dont remove the item once it is used
+org $83D911
+    NOP #3
 ;-------------------------------------------------;
-
 
 ;-------------- Mole's Ribbon Chest --------------;
 
@@ -771,7 +793,10 @@ org $83DC13
 ;---------------- Delicious Seeds ----------------;
 ;Check if item obtained instead of equipped
 org $83E029
-COP #$18
+    COP #$18
+;Dont remove the item once it is used
+org $83E032
+    NOP #3
 ;-------------------------------------------------;
 
 ;------------- Psycho Sword Squirrel -------------;
@@ -780,7 +805,7 @@ COP #$18
 ; We dont have quite enough room in the script, 
 ; but we can save some room in the text and relocate our script there.
 org $83E145
-JMP +
+    JMP +
 
 ; Patch release text to have reward hint.
 org $83E1A0
@@ -896,7 +921,7 @@ org $83E5AF
     %CopJumpIfNpcRewardNotObtained(!NPC_FireShrineCrystal, +)
     JMP CrystalReturnDialog
 org $83E571
-+   
++
     %CopShowText($EBC2)
     %CopGiveNpcReward(!NPC_FireShrineCrystal)
     RTL
@@ -965,6 +990,15 @@ pushpc
 ; TODO: more text edits to account for opening the world of evil with potentially less than 6 stones.
 org $83EC6C
     %CopShowText(NewStonesConsumedStart)
+    ; Dont remove stones from inventory.
+    BRA +
+    NOP
+    NOP #3
+    NOP #3
+    NOP #3
+    NOP #3
+    NOP #3
++
 
 org $83ED15
 NewStonesConsumedStart:

@@ -219,7 +219,10 @@ org $9F9D5A
 ;------------------- Big Pearl -------------------;
 ;Check if item obtained instead of equipped
 org $9FA159
-COP #$18
+    COP #$18
+;Dont remove the item once it is used
+org $9FA162
+    NOP #3
 ;-------------------------------------------------;
 
 ;--------------- Rockbird Crystal ----------------;
@@ -271,7 +274,10 @@ org $9FA4E9
 ;---------------- Mermaid's Tears ----------------;
 ;Check if item obtained instead of equipped
 org $9FA60D
-COP #$18
+    COP #$18
+;Dont remove the item once it is used
+org $9FA616
+    NOP #3
 ;-------------------------------------------------;
 
 pullpc

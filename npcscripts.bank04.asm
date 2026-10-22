@@ -58,9 +58,13 @@ MountainKingNewEntryPoint:
     ; start the cutscene over.
     STZ.W DisableCommunication
     %CopGiveNpcReward(!NPC_MountainKing)
-    %CopRemoveItem(!RedHotMirror)
-    %CopRemoveItem(!RedHotBall)
-    %CopRemoveItem(!RedHotStick)
+    ;Don't remove red-hots from inventory
+    ;%CopRemoveItem(!RedHotMirror)
+    NOP #3
+    ;%CopRemoveItem(!RedHotBall)
+    NOP #3
+    ;%CopRemoveItem(!RedHotStick)
+    NOP #3
     assert pc() == $8485E5
 
 MountainKingScriptEnd = $8485EF
@@ -239,15 +243,15 @@ org $849F47
 ;-------------------- Door Key -------------------;
 ;Check if item obtained instead of equipped
 org $84A62F
-COP #$18
+    COP #$18
 ;-------------------------------------------------;
 
 ;---------------- Actinidia Leaves ---------------;
 ;Check if item obtained instead of equipped
 org $84A7AC
-COP #$18
+    COP #$18
 org $84A89C
-COP #$18
+    COP #$18
 ;-------------------------------------------------;
 
 ;-------- Emblem G Under Chest of Drawers --------;
@@ -916,7 +920,10 @@ org $84C111
 ;------------------ Harp String ------------------;
 ;Check if item obtained instead of equipped
 org $84C5D1
-COP #$18
+    COP #$18
+;Dont remove the item once it is used
+org $84C5EF
+    NOP #3
 ;-------------------------------------------------;
 
 ;-------------- Super Bracelet Tile --------------;
@@ -1066,7 +1073,7 @@ org $84CA80
 ;----------------- Platinum Card -----------------;
 ;Check if item obtained instead of equipped
 org $84CB2C
-COP #$18
+    COP #$18
 ;-------------------------------------------------;
 
 ;------------- Platinum Card Soldier -------------;
@@ -1369,7 +1376,7 @@ assert pc() <= $84CF49
 ;-------------------- VIP Card -------------------;
 ;Check if item obtained instead of equipped
 org $84D0B8
-COP #$18
+    COP #$18
 ;-------------------------------------------------;
 
 ;------------ Soul of Reality Soldier ------------;
@@ -1567,7 +1574,7 @@ org $84EA32
 ;------------------ Airship Key ------------------;
 ;Check if item obtained instead of equipped
 org $84EF5D
-COP #$18
+    COP #$18
 ;-------------------------------------------------;
 
 ; TODO: Add sword hints for cystal in magrid castle basement
