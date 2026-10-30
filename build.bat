@@ -1,5 +1,5 @@
 @echo off
-set asar_path=".\asar\asar.exe"
+set asar_path=".\asar\asar.exe" -DVersion="0.7.0"
 set vanilla_rom=".\rom\Soul Blazer (U) [!].sfc"
 set fast_rom=".\rom\Soul Blazer Fastrom.sfc"
 set rando_base=".\rom\Soul Blazer RandoBase.sfc"
@@ -16,6 +16,7 @@ copy /Y %fast_rom% %rando_base%
 
 @REM Create bsdiff4 basepatch (with fastrom)
 call bsdiff4 %vanilla_rom% %rando_base% ".\patches\basepatch.bsdiff4"
+call ips_util create %vanilla_rom% %rando_base% -o ".\patches\basepatch.ips"
 
 @REM TODO: fix making patches for semiprogressive standalone.
 @REM Do it again for separate semiprogressive equipment patch (no fastrom)
